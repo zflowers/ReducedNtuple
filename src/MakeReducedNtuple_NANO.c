@@ -28,11 +28,6 @@
 #include "prod2017MC_reducedNANO_MET.h"
 #include "prod2016MC_reducedNANO_MET.h"
 
-//trigger classes
-#include "prod2018MC_reducedNANO_Triggers.h"
-#include "prod2017MC_reducedNANO_Triggers.h"
-#include "prod2016MC_reducedNANO_Triggers.h"
-
 using namespace std;
 using std::vector;
 
@@ -162,18 +157,12 @@ int main(int argc, char* argv[]) {
     chain->Add(filenames[i].c_str());
     cout << "   Adding file " << filenames[i] << endl;
   }
-
+  
 
   //use std::string because who would want to use char array
   std::string _selectorClassName(SelectorClassName);
   std::string _ofilename(outputFileName);
   //create appropriate selector class
-  if(_selectorClassName.compare("prod2018MC_reducedNANO_Muon") == 0){
-	std::cout<<"Using selector: "<< _selectorClassName <<std::endl;
-	prod2018MC_reducedNANO_Muon s(chain);
-	produceReducedTree(s,_ofilename);	
-  }
-
 //MET CLASSES
   if(_selectorClassName.compare("prod2018MC_reducedNANO_MET") == 0){
 	std::cout<<"Using selector: "<< _selectorClassName <<std::endl;
@@ -190,36 +179,8 @@ int main(int argc, char* argv[]) {
 	prod2016MC_reducedNANO_MET s(chain);
 	produceReducedTree(s,_ofilename);
   }
-// Trigger classes
-  if(_selectorClassName.compare("prod2018MC_reducedNANO_Triggers") == 0){
-	std::cout<<"Using selector: "<< _selectorClassName <<std::endl;
-	prod2018MC_reducedNANO_Triggers s(chain);
-	produceReducedTree(s,_ofilename);
-  }
-  if(_selectorClassName.compare("prod2017MC_reducedNANO_Triggers") == 0){
-	std::cout<<"Using selector: "<< _selectorClassName <<std::endl;
-	prod2017MC_reducedNANO_Triggers s(chain);
-	produceReducedTree(s,_ofilename);
-  }
-  if(_selectorClassName.compare("prod2016MC_reducedNANO_Triggers") == 0){
-	std::cout<<"Using selector: "<< _selectorClassName <<std::endl;
-	prod2016MC_reducedNANO_Triggers s(chain);
-	produceReducedTree(s,_ofilename);
-  }
 
 
- // ReducedNtuple<SUSYNANOBase>* ntuple = new ReducedNtuple<SUSYNANOBase>(chain);
-
- // ntuple->AddLabels(string(DataSet),string(FileTag));
- // ntuple->AddEventCountFile(string(EventCount));
-
-  //if(DO_SMS)
-   // ntuple->DoSMS();
-
- // ntuple->WriteNtuple(string(outputFileName));
-
-  //delete ntuple;
- 
   return 0;
 
 }

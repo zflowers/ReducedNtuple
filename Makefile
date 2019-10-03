@@ -30,22 +30,6 @@ MakeReducedNtuple.x: $(SRCDIR)MakeReducedNtuple_NANO.c $(OBJ_FILES) $(HH_FILES)
 	$(CXX) $(CXXFLAGS) -o MakeReducedNtuple.x $(OUTOBJ)/*.o $(GLIBS) $ $< 
 	touch MakeReducedNtuple.x
 
-# MakeReducedNtuple.x:  $(SRCDIR)MakeReducedNtuple.C $(OBJ_FILES) $(HH_FILES)
-# 	$(CXX) $(CXXFLAGS) -o MakeReducedNtuple.x $(OUTOBJ)/*.o $(GLIBS) $ $<
-# 	touch MakeReducedNtuple.x
-
-# MakeEventCount.x:  $(SRCDIR)MakeEventCount.C $(OBJ_FILES) $(HH_FILES)
-# 	$(CXX) $(CXXFLAGS) -o MakeEventCount.x $(OUTOBJ)/*.o $(GLIBS) $ $<
-# 	touch MakeEventCount.x
-
-#MakeReducedNtuple_NANO.x:  $(SRCDIR)MakeReducedNtuple_NANO.C $(OBJ_FILES) $(HH_FILES)
-# 	$(CXX) $(CXXFLAGS) -o MakeReducedNtuple_NANO.x $(OUTOBJ)/*.o $(GLIBS) $ $<
-# 	touch MakeReducedNtuple_NANO.x
-
-# MakeEventCount_NANO.x:  $(SRCDIR)MakeEventCount_NANO.C $(OBJ_FILES) $(HH_FILES)
-# 	$(CXX) $(CXXFLAGS) -o MakeEventCount_NANO.x $(OUTOBJ)/*.o $(GLIBS) $ $<
-# 	touch MakeEventCount_NANO.x
-
 $(OUTOBJ)%.o: src/%.C include/%.h
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
