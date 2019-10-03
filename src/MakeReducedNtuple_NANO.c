@@ -19,10 +19,6 @@
 #include <TLeafElement.h>
 #include <TLorentzVector.h>
 
-//#include "ReducedNtuple.hh"
-//#include "SUSYNANOBase.hh"
-#include "prod2018MC_reducedNANO_Muon.h"
-
 //MET classes
 #include "prod2018MC_reducedNANO_MET.h"
 #include "prod2017MC_reducedNANO_MET.h"

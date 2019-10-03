@@ -171,7 +171,7 @@ void prod2018MC_reducedNANO_MET::Init(TTree *tree)
    // Set branch addresses and branch pointers
    if (!tree) return;
    fChain = tree;
-fChain->SetBranchStatus("*", 0);
+   fChain->SetBranchStatus("*", 0);
    fCurrent = -1;
    fChain->SetMakeClass(1);
 
