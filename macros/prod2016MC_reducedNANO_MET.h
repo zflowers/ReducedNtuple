@@ -118,9 +118,11 @@ public :
 #ifdef prod2016MC_reducedNANO_MET_cxx
 prod2016MC_reducedNANO_MET::prod2016MC_reducedNANO_MET(TTree *tree) : fChain(0) 
 {
-   TFile *f = new TFile("/home/t3-ku/z374f439/../janguian/ReducedNtuple/output/prod2016MC_reducedNANO_MET.root");
+  if(tree == 0){
+   TFile *f = new TFile("../samples/prod2016MC_reducedNANO_MET.root");
    f->GetObject("Events",tree);
-   Init(tree);
+  }
+  Init(tree);
 }
 
 prod2016MC_reducedNANO_MET::~prod2016MC_reducedNANO_MET()
