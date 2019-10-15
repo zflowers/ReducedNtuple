@@ -13,7 +13,7 @@ void Analyze(vector<string> vect_string_Trigger, string x, string year, TTree* f
    vector<TEfficiency*> vect_Eff;
    for(int i=0; i < int(vect_string_Trigger.size()); i++)
    {
-    TEfficiency* eff = new TEfficiency(vect_string_Trigger.at(i).c_str(),(vect_string_Trigger.at(i)+";"+x+";#epsilon").c_str(),25,0.,800.);
+    TEfficiency* eff = new TEfficiency(vect_string_Trigger.at(i).c_str(),(vect_string_Trigger.at(i)+";"+x+";Efficiency").c_str(),20,0.,600.);
     vect_Eff.push_back(eff);
     TLeaf* trig = fChain->GetLeaf(vect_string_Trigger.at(i).c_str());
     vect_leaf.push_back(trig);

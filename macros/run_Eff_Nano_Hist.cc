@@ -6,7 +6,7 @@ void run_Eff_Nano_Hist(string outFile = "output_test.root"){
  gROOT->ProcessLine(".x prod2016MC_reducedNANO_MET.C++");
  gROOT->ProcessLine(".x prod2017MC_reducedNANO_MET.C++");
  gROOT->ProcessLine(".x prod2018MC_reducedNANO_MET.C++");
- gROOT->ProcessLine(".L Eff_Nano_Plotter.C++"); 
+ gROOT->ProcessLine(".L Plotter_Eff_Nano.C++"); 
  
  //2016
  gROOT->ProcessLine("TChain chain_2016(\"Events\")");
@@ -32,7 +32,7 @@ void run_Eff_Nano_Hist(string outFile = "output_test.root"){
  gROOT->ProcessLine("MET_2018.GetEntry(0)");
  gROOT->ProcessLine("MET_2018.Loop()");
  
- gROOT->ProcessLine((".x Eff_Nano_Plotter.C(\""+outFile+"\")").c_str()); 
+ gROOT->ProcessLine((".x Plotter_Eff_Nano.C(\""+outFile+"\")").c_str()); 
  gSystem->Exec("make clean");
  Long64_t end = gSystem->Now();
  cout << "Time to Run: " << (end-start)/1000.0 << " seconds" << endl;
