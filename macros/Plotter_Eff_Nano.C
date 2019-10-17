@@ -137,10 +137,10 @@ TMultiGraph* get_mg(string fname, vector<string> years, vector<string> Triggers,
     string title = " ;";
     mg->SetTitle((title+gr->GetXaxis()->GetTitle()+";"+gr->GetYaxis()->GetTitle()).c_str());
    }
-   gr->SetMarkerStyle(22);
+   gr->SetMarkerStyle(20);
    gr->SetMarkerColor(colors[i+j]);
    gr->SetLineColor(colors[i+j]);
-   leg->AddEntry(gr,(years.at(i)+"_"+Triggers.at(j)).c_str(),"P");
+   leg->AddEntry(gr,(years.at(i)+"_"+Triggers.at(j)).c_str(),"PL");
    mg->Add(gr);
   }
  }

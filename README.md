@@ -1,4 +1,3 @@
-To run:
+To make Ntuples
 
-cd macros/
-
+./scripts/runMET.sh
