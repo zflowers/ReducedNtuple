@@ -18,7 +18,7 @@ class prod2016MC_reducedNANO_MET {
 public :
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
    Int_t           fCurrent; //!current Tree number in a TChain
-   string          m_outFile = "";
+
 // Fixed size dimensions of array or collections stored in the TTree if any.
 
    // Declaration of leaf types
@@ -42,9 +42,9 @@ public :
    //Int_t           PFcand_contJetIndex[27];   //[nPFcand]
    //Float_t         btagWeight_CSVV2;
    //Float_t         btagWeight_CMVA;
-   //Float_t         CaloMET_phi;
-   //Float_t         CaloMET_pt;
-   //Float_t         CaloMET_sumEt;
+   Float_t         CaloMET_phi;
+   Float_t         CaloMET_pt;
+   Float_t         CaloMET_sumEt;
    //Float_t         ChsMET_phi;
    //Float_t         ChsMET_pt;
    //Float_t         ChsMET_sumEt;
@@ -174,7 +174,7 @@ public :
    //Float_t         SubGenJetAK8_pt[10];   //[nSubGenJetAK8]
    //Float_t         Generator_binvar;
    //Float_t         Generator_scalePDF;
-   //Float_t         Generator_weight;
+   Float_t         Generator_weight;
    //Float_t         Generator_x1;
    //Float_t         Generator_x2;
    //Float_t         Generator_xpdf1;
@@ -212,7 +212,7 @@ public :
    //Bool_t          IsoTrack_isHighPurityTrack[5];   //[nIsoTrack]
    //Bool_t          IsoTrack_isPFcand[5];   //[nIsoTrack]
    //Bool_t          IsoTrack_isFromLostTrack[5];   //[nIsoTrack]
-   //UInt_t          nJet;
+   UInt_t          nJet;
    //Float_t         Jet_CvsB[20];   //[nJet]
    //Float_t         Jet_CvsL[20];   //[nJet]
    //Float_t         Jet_area[20];   //[nJet]
@@ -236,10 +236,10 @@ public :
    //Float_t         Jet_deepFlavouruds[20];   //[nJet]
    //Float_t         Jet_elEF[20];   //[nJet]
    //Float_t         Jet_elMult[20];   //[nJet]
-   //Float_t         Jet_eta[20];   //[nJet]
+   Float_t         Jet_eta[20];   //[nJet]
    //Float_t         Jet_hfEMEF[20];   //[nJet]
    //Float_t         Jet_hfHadEF[20];   //[nJet]
-   //Float_t         Jet_mass[20];   //[nJet]
+   Float_t         Jet_mass[20];   //[nJet]
    //Float_t         Jet_muEF[20];   //[nJet]
    //Float_t         Jet_muMult[20];   //[nJet]
    //Float_t         Jet_neEmEF[20];   //[nJet]
@@ -247,8 +247,8 @@ public :
    //Float_t         Jet_neHadMult[20];   //[nJet]
    //Float_t         Jet_phEF[20];   //[nJet]
    //Float_t         Jet_phMult[20];   //[nJet]
-   //Float_t         Jet_phi[20];   //[nJet]
-   //Float_t         Jet_pt[20];   //[nJet]
+   Float_t         Jet_phi[20];   //[nJet]
+   Float_t         Jet_pt[20];   //[nJet]
    //Float_t         Jet_qgAxis1[20];   //[nJet]
    //Float_t         Jet_qgAxis2[20];   //[nJet]
    //Float_t         Jet_qgl[20];   //[nJet]
@@ -258,7 +258,7 @@ public :
    //Float_t         Jet_bRegRes[20];   //[nJet]
    //Int_t           Jet_electronIdx1[20];   //[nJet]
    //Int_t           Jet_electronIdx2[20];   //[nJet]
-   //Int_t           Jet_jetId[20];   //[nJet]
+   Int_t           Jet_jetId[20];   //[nJet]
    //Int_t           Jet_muonIdx1[20];   //[nJet]
    //Int_t           Jet_muonIdx2[20];   //[nJet]
    //Int_t           Jet_nConstituents[20];   //[nJet]
@@ -712,7 +712,7 @@ public :
    Bool_t          HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ;
    Bool_t          HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL;
    Bool_t          HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ;
-   Bool_t          HLT_Mu25_TkMu0_dEta18_Onia;
+   //Bool_t          HLT_Mu25_TkMu0_dEta18_Onia;
    //Bool_t          HLT_Mu27_TkMu8;
    //Bool_t          HLT_Mu30_TkMu11;
    //Bool_t          HLT_Mu30_eta2p1_PFJet150_PFJet50;
@@ -1182,9 +1182,9 @@ public :
    //TBranch        *b_PFcand_contJetIndex;   //!
    //TBranch        *b_btagWeight_CSVV2;   //!
    //TBranch        *b_btagWeight_CMVA;   //!
-   //TBranch        *b_CaloMET_phi;   //!
-   //TBranch        *b_CaloMET_pt;   //!
-   //TBranch        *b_CaloMET_sumEt;   //!
+   TBranch        *b_CaloMET_phi;   //!
+   TBranch        *b_CaloMET_pt;   //!
+   TBranch        *b_CaloMET_sumEt;   //!
    //TBranch        *b_ChsMET_phi;   //!
    //TBranch        *b_ChsMET_pt;   //!
    //TBranch        *b_ChsMET_sumEt;   //!
@@ -1314,7 +1314,7 @@ public :
    //TBranch        *b_SubGenJetAK8_pt;   //!
    //TBranch        *b_Generator_binvar;   //!
    //TBranch        *b_Generator_scalePDF;   //!
-   //TBranch        *b_Generator_weight;   //!
+   TBranch        *b_Generator_weight;   //!
    //TBranch        *b_Generator_x1;   //!
    //TBranch        *b_Generator_x2;   //!
    //TBranch        *b_Generator_xpdf1;   //!
@@ -1352,7 +1352,7 @@ public :
    //TBranch        *b_IsoTrack_isHighPurityTrack;   //!
    //TBranch        *b_IsoTrack_isPFcand;   //!
    //TBranch        *b_IsoTrack_isFromLostTrack;   //!
-   //TBranch        *b_nJet;   //!
+   TBranch        *b_nJet;   //!
    //TBranch        *b_Jet_CvsB;   //!
    //TBranch        *b_Jet_CvsL;   //!
    //TBranch        *b_Jet_area;   //!
@@ -1376,10 +1376,10 @@ public :
    //TBranch        *b_Jet_deepFlavouruds;   //!
    //TBranch        *b_Jet_elEF;   //!
    //TBranch        *b_Jet_elMult;   //!
-   //TBranch        *b_Jet_eta;   //!
+   TBranch        *b_Jet_eta;   //!
    //TBranch        *b_Jet_hfEMEF;   //!
    //TBranch        *b_Jet_hfHadEF;   //!
-   //TBranch        *b_Jet_mass;   //!
+   TBranch        *b_Jet_mass;   //!
    //TBranch        *b_Jet_muEF;   //!
    //TBranch        *b_Jet_muMult;   //!
    //TBranch        *b_Jet_neEmEF;   //!
@@ -1387,8 +1387,8 @@ public :
    //TBranch        *b_Jet_neHadMult;   //!
    //TBranch        *b_Jet_phEF;   //!
    //TBranch        *b_Jet_phMult;   //!
-   //TBranch        *b_Jet_phi;   //!
-   //TBranch        *b_Jet_pt;   //!
+   TBranch        *b_Jet_phi;   //!
+   TBranch        *b_Jet_pt;   //!
    //TBranch        *b_Jet_qgAxis1;   //!
    //TBranch        *b_Jet_qgAxis2;   //!
    //TBranch        *b_Jet_qgl;   //!
@@ -1398,7 +1398,7 @@ public :
    //TBranch        *b_Jet_bRegRes;   //!
    //TBranch        *b_Jet_electronIdx1;   //!
    //TBranch        *b_Jet_electronIdx2;   //!
-   //TBranch        *b_Jet_jetId;   //!
+   TBranch        *b_Jet_jetId;   //!
    //TBranch        *b_Jet_muonIdx1;   //!
    //TBranch        *b_Jet_muonIdx2;   //!
    //TBranch        *b_Jet_nConstituents;   //!
@@ -2302,7 +2302,6 @@ public :
    TBranch        *b_Flag_METFilters;   //!
 
    prod2016MC_reducedNANO_MET(TTree *tree=0);
-   virtual void     SetOutput(string outFile);
    virtual ~prod2016MC_reducedNANO_MET();
    virtual Int_t    Cut(Long64_t entry);
    virtual Int_t    GetEntry(Long64_t entry);
@@ -2335,11 +2334,6 @@ prod2016MC_reducedNANO_MET::~prod2016MC_reducedNANO_MET()
 {
    if (!fChain) return;
    delete fChain->GetCurrentFile();
-}
-
-void prod2016MC_reducedNANO_MET::SetOutput(string outFile)
-{
-   m_outFile = outFile;
 }
 
 Int_t prod2016MC_reducedNANO_MET::GetEntry(Long64_t entry)
@@ -2398,9 +2392,9 @@ void prod2016MC_reducedNANO_MET::Init(TTree *tree)
    //fChain->SetBranchAddress("PFcand_contJetIndex", PFcand_contJetIndex, &b_PFcand_contJetIndex);
    //fChain->SetBranchAddress("btagWeight_CSVV2", &btagWeight_CSVV2, &b_btagWeight_CSVV2);
    //fChain->SetBranchAddress("btagWeight_CMVA", &btagWeight_CMVA, &b_btagWeight_CMVA);
-   //fChain->SetBranchAddress("CaloMET_phi", &CaloMET_phi, &b_CaloMET_phi);
-   //fChain->SetBranchAddress("CaloMET_pt", &CaloMET_pt, &b_CaloMET_pt);
-   //fChain->SetBranchAddress("CaloMET_sumEt", &CaloMET_sumEt, &b_CaloMET_sumEt);
+   fChain->SetBranchAddress("CaloMET_phi", &CaloMET_phi, &b_CaloMET_phi);
+   fChain->SetBranchAddress("CaloMET_pt", &CaloMET_pt, &b_CaloMET_pt);
+   fChain->SetBranchAddress("CaloMET_sumEt", &CaloMET_sumEt, &b_CaloMET_sumEt);
    //fChain->SetBranchAddress("ChsMET_phi", &ChsMET_phi, &b_ChsMET_phi);
    //fChain->SetBranchAddress("ChsMET_pt", &ChsMET_pt, &b_ChsMET_pt);
    //fChain->SetBranchAddress("ChsMET_sumEt", &ChsMET_sumEt, &b_ChsMET_sumEt);
@@ -2530,7 +2524,7 @@ void prod2016MC_reducedNANO_MET::Init(TTree *tree)
    //fChain->SetBranchAddress("SubGenJetAK8_pt", SubGenJetAK8_pt, &b_SubGenJetAK8_pt);
    //fChain->SetBranchAddress("Generator_binvar", &Generator_binvar, &b_Generator_binvar);
    //fChain->SetBranchAddress("Generator_scalePDF", &Generator_scalePDF, &b_Generator_scalePDF);
-   //fChain->SetBranchAddress("Generator_weight", &Generator_weight, &b_Generator_weight);
+   fChain->SetBranchAddress("Generator_weight", &Generator_weight, &b_Generator_weight);
    //fChain->SetBranchAddress("Generator_x1", &Generator_x1, &b_Generator_x1);
    //fChain->SetBranchAddress("Generator_x2", &Generator_x2, &b_Generator_x2);
    //fChain->SetBranchAddress("Generator_xpdf1", &Generator_xpdf1, &b_Generator_xpdf1);
@@ -2568,7 +2562,7 @@ void prod2016MC_reducedNANO_MET::Init(TTree *tree)
    //fChain->SetBranchAddress("IsoTrack_isHighPurityTrack", IsoTrack_isHighPurityTrack, &b_IsoTrack_isHighPurityTrack);
    //fChain->SetBranchAddress("IsoTrack_isPFcand", IsoTrack_isPFcand, &b_IsoTrack_isPFcand);
    //fChain->SetBranchAddress("IsoTrack_isFromLostTrack", IsoTrack_isFromLostTrack, &b_IsoTrack_isFromLostTrack);
-   //fChain->SetBranchAddress("nJet", &nJet, &b_nJet);
+   fChain->SetBranchAddress("nJet", &nJet, &b_nJet);
    //fChain->SetBranchAddress("Jet_CvsB", Jet_CvsB, &b_Jet_CvsB);
    //fChain->SetBranchAddress("Jet_CvsL", Jet_CvsL, &b_Jet_CvsL);
    //fChain->SetBranchAddress("Jet_area", Jet_area, &b_Jet_area);
@@ -2592,10 +2586,10 @@ void prod2016MC_reducedNANO_MET::Init(TTree *tree)
    //fChain->SetBranchAddress("Jet_deepFlavouruds", Jet_deepFlavouruds, &b_Jet_deepFlavouruds);
    //fChain->SetBranchAddress("Jet_elEF", Jet_elEF, &b_Jet_elEF);
    //fChain->SetBranchAddress("Jet_elMult", Jet_elMult, &b_Jet_elMult);
-   //fChain->SetBranchAddress("Jet_eta", Jet_eta, &b_Jet_eta);
+   fChain->SetBranchAddress("Jet_eta", Jet_eta, &b_Jet_eta);
    //fChain->SetBranchAddress("Jet_hfEMEF", Jet_hfEMEF, &b_Jet_hfEMEF);
    //fChain->SetBranchAddress("Jet_hfHadEF", Jet_hfHadEF, &b_Jet_hfHadEF);
-   //fChain->SetBranchAddress("Jet_mass", Jet_mass, &b_Jet_mass);
+   fChain->SetBranchAddress("Jet_mass", Jet_mass, &b_Jet_mass);
    //fChain->SetBranchAddress("Jet_muEF", Jet_muEF, &b_Jet_muEF);
    //fChain->SetBranchAddress("Jet_muMult", Jet_muMult, &b_Jet_muMult);
    //fChain->SetBranchAddress("Jet_neEmEF", Jet_neEmEF, &b_Jet_neEmEF);
@@ -2603,8 +2597,8 @@ void prod2016MC_reducedNANO_MET::Init(TTree *tree)
    //fChain->SetBranchAddress("Jet_neHadMult", Jet_neHadMult, &b_Jet_neHadMult);
    //fChain->SetBranchAddress("Jet_phEF", Jet_phEF, &b_Jet_phEF);
    //fChain->SetBranchAddress("Jet_phMult", Jet_phMult, &b_Jet_phMult);
-   //fChain->SetBranchAddress("Jet_phi", Jet_phi, &b_Jet_phi);
-   //fChain->SetBranchAddress("Jet_pt", Jet_pt, &b_Jet_pt);
+   fChain->SetBranchAddress("Jet_phi", Jet_phi, &b_Jet_phi);
+   fChain->SetBranchAddress("Jet_pt", Jet_pt, &b_Jet_pt);
    //fChain->SetBranchAddress("Jet_qgAxis1", Jet_qgAxis1, &b_Jet_qgAxis1);
    //fChain->SetBranchAddress("Jet_qgAxis2", Jet_qgAxis2, &b_Jet_qgAxis2);
    //fChain->SetBranchAddress("Jet_qgl", Jet_qgl, &b_Jet_qgl);
@@ -2614,7 +2608,7 @@ void prod2016MC_reducedNANO_MET::Init(TTree *tree)
    //fChain->SetBranchAddress("Jet_bRegRes", Jet_bRegRes, &b_Jet_bRegRes);
    //fChain->SetBranchAddress("Jet_electronIdx1", Jet_electronIdx1, &b_Jet_electronIdx1);
    //fChain->SetBranchAddress("Jet_electronIdx2", Jet_electronIdx2, &b_Jet_electronIdx2);
-   //fChain->SetBranchAddress("Jet_jetId", Jet_jetId, &b_Jet_jetId);
+   fChain->SetBranchAddress("Jet_jetId", Jet_jetId, &b_Jet_jetId);
    //fChain->SetBranchAddress("Jet_muonIdx1", Jet_muonIdx1, &b_Jet_muonIdx1);
    //fChain->SetBranchAddress("Jet_muonIdx2", Jet_muonIdx2, &b_Jet_muonIdx2);
    //fChain->SetBranchAddress("Jet_nConstituents", Jet_nConstituents, &b_Jet_nConstituents);

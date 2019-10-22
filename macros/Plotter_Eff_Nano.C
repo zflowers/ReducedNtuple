@@ -13,12 +13,57 @@
 
 bool invert_colors = true;
 
-TMultiGraph* get_mg(string fname, vector<string> years, vector<string> Triggers, vector<int> colors, TLegend*& leg, TCanvas*& can);
-void Get_Plot(vector<string> years, vector<string> Triggers, vector<int> colors, string outFile, string name);
+TMultiGraph* get_mg(string fname, vector<string> tags, vector<string> Triggers, vector<int> colors, TLegend*& leg, TCanvas*& can);
+void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, string outFile, string name);
 
-void Plotter_Eff_Nano(string inFile){
+void Plotter_Eff_Nano(){
+ string inFile =" output_test.root";
+ vector<string> tags_2016 = {"WJets_2016", "TTJets_2016", "DY_2016", "TChiWZ_2016", "Stop_2016"};
+ vector<int> colors = {kPink, kGreen, kCyan};
 
- vector<string> years_2016 = { "2016" };
+ vector<string> Triggers_90{
+   "HLT_PFMET90_PFMHT90_IDTight",
+ };
+ vector<string> Triggers_100{
+   "HLT_PFMET100_PFMHT100_IDTight",
+ };
+ vector<string> Triggers_110{
+   "HLT_PFMET110_PFMHT110_IDTight",
+ };
+ vector<string> Triggers_120{
+   "HLT_PFMET120_PFMHT120_IDTight",
+ };
+ vector<string> Triggers_130{ //Not in 2016
+   "HLT_PFMET130_PFMHT130_IDTight",
+ };
+ vector<string> Triggers_140{ //Not in 2016
+   "HLT_PFMET140_PFMHT140_IDTight",
+ };
+
+ Get_Plot(tags_2016,Triggers_90,colors,inFile,"2016_HLT_PFMET90_PFMHT90_IDTight");
+ Get_Plot(tags_2016,Triggers_100,colors,inFile,"2016_HLT_PFMET100_PFMHT100_IDTight");
+ Get_Plot(tags_2016,Triggers_110,colors,inFile,"2016_HLT_PFMET110_PFMHT110_IDTight");
+ Get_Plot(tags_2016,Triggers_120,colors,inFile,"2016_HLT_PFMET120_PFMHT120_IDTight");
+
+ /*
+ Get_Plot(tags_2017,Triggers_90,colors,inFile,"2017_HLT_PFMET90_PFMHT90_IDTight");
+ Get_Plot(tags_2017,Triggers_100,colors,inFile,"2017_HLT_PFMET100_PFMHT100_IDTight");
+ Get_Plot(tags_2017,Triggers_110,colors,inFile,"2017_HLT_PFMET110_PFMHT110_IDTight");
+ Get_Plot(tags_2017,Triggers_120,colors,inFile,"2017_HLT_PFMET120_PFMHT120_IDTight");
+ Get_Plot(tags_2017,Triggers_130,colors,inFile,"2017_HLT_PFMET130_PFMHT130_IDTight");
+ Get_Plot(tags_2017,Triggers_140,colors,inFile,"2017_HLT_PFMET140_PFMHT140_IDTight");
+
+ Get_Plot(tags_2018,Triggers_90,colors,inFile,"2018_HLT_PFMET90_PFMHT90_IDTight");
+ Get_Plot(tags_2018,Triggers_100,colors,inFile,"2018_HLT_PFMET100_PFMHT100_IDTight");
+ Get_Plot(tags_2018,Triggers_110,colors,inFile,"2018_HLT_PFMET110_PFMHT110_IDTight");
+ Get_Plot(tags_2018,Triggers_120,colors,inFile,"2018_HLT_PFMET120_PFMHT120_IDTight");
+ Get_Plot(tags_2018,Triggers_130,colors,inFile,"2018_HLT_PFMET130_PFMHT130_IDTight");
+ Get_Plot(tags_2018,Triggers_140,colors,inFile,"2018_HLT_PFMET140_PFMHT140_IDTight");
+ */
+/////////////////////////////////////////////////////////////////////
+//Example Comparing triggers in a given sample and year
+/*
+ vector<string> tags_2016 = { "WJets_2016" };
  vector<string> Triggers_2016{
    "HLT_MET100",
    "HLT_MET150",
@@ -27,19 +72,30 @@ void Plotter_Eff_Nano(string inFile){
    "HLT_MET300",
  };
  vector<int> colors_2016 = {kPink, kGreen, kCyan, kMagenta, kOrange};
- 
- vector<string> years_2017_2018 = { "2017", "2018" };
+ Get_Plot(tags_2016, Triggers_2016,colors_2016,inFile,"HLT_MET_2016");
+*/
+//Example Comparing a trigger across years 
+/*
+ vector<string> tags_2017_2018 = { "WJets_2017", "WJets_2018" };
  vector<string> Triggers_2017_2018{
    "HLT_PFMET200_HBHECleaned",
  };
  vector<int> colors_2017_2018 = {kPink, kGreen}; 
-
- Get_Plot(years_2016, Triggers_2016,colors_2016,inFile,"HLT_MET_2016");
- Get_Plot(years_2017_2018, Triggers_2017_2018,colors_2017_2018,inFile,"HLT_2017_2018");
+ Get_Plot(tags_2017_2018, Triggers_2017_2018,colors_2017_2018,inFile,"HLT_2017_2018");
+*/
+//Example comparing trigger across sample
+/*
+ vector<string> tags_samples = { "WJets_2016", "TTJets_2016" };
+ vector<string> Triggers_samples{
+    "HLT_MET100",
+ };
+ Get_Plot(tags_samples, Triggers_samples,colors_2017_2018,inFile,"Samples");
+*/
+/////////////////////////////////////////////////////////////////////
 }
 
 //get all Eff on one plot
-void Get_Plot(vector<string> years, vector<string> Triggers, vector<int> colors, string outFile, string name)
+void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, string outFile, string name)
 {
  if(invert_colors)
  {
@@ -47,7 +103,7 @@ void Get_Plot(vector<string> years, vector<string> Triggers, vector<int> colors,
   gStyle->SetFrameLineColor(kWhite);
  }
 
- TLegend* leg = new TLegend(0.588,0.546,0.945,0.904);
+ TLegend* leg = new TLegend(0.588,0.546,0.945,0.904); 
  leg->SetTextFont(132);
  leg->SetTextSize(0.045);
  
@@ -61,7 +117,7 @@ void Get_Plot(vector<string> years, vector<string> Triggers, vector<int> colors,
  can->SetGridy();
  can->Draw();
  can->cd();
- TMultiGraph* mg = get_mg(outFile,years,Triggers,colors,leg,can);
+ TMultiGraph* mg = get_mg(outFile,tags,Triggers,colors,leg,can);
  can->Clear();
 
  mg->Draw("AP"); 
@@ -110,7 +166,7 @@ void Get_Plot(vector<string> years, vector<string> Triggers, vector<int> colors,
  delete output;
 }
 
-TMultiGraph* get_mg(string fname, vector<string> years, vector<string> Triggers, vector<int> colors, TLegend*& leg, TCanvas*& can)
+TMultiGraph* get_mg(string fname, vector<string> tags, vector<string> Triggers, vector<int> colors, TLegend*& leg, TCanvas*& can)
 {
  TMultiGraph* mg = new TMultiGraph();
  TKey *key;
@@ -120,10 +176,10 @@ TMultiGraph* get_mg(string fname, vector<string> years, vector<string> Triggers,
   cout << "Unable to open " << fname << " for reading..." << endl;
   return mg;
  }
- for(int i = 0; i < int(years.size()); i++)
+ for(int i = 0; i < int(tags.size()); i++)
  {
   TDirectoryFile* folder = nullptr;
-  f->GetObject(years[i].c_str(),folder);
+  f->GetObject(tags[i].c_str(),folder);
   folder->cd();
   for(int j = 0; j < int(Triggers.size()); j++)
   {
@@ -137,10 +193,10 @@ TMultiGraph* get_mg(string fname, vector<string> years, vector<string> Triggers,
     string title = " ;";
     mg->SetTitle((title+gr->GetXaxis()->GetTitle()+";"+gr->GetYaxis()->GetTitle()).c_str());
    }
+   leg->AddEntry(gr,(tags.at(i)+"_"+Triggers.at(j)).c_str(),"PL");
    gr->SetMarkerStyle(20);
    gr->SetMarkerColor(colors[i+j]);
    gr->SetLineColor(colors[i+j]);
-   leg->AddEntry(gr,(years.at(i)+"_"+Triggers.at(j)).c_str(),"PL");
    mg->Add(gr);
   }
  }
