@@ -6,23 +6,29 @@
 #include <TTree.h>
 #include <TEfficiency.h>
 #include <TLeaf.h>
+#include "MET_2016_Triggers.h"
+#include "MET_2017_Triggers.h"
+#include "MET_2018_Triggers.h"
 
 class Eff_Nano{
   private:
-   bool global_cuts(TTree*& fChain, const Long64_t& jentry, double x_val);
-   prod2016MC_reducedNANO_MET m_MET_2016(NULL);
-   prod2017MC_reducedNANO_MET m_MET_2017(NULL);
-   prod2018MC_reducedNANO_MET m_MET_2018(NULL);
+   bool global_cuts(const Long64_t& jentry, double x_val);
    string m_outFile = "output_test.root";
+   vector<string> m_Triggers;
    string m_Tag;
-   string x;
+   string m_x;
+   TTree* m_Tree;
   public:
    Eff_Nano();
-   Eff_Nano(prod2016MC_reducedNANO_MET MET_2016);
-   Eff_Nano(prod2017MC_reducedNANO_MET MET_2017);
-   Eff_Nano(prod2018MC_reducedNANO_MET MET_2018);
-   void Analyze(vector<string> vect_string_Trigger, string x, TTree* fChain);
-   void SetOutput(string outFile);
+   Eff_Nano(string outFile, vector<string> Triggers, string Tag, string x, TTree* Tree);
+   void Analyze();
+   void Set_Triggers_2016();
+   void Set_Triggers_2017();
+   void Set_Triggers_2018();
+   void Set_Tag(string tag);
+   void Set_x(string x);
+   void Set_Tree(TTree* tree);
+   void Set_Output(string outFile);
 };
 
 #endif
@@ -31,78 +37,99 @@ class Eff_Nano{
 
 inline Eff_Nano::Eff_Nano()
 {
- m_outFile = "output_test.root";
+ cout << "Do Not Use This Constructor!" << endl;
+ cout << "Use This One: " << endl;
+ cout << "Eff_Nano(string outFile, vector<string> Triggers, string Tag, string x, TTree* Tree)" << endl;
+ cout << "Probably Going To Crash Now... " << endl;
 }
 
-inline Eff_Nano::Eff_Nano(prod2016MC_reducedNANO_MET MET_2016)
+inline Eff_Nano::Eff_Nano(string outFile, vector<string> Triggers, string Tag, string x, TTree* Tree)
 {
- m_MET_2016 = MET_2016;
+ m_outFile = outFile;
+ m_Triggers = Triggers;
+ m_Tag = Tag;
+ m_x = x;
+ m_Tree = Tree;
 }
 
-inline Eff_Nano::Eff_Nano(prod2017MC_reducedNANO_MET MET_2017)
+inline void Eff_Nano::Set_Triggers_2016()
 {
- m_MET_2017 = MET_2017;
+ m_Triggers = Get_2016_Triggers(); 
 }
 
-inline Eff_Nano::Eff_Nano(prod2018MC_reducedNANO_MET MET_2018)
+inline void Eff_Nano::Set_Triggers_2017()
 {
- m_MET_2018 = MET_2018;
+ m_Triggers = Get_2017_Triggers(); 
 }
 
-inline void Eff_Nano::Run()
+inline void Eff_Nano::Set_Triggers_2018()
 {
- if(MET_2016 != NULL){ LoadTriggers_MET_2016() }
+ m_Triggers = Get_2018_Triggers(); 
 }
 
-inline vector<string> LoadTriggers_MET_2016()
+inline void Eff_Nano::Set_Tag(string tag)
 {
- //load vector of triggers
- //call Analyze
+ m_Tag = tag;
 }
 
-inline bool Eff_Nano::global_cuts(TTree*& fChain, const Long64_t& jentry, double x_val)
+inline void Eff_Nano::Set_x(string x)
+{
+ m_x = x;
+}
+
+inline void Eff_Nano::Set_Tree(TTree* Tree)
+{
+ m_Tree = Tree;
+}
+
+inline void Eff_Nano::Set_Output(string outFile)
+{
+ m_outFile = outFile;
+}
+
+inline bool Eff_Nano::global_cuts(const Long64_t& jentry, double x_val)
 {
  bool cut = true;
- TLeaf* CaloMET_pt_leaf = fChain->GetLeaf("CaloMET_pt");
+ TLeaf* CaloMET_pt_leaf = m_Tree->GetLeaf("CaloMET_pt");
  CaloMET_pt_leaf->GetBranch()->GetEntry(jentry);
  if(x_val/CaloMET_pt_leaf->GetValue() < 5.) cut = false;
  return cut;
 }
 
-inline void Eff_Nano::Analyze(vector<string> vect_string_Trigger, string x, TTree* fChain){
-   TLeaf* x_leaf = fChain->GetLeaf(x.c_str());
-   TLeaf* weight_leaf = fChain->GetLeaf("Generator_weight");
+inline void Eff_Nano::Analyze(){
+   TLeaf* x_leaf = m_Tree->GetLeaf(m_x.c_str());
+   TLeaf* weight_leaf = m_Tree->GetLeaf("Generator_weight");
    vector<TLeaf*> vect_leaf;
    vector<TEfficiency*> vect_Eff;
    int bins = 32;
    double bin_edges[33] = {0.,50.,60.,70.,80.,90.,100.,110.,120.,130.,140.,150.,160.,170.,180.,190.,200.,210.,220.,230.,240.,250.,260.,270.,280.,290.,300.,350.,400.,450.,500.,600.,1000.};
-   for(int i=0; i < int(vect_string_Trigger.size()); i++)
+   for(int i=0; i < int(m_Triggers.size()); i++)
    {
-    TEfficiency* eff = new TEfficiency(vect_string_Trigger.at(i).c_str(),(vect_string_Trigger.at(i)+";"+x+";Efficiency").c_str(),bins,bin_edges);
+    TEfficiency* eff = new TEfficiency(m_Triggers.at(i).c_str(),(m_Triggers.at(i)+";"+m_x+";Efficiency").c_str(),bins,bin_edges);
     vect_Eff.push_back(eff);
-    TLeaf* trig = fChain->GetLeaf(vect_string_Trigger.at(i).c_str());
+    TLeaf* trig = m_Tree->GetLeaf(m_Triggers.at(i).c_str());
     vect_leaf.push_back(trig);
    }
 
-   Long64_t nentries = fChain->GetEntriesFast();
+   Long64_t nentries = m_Tree->GetEntriesFast();
    
    Long64_t nbytes = 0, nb = 0;
    for (Long64_t jentry=0; jentry<nentries;jentry++) {
-      Long64_t ientry = fChain->LoadTree(jentry);
-      //nb = fChain->GetEntry(jentry);   nbytes += nb;
+      Long64_t ientry = m_Tree->LoadTree(jentry);
+      //nb = m_Tree->GetEntry(jentry);   nbytes += nb;
       x_leaf->GetBranch()->GetEntry(jentry);    
       weight_leaf->GetBranch()->GetEntry(jentry);    
-      if(global_cuts(fChain,jentry,x_leaf->GetValue())) continue;
-      for(int i=0; i < int(vect_string_Trigger.size()); i++)
+      if(global_cuts(jentry,x_leaf->GetValue())) continue;
+      for(int i=0; i < int(m_Triggers.size()); i++)
       {
        vect_leaf.at(i)->GetBranch()->GetEntry(jentry);
        vect_Eff.at(i)->FillWeighted(vect_leaf.at(i)->GetValue(),weight_leaf->GetValue(),x_leaf->GetValue());
       }
    }
    TFile* output = new TFile(m_outFile.c_str(),"UPDATE");
-   output->mkdir(fChain->GetName());
-   output->cd(fChain->GetName());
-   for(int i=0; i < int(vect_string_Trigger.size()); i++)
+   output->mkdir(m_Tag.c_str());
+   output->cd(m_Tag.c_str());
+   for(int i=0; i < int(m_Triggers.size()); i++)
    {
     vect_Eff.at(i)->Write();
     delete vect_Eff.at(i);

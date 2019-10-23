@@ -1,12 +1,28 @@
 #include <TROOT.h>
-void run_Eff_Nano_Hist(){
+void run_Eff_Nano_Hist(string outFile = "output_test.root"){
  Long64_t start = gSystem->Now();
- //gROOT->ProcessLine(".L Eff_Nano.h++");
- gROOT->ProcessLine(".x prod2016MC_reducedNANO_MET.C++");
- gROOT->ProcessLine(".x prod2017MC_reducedNANO_MET.C++");
- //gROOT->ProcessLine(".x prod2018MC_reducedNANO_MET.C++");
+ gROOT->ProcessLine(".L Eff_Nano.h++");
+ gROOT->ProcessLine(".L MET_2016_Triggers.h");
+ gROOT->ProcessLine(".L MET_2017_Triggers.h");
+ gROOT->ProcessLine(".L MET_2018_Triggers.h");
+ gROOT->ProcessLine("vector<string> Triggers_2016 = Get_2016_Triggers()");
+ //gROOT->ProcessLine("vector<string> Triggers_2017 = Get_2017_Triggers()");
+ //gROOT->ProcessLine("vector<string> Triggers_2018 = Get_2018_Triggers()");
+ gROOT->ProcessLine("string x_2016 = \"MET_pt\"");
  //gROOT->ProcessLine(".L Plotter_Eff_Nano.C++"); 
  
+  gROOT->ProcessLine("TChain* chain_2016_WJets = new TChain(\"Events\")");
+  gROOT->ProcessLine("chain_2016_WJets->Add(\"../samples/WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_2016.root\")");
+  gROOT->ProcessLine(("Eff_Nano Eff_2016_WJets(\""+outFile+"\",Triggers_2016,\"WJets_2016\",x_2016,chain_2016_WJets)").c_str());
+  gROOT->ProcessLine("Eff_2016_WJets.Analyze()");
+  //gROOT->ProcessLine("prod2016MC_reducedNANO_MET MET_2016_WJets(chain_2016_WJets)");
+  //gROOT->ProcessLine("Eff_Nano Eff_2016_WJets(MET_2016_WJets)");
+  //gROOT->ProcessLine("Eff_2016_WJets.SetTag(\"WJets_2016\")");
+  //gROOT->ProcessLine("Eff_2016_WJets.Run()");
+  //gROOT->ProcessLine("MET_2016_WJets.GetEntry(0)");
+  //gROOT->ProcessLine("MET_2016_WJets.Loop()");
+
+/* 
  //2016
   //WJets
   gROOT->ProcessLine("TChain* chain_2016_WJets = new TChain(\"Events\")");
@@ -17,7 +33,7 @@ void run_Eff_Nano_Hist(){
   gROOT->ProcessLine("Eff_2016_WJets.Run()");
   //gROOT->ProcessLine("MET_2016_WJets.GetEntry(0)");
   //gROOT->ProcessLine("MET_2016_WJets.Loop()");
-/*
+
   //TTJets
   gROOT->ProcessLine("TChain* chain_2016_TTJets = new TChain(\"Events\")");
   gROOT->ProcessLine("chain_2016_TTJets->SetName(\"TTJets_2016\")");
@@ -98,5 +114,5 @@ void run_Eff_Nano_Hist(){
  gSystem->Exec("make clean");
  Long64_t end = gSystem->Now();
  cout << "Time to Run: " << (end-start)/1000.0 << " seconds" << endl;
- gROOT->ProcessLine(".qqqqq"); 
+ gROOT->ProcessLine(".qqqqqqq"); 
 }
