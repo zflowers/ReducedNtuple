@@ -1,6 +1,7 @@
 #include <TROOT.h>
 void run_Eff_Nano_Hist(string outFile = "output_test.root"){
  Long64_t start = gSystem->Now();
+ gSystem->Exec(("rm "+outFile).c_str());
  gROOT->ProcessLine(".L Eff_Nano.h++");
  gROOT->ProcessLine(".L MET_2016_Triggers.h");
  gROOT->ProcessLine(".L MET_2017_Triggers.h");

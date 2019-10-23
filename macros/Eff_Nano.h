@@ -89,10 +89,13 @@ inline void Eff_Nano::Set_Output(string outFile)
 
 inline bool Eff_Nano::global_cuts(const Long64_t& jentry, double x_val)
 {
- bool cut = true;
- TLeaf* CaloMET_pt_leaf = m_Tree->GetLeaf("CaloMET_pt");
- CaloMET_pt_leaf->GetBranch()->GetEntry(jentry);
- if(x_val/CaloMET_pt_leaf->GetValue() < 5.) cut = false;
+ bool cut = false;
+ //Example Cut
+ ///////////////////////////////////////////////////////
+ //TLeaf* CaloMET_pt_leaf = m_Tree->GetLeaf("CaloMET_pt");
+ //CaloMET_pt_leaf->GetBranch()->GetEntry(jentry);
+ //if(x_val/CaloMET_pt_leaf->GetValue() > 5.) cut = true;
+ ///////////////////////////////////////////////////////
  return cut;
 }
 
@@ -101,11 +104,13 @@ inline void Eff_Nano::Analyze(){
    TLeaf* weight_leaf = m_Tree->GetLeaf("Generator_weight");
    vector<TLeaf*> vect_leaf;
    vector<TEfficiency*> vect_Eff;
-   int bins = 32;
-   double bin_edges[33] = {0.,50.,60.,70.,80.,90.,100.,110.,120.,130.,140.,150.,160.,170.,180.,190.,200.,210.,220.,230.,240.,250.,260.,270.,280.,290.,300.,350.,400.,450.,500.,600.,1000.};
+   int bins = 30;
+   double bin_edges[31] = {0.,50.,60.,70.,80.,90.,100.,110.,120.,130.,140.,150.,160.,170.,180.,190.,200.,210.,220.,230.,240.,250.,260.,270.,280.,290.,300.,350.,450.,600.,1000.};
    for(int i=0; i < int(m_Triggers.size()); i++)
    {
     TEfficiency* eff = new TEfficiency(m_Triggers.at(i).c_str(),(m_Triggers.at(i)+";"+m_x+";Efficiency").c_str(),bins,bin_edges);
+    //eff->SetUseWeightedEvents();
+    //eff->SetStatisticOption(TEfficiency::kFNormal);
     vect_Eff.push_back(eff);
     TLeaf* trig = m_Tree->GetLeaf(m_Triggers.at(i).c_str());
     vect_leaf.push_back(trig);
@@ -123,7 +128,8 @@ inline void Eff_Nano::Analyze(){
       for(int i=0; i < int(m_Triggers.size()); i++)
       {
        vect_leaf.at(i)->GetBranch()->GetEntry(jentry);
-       vect_Eff.at(i)->FillWeighted(vect_leaf.at(i)->GetValue(),weight_leaf->GetValue(),x_leaf->GetValue());
+       //vect_Eff.at(i)->FillWeighted(vect_leaf.at(i)->GetValue(),weight_leaf->GetValue(),x_leaf->GetValue());
+       vect_Eff.at(i)->Fill(vect_leaf.at(i)->GetValue(),x_leaf->GetValue());
       }
    }
    TFile* output = new TFile(m_outFile.c_str(),"UPDATE");
