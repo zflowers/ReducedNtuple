@@ -14,7 +14,7 @@
 bool invert_colors = true;
 
 TMultiGraph* get_mg(string fname, vector<string> tags, vector<string> Triggers, vector<int> colors, TLegend*& leg, TCanvas*& can);
-void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, string outFile, string name);
+void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, string outFile, string name, string option);
 
 void Plotter_Eff_Nano(){
  string inFile =" output_test.root";
@@ -40,58 +40,26 @@ void Plotter_Eff_Nano(){
    "HLT_PFMET140_PFMHT140_IDTight",
  };
 
- Get_Plot(tags_2016,Triggers_90,colors,inFile,"2016_HLT_PFMET90_PFMHT90_IDTight");
- Get_Plot(tags_2016,Triggers_100,colors,inFile,"2016_HLT_PFMET100_PFMHT100_IDTight");
- Get_Plot(tags_2016,Triggers_110,colors,inFile,"2016_HLT_PFMET110_PFMHT110_IDTight");
- Get_Plot(tags_2016,Triggers_120,colors,inFile,"2016_HLT_PFMET120_PFMHT120_IDTight");
+ Get_Plot(tags_2016,Triggers_90,colors,inFile,"2016_HLT_PFMET90_PFMHT90_IDTight","Trigger");
+ Get_Plot(tags_2016,Triggers_100,colors,inFile,"2016_HLT_PFMET100_PFMHT100_IDTight","Trigger");
+ Get_Plot(tags_2016,Triggers_110,colors,inFile,"2016_HLT_PFMET110_PFMHT110_IDTight","Trigger");
+ Get_Plot(tags_2016,Triggers_120,colors,inFile,"2016_HLT_PFMET120_PFMHT120_IDTight","Trigger");
 
  /*
- Get_Plot(tags_2017,Triggers_90,colors,inFile,"2017_HLT_PFMET90_PFMHT90_IDTight");
- Get_Plot(tags_2017,Triggers_100,colors,inFile,"2017_HLT_PFMET100_PFMHT100_IDTight");
- Get_Plot(tags_2017,Triggers_110,colors,inFile,"2017_HLT_PFMET110_PFMHT110_IDTight");
- Get_Plot(tags_2017,Triggers_120,colors,inFile,"2017_HLT_PFMET120_PFMHT120_IDTight");
- Get_Plot(tags_2017,Triggers_130,colors,inFile,"2017_HLT_PFMET130_PFMHT130_IDTight");
- Get_Plot(tags_2017,Triggers_140,colors,inFile,"2017_HLT_PFMET140_PFMHT140_IDTight");
+ Get_Plot(tags_2017,Triggers_90,colors,inFile,"2017_HLT_PFMET90_PFMHT90_IDTight","Trigger");
+ Get_Plot(tags_2017,Triggers_100,colors,inFile,"2017_HLT_PFMET100_PFMHT100_IDTight","Trigger");
+ Get_Plot(tags_2017,Triggers_110,colors,inFile,"2017_HLT_PFMET110_PFMHT110_IDTight","Trigger");
+ Get_Plot(tags_2017,Triggers_120,colors,inFile,"2017_HLT_PFMET120_PFMHT120_IDTight","Trigger");
+ Get_Plot(tags_2017,Triggers_130,colors,inFile,"2017_HLT_PFMET130_PFMHT130_IDTight","Trigger");
+ Get_Plot(tags_2017,Triggers_140,colors,inFile,"2017_HLT_PFMET140_PFMHT140_IDTight","Trigger");
 
- Get_Plot(tags_2018,Triggers_90,colors,inFile,"2018_HLT_PFMET90_PFMHT90_IDTight");
- Get_Plot(tags_2018,Triggers_100,colors,inFile,"2018_HLT_PFMET100_PFMHT100_IDTight");
- Get_Plot(tags_2018,Triggers_110,colors,inFile,"2018_HLT_PFMET110_PFMHT110_IDTight");
- Get_Plot(tags_2018,Triggers_120,colors,inFile,"2018_HLT_PFMET120_PFMHT120_IDTight");
- Get_Plot(tags_2018,Triggers_130,colors,inFile,"2018_HLT_PFMET130_PFMHT130_IDTight");
- Get_Plot(tags_2018,Triggers_140,colors,inFile,"2018_HLT_PFMET140_PFMHT140_IDTight");
+ Get_Plot(tags_2018,Triggers_90,colors,inFile,"2018_HLT_PFMET90_PFMHT90_IDTight","Trigger");
+ Get_Plot(tags_2018,Triggers_100,colors,inFile,"2018_HLT_PFMET100_PFMHT100_IDTight","Trigger");
+ Get_Plot(tags_2018,Triggers_110,colors,inFile,"2018_HLT_PFMET110_PFMHT110_IDTight","Trigger");
+ Get_Plot(tags_2018,Triggers_120,colors,inFile,"2018_HLT_PFMET120_PFMHT120_IDTight","Trigger");
+ Get_Plot(tags_2018,Triggers_130,colors,inFile,"2018_HLT_PFMET130_PFMHT130_IDTight","Trigger");
+ Get_Plot(tags_2018,Triggers_140,colors,inFile,"2018_HLT_PFMET140_PFMHT140_IDTight","Trigger");
  */
-/////////////////////////////////////////////////////////////////////
-//Example Comparing triggers in a given sample and year
-/*
- vector<string> tags_2016 = { "WJets_2016" };
- vector<string> Triggers_2016{
-   "HLT_MET100",
-   "HLT_MET150",
-   "HLT_MET200",
-   "HLT_MET250",
-   "HLT_MET300",
- };
- vector<int> colors_2016 = {kPink, kGreen, kCyan, kMagenta, kOrange};
- Get_Plot(tags_2016, Triggers_2016,colors_2016,inFile,"HLT_MET_2016");
-*/
-//Example Comparing a trigger across years 
-/*
- vector<string> tags_2017_2018 = { "WJets_2017", "WJets_2018" };
- vector<string> Triggers_2017_2018{
-   "HLT_PFMET200_HBHECleaned",
- };
- vector<int> colors_2017_2018 = {kPink, kGreen}; 
- Get_Plot(tags_2017_2018, Triggers_2017_2018,colors_2017_2018,inFile,"HLT_2017_2018");
-*/
-//Example comparing trigger across sample
-/*
- vector<string> tags_samples = { "WJets_2016", "TTJets_2016" };
- vector<string> Triggers_samples{
-    "HLT_MET100",
- };
- Get_Plot(tags_samples, Triggers_samples,colors_2017_2018,inFile,"Samples");
-*/
-/////////////////////////////////////////////////////////////////////
 }
 
 //get all Eff on one plot
@@ -166,7 +134,7 @@ void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, 
  delete output;
 }
 
-TMultiGraph* get_mg(string fname, vector<string> tags, vector<string> Triggers, vector<int> colors, TLegend*& leg, TCanvas*& can)
+TMultiGraph* get_mg(string fname, vector<string> tags, vector<string> Triggers, vector<int> colors, TLegend*& leg, TCanvas*& can, string option)
 {
  TMultiGraph* mg = new TMultiGraph();
  TKey *key;
@@ -193,12 +161,31 @@ TMultiGraph* get_mg(string fname, vector<string> tags, vector<string> Triggers, 
     string title = " ;";
     mg->SetTitle((title+gr->GetXaxis()->GetTitle()+";"+gr->GetYaxis()->GetTitle()).c_str());
    }
-   leg->AddEntry(gr,(tags.at(i)+"_"+Triggers.at(j)).c_str(),"PL");
+   if(option.compare("Tag") == 0)
+   {
+    leg->AddEntry(gr,Triggers.at(j).c_str(),"PL");
+   }
+   else if(option.compare("Trigger") == 0)
+   {
+    leg->AddEntry(gr,tags.at(i).c_str(),"PL");
+   }
    gr->SetMarkerStyle(20);
    gr->SetMarkerColor(colors[i+j]);
    gr->SetLineColor(colors[i+j]);
    mg->Add(gr);
   }
+ }
+ TLatex l
+ l.SetNDC();
+ l.SetTextSize(0.05);
+ l.SetTextFont(42);
+ if(option.compare("Tag") == 0)
+ {
+  l.DrawLatex(0.65,0.943,tags.at(0).c_str());
+ }
+ if(option.compare("Trigger") == 0)
+ {
+  l.DrawLatex(0.65,0.943,Triggers.at(0).c_str());
  }
  return mg;
 }
