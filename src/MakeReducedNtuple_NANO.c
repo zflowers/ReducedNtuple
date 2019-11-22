@@ -37,6 +37,7 @@ void produceReducedTree(selectortype& selector, std::string ofilename){
 	//auto reducedTree = selector.fChain->CloneTree();
 	//reducedTree->Write();
 	//reducedTree->CopyEntries(selector.fReader.GetTree());
+	cout << "Writing Tree... " << endl;
 	reducedTree->Write();
 	ofile->Write();
 	ofile->Close();
