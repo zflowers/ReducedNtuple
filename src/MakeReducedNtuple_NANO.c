@@ -32,6 +32,7 @@ template<class selectortype>
 void produceReducedTree(selectortype& selector, std::string ofilename){
 	//copy branches to output file	
 	auto ofile =  new TFile(ofilename.c_str(), "RECREATE");
+        cout << "Made Output File... " << endl;
 //	auto reducedTree = selector.fReader.GetTree()->CloneTree();
 	auto reducedTree = selector.fChain->CloneTree();
 	//auto reducedTree = selector.fChain->CloneTree();
@@ -39,8 +40,10 @@ void produceReducedTree(selectortype& selector, std::string ofilename){
 	//reducedTree->CopyEntries(selector.fReader.GetTree());
 	cout << "Writing Tree... " << endl;
 	reducedTree->Write();
+        ofile->Purge();
 	ofile->Write();
 	ofile->Close();
+        delete ofile;
 }
 
 /// Main function that runs the analysis algorithm on the
@@ -72,7 +75,7 @@ int main(int argc, char* argv[]) {
     cout << "  Example:      ./MakeReducedNtuple_NANO.x -ifile=input.root -ofile=output.root -dataset=dataset_name -filetag=sample_tag"  << endl;
     cout << "  Example:      ./MakeReducedNtuple_NANO.x -ilist=input.list -ofile=output.root -dataset=dataset_name -filetag=sample_tag"  << endl;
     cout << "  Example:      ./MakeReducedNtuple_NANO.x -ifold=folder_path -ofile=output.root -dataset=dataset_name -filetag=sample_tag -tree=treename -eventcount=event_count --sms" << endl;
-    cout << " additional tags for object based reduced tree: -selector=TSelector_ClassName "<<endl; 
+    cout << " additional tags for object based reduced tree: -selector=TSelector_ClassName " << endl; 
     return 1;
   }
   for (int i=0;i<argc;i++){
@@ -96,10 +99,10 @@ int main(int argc, char* argv[]) {
       sscanf(argv[i],"-selector=%s", SelectorClassName); 
     }
     if (strncmp(argv[i],"-ofile",6)==0) sscanf(argv[i],"-ofile=%s", outputFileName);
-    if (strncmp(argv[i],"-dataset",8)==0)   sscanf(argv[i],"-dataset=%s", DataSet);
-    if (strncmp(argv[i],"-filetag",8)==0)   sscanf(argv[i],"-filetag=%s", FileTag);
-    if (strncmp(argv[i],"-eventcount",11)==0)   sscanf(argv[i],"-eventcount=%s", EventCount);
-    if (strncmp(argv[i],"--sms",5)==0)  DO_SMS = true;
+    //if (strncmp(argv[i],"-dataset",8)==0)   sscanf(argv[i],"-dataset=%s", DataSet);
+    //if (strncmp(argv[i],"-filetag",8)==0)   sscanf(argv[i],"-filetag=%s", FileTag);
+    //if (strncmp(argv[i],"-eventcount",11)==0)   sscanf(argv[i],"-eventcount=%s", EventCount);
+    //if (strncmp(argv[i],"--sms",5)==0)  DO_SMS = true;
   }
 
   gROOT->ProcessLine("#include <vector>");
@@ -177,7 +180,8 @@ int main(int argc, char* argv[]) {
 	produceReducedTree(s,_ofilename);
   }
 
-
+  delete chain;
+  cout << "Finished Script" << endl;
   return 0;
 
 }

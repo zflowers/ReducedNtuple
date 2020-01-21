@@ -4,7 +4,8 @@
 vector<string> Get_2016_Triggers()
 {
    vector<string> vect_string_Trigger{
-/*   "HLT_DoubleMu33NoFiltersNoVtx",
+   /*
+   "HLT_DoubleMu33NoFiltersNoVtx",
    "HLT_DoubleMu38NoFiltersNoVtx",
    "HLT_DoubleMu23NoFiltersNoVtxDisplaced",
    "HLT_DoubleMu28NoFiltersNoVtxDisplaced",
@@ -118,6 +119,10 @@ vector<string> Get_2016_Triggers()
    "HLT_Ele17_CaloIdL_GsfTrkIdVL",
    "HLT_Ele17_CaloIdL_TrackIdL_IsoVL",
   */ "HLT_Ele23_CaloIdL_TrackIdL_IsoVL",
+   "HLT_PFMET90_PFMHT90_IDTight",
+   "HLT_PFMET100_PFMHT100_IDTight",
+   "HLT_PFMET110_PFMHT110_IDTight",
+   "HLT_PFMET120_PFMHT120_IDTight",
    "HLT_PFMETNoMu90_PFMHTNoMu90_IDTight",
    "HLT_PFMETNoMu100_PFMHTNoMu100_IDTight",
    "HLT_PFMETNoMu110_PFMHTNoMu110_IDTight",

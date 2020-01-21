@@ -14,11 +14,12 @@ EXE  = "MakeReducedNtuple.x"
 #EXE  = "MakeEventCount.x"
 TREE = "Events"
 #OUT  = "/home/t3-ku/crogan/NTUPLES/Processing/"
-OUT = pwd
+OUT = "/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/root/"
 LIST = "default.list"
 QUEUE = ""
-MAXN = 20
+MAXN = 10
 SELECTOR = ""
+SPLIT = 5
 
 def new_listfile(rootlist, listfile):
     mylist = open(listfile,'w')
@@ -47,7 +48,7 @@ def create_filelist(rootlist, dataset, filetag):
 
     return listlist
 
-def write_sh(srcfile,ifile,ofile,lfile,dataset,filetag):
+def write_sh(srcfile,ifile,ofile,lfile,dataset,filetag,i,n):
     fsrc = open(srcfile,'w')
     fsrc.write('universe = vanilla \n')
     fsrc.write('executable = '+EXE+" \n")
@@ -63,9 +64,13 @@ def write_sh(srcfile,ifile,ofile,lfile,dataset,filetag):
     fsrc.write('-dataset='+dataset+" ")
     fsrc.write('-filetag='+filetag+" \n")
     #fsrc.write('-eventcount='+evtcnt+" \n")
+    splitstring = '-split=%d,%d \n' % (i+1,n)
+    fsrc.write(splitstring)
     fsrc.write('output = '+lfile+"_out.log \n")
     fsrc.write('error = '+lfile+"_err.log \n")
     fsrc.write('log = '+lfile+"_log.log \n")
+    fsrc.write('Requirements = (Machine != "red-node000.unl.edu")\n')
+    #fsrc.write('request_memory = 2 GB \n')
     fsrc.write('queue \n')
     #fsrc.write('cd '+RUN_DIR+" \n")
     #fsrc.write('source ../RestFrames/setup_RestFrames.sh \n')
@@ -96,6 +101,10 @@ if __name__ == "__main__":
         p = sys.argv.index('-maxN')
         MAXN = int(sys.argv[p+1])
         argv_pos += 2
+    if '-split' in sys.argv:
+        p = sys.argv.index('-split')
+        SPLIT = int(sys.argv[p+1])
+        argv_pos += 2
     if '--sms' in sys.argv:
         DO_SMS = 1
         argv_pos += 1
@@ -105,7 +114,14 @@ if __name__ == "__main__":
         SELECTOR = sys.argv [p+1]
         argv_pos += 2  
 
+    if SPLIT <= 1:
+        SPLIT = 1
+    else:
+        MAXN = 1
+    
+
     print "maxN is %d" % MAXN
+    print "split is %d" % SPLIT
 
     # input sample list
     listfile = LIST
@@ -147,7 +163,8 @@ if __name__ == "__main__":
 
     datasetlist = []
 
-    knowntags = ["Fall17_94X","Autumn18_102X","Summer16_94X"]
+    #knowntags = ["Fall17_94X","Autumn18_102X","Summer16_94X"]
+    knowntags = ["Fall17_94X","Autumn18_102X","Summer16_94X","Summer16_102X","Fall17_102X"]
     
     with open(listfile,'r') as mylist:
         inputlist = mylist.readlines()
@@ -199,5 +216,7 @@ if __name__ == "__main__":
             filename = f.split("/")
             filename = filename[-1]
             name = filename.replace(".list",'')
-            write_sh(srcdir+name+".sh",f,ROOT+dataset+"_"+filetag+"/"+name+".root",logdir+name,dataset,filetag)
-            os.system('condor_submit '+srcdir+name+".sh")
+            for i in range(SPLIT):
+                namei = name + "_%d" % i
+                write_sh(srcdir+namei+".sh",f,ROOT+dataset+"_"+filetag+"/"+namei+".root",logdir+namei,dataset,filetag,i,SPLIT)
+                os.system('condor_submit '+srcdir+namei+".sh")

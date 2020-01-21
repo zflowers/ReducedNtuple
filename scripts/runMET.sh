@@ -41,7 +41,7 @@ cd /home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/
 #./MakeReducedNtuple.x -ifile=root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18NanoAODv5/SMS-T2tt_mStop-1000_mLSP-400_TuneCP2_13TeV-madgraphMLM-pythia8/NANOAODSIM/Nano1June2019_102X_upgrade2018_realistic_v19-v1/50000/39AC445B-CF7D-B04E-AD03-A42C71B5FC98.root -selector=prod2018MC_reducedNANO_MET -ofile=./samples/SMS-T2tt_mStop-1000_mLSP-400_TuneCP2_13TeV-madgraphMLM-pythia8_2018.root
 
 #Works
-./MakeReducedNtuple.x -ifile=root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18NanoAODv5/SMS-TChiWZ_ZToLL_mZMin-0p1_TuneCP2_13TeV-madgraphMLM-pythia8/NANOAODSIM/Nano1June2019_GridpackScan_102X_upgrade2018_realistic_v19-v2/70000/05F792AA-8723-7944-83AD-F8FC4C595049.root -selector=prod2018MC_reducedNANO_MET -ofile=./samples/SMS-TChiWZ_ZToLL_mZMin-0p1_TuneCP2_13TeV-madgraphMLM-pythia8_2018.root
+#./MakeReducedNtuple.x -ifile=root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18NanoAODv5/SMS-TChiWZ_ZToLL_mZMin-0p1_TuneCP2_13TeV-madgraphMLM-pythia8/NANOAODSIM/Nano1June2019_GridpackScan_102X_upgrade2018_realistic_v19-v2/70000/05F792AA-8723-7944-83AD-F8FC4C595049.root -selector=prod2018MC_reducedNANO_MET -ofile=./samples/SMS-TChiWZ_ZToLL_mZMin-0p1_TuneCP2_13TeV-madgraphMLM-pythia8_2018.root
 
 #2017
 
@@ -52,14 +52,14 @@ cd /home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/
 #./MakeReducedNtuple.x -ifile=root://cmsxrootd.fnal.gov//store/mc/RunIIFall17NanoAODv5/SMS-T2-4bd_genMET-80_mStop-500_mLSP-490_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/110000/EC9411D3-C6DB-0C48-AB2E-5F7DD0F42B4B.root -selector=prod2017MC_reducedNANO_MET -ofile=./samples/SMS-T2-4bd_genMET-80_mStop-500_mLSP-490_TuneCP5_13TeV-madgraphMLM-pythia8_2017.root
 
 #Works
-./MakeReducedNtuple.x -ifile=root://cmsxrootd.fnal.gov//store/mc/RunIIFall17NanoAODv5/SMS-T2-4bd_genMET-80_mStop-500_mLSP-420_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/120000/7AC57957-442A-5B42-90AA-4F33928053EA.root -selector=prod2017MC_reducedNANO_MET -ofile=./samples/SMS-T2-4bd_genMET-80_mStop-500_mLSP-420_TuneCP5_13TeV-madgraphMLM-pythia8_2017.root
+#./MakeReducedNtuple.x -ifile=root://cmsxrootd.fnal.gov//store/mc/RunIIFall17NanoAODv5/SMS-T2-4bd_genMET-80_mStop-500_mLSP-420_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano1June2019_102X_mc2017_realistic_v7-v1/120000/7AC57957-442A-5B42-90AA-4F33928053EA.root -selector=prod2017MC_reducedNANO_MET -ofile=./samples/SMS-T2-4bd_genMET-80_mStop-500_mLSP-420_TuneCP5_13TeV-madgraphMLM-pythia8_2017.root
 
 #Redirect Limit
 #./MakeReducedNtuple.x -ifile=root://cmsxrootd.fnal.gov//store/mc/RunIIFall17NanoAODv5/SMS-TChiWZ_ZToLL_mZMin-0p1_TuneCP2_13TeV-madgraphMLM-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano1June2019_GridpackScan_102X_mc2017_realistic_v7-v1/30000/7C4DB2B4-1994-E14C-97E3-9B5A575B4D66.root -selector=prod2017MC_reducedNANO_MET -ofile=./samples/SMS-TChiWZ_ZToLL_mZMin-0p1_TuneCP2_13TeV-madgraphMLM-pythia8_2017.root
 
 #2016
 
-./MakeReducedNtuple.x -ifile=root://cmsxrootd.fnal.gov//store/mc/RunIISummer16NanoAODv3/SMS-T2tt_mStop-425_mLSP-325_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/NANOAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v2/80000/56096210-C6F0-E811-96F9-C0BFC0E56816.root -selector=prod2016MC_reducedNANO_MET -ofile=./samples/SMS-T2tt_mStop-425_mLSP-325_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_2016.root
+#./MakeReducedNtuple.x -ifile=root://cmsxrootd.fnal.gov//store/mc/RunIISummer16NanoAODv3/SMS-T2tt_mStop-425_mLSP-325_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/NANOAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v2/80000/56096210-C6F0-E811-96F9-C0BFC0E56816.root -selector=prod2016MC_reducedNANO_MET -ofile=./samples/SMS-T2tt_mStop-425_mLSP-325_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_2016.root
 
 #Redirect Limit
 #./MakeReducedNtuple.x -ifile=root://cmsxrootd.fnal.gov//store/mc/RunIISummer16NanoAODv5/SMS-T2tt_mStop-150_mLSP-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/NANOAODSIM/PUMoriond17_Nano1June2019_102X_mcRun2_asymptotic_v7-v1/250000/63B10524-D574-254A-96C1-FD404DB3A115.root -selector=prod2016MC_reducedNANO_MET -ofile=./samples/SMS-T2tt_mStop-150_mLSP-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_2016.root
@@ -69,7 +69,5 @@ cd /home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/
 #./MakeReducedNtuple.x -ifile=root://cmsxrootd.fnal.gov//store/mc/RunIIFall17NanoAODv5/SMS-TChiWZ_ZToLL_mZMin-0p1_TuneCP2_13TeV-madgraphMLM-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano1June2019_GridpackScan_102X_mc2017_realistic_v7-v1/30000/964FB3E4-EE48-714E-8158-87B2717C13C8.root -selector=prod2017MC_reducedNANO_MET -ofile=./samples/SMS-TChiWZ_ZToLL_mZMin-0p1_TuneCP2_13TeV-madgraphMLM-pythia8_2017.root
 
 #Works
-./MakeReducedNtuple.x -ifile=root://cmsxrootd.fnal.gov//store/mc/RunIIAutumn18NanoAODv5/SMS-TChiWZ_ZToLL_mZMin-0p1_TuneCP2_13TeV-madgraphMLM-pythia8/NANOAODSIM/Nano1June2019_GridpackScan_102X_upgrade2018_realistic_v19-v2/70000/05F792AA-8723-7944-83AD-F8FC4C595049.root -selector=prod2018MC_reducedNANO_MET -ofile=./samples/SMS-TChiWZ_ZToLL_mZMin-0p1_TuneCP2_13TeV-madgraphMLM-pythia8_2018.root
-
-#Works
-./MakeReducedNtuple.x -ifile=root://cmsxrootd.fnal.gov//store/mc/RunIISummer16NanoAODv4/SMS-TChiWZ_ZToLL_mZMin-0p1_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/NANOAODSIM/PUMoriond17_Nano14Dec2018_GridpackScan_102X_mcRun2_asymptotic_v6-v1/50000/87331B68-DD6D-994F-95F8-148EFA90A1A8.root -selector=prod2016MC_reducedNANO_MET -ofile=./samples/SMS-TChiWZ_ZToLL_mZMin-0p1_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_2016.root
+#Processed
+#./MakeReducedNtuple.x -ifile=root://cmsxrootd.fnal.gov//store/mc/RunIISummer16NanoAODv4/SMS-TChiWZ_ZToLL_mZMin-0p1_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/NANOAODSIM/PUMoriond17_Nano14Dec2018_GridpackScan_102X_mcRun2_asymptotic_v6-v1/50000/87331B68-DD6D-994F-95F8-148EFA90A1A8.root -selector=prod2016MC_reducedNANO_MET -ofile=./samples/SMS-TChiWZ_ZToLL_mZMin-0p1_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_2016.root

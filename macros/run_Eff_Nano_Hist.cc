@@ -17,95 +17,59 @@ void run_Eff_Nano_Hist(string outFile = "output_test.root"){
  //2016
   //WJets
   gROOT->ProcessLine("TChain* chain_2016_WJets = new TChain(\"Events\")");
-  gROOT->ProcessLine("chain_2016_WJets->Add(\"../samples/WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_2016.root\")");
+  gROOT->ProcessLine("chain_2016_WJets->Add(\"/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/root/Summer16_102X/WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Summer16_102X/*.root\")");
   gROOT->ProcessLine(("Eff_Nano Eff_2016_WJets(\""+outFile+"\",Triggers_2016,\"WJets_2016\",x_2016,chain_2016_WJets)").c_str());
   gROOT->ProcessLine("Eff_2016_WJets.Analyze()");
-
+/*
   //TTJets
   gROOT->ProcessLine("TChain* chain_2016_TTJets = new TChain(\"Events\")");
-  gROOT->ProcessLine("chain_2016_TTJets->Add(\"../samples/TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_2016.root\")");
+  gROOT->ProcessLine("chain_2016_TTJets->Add(\"/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/root/Summer16_102X/TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Summer16_102X/*.root\")");
   gROOT->ProcessLine(("Eff_Nano Eff_2016_TTJets(\""+outFile+"\",Triggers_2016,\"TTJets_2016\",x_2016,chain_2016_TTJets)").c_str());
   gROOT->ProcessLine("Eff_2016_TTJets.Analyze()");
 
   //DY
   gROOT->ProcessLine("TChain* chain_2016_DY = new TChain(\"Events\")");
-  gROOT->ProcessLine("chain_2016_DY->Add(\"../samples/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_2016.root\")");
+  gROOT->ProcessLine("chain_2016_DY->Add(\"/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/root/Summer16_102X/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Summer16_102X/*.root\")");
   gROOT->ProcessLine(("Eff_Nano Eff_2016_DY(\""+outFile+"\",Triggers_2016,\"DY_2016\",x_2016,chain_2016_DY)").c_str());
   gROOT->ProcessLine("Eff_2016_DY.Analyze()");
- /* 
-  //TChiWZ
-  gROOT->ProcessLine("TChain* chain_2016_TChiWZ = new TChain(\"Events\")");
-  gROOT->ProcessLine("chain_2016_TChiWZ->Add(\"../samples/\")");
-  gROOT->ProcessLine(("Eff_Nano Eff_2016_TChiWZ(\""+outFile+"\",Triggers_2016,\"TChiWZ_2016\",x_2016,chain_2016_TChiWZ)").c_str());
-  gROOT->ProcessLine("Eff_2016_TChiWZ.Analyze()");
 
-  //Stops
-  gROOT->ProcessLine("TChain* chain_2016_Stops = new TChain(\"Events\")");
-  gROOT->ProcessLine("chain_2016_Stops->Add(\"../samples/\")");
-  gROOT->ProcessLine(("Eff_Nano Eff_2016_Stops(\""+outFile+"\",Triggers_2016,\"Stops_2016\",x_2016,chain_2016_Stops)").c_str());
-  gROOT->ProcessLine("Eff_2016_Stops.Analyze()");
-*/
  //2017
   //WJets
   gROOT->ProcessLine("TChain* chain_2017_WJets = new TChain(\"Events\")");
-  gROOT->ProcessLine("chain_2017_WJets->Add(\"../samples/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8_2017.root\")");
+  gROOT->ProcessLine("chain_2017_WJets->Add(\"/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/root/Fall17_102X/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X/*.root\")");
   gROOT->ProcessLine(("Eff_Nano Eff_2017_WJets(\""+outFile+"\",Triggers_2017,\"WJets_2017\",x_2017,chain_2017_WJets)").c_str());
   gROOT->ProcessLine("Eff_2017_WJets.Analyze()");
 
   //TTJets
   gROOT->ProcessLine("TChain* chain_2017_TTJets = new TChain(\"Events\")");
-  gROOT->ProcessLine("chain_2017_TTJets->Add(\"../samples/TTJets_TuneCP5_13TeV-madgraphMLM-pythia8_2017.root\")");
+  gROOT->ProcessLine("chain_2017_TTJets->Add(\"/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/root/Fall17_102X/TTJets_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X/*.root\")");
   gROOT->ProcessLine(("Eff_Nano Eff_2017_TTJets(\""+outFile+"\",Triggers_2017,\"TTJets_2017\",x_2017,chain_2017_TTJets)").c_str());
   gROOT->ProcessLine("Eff_2017_TTJets.Analyze()");
 
   //DY
   gROOT->ProcessLine("TChain* chain_2017_DY = new TChain(\"Events\")");
-  gROOT->ProcessLine("chain_2017_DY->Add(\"../samples/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8_2017.root\")");
+  gROOT->ProcessLine("chain_2017_DY->Add(\"/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/root/Fall17_102X/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8_Fall17_102X/*.root\")");
   gROOT->ProcessLine(("Eff_Nano Eff_2017_DY(\""+outFile+"\",Triggers_2017,\"DY_2017\",x_2017,chain_2017_DY)").c_str());
   gROOT->ProcessLine("Eff_2017_DY.Analyze()");
-/*  
-  //TChiWZ
-  gROOT->ProcessLine("TChain* chain_2017_TChiWZ = new TChain(\"Events\")");
-  gROOT->ProcessLine("chain_2017_TChiWZ->Add(\"../samples/\")");
-  gROOT->ProcessLine(("Eff_Nano Eff_2017_TChiWZ(\""+outFile+"\",Triggers_2017,\"TChiWZ_2017\",x_2017,chain_2017_TChiWZ)").c_str());
-  gROOT->ProcessLine("Eff_2017_TChiWZ.Analyze()");
 
-  //Stops
-  gROOT->ProcessLine("TChain* chain_2017_Stops = new TChain(\"Events\")");
-  gROOT->ProcessLine("chain_2017_Stops->Add(\"../samples/\")");
-  gROOT->ProcessLine(("Eff_Nano Eff_2017_Stops(\""+outFile+"\",Triggers_2017,\"Stops_2017\",x_2017,chain_2017_Stops)").c_str());
-  gROOT->ProcessLine("Eff_2017_Stops.Analyze()");
-*/
  //2018
   //WJets
   gROOT->ProcessLine("TChain* chain_2018_WJets = new TChain(\"Events\")");
-  gROOT->ProcessLine("chain_2018_WJets->Add(\"../samples/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8_2018.root\")");
+  gROOT->ProcessLine("chain_2018_WJets->Add(\"/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/root/Autumn18_102X/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8_Autumn18_102X/*.root\")");
   gROOT->ProcessLine(("Eff_Nano Eff_2018_WJets(\""+outFile+"\",Triggers_2018,\"WJets_2018\",x_2018,chain_2018_WJets)").c_str());
   gROOT->ProcessLine("Eff_2018_WJets.Analyze()");
 
   //TTJets
   gROOT->ProcessLine("TChain* chain_2018_TTJets = new TChain(\"Events\")");
-  gROOT->ProcessLine("chain_2018_TTJets->Add(\"../samples/TTJets_TuneCP5_13TeV-madgraphMLM-pythia8_2018.root\")");
+  gROOT->ProcessLine("chain_2018_TTJets->Add(\"/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/root/Autumn18_102X/TTJets_TuneCP5_13TeV-madgraphMLM-pythia8_Autumn18_102X/*.root\")");
   gROOT->ProcessLine(("Eff_Nano Eff_2018_TTJets(\""+outFile+"\",Triggers_2018,\"TTJets_2018\",x_2018,chain_2018_TTJets)").c_str());
   gROOT->ProcessLine("Eff_2018_TTJets.Analyze()");
 
   //DY
   gROOT->ProcessLine("TChain* chain_2018_DY = new TChain(\"Events\")");
-  gROOT->ProcessLine("chain_2018_DY->Add(\"../samples/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8_2018.root\")");
+  gROOT->ProcessLine("chain_2018_DY->Add(\"/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/root/Autumn18_102X/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8_Autumn18_102X/*.root\")");
   gROOT->ProcessLine(("Eff_Nano Eff_2018_DY(\""+outFile+"\",Triggers_2018,\"DY_2018\",x_2018,chain_2018_DY)").c_str());
   gROOT->ProcessLine("Eff_2018_DY.Analyze()");
- /* 
-  //TChiWZ
-  gROOT->ProcessLine("TChain* chain_2018_TChiWZ = new TChain(\"Events\")");
-  gROOT->ProcessLine("chain_2018_TChiWZ->Add(\"../samples/\")");
-  gROOT->ProcessLine(("Eff_Nano Eff_2018_TChiWZ(\""+outFile+"\",Triggers_2018,\"TChiWZ_2018\",x_2018,chain_2018_TChiWZ)").c_str());
-  gROOT->ProcessLine("Eff_2018_TChiWZ.Analyze()");
-
-  //Stops
-  gROOT->ProcessLine("TChain* chain_2018_Stops = new TChain(\"Events\")");
-  gROOT->ProcessLine("chain_2018_Stops->Add(\"../samples/\")");
-  gROOT->ProcessLine(("Eff_Nano Eff_2018_Stops(\""+outFile+"\",Triggers_2018,\"Stops_2018\",x_2018,chain_2018_Stops)").c_str());
-  gROOT->ProcessLine("Eff_2018_Stops.Analyze()");
 */
  gROOT->ProcessLine(".x Plotter_Eff_Nano.C");
  gSystem->Exec("make clean");

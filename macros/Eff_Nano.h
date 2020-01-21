@@ -6,6 +6,7 @@
 #include <TTree.h>
 #include <TEfficiency.h>
 #include <TLeaf.h>
+#include <TLorentzVector.h>
 #include "MET_2016_Triggers.h"
 #include "MET_2017_Triggers.h"
 #include "MET_2018_Triggers.h"
@@ -13,6 +14,7 @@
 class Eff_Nano{
   private:
    bool global_cuts(const Long64_t& jentry, double x_val);
+   bool Other_Bools(const Long64_t& jentry);
    string m_outFile = "output_test.root";
    vector<string> m_Triggers;
    string m_Tag;
@@ -91,12 +93,46 @@ inline bool Eff_Nano::global_cuts(const Long64_t& jentry, double x_val)
 {
  bool cut = false;
  //Example Cut
+ //cut = true means skip that event
  ///////////////////////////////////////////////////////
  //TLeaf* CaloMET_pt_leaf = m_Tree->GetLeaf("CaloMET_pt");
  //CaloMET_pt_leaf->GetBranch()->GetEntry(jentry);
  //if(x_val/CaloMET_pt_leaf->GetValue() > 5.) cut = true;
  ///////////////////////////////////////////////////////
+ //Calculate PFMHT
+ TLeaf* nJet_leaf = m_Tree->GetLeaf("nJet");
+ nJet_leaf->GetBranch()->GetEntry(jentry);
+
+ TLeaf* Jet_pt_leaf = m_Tree->GetLeaf("Jet_pt");
+ Jet_pt_leaf->GetBranch()->GetEntry(jentry);
+ TLeaf* Jet_eta_leaf = m_Tree->GetLeaf("Jet_eta");
+ Jet_eta_leaf->GetBranch()->GetEntry(jentry);
+ TLeaf* Jet_phi_leaf = m_Tree->GetLeaf("Jet_phi");
+ Jet_phi_leaf->GetBranch()->GetEntry(jentry);
+ TLeaf* Jet_mass_leaf = m_Tree->GetLeaf("Jet_mass");
+ Jet_mass_leaf->GetBranch()->GetEntry(jentry);
+
+ TLorentzVector MHT(0.,0.,0.,0.);
+ for(int i = 0; i < nJet_leaf->GetValue(); i++)
+ {
+  TLorentzVector dummy;
+  dummy.SetPtEtaPhiM(Jet_pt_leaf->GetValue(i),Jet_eta_leaf->GetValue(i),Jet_phi_leaf->GetValue(i),Jet_mass_leaf->GetValue(i));
+  MHT -= dummy;
+ }
+ if (MHT.Pt() < 300.) { cut = true; }
  return cut;
+}
+
+inline bool Eff_Nano::Other_Bools(const Long64_t& jentry)
+{
+ bool other = false;
+ //Example Other
+ ///////////////////////////////////////////////////////
+ //TLeaf* CaloMET_pt_leaf = m_Tree->GetLeaf("CaloMET_pt");
+ //CaloMET_pt_leaf->GetBranch()->GetEntry(jentry);
+ //if(x_val/CaloMET_pt_leaf->GetValue() > 5.) other = true;
+ /////////////////////////////////////////////////////// 
+ return other;
 }
 
 inline void Eff_Nano::Analyze(){
@@ -124,11 +160,12 @@ inline void Eff_Nano::Analyze(){
       //nb = m_Tree->GetEntry(jentry);   nbytes += nb;
       x_leaf->GetBranch()->GetEntry(jentry);    
       weight_leaf->GetBranch()->GetEntry(jentry);    
-      if(global_cuts(jentry,x_leaf->GetValue())) continue;
+      //if(global_cuts(jentry,x_leaf->GetValue())) continue;
       for(int i=0; i < int(m_Triggers.size()); i++)
       {
        vect_leaf.at(i)->GetBranch()->GetEntry(jentry);
        //vect_Eff.at(i)->FillWeighted(vect_leaf.at(i)->GetValue(),weight_leaf->GetValue(),x_leaf->GetValue());
+       //vect_Eff.at(i)->Fill((vect_leaf.at(i)->GetValue() && Other_Bools(jentry)),x_leaf->GetValue());
        vect_Eff.at(i)->Fill(vect_leaf.at(i)->GetValue(),x_leaf->GetValue());
       }
    }

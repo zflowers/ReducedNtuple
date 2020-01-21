@@ -36,3 +36,4 @@ if __name__ == "__main__":
         haddcmd += IN_DIR+"/*.root"
         print haddcmd
         os.system(haddcmd)
+        os.system("rm -rf "+IN_DIR)

@@ -22,22 +22,22 @@ void Plotter_Eff_Nano(){
  vector<int> colors = {kPink, kGreen, kCyan};
 
  vector<string> Triggers_90{
-   "HLT_PFMETNoMu90_PFMHTNoMu90_IDTight",
+   "HLT_PFMET90_PFMHT90_IDTight",
  };
  vector<string> Triggers_100{
-   "HLT_PFMETNoMu100_PFMHTNoMu100_IDTight",
+   "HLT_PFMET100_PFMHT100_IDTight",
  };
  vector<string> Triggers_110{
-   "HLT_PFMETNoMu110_PFMHTNoMu110_IDTight",
+   "HLT_PFMET110_PFMHT110_IDTight",
  };
  vector<string> Triggers_120{
-   "HLT_PFMETNoMu120_PFMHTNoMu120_IDTight",
+   "HLT_PFMET120_PFMHT120_IDTight",
  };
  vector<string> Triggers_130{ //Not in 2016
-   "HLT_PFMETNoMu130_PFMHTNoMu130_IDTight",
+   "HLT_PFMET130_PFMHT130_IDTight",
  };
  vector<string> Triggers_140{ //Not in 2016
-   "HLT_PFMETNoMu140_PFMHTNoMu140_IDTight",
+   "HLT_PFMET140_PFMHT140_IDTight",
  };
 
  Get_Plot(tags_2016,Triggers_90,colors,inFile,"2016_HLT_PFMET90_PFMHT90_IDTight","Trigger");
@@ -120,10 +120,20 @@ void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, 
 
  leg->Draw("SAME");
 
- l.SetNDC();
- l.SetTextSize(0.05);
  l.SetTextFont(42);
- l.DrawLatex(0.15,0.943,"#bf{#it{CMS}} Internal 13 TeV Simulation");
+ l.SetNDC();
+ l.SetTextSize(0.04);
+ l.SetTextFont(42);
+ if(option.compare("Tag") == 0)
+ {
+  l.DrawLatex(0.61,0.93,tags.at(0).c_str());
+ }
+ else if(option.compare("Trigger") == 0)
+ {
+  l.DrawLatex(0.61,0.93,Triggers.at(0).c_str());
+ }
+ l.DrawLatex(0.13,0.93,"#bf{#it{CMS}} Internal 13 TeV Simulation");
+
  TFile* output = new TFile(outFile.c_str(),"UPDATE");
  can->Write();
  output->Close();
@@ -152,7 +162,7 @@ TMultiGraph* get_mg(string fname, vector<string> tags, vector<string> Triggers, 
   {
    TEfficiency* eff = nullptr;
    folder->GetObject(Triggers.at(j).c_str(),eff);
-   eff->Draw("AP"); //Break Here
+   eff->Draw("AP");
    can->Update();
    TGraphAsymmErrors* gr = eff->GetPaintedGraph();
    if((i+j) == 0)
@@ -173,22 +183,6 @@ TMultiGraph* get_mg(string fname, vector<string> tags, vector<string> Triggers, 
    gr->SetLineColor(colors[i+j]);
    mg->Add(gr);
   }
- }
- TLatex l;
- l.SetNDC();
- l.SetTextSize(0.05);
- l.SetTextFont(42);
- if(invert_colors)
- {
-  l.SetTextColor(kWhite);
- }
- if(option.compare("Tag") == 0)
- {
-  l.DrawLatex(0.65,0.943,tags.at(0).c_str());
- }
- if(option.compare("Trigger") == 0)
- {
-  l.DrawLatex(0.65,0.943,Triggers.at(0).c_str());
  }
  return mg;
 }
