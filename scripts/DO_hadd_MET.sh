@@ -1,3 +1,7 @@
+cd /home/t3-ku/z374f439/NANOAOD/CMSSW_10_2_9/src/
+eval `scramv1 runtime -sh`
+cd /home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/ 
+
 python scripts/DO_hadd.py -idir /mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/root/Autumn18_102X/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8_Autumn18_102X/ -odir /scratch/zflowers/ReducedNtuple/output/Autumn18_102X/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8_Autumn18_102X/
 
 mv /scratch/zflowers/* /mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/
