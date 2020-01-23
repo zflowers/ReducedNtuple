@@ -113,13 +113,17 @@ inline bool Eff_Nano::global_cuts(const Long64_t& jentry, double x_val)
  Jet_mass_leaf->GetBranch()->GetEntry(jentry);
 
  TLorentzVector MHT(0.,0.,0.,0.);
+ double HT = 0.;
  for(int i = 0; i < nJet_leaf->GetValue(); i++)
  {
+  HT+=Jet_pt_leaf->GetValue(i);
   TLorentzVector dummy;
   dummy.SetPtEtaPhiM(Jet_pt_leaf->GetValue(i),Jet_eta_leaf->GetValue(i),Jet_phi_leaf->GetValue(i),Jet_mass_leaf->GetValue(i));
   MHT -= dummy;
  }
- if (MHT.Pt() < 300.) { cut = true; }
+ //if (MHT.Pt() < 300.) { cut = true; }
+ if(HT < 300.) { cut = true; }
+ 
  return cut;
 }
 
@@ -140,8 +144,10 @@ inline void Eff_Nano::Analyze(){
    TLeaf* weight_leaf = m_Tree->GetLeaf("Generator_weight");
    vector<TLeaf*> vect_leaf;
    vector<TEfficiency*> vect_Eff;
-   int bins = 30;
-   double bin_edges[31] = {0.,50.,60.,70.,80.,90.,100.,110.,120.,130.,140.,150.,160.,170.,180.,190.,200.,210.,220.,230.,240.,250.,260.,270.,280.,290.,300.,350.,450.,600.,1000.};
+   //bins is number of bins-1
+   int bins = 15;
+   //array size is the number of bins
+   double bin_edges[16] = {0.,50.,75.,100.,125.,150.,175.,200.,225.,250.,275.,300.,350.,400.,500.,750.};
    for(int i=0; i < int(m_Triggers.size()); i++)
    {
     TEfficiency* eff = new TEfficiency(m_Triggers.at(i).c_str(),(m_Triggers.at(i)+";"+m_x+";Efficiency").c_str(),bins,bin_edges);
@@ -160,7 +166,8 @@ inline void Eff_Nano::Analyze(){
       //nb = m_Tree->GetEntry(jentry);   nbytes += nb;
       x_leaf->GetBranch()->GetEntry(jentry);    
       weight_leaf->GetBranch()->GetEntry(jentry);    
-      //if(global_cuts(jentry,x_leaf->GetValue())) continue;
+      if(global_cuts(jentry,x_leaf->GetValue())) continue;
+      if(jentry > 250000) break;
       for(int i=0; i < int(m_Triggers.size()); i++)
       {
        vect_leaf.at(i)->GetBranch()->GetEntry(jentry);

@@ -316,15 +316,15 @@ public :
    //Bool_t          Muon_isGlobal[4];   //[nMuon]
    //Bool_t          Muon_isPFcand[4];   //[nMuon]
    //Bool_t          Muon_isTracker[4];   //[nMuon]
-   //Bool_t          Muon_mediumId[4];   //[nMuon]
+   Bool_t          Muon_mediumId[4];   //[nMuon]
    //Bool_t          Muon_mediumPromptId[4];   //[nMuon]
    //UChar_t         Muon_miniIsoId[4];   //[nMuon]
    //UChar_t         Muon_multiIsoId[4];   //[nMuon]
    //UChar_t         Muon_mvaId[4];   //[nMuon]
    //UChar_t         Muon_pfIsoId[4];   //[nMuon]
-   //Bool_t          Muon_softId[4];   //[nMuon]
+   Bool_t          Muon_softId[4];   //[nMuon]
    //Bool_t          Muon_softMvaId[4];   //[nMuon]
-   //Bool_t          Muon_tightId[4];   //[nMuon]
+   Bool_t          Muon_tightId[4];   //[nMuon]
    //UChar_t         Muon_tkIsoId[4];   //[nMuon]
    //Bool_t          Muon_triggerIdLoose[4];   //[nMuon]
    //UInt_t          nPhoton;
@@ -1418,15 +1418,15 @@ public :
    //TBranch        *b_Muon_isGlobal;   //!
    //TBranch        *b_Muon_isPFcand;   //!
    //TBranch        *b_Muon_isTracker;   //!
-   //TBranch        *b_Muon_mediumId;   //!
+   TBranch        *b_Muon_mediumId;   //!
    //TBranch        *b_Muon_mediumPromptId;   //!
    //TBranch        *b_Muon_miniIsoId;   //!
    //TBranch        *b_Muon_multiIsoId;   //!
    //TBranch        *b_Muon_mvaId;   //!
    //TBranch        *b_Muon_pfIsoId;   //!
-   //TBranch        *b_Muon_softId;   //!
+   TBranch        *b_Muon_softId;   //!
    //TBranch        *b_Muon_softMvaId;   //!
-   //TBranch        *b_Muon_tightId;   //!
+   TBranch        *b_Muon_tightId;   //!
    //TBranch        *b_Muon_tkIsoId;   //!
    //TBranch        *b_Muon_triggerIdLoose;   //!
    //TBranch        *b_nPhoton;   //!
@@ -2590,15 +2590,15 @@ void prod2017MC_reducedNANO_MET::Init(TTree *tree)
    //fChain->SetBranchAddress("Muon_isGlobal", Muon_isGlobal, &b_Muon_isGlobal);
    //fChain->SetBranchAddress("Muon_isPFcand", Muon_isPFcand, &b_Muon_isPFcand);
    //fChain->SetBranchAddress("Muon_isTracker", Muon_isTracker, &b_Muon_isTracker);
-   //fChain->SetBranchAddress("Muon_mediumId", Muon_mediumId, &b_Muon_mediumId);
+   fChain->SetBranchAddress("Muon_mediumId", Muon_mediumId, &b_Muon_mediumId);
    //fChain->SetBranchAddress("Muon_mediumPromptId", Muon_mediumPromptId, &b_Muon_mediumPromptId);
    //fChain->SetBranchAddress("Muon_miniIsoId", Muon_miniIsoId, &b_Muon_miniIsoId);
    //fChain->SetBranchAddress("Muon_multiIsoId", Muon_multiIsoId, &b_Muon_multiIsoId);
    //fChain->SetBranchAddress("Muon_mvaId", Muon_mvaId, &b_Muon_mvaId);
    //fChain->SetBranchAddress("Muon_pfIsoId", Muon_pfIsoId, &b_Muon_pfIsoId);
-   //fChain->SetBranchAddress("Muon_softId", Muon_softId, &b_Muon_softId);
+   fChain->SetBranchAddress("Muon_softId", Muon_softId, &b_Muon_softId);
    //fChain->SetBranchAddress("Muon_softMvaId", Muon_softMvaId, &b_Muon_softMvaId);
-   //fChain->SetBranchAddress("Muon_tightId", Muon_tightId, &b_Muon_tightId);
+   fChain->SetBranchAddress("Muon_tightId", Muon_tightId, &b_Muon_tightId);
    //fChain->SetBranchAddress("Muon_tkIsoId", Muon_tkIsoId, &b_Muon_tkIsoId);
    //fChain->SetBranchAddress("Muon_triggerIdLoose", Muon_triggerIdLoose, &b_Muon_triggerIdLoose);
    //fChain->SetBranchAddress("nPhoton", &nPhoton, &b_nPhoton);
