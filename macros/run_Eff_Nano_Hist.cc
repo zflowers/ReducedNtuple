@@ -13,7 +13,7 @@ void run_Eff_Nano_Hist(string outFile = "output_test.root"){
  gROOT->ProcessLine("string x_2017 = \"METFixEE2017_pt\"");
  gROOT->ProcessLine("string x_2018 = \"MET_pt\"");
  gROOT->ProcessLine(".L Plotter_Eff_Nano.C++"); 
- 
+/* 
  //2016
   cout << "Processing WJets 2016" << endl;
   //WJets
@@ -28,7 +28,7 @@ void run_Eff_Nano_Hist(string outFile = "output_test.root"){
   gROOT->ProcessLine("chain_2016_TTJets->Add(\"/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/output/Summer16_102X/TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Summer16_102X/TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Summer16_102X.root\")");
   gROOT->ProcessLine(("Eff_Nano Eff_2016_TTJets(\""+outFile+"\",Triggers_2016,\"TTJets_2016\",x_2016,chain_2016_TTJets)").c_str());
   gROOT->ProcessLine("Eff_2016_TTJets.Analyze()");
-/*
+
   //DY
   cout << "Processing DY 2016" << endl;
   gROOT->ProcessLine("TChain* chain_2016_DY = new TChain(\"Events\")");
@@ -36,6 +36,7 @@ void run_Eff_Nano_Hist(string outFile = "output_test.root"){
   gROOT->ProcessLine(("Eff_Nano Eff_2016_DY(\""+outFile+"\",Triggers_2016,\"DY_2016\",x_2016,chain_2016_DY)").c_str());
   gROOT->ProcessLine("Eff_2016_DY.Analyze()");
 */
+
  //2017
   //WJets
   cout << "Processing WJets 2017" << endl;
@@ -50,6 +51,19 @@ void run_Eff_Nano_Hist(string outFile = "output_test.root"){
   gROOT->ProcessLine("chain_2017_TTJets->Add(\"/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/output/Fall17_102X/TTJets_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X/TTJets_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root\")");
   gROOT->ProcessLine(("Eff_Nano Eff_2017_TTJets(\""+outFile+"\",Triggers_2017,\"TTJets_2017\",x_2017,chain_2017_TTJets)").c_str());
   gROOT->ProcessLine("Eff_2017_TTJets.Analyze()");
+
+  cout << "Processing T2-4bd 500 490 2017" << endl;
+  gROOT->ProcessLine("TChain* chain_2017_T2_4bd_500_490 = new TChain(\"Events\")");
+  gROOT->ProcessLine("chain_2017_T2_4bd_500_490->Add(\"/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/output/Fall17_102X_SMS/SMS-T2-4bd_genMET-80_mStop-500_mLSP-490_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X_SMS/SMS-T2-4bd_genMET-80_mStop-500_mLSP-490_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X_SMS.root\")");
+  gROOT->ProcessLine(("Eff_Nano Eff_2017_T2_4bd_500_490(\""+outFile+"\",Triggers_2017,\"T2_4bd_500_490_2017\",x_2017,chain_2017_T2_4bd_500_490)").c_str());
+  gROOT->ProcessLine("Eff_2017_T2_4bd_500_490.Analyze()");
+
+  cout << "Processing T2-4bd 500 420 2017" << endl;
+  gROOT->ProcessLine("TChain* chain_2017_T2_4bd_500_420 = new TChain(\"Events\")");
+  gROOT->ProcessLine("chain_2017_T2_4bd_500_420->Add(\"/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/output/Fall17_102X_SMS/SMS-T2-4bd_genMET-80_mStop-500_mLSP-420_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X_SMS/SMS-T2-4bd_genMET-80_mStop-500_mLSP-420_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X_SMS.root\")");
+  gROOT->ProcessLine(("Eff_Nano Eff_2017_T2_4bd_500_420(\""+outFile+"\",Triggers_2017,\"T2_4bd_500_420_2017\",x_2017,chain_2017_T2_4bd_500_420)").c_str());
+  gROOT->ProcessLine("Eff_2017_T2_4bd_500_420.Analyze()");
+
 /*
   //DY
   cout << "Processing DY 2017" << endl;
@@ -58,6 +72,7 @@ void run_Eff_Nano_Hist(string outFile = "output_test.root"){
   gROOT->ProcessLine(("Eff_Nano Eff_2017_DY(\""+outFile+"\",Triggers_2017,\"DY_2017\",x_2017,chain_2017_DY)").c_str());
   gROOT->ProcessLine("Eff_2017_DY.Analyze()");
 */
+/*
  //2018
   //WJets
   cout << "Processing WJets 2018" << endl;
@@ -72,7 +87,7 @@ void run_Eff_Nano_Hist(string outFile = "output_test.root"){
   gROOT->ProcessLine("chain_2018_TTJets->Add(\"/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/output/Autumn18_102X/TTJets_TuneCP5_13TeV-madgraphMLM-pythia8_Autumn18_102X/TTJets_TuneCP5_13TeV-madgraphMLM-pythia8_Autumn18_102X.root\")");
   gROOT->ProcessLine(("Eff_Nano Eff_2018_TTJets(\""+outFile+"\",Triggers_2018,\"TTJets_2018\",x_2018,chain_2018_TTJets)").c_str());
   gROOT->ProcessLine("Eff_2018_TTJets.Analyze()");
-/*
+
   //DY
   cout << "Processing DY 2018" << endl;
   gROOT->ProcessLine("TChain* chain_2018_DY = new TChain(\"Events\")");

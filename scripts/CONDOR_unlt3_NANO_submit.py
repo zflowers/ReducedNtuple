@@ -13,13 +13,13 @@ TEMP = pwd
 EXE  = "MakeReducedNtuple.x"
 #EXE  = "MakeEventCount.x"
 TREE = "Events"
-#OUT  = "/home/t3-ku/crogan/NTUPLES/Processing/"
 OUT = "/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/root/"
+#OUT = "/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/root/"
 LIST = "default.list"
 QUEUE = ""
 MAXN = 10
 SELECTOR = ""
-SPLIT = 5
+SPLIT = 3
 
 def new_listfile(rootlist, listfile):
     mylist = open(listfile,'w')
