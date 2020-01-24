@@ -19,3 +19,16 @@ python scripts/DO_hadd.py -idir output/Autumn18_102X/WJetsToLNu_TuneCP5_13TeV-ma
 HADD Script:
 
 ./scripts/DO_hadd_MET.sh
+
+
+To Process Ntuples (Jan 23, 2020)
+
+./scripts/runMET_CONDOR.sh
+
+After jobs finish
+
+Run this in a screen:
+
+./scripts/DO_hadd_MET.sh
+
+Go to macros/ to make plots
