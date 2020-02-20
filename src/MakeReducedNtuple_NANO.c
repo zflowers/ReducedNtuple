@@ -33,10 +33,8 @@ void produceReducedTree(selectortype& selector, std::string ofilename){
 	//copy branches to output file	
 	auto ofile =  new TFile(ofilename.c_str(), "RECREATE");
         cout << "Made Output File... " << endl;
-//	auto reducedTree = selector.fReader.GetTree()->CloneTree();
+        //auto reducedTree = selector.fReader.GetTree()->CloneTree();
 	auto reducedTree = selector.fChain->CloneTree();
-	//auto reducedTree = selector.fChain->CloneTree();
-	//reducedTree->Write();
 	//reducedTree->CopyEntries(selector.fReader.GetTree());
 	cout << "Writing Tree... " << endl;
 	reducedTree->Write();

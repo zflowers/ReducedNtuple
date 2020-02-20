@@ -54,13 +54,13 @@ void run_Eff_Nano_Hist(string outFile = "output_test.root"){
 
   cout << "Processing T2-4bd 500 490 2017" << endl;
   gROOT->ProcessLine("TChain* chain_2017_T2_4bd_500_490 = new TChain(\"Events\")");
-  gROOT->ProcessLine("chain_2017_T2_4bd_500_490->Add(\"/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/output/Fall17_102X_SMS/SMS-T2-4bd_genMET-80_mStop-500_mLSP-490_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X_SMS/SMS-T2-4bd_genMET-80_mStop-500_mLSP-490_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X_SMS.root\")");
+  gROOT->ProcessLine("chain_2017_T2_4bd_500_490->Add(\"/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/output/Fall17_102X_SMS/SMS-T2-4bd_genMET-80_mStop-500_mLSP-490_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X/SMS-T2-4bd_genMET-80_mStop-500_mLSP-490_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root\")");
   gROOT->ProcessLine(("Eff_Nano Eff_2017_T2_4bd_500_490(\""+outFile+"\",Triggers_2017,\"T2_4bd_500_490_2017\",x_2017,chain_2017_T2_4bd_500_490)").c_str());
   gROOT->ProcessLine("Eff_2017_T2_4bd_500_490.Analyze()");
 
   cout << "Processing T2-4bd 500 420 2017" << endl;
   gROOT->ProcessLine("TChain* chain_2017_T2_4bd_500_420 = new TChain(\"Events\")");
-  gROOT->ProcessLine("chain_2017_T2_4bd_500_420->Add(\"/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/output/Fall17_102X_SMS/SMS-T2-4bd_genMET-80_mStop-500_mLSP-420_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X_SMS/SMS-T2-4bd_genMET-80_mStop-500_mLSP-420_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X_SMS.root\")");
+  gROOT->ProcessLine("chain_2017_T2_4bd_500_420->Add(\"/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/output/Fall17_102X_SMS/SMS-T2-4bd_genMET-80_mStop-500_mLSP-420_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X/SMS-T2-4bd_genMET-80_mStop-500_mLSP-420_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root\")");
   gROOT->ProcessLine(("Eff_Nano Eff_2017_T2_4bd_500_420(\""+outFile+"\",Triggers_2017,\"T2_4bd_500_420_2017\",x_2017,chain_2017_T2_4bd_500_420)").c_str());
   gROOT->ProcessLine("Eff_2017_T2_4bd_500_420.Analyze()");
 
