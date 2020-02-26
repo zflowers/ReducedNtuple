@@ -430,7 +430,8 @@ inline bool Eff_Nano::Lepton_Cut(const Long64_t& jentry)
   }
 
   //Muon
-  bool cut_Muon = false; //start by assuming we have no good muons
+  bool cut_Muon1 = false; //start by assuming we have no good muons
+  bool cut_Muon2 = false; //start by assuming we have no good muons
   for(int i = 0; i < nMuon_leaf->GetValue(); i++){
      // baseline lepton definition
     if(Muon_pt_leaf->GetValue(i) < 3. || fabs(Muon_eta_leaf->GetValue(i)) > 2.4)
@@ -442,20 +443,43 @@ inline bool Eff_Nano::Lepton_Cut(const Long64_t& jentry)
     if(Muon_pfRelIso03_all_leaf->GetValue(i)*Muon_pt_leaf->GetValue(i) >= 20. + 300./Muon_pt_leaf->GetValue(i))
       continue;
     if(true){
-      cut_Muon = true;
       // signal lep criteria
 	if(Muon_tightId_leaf->GetValue(i))
-          cut_Muon = true;
+          cut_Muon1 = true;
+          if(cut_Muon1)
+          {
+           if(cut_Muon2)
+           {
+            cut_Muon2 = false; break;
+           }
+           cut_Muon2 = true;
+          }
 	else if(Electron_pt_leaf->GetValue(i) < 0.){
 	  if(Muon_softId_leaf->GetValue(i))
-            cut_Muon = true;
+            cut_Muon1 = true;
+            if(cut_Muon1)
+            {
+             if(cut_Muon2)
+             {
+              cut_Muon2 = false; break;
+             }
+             cut_Muon2 = true;
+            }
 	} else {
 	  if(Muon_mediumId_leaf->GetValue(i))
-            cut_Muon = true;
+            cut_Muon1 = true;
+            if(cut_Muon1)
+            {
+             if(cut_Muon2)
+             {
+              cut_Muon2 = false; break;
+             }
+             cut_Muon2 = true;
+            }
 	}
      }
    }
-   if (cut_Electron || cut_Muon) {return true;}
+   if (cut_Muon1 && cut_Muon2) {return true;}
    else {return false;}
 }
 
@@ -532,6 +556,7 @@ inline void Eff_Nano::Analyze(){
    }
 
    Long64_t nentries = m_Tree->GetEntriesFast();
+   Long64_t percent = 10.0;
    
    Long64_t nbytes = 0, nb = 0;
    for (Long64_t jentry=0; jentry<nentries;jentry++) {
@@ -539,8 +564,8 @@ inline void Eff_Nano::Analyze(){
       //nb = m_Tree->GetEntry(jentry);   nbytes += nb;
       x_leaf->GetBranch()->GetEntry(jentry);    
       weight_leaf->GetBranch()->GetEntry(jentry);    
+      if(jentry%((std::max(nentries,percent))/percent) == 0) { cout << "Processing Event: " << jentry << " out of: " << nentries << " Entries" << endl; }
       if(global_cuts(jentry,x_leaf->GetValue())) continue;
-      if(jentry > 300000) break;
       for(int i=0; i < int(m_Triggers.size()); i++)
       {
        vect_leaf.at(i)->GetBranch()->GetEntry(jentry);

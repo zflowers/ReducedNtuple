@@ -38,13 +38,14 @@ void run_Eff_Nano_Hist(string outFile = "output_test.root"){
 */
 
  //2017
+ /*
   //WJets
   cout << "Processing WJets 2017" << endl;
   gROOT->ProcessLine("TChain* chain_2017_WJets = new TChain(\"Events\")");
   gROOT->ProcessLine("chain_2017_WJets->Add(\"/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/output/Fall17_102X/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root\")");
   gROOT->ProcessLine(("Eff_Nano Eff_2017_WJets(\""+outFile+"\",Triggers_2017,\"WJets_2017\",x_2017,chain_2017_WJets)").c_str());
   gROOT->ProcessLine("Eff_2017_WJets.Analyze()");
-
+ */
   //TTJets
   cout << "Processing TTJets 2017" << endl;
   gROOT->ProcessLine("TChain* chain_2017_TTJets = new TChain(\"Events\")");
@@ -64,6 +65,17 @@ void run_Eff_Nano_Hist(string outFile = "output_test.root"){
   gROOT->ProcessLine(("Eff_Nano Eff_2017_T2_4bd_500_420(\""+outFile+"\",Triggers_2017,\"T2_4bd_500_420_2017\",x_2017,chain_2017_T2_4bd_500_420)").c_str());
   gROOT->ProcessLine("Eff_2017_T2_4bd_500_420.Analyze()");
 
+  cout << "Processing WWTo2L2Nu 2017" << endl;
+  gROOT->ProcessLine("TChain* chain_2017_WWTo2L2Nu = new TChain(\"Events\")");
+  gROOT->ProcessLine("chain_2017_WWTo2L2Nu->Add(\"/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/output/Fall17_102X/WWTo2L2Nu_NNPDF31_TuneCP5_13TeV-powheg-pythia8_Fall17_102X/WWTo2L2Nu_NNPDF31_TuneCP5_13TeV-powheg-pythia8_Fall17_102X.root\")");
+  gROOT->ProcessLine(("Eff_Nano Eff_2017_WWTo2L2Nu(\""+outFile+"\",Triggers_2017,\"WWTo2L2Nu_2017\",x_2017,chain_2017_WWTo2L2Nu)").c_str());
+  gROOT->ProcessLine("Eff_2017_WWTo2L2Nu.Analyze()");
+
+  cout << "Processing ZZTo2L2Nu 2017" << endl;
+  gROOT->ProcessLine("TChain* chain_2017_ZZTo2L2Nu = new TChain(\"Events\")");
+  gROOT->ProcessLine("chain_2017_ZZTo2L2Nu->Add(\"/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/output/Fall17_102X/ZZTo2L2Nu_13TeV_powheg_pythia8_Fall17_102X/ZZTo2L2Nu_13TeV_powheg_pythia8_Fall17_102X.root\")");
+  gROOT->ProcessLine(("Eff_Nano Eff_2017_ZZTo2L2Nu(\""+outFile+"\",Triggers_2017,\"ZZTo2L2Nu_2017\",x_2017,chain_2017_ZZTo2L2Nu)").c_str());
+  gROOT->ProcessLine("Eff_2017_ZZTo2L2Nu.Analyze()");
 /*
   //DY
   cout << "Processing DY 2017" << endl;
