@@ -2,7 +2,7 @@
 void run_Eff_Nano_Hist(string outFile = "output_test.root"){
  Long64_t start = gSystem->Now();
  gSystem->Exec(("rm "+outFile).c_str());
- gROOT->ProcessLine(".L Eff_Nano.h++");
+ gROOT->ProcessLine(".L Eff_Nano.h++"); //++
  gROOT->ProcessLine(".L MET_2016_Triggers.h");
  gROOT->ProcessLine(".L MET_2017_Triggers.h");
  gROOT->ProcessLine(".L MET_2018_Triggers.h");
@@ -12,7 +12,8 @@ void run_Eff_Nano_Hist(string outFile = "output_test.root"){
  gROOT->ProcessLine("string x_2016 = \"MET_pt\"");
  gROOT->ProcessLine("string x_2017 = \"METFixEE2017_pt\"");
  gROOT->ProcessLine("string x_2018 = \"MET_pt\"");
- gROOT->ProcessLine(".L Plotter_Eff_Nano.C++"); 
+ gROOT->ProcessLine(".L Plotter_Eff_Nano.C++"); //++
+
 /* 
  //2016
   cout << "Processing WJets 2016" << endl;
@@ -46,6 +47,8 @@ void run_Eff_Nano_Hist(string outFile = "output_test.root"){
   gROOT->ProcessLine(("Eff_Nano Eff_2017_WJets(\""+outFile+"\",Triggers_2017,\"WJets_2017\",x_2017,chain_2017_WJets)").c_str());
   gROOT->ProcessLine("Eff_2017_WJets.Analyze()");
  */
+
+
   //TTJets
   cout << "Processing TTJets 2017" << endl;
   gROOT->ProcessLine("TChain* chain_2017_TTJets = new TChain(\"Events\")");
@@ -65,6 +68,12 @@ void run_Eff_Nano_Hist(string outFile = "output_test.root"){
   gROOT->ProcessLine(("Eff_Nano Eff_2017_T2_4bd_500_420(\""+outFile+"\",Triggers_2017,\"T2_4bd_500_420_2017\",x_2017,chain_2017_T2_4bd_500_420)").c_str());
   gROOT->ProcessLine("Eff_2017_T2_4bd_500_420.Analyze()");
 
+  cout << "Processing TChiWZ 2017" << endl;
+  gROOT->ProcessLine("TChain* chain_2017_TChiWZ = new TChain(\"Events\")");
+  gROOT->ProcessLine("chain_2017_TChiWZ->Add(\"/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/output/Fall17_102X_SMS/SMS-TChiWZ_ZToLL_mZMin-0p1_TuneCP2_13TeV-madgraphMLM-pythia8_Fall17_102X/SMS-TChiWZ_ZToLL_mZMin-0p1_TuneCP2_13TeV-madgraphMLM-pythia8_Fall17_102X.root\")");
+  gROOT->ProcessLine(("Eff_Nano Eff_2017_TChiWZ(\""+outFile+"\",Triggers_2017,\"TChiWZ_2017\",x_2017,chain_2017_TChiWZ)").c_str());
+  gROOT->ProcessLine("Eff_2017_TChiWZ.Analyze()");
+
   cout << "Processing WWTo2L2Nu 2017" << endl;
   gROOT->ProcessLine("TChain* chain_2017_WWTo2L2Nu = new TChain(\"Events\")");
   gROOT->ProcessLine("chain_2017_WWTo2L2Nu->Add(\"/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/output/Fall17_102X/WWTo2L2Nu_NNPDF31_TuneCP5_13TeV-powheg-pythia8_Fall17_102X/WWTo2L2Nu_NNPDF31_TuneCP5_13TeV-powheg-pythia8_Fall17_102X.root\")");
@@ -76,14 +85,15 @@ void run_Eff_Nano_Hist(string outFile = "output_test.root"){
   gROOT->ProcessLine("chain_2017_ZZTo2L2Nu->Add(\"/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/output/Fall17_102X/ZZTo2L2Nu_13TeV_powheg_pythia8_Fall17_102X/ZZTo2L2Nu_13TeV_powheg_pythia8_Fall17_102X.root\")");
   gROOT->ProcessLine(("Eff_Nano Eff_2017_ZZTo2L2Nu(\""+outFile+"\",Triggers_2017,\"ZZTo2L2Nu_2017\",x_2017,chain_2017_ZZTo2L2Nu)").c_str());
   gROOT->ProcessLine("Eff_2017_ZZTo2L2Nu.Analyze()");
-/*
+
   //DY
   cout << "Processing DY 2017" << endl;
   gROOT->ProcessLine("TChain* chain_2017_DY = new TChain(\"Events\")");
   gROOT->ProcessLine("chain_2017_DY->Add(\"/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/output/Fall17_102X/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8_Fall17_102X/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8_Fall17_102X.root\")");
   gROOT->ProcessLine(("Eff_Nano Eff_2017_DY(\""+outFile+"\",Triggers_2017,\"DY_2017\",x_2017,chain_2017_DY)").c_str());
   gROOT->ProcessLine("Eff_2017_DY.Analyze()");
-*/
+
+
 /*
  //2018
   //WJets
@@ -107,6 +117,8 @@ void run_Eff_Nano_Hist(string outFile = "output_test.root"){
   gROOT->ProcessLine(("Eff_Nano Eff_2018_DY(\""+outFile+"\",Triggers_2018,\"DY_2018\",x_2018,chain_2018_DY)").c_str());
   gROOT->ProcessLine("Eff_2018_DY.Analyze()");
 */
+
+
  cout << "Running Plotter" << endl;
  string runPlotter = ".x Plotter_Eff_Nano.C(\"";
  runPlotter+=outFile;
@@ -117,4 +129,5 @@ void run_Eff_Nano_Hist(string outFile = "output_test.root"){
  Long64_t end = gSystem->Now();
  cout << "Time to Run: " << (end-start)/1000.0 << " seconds" << endl;
  gROOT->ProcessLine(".qqqqqqq"); 
+
 }

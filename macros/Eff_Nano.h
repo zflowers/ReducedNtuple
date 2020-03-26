@@ -2,6 +2,7 @@
 #define EFF_NANO_H
 
 #include <iostream>
+#include <algorithm>
 #include <TFile.h>
 #include <TTree.h>
 #include <TEfficiency.h>
@@ -93,6 +94,7 @@ inline void Eff_Nano::Set_Output(string outFile)
 inline bool Eff_Nano::Lepton_Cut(const Long64_t& jentry)
 {
  //Setting Up Leaves
+ /*
  TLeaf* nElectron_leaf = m_Tree->GetLeaf("nElectron");
  nElectron_leaf->GetBranch()->GetEntry(jentry);
  TLeaf* Electron_pt_leaf = m_Tree->GetLeaf("Electron_pt");
@@ -129,7 +131,7 @@ inline bool Eff_Nano::Lepton_Cut(const Long64_t& jentry)
  Electron_mvaFall17V1noIso_leaf->GetBranch()->GetEntry(jentry);
  TLeaf* Electron_mvaFall17V2noIso_leaf = m_Tree->GetLeaf("Electron_mvaFall17V2noIso");
  Electron_mvaFall17V2noIso_leaf->GetBranch()->GetEntry(jentry);
- 
+ */
  TLeaf* nMuon_leaf = m_Tree->GetLeaf("nMuon");
  nMuon_leaf->GetBranch()->GetEntry(jentry);
  TLeaf* Muon_pt_leaf = m_Tree->GetLeaf("Muon_pt");
@@ -140,10 +142,10 @@ inline bool Eff_Nano::Lepton_Cut(const Long64_t& jentry)
  Muon_phi_leaf->GetBranch()->GetEntry(jentry);
  TLeaf* Muon_mass_leaf = m_Tree->GetLeaf("Muon_mass");
  Muon_mass_leaf->GetBranch()->GetEntry(jentry);
- TLeaf* Muon_pfRelIso03_all_leaf = m_Tree->GetLeaf("Muon_pfRelIso03_all");
- Muon_pfRelIso03_all_leaf->GetBranch()->GetEntry(jentry);
- TLeaf* Muon_MiniIso_leaf = m_Tree->GetLeaf("Muon_miniPFRelIso_all");
- Muon_MiniIso_leaf->GetBranch()->GetEntry(jentry);
+ //TLeaf* Muon_pfRelIso03_all_leaf = m_Tree->GetLeaf("Muon_pfRelIso03_all");
+ //Muon_pfRelIso03_all_leaf->GetBranch()->GetEntry(jentry);
+ TLeaf* Muon_minipfRelIso_all_leaf = m_Tree->GetLeaf("Muon_miniPFRelIso_all");
+ Muon_minipfRelIso_all_leaf->GetBranch()->GetEntry(jentry);
  TLeaf* Muon_Charge_leaf = m_Tree->GetLeaf("Muon_charge");
  Muon_Charge_leaf->GetBranch()->GetEntry(jentry);
  TLeaf* Muon_dxy_leaf = m_Tree->GetLeaf("Muon_dxy");
@@ -161,10 +163,10 @@ inline bool Eff_Nano::Lepton_Cut(const Long64_t& jentry)
  TLeaf* Muon_softId_leaf = m_Tree->GetLeaf("Muon_softId"); 
  Muon_softId_leaf->GetBranch()->GetEntry(jentry);
  TLeaf* Muon_mediumId_leaf = m_Tree->GetLeaf("Muon_mediumId"); 
- Muon_softId_leaf->GetBranch()->GetEntry(jentry);
+ Muon_mediumId_leaf->GetBranch()->GetEntry(jentry);
  TLeaf* Muon_tightId_leaf = m_Tree->GetLeaf("Muon_tightId"); 
  Muon_tightId_leaf->GetBranch()->GetEntry(jentry);
-  
+  /*
  //Electrons
  bool cut_Electron = false; //start by assuming we have no good electrons
 
@@ -313,7 +315,7 @@ inline bool Eff_Nano::Lepton_Cut(const Long64_t& jentry)
 	    }
 	  }
 	}
-  /*
+  //comment out below
       // FO VLoose Electron
       if(year == 2016){ // Summer16_94X legacy
 	if(fabs(Electron_eta_leaf->GetValue(i)) < 0.8){ // eta < 0.8
@@ -426,72 +428,53 @@ inline bool Eff_Nano::Lepton_Cut(const Long64_t& jentry)
 	}
       }
      */
+ 
+/*
+
     }
   }
+  */
 
   //Muon
-  bool cut_Muon1 = false; //start by assuming we have no good muons
-  bool cut_Muon2 = false; //start by assuming we have no good muons
-  for(int i = 0; i < nMuon_leaf->GetValue(); i++){
+  int Nmuons = nMuon_leaf->GetValue();
+  if(Nmuons != 2) return true;
+   
+  TLorentzVector Muon1;
+  TLorentzVector Muon2;
+  for(int i = 0; i < Nmuons; i++){
+  
      // baseline lepton definition
-    if(Muon_pt_leaf->GetValue(i) < 3. || fabs(Muon_eta_leaf->GetValue(i)) > 2.4)
-      continue;
-    // if(fabs(Muon_dxy_leaf->GetValue(i)) >= 0.05 || fabs(Muon_dz_leaf->GetValue(i)) >= 0.1 ||
-    //    Muon_ip3d_leaf->GetValue(i) >= 0.0175 || Muon_sip3d_leaf->GetValue(i) >= 2.5)
-    if(fabs(Muon_dxy_leaf->GetValue(i)) >= 0.05 || fabs(Muon_dz_leaf->GetValue(i)) >= 0.1 || Muon_sip3d_leaf->GetValue(i) >= 8.)
-      continue;
-    if(Muon_pfRelIso03_all_leaf->GetValue(i)*Muon_pt_leaf->GetValue(i) >= 20. + 300./Muon_pt_leaf->GetValue(i))
-      continue;
-    if(true){
-      // signal lep criteria
-	if(Muon_tightId_leaf->GetValue(i))
-          cut_Muon1 = true;
-          if(cut_Muon1)
-          {
-           if(cut_Muon2)
-           {
-            cut_Muon2 = false; break;
-           }
-           cut_Muon2 = true;
-          }
-	else if(Electron_pt_leaf->GetValue(i) < 0.){
-	  if(Muon_softId_leaf->GetValue(i))
-            cut_Muon1 = true;
-            if(cut_Muon1)
-            {
-             if(cut_Muon2)
-             {
-              cut_Muon2 = false; break;
-             }
-             cut_Muon2 = true;
-            }
-	} else {
-	  if(Muon_mediumId_leaf->GetValue(i))
-            cut_Muon1 = true;
-            if(cut_Muon1)
-            {
-             if(cut_Muon2)
-             {
-              cut_Muon2 = false; break;
-             }
-             cut_Muon2 = true;
-            }
-	}
-     }
+    if(Muon_pt_leaf->GetValue(i) < 3. || fabs(Muon_eta_leaf->GetValue(i)) > 2.4) return true;
+    if(fabs(Muon_dxy_leaf->GetValue(i)) >= 0.05) return true;
+    if(fabs(Muon_dz_leaf->GetValue(i)) >= 0.1) return true;
+    if(Muon_sip3d_leaf->GetValue(i) >= 8.) return true;
+    if(Muon_minipfRelIso_all_leaf->GetValue(i)*Muon_pt_leaf->GetValue(i) > 6.) return true;//Margaret Iso
+    //if(Muon_pfRelIso03_all_leaf->GetValue(i)*Muon_pt_leaf->GetValue(i) >= 20. + 300./Muon_pt_leaf->GetValue(i)) return true; //Chris Iso
+   
+    // signal lep criteria
+    //if(!(Muon_tightId_leaf->GetValue(i))) return true;
+    //if(!(Muon_softId_leaf->GetValue(i))) return true;
+    if(!(Muon_mediumId_leaf->GetValue(i))) return true;
    }
-   if (cut_Muon1 && cut_Muon2) {return true;}
-   else {return false;}
+   Muon1.SetPtEtaPhiM(Muon_pt_leaf->GetValue(0),Muon_eta_leaf->GetValue(0),Muon_phi_leaf->GetValue(0),Muon_mass_leaf->GetValue(0));
+   Muon2.SetPtEtaPhiM(Muon_pt_leaf->GetValue(1),Muon_eta_leaf->GetValue(1),Muon_phi_leaf->GetValue(1),Muon_mass_leaf->GetValue(1));
+   if(Muon2.Pt() < 10.) return true;
+   //if((Muon1+Muon2).M() < 4.) return true;
+   //if((Muon1+Muon2).M() > 60.) return true;
+   //if((Muon1+Muon2).Pt() < 3.) return true;
+   
+   return false; 
 }
 
 inline bool Eff_Nano::global_cuts(const Long64_t& jentry, double x_val)
 {
- bool cut = false;
+ //return false to keep the event
  //Example Cut
- //cut = true means skip that event
  ///////////////////////////////////////////////////////
  //TLeaf* CaloMET_pt_leaf = m_Tree->GetLeaf("CaloMET_pt");
  //CaloMET_pt_leaf->GetBranch()->GetEntry(jentry);
  //if(x_val/CaloMET_pt_leaf->GetValue() > 5.) cut = true;
+ //this skips every event with MET/CaloMET > 5.
  ///////////////////////////////////////////////////////
  //Calculate PFMHT
  TLeaf* nJet_leaf = m_Tree->GetLeaf("nJet");
@@ -514,14 +497,20 @@ inline bool Eff_Nano::global_cuts(const Long64_t& jentry, double x_val)
   dummy.SetPtEtaPhiM(Jet_pt_leaf->GetValue(i),Jet_eta_leaf->GetValue(i),Jet_phi_leaf->GetValue(i),Jet_mass_leaf->GetValue(i));
   MHT -= dummy;
  }
- //if (MHT.Pt() < 300.) { cut = true; }
- //if(HT < 300.) { cut = true; }
- 
- //Lepton Cut(s)
- //Require at least one electron or muon (loose)
- if(!Lepton_Cut(jentry)) { cut = true; } 
 
- return cut;
+ TLeaf* HLT_IsoMu27_leaf = m_Tree->GetLeaf("HLT_IsoMu27");
+ HLT_IsoMu27_leaf->GetBranch()->GetEntry(jentry);
+ if(!Lepton_Cut(jentry)) 
+ {
+  if(HLT_IsoMu27_leaf->GetValue() != false)
+  {
+   //if(MHT.Pt() > 60.)
+   //{ 
+    return false; 
+   //}
+  }
+ }
+ return true;
 }
 
 inline bool Eff_Nano::Other_Bools(const Long64_t& jentry)
@@ -557,8 +546,8 @@ inline void Eff_Nano::Analyze(){
 
    Long64_t nentries = m_Tree->GetEntriesFast();
    Long64_t percent = 10.0;
-   
    Long64_t nbytes = 0, nb = 0;
+
    for (Long64_t jentry=0; jentry<nentries;jentry++) {
       Long64_t ientry = m_Tree->LoadTree(jentry);
       //nb = m_Tree->GetEntry(jentry);   nbytes += nb;
@@ -574,6 +563,7 @@ inline void Eff_Nano::Analyze(){
        vect_Eff.at(i)->Fill(vect_leaf.at(i)->GetValue(),x_leaf->GetValue());
       }
    }
+   cout << "Finished Event Loop" << endl;
    TFile* output = new TFile(m_outFile.c_str(),"UPDATE");
    output->mkdir(m_Tag.c_str());
    output->cd(m_Tag.c_str());
