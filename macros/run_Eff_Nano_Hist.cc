@@ -39,15 +39,13 @@ void run_Eff_Nano_Hist(string outFile = "output_test.root"){
 */
 
  //2017
- /*
+ 
   //WJets
   cout << "Processing WJets 2017" << endl;
   gROOT->ProcessLine("TChain* chain_2017_WJets = new TChain(\"Events\")");
   gROOT->ProcessLine("chain_2017_WJets->Add(\"/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/output/Fall17_102X/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root\")");
   gROOT->ProcessLine(("Eff_Nano Eff_2017_WJets(\""+outFile+"\",Triggers_2017,\"WJets_2017\",x_2017,chain_2017_WJets)").c_str());
   gROOT->ProcessLine("Eff_2017_WJets.Analyze()");
- */
-
 
   //TTJets
   cout << "Processing TTJets 2017" << endl;

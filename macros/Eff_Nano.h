@@ -94,7 +94,6 @@ inline void Eff_Nano::Set_Output(string outFile)
 inline bool Eff_Nano::Lepton_Cut(const Long64_t& jentry)
 {
  //Setting Up Leaves
- /*
  TLeaf* nElectron_leaf = m_Tree->GetLeaf("nElectron");
  nElectron_leaf->GetBranch()->GetEntry(jentry);
  TLeaf* Electron_pt_leaf = m_Tree->GetLeaf("Electron_pt");
@@ -131,7 +130,7 @@ inline bool Eff_Nano::Lepton_Cut(const Long64_t& jentry)
  Electron_mvaFall17V1noIso_leaf->GetBranch()->GetEntry(jentry);
  TLeaf* Electron_mvaFall17V2noIso_leaf = m_Tree->GetLeaf("Electron_mvaFall17V2noIso");
  Electron_mvaFall17V2noIso_leaf->GetBranch()->GetEntry(jentry);
- */
+ 
  TLeaf* nMuon_leaf = m_Tree->GetLeaf("nMuon");
  nMuon_leaf->GetBranch()->GetEntry(jentry);
  TLeaf* Muon_pt_leaf = m_Tree->GetLeaf("Muon_pt");
@@ -142,8 +141,8 @@ inline bool Eff_Nano::Lepton_Cut(const Long64_t& jentry)
  Muon_phi_leaf->GetBranch()->GetEntry(jentry);
  TLeaf* Muon_mass_leaf = m_Tree->GetLeaf("Muon_mass");
  Muon_mass_leaf->GetBranch()->GetEntry(jentry);
- //TLeaf* Muon_pfRelIso03_all_leaf = m_Tree->GetLeaf("Muon_pfRelIso03_all");
- //Muon_pfRelIso03_all_leaf->GetBranch()->GetEntry(jentry);
+ TLeaf* Muon_pfRelIso03_all_leaf = m_Tree->GetLeaf("Muon_pfRelIso03_all");
+ Muon_pfRelIso03_all_leaf->GetBranch()->GetEntry(jentry);
  TLeaf* Muon_minipfRelIso_all_leaf = m_Tree->GetLeaf("Muon_miniPFRelIso_all");
  Muon_minipfRelIso_all_leaf->GetBranch()->GetEntry(jentry);
  TLeaf* Muon_Charge_leaf = m_Tree->GetLeaf("Muon_charge");
@@ -166,9 +165,11 @@ inline bool Eff_Nano::Lepton_Cut(const Long64_t& jentry)
  Muon_mediumId_leaf->GetBranch()->GetEntry(jentry);
  TLeaf* Muon_tightId_leaf = m_Tree->GetLeaf("Muon_tightId"); 
  Muon_tightId_leaf->GetBranch()->GetEntry(jentry);
-  /*
+  
+ bool selection = false;
+ int Nlep = 0;
+
  //Electrons
- bool cut_Electron = false; //start by assuming we have no good electrons
 
   int year = 2017;
   if(m_Tag.find("16") != std::string::npos)
@@ -178,14 +179,9 @@ inline bool Eff_Nano::Lepton_Cut(const Long64_t& jentry)
 
   for(int i = 0; i < nElectron_leaf->GetValue(); i++){
     // baseline lepton definition
-    if(Electron_pt_leaf->GetValue(i) < 5. || fabs(Electron_eta_leaf->GetValue(i)) > 2.5)
-      continue;
-    // if(fabs(Electron_dxy_leaf->GetValue(i)) >= 0.05 || fabs(Electron_dz_leaf->GetValue(i)) >= 0.1 ||
-    //    Electron_ip3d_leaf->GetValue(i) >= 0.0175 || Electron_sip3d_leaf->GetValue(i) >= 2.5)
-    if(fabs(Electron_dxy_leaf->GetValue(i)) >= 0.05 || fabs(Electron_dz_leaf->GetValue(i)) >= 0.1 || Electron_sip3d_leaf->GetValue(i) >= 8)
-      continue;
-    if(Electron_pfRelIso03_all_leaf->GetValue(i)*Electron_pt_leaf->GetValue(i) >= 20. + 300./Electron_pt_leaf->GetValue(i))
-      continue;
+    if(Electron_pt_leaf->GetValue(i) < 5. || fabs(Electron_eta_leaf->GetValue(i)) > 2.5) continue;
+    if(fabs(Electron_dxy_leaf->GetValue(i)) >= 0.05 || fabs(Electron_dz_leaf->GetValue(i)) >= 0.1 || Electron_sip3d_leaf->GetValue(i) >= 4.) continue;
+    if(Electron_pfRelIso03_all_leaf->GetValue(i)*Electron_pt_leaf->GetValue(i) >= 20. + 300./Electron_pt_leaf->GetValue(i)) continue;
 
     // FO baseline criteria
     if(Electron_lostHits_leaf->GetValue(i) == 0 && Electron_convVeto_leaf->GetValue(i)){
@@ -209,35 +205,35 @@ inline bool Eff_Nano::Lepton_Cut(const Long64_t& jentry)
 	  if(fabs(Electron_eta_leaf->GetValue(i)) < 0.8){ // eta < 0.8
 	    if(Electron_pt_leaf->GetValue(i) < 10.){ // using VLoose ID for low pT
 	      if(mva > 1.309)
-		cut_Electron = true; break;
+		continue;
 	    } else if(Electron_pt_leaf->GetValue(i) < 40.) {
 	      if(mva > 3.447 + 0.063*(Electron_pt_leaf->GetValue(i)- 25.))
-		cut_Electron = true; break;
+		continue;
 	    } else {
 	      if(mva > 4.392)
-		cut_Electron = true; break;
+		continue;
 	    }
 	  } else if(fabs(Electron_eta_leaf->GetValue(i)) < 1.479){ // eta < 1.479
 	    if(Electron_pt_leaf->GetValue(i) < 10.){ // using VLoose ID for low pT
 	      if(mva > 0.373)
-		cut_Electron = true; break; // just changed me
+		continue; // just changed me
 	    } else if(Electron_pt_leaf->GetValue(i) < 40.) {
 	      if(mva > 2.522 + 0.058*(Electron_pt_leaf->GetValue(i) - 25.))
-		cut_Electron = true; break;
+		continue;
 	    } else {
 	      if(mva > 3.392)
-		cut_Electron = true; break;
+		continue;
 	    }
 	  } else { // eta < 2.5
 	    if(Electron_pt_leaf->GetValue(i) < 10.){ // using VLoose ID for low pT
 	      if(mva > 0.071)
-		cut_Electron = true; break;
+		continue;
 	    } else if(Electron_pt_leaf->GetValue(i) < 40.) {
 	      if(mva > 1.555 + 0.075*(Electron_pt_leaf->GetValue(i) - 25.))
-		cut_Electron = true; break;
+		continue;
 	    } else {
 	      if(mva > 2.680)
-		cut_Electron = true; break;
+		continue;
 	    }
 	  }
 	}
@@ -246,35 +242,35 @@ inline bool Eff_Nano::Lepton_Cut(const Long64_t& jentry)
 	  if(fabs(Electron_eta_leaf->GetValue(i)) < 0.8){ // eta < 0.8
 	    if(Electron_pt_leaf->GetValue(i) < 10.){ // using VLoose ID for low pT
 	      if(mva > 0.488)
-		cut_Electron = true; break;
+		continue;
 	    } else if(Electron_pt_leaf->GetValue(i) < 25.) {
 	      if(mva > 0.2+0.032*(Electron_pt_leaf->GetValue(i) - 10.))
-		cut_Electron = true; break;
+		continue;
 	    } else {
 	      if(mva > 0.68)
-		cut_Electron = true; break;
+		continue;
 	    }
 	  } else if(fabs(Electron_eta_leaf->GetValue(i)) < 1.479){ // eta < 1.479
 	    if(Electron_pt_leaf->GetValue(i) < 10.){ // using VLoose ID for low pT
 	      if(mva > -0.045)
-		cut_Electron = true; break;
+		continue;
 	    } else if(Electron_pt_leaf->GetValue(i) < 25.) {
 	      if(mva > 0.1+0.025*(Electron_pt_leaf->GetValue(i) - 10.))
-		cut_Electron = true; break;
+		continue;
 	    } else {
 	      if(mva > 0.475)
-		cut_Electron = true; break;
+		continue;
 	    }
 	  } else { // eta < 2.5
 	    if(Electron_pt_leaf->GetValue(i) < 10.){ // using VLoose ID for low pT
 	      if(mva > 0.176)
-		cut_Electron = true; break;
+		continue;
 	    } else if(Electron_pt_leaf->GetValue(i) < 25.) {
 	      if(mva > -0.1+0.028*(Electron_pt_leaf->GetValue(i) - 10.))
-		cut_Electron = true; break;
+		continue;
 	    } else {
 	      if(mva > 0.32)
-		cut_Electron = true; break;
+		continue;
 	    }
 	  }
 	}
@@ -283,187 +279,74 @@ inline bool Eff_Nano::Lepton_Cut(const Long64_t& jentry)
 	  if(fabs(Electron_eta_leaf->GetValue(i)) < 0.8){ // eta < 0.8
 	    if(Electron_pt_leaf->GetValue(i) < 10.){ // using VLoose ID for low pT
 	      if(mva > 1.320)
-		cut_Electron = true; break;
+		continue;
 	    } else if(Electron_pt_leaf->GetValue(i) < 25.) {
 	      if(mva > 4.277 + 0.112*(Electron_pt_leaf->GetValue(i) - 25.))
-		cut_Electron = true; break;
+		continue;
 	    } else {
 	      if(mva > 4.277)
-		cut_Electron = true; break;
+		continue;
 	    }
 	  } else if(fabs(Electron_eta_leaf->GetValue(i)) < 1.479){ // eta < 1.479
 	    if(Electron_pt_leaf->GetValue(i) < 10.){ // using VLoose ID for low pT
 	      if(mva > 0.192)
-		cut_Electron = true; break;
+		continue;
 	    } else if(Electron_pt_leaf->GetValue(i) < 25.) {
 	      if(mva > 3.152 + 0.060*(Electron_pt_leaf->GetValue(i) - 25.))
-		cut_Electron = true; break;
+		continue;
 	    } else {
 	      if(mva > 3.152)
-		cut_Electron = true; break;
+		continue;
 	    }
 	  } else { // eta < 2.5
 	    if(Electron_pt_leaf->GetValue(i) < 10.){ // using VLoose ID for low pT
 	      if(mva > 0.362)
-		cut_Electron = true; break;
+		continue;
 	    } else if(Electron_pt_leaf->GetValue(i) < 25.) {
 	      if(mva > 2.359 + 0.087*(Electron_pt_leaf->GetValue(i) - 25.))
-		cut_Electron = true; break;
+		continue;
 	    } else {
 	      if(mva > 2.359)
-		cut_Electron = true; break;
+		continue;
 	    }
 	  }
 	}
-  //comment out below
-      // FO VLoose Electron
-      if(year == 2016){ // Summer16_94X legacy
-	if(fabs(Electron_eta_leaf->GetValue(i)) < 0.8){ // eta < 0.8
-	  if(Electron_pt_leaf->GetValue(i) < 10.){
-	    if(mva > -0.259)
-	      cut_Electron = true; break;
-	  } else if(Electron_pt_leaf->GetValue(i) < 25.) {
-	    if(mva > -0.388 + 0.109*(Electron_pt_leaf->GetValue(i) - 25.))
-	      cut_Electron = true; break;
-	  } else {
-	    if(mva > -0.388)
-	      cut_Electron = true; break;
-	  }
-	} else if(fabs(Electron_eta_leaf->GetValue(i)) < 1.479){ // eta < 1.479
-	  if(Electron_pt_leaf->GetValue(i) < 10.){
-	    if(mva > -0.256)
-	      cut_Electron = true; break;
-	  } else if(Electron_pt_leaf->GetValue(i) < 25.) {
-	    if(mva > -0.696 + 0.106*(Electron_pt_leaf->GetValue(i) - 25.))
-	      cut_Electron = true; break;
-	  } else {
-	    if(mva > -0.696)
-	      cut_Electron = true; break;
-	  }
-	} else { // eta < 2.5
-	  if(Electron_pt_leaf->GetValue(i) < 10.){
-	    if(mva > -1.630)
-	      cut_Electron = true; break;
-	  } else if(Electron_pt_leaf->GetValue(i) < 25.) {
-	    if(mva > -1.219 + 0.148*(Electron_pt_leaf->GetValue(i) - 25.))
-	      cut_Electron = true; break;
-	  } else {
-	    if(mva > -1.219)
-	      cut_Electron = true; break;
-	  }
-	}
-      }
-
-      if(year == 2017){ // Fall17_94X
-	if(fabs(Electron_eta_leaf->GetValue(i)) < 0.8){ // eta < 0.8
-	  if(Electron_pt_leaf->GetValue(i) < 10.){
-	    if(mva > -0.135)
-	      cut_Electron = true; break;
-	  } else if(Electron_pt_leaf->GetValue(i) < 25.) {
-	    if(mva > (-0.93 + (0.043/15.)*(Electron_pt_leaf->GetValue(i)-10.)))
-	      cut_Electron = true; break;
-	  } else {
-	    if(mva > -0.887)
-	      cut_Electron = true; break;
-	  }
-	} else if(fabs(Electron_eta_leaf->GetValue(i)) < 1.479){ // eta < 1.479
-	  if(Electron_pt_leaf->GetValue(i) < 10.){
-	    if(mva > -0.417)
-	      cut_Electron = true; break;
-	  } else if(Electron_pt_leaf->GetValue(i) < 25.) {
-	    if(mva > (-0.93 + (0.04/15.)*(Electron_pt_leaf->GetValue(i)-10.)))
-	      cut_Electron = true; break;
-	  } else {
-	    if(mva > -0.89)
-	      cut_Electron = true; break;
-	  }
-	} else { // eta < 2.5
-	  if(Electron_pt_leaf->GetValue(i) < 10.){
-	    if(mva > -0.470)
-	      cut_Electron = true; break;
-	  } else if(Electron_pt_leaf->GetValue(i) < 25.) {
-	    if(mva > (-0.942 + (0.032/15.)*(Electron_pt_leaf->GetValue(i)-10.)))
-	      cut_Electron = true; break;
-	  } else {
-	    if(mva > -0.91)
-	      cut_Electron = true; break;
-	  }
-	}
-      }
-
-      if(year == 2018){ // Autumn18_102X
-	if(fabs(Electron_eta_leaf->GetValue(i)) < 0.8){ // eta < 0.8
-	  if(Electron_pt_leaf->GetValue(i) < 10.){
-	    if(mva > 0.053)
-	      cut_Electron = true; break;
-	  } else if(Electron_pt_leaf->GetValue(i) < 25.) {
-	    if(mva > -0.106 + 0.062*(Electron_pt_leaf->GetValue(i) - 25.))
-	      cut_Electron = true; break;
-	  } else {
-	    if(mva > -0.106)
-	      cut_Electron = true; break;
-	  }
-	} else if(fabs(Electron_eta_leaf->GetValue(i)) < 1.479){ // eta < 1.479
-	  if(Electron_pt_leaf->GetValue(i) < 10.){
-	    if(mva > -0.434)
-	      cut_Electron = true; break;
-	  } else if(Electron_pt_leaf->GetValue(i) < 25.) {
-	    if(mva > -0.769 + 0.038*(Electron_pt_leaf->GetValue(i) - 25.))
-	      cut_Electron = true; break;
-	  } else {
-	    if(mva > -0.769)
-	      cut_Electron = true; break;
-	  }
-	} else { // eta < 2.5
-	  if(Electron_pt_leaf->GetValue(i) < 10.){
-	    if(mva > -0.956)
-	      cut_Electron = true; break;
-	  } else if(Electron_pt_leaf->GetValue(i) < 25.) {
-	    if(mva > -1.461 + 0.042*(Electron_pt_leaf->GetValue(i) - 25.))
-	      cut_Electron = true; break;
-	  } else {
-	    if(mva > -1.461)
-	      cut_Electron = true; break;
-	  }
-	}
-      }
-     */
- 
-/*
 
     }
+    //selection = true;
+    Nlep++;
   }
-  */
 
   //Muon
   int Nmuons = nMuon_leaf->GetValue();
-  if(Nmuons != 2) return true;
+  //if(Nmuons != 2) selection = true;
    
-  TLorentzVector Muon1;
-  TLorentzVector Muon2;
+  //TLorentzVector Muon1;
+  //TLorentzVector Muon2;
   for(int i = 0; i < Nmuons; i++){
   
      // baseline lepton definition
-    if(Muon_pt_leaf->GetValue(i) < 3. || fabs(Muon_eta_leaf->GetValue(i)) > 2.4) return true;
-    if(fabs(Muon_dxy_leaf->GetValue(i)) >= 0.05) return true;
-    if(fabs(Muon_dz_leaf->GetValue(i)) >= 0.1) return true;
-    if(Muon_sip3d_leaf->GetValue(i) >= 8.) return true;
-    if(Muon_minipfRelIso_all_leaf->GetValue(i)*Muon_pt_leaf->GetValue(i) > 6.) return true;//Margaret Iso
-    //if(Muon_pfRelIso03_all_leaf->GetValue(i)*Muon_pt_leaf->GetValue(i) >= 20. + 300./Muon_pt_leaf->GetValue(i)) return true; //Chris Iso
+    if(Muon_pt_leaf->GetValue(i) < 3. || fabs(Muon_eta_leaf->GetValue(i)) > 2.4) selection = true;
+    if(fabs(Muon_dxy_leaf->GetValue(i)) >= 0.05) selection = true;
+    if(fabs(Muon_dz_leaf->GetValue(i)) >= 0.1) selection = true;
+    if(Muon_sip3d_leaf->GetValue(i) >= 8.) selection = true;
+    if(Muon_minipfRelIso_all_leaf->GetValue(i)*Muon_pt_leaf->GetValue(i) > 6.) selection = true;//Margaret Iso
+    //if(Muon_pfRelIso03_all_leaf->GetValue(i)*Muon_pt_leaf->GetValue(i) >= 20. + 300./Muon_pt_leaf->GetValue(i)) selection = true; //Chris Iso
    
     // signal lep criteria
-    //if(!(Muon_tightId_leaf->GetValue(i))) return true;
-    //if(!(Muon_softId_leaf->GetValue(i))) return true;
-    if(!(Muon_mediumId_leaf->GetValue(i))) return true;
+    //if(!(Muon_tightId_leaf->GetValue(i))) selection = true;
+    //if(!(Muon_softId_leaf->GetValue(i))) selection = true;
+    if(!(Muon_mediumId_leaf->GetValue(i))) selection = true;
    }
-   Muon1.SetPtEtaPhiM(Muon_pt_leaf->GetValue(0),Muon_eta_leaf->GetValue(0),Muon_phi_leaf->GetValue(0),Muon_mass_leaf->GetValue(0));
-   Muon2.SetPtEtaPhiM(Muon_pt_leaf->GetValue(1),Muon_eta_leaf->GetValue(1),Muon_phi_leaf->GetValue(1),Muon_mass_leaf->GetValue(1));
-   if(Muon2.Pt() < 10.) return true;
-   //if((Muon1+Muon2).M() < 4.) return true;
-   //if((Muon1+Muon2).M() > 60.) return true;
-   //if((Muon1+Muon2).Pt() < 3.) return true;
+   //Muon1.SetPtEtaPhiM(Muon_pt_leaf->GetValue(0),Muon_eta_leaf->GetValue(0),Muon_phi_leaf->GetValue(0),Muon_mass_leaf->GetValue(0));
+   //Muon2.SetPtEtaPhiM(Muon_pt_leaf->GetValue(1),Muon_eta_leaf->GetValue(1),Muon_phi_leaf->GetValue(1),Muon_mass_leaf->GetValue(1));
+   //if(Muon2.Pt() < 10.) selection = true;
+   //if((Muon1+Muon2).M() < 4.) selection = true;
+   //if((Muon1+Muon2).M() > 60.) selection = true;
+   //if((Muon1+Muon2).Pt() < 3.) selection = true;
    
-   return false; 
+   if(Nlep > 0) selection = true;
+   return selection; 
 }
 
 inline bool Eff_Nano::global_cuts(const Long64_t& jentry, double x_val)
@@ -498,17 +381,17 @@ inline bool Eff_Nano::global_cuts(const Long64_t& jentry, double x_val)
   MHT -= dummy;
  }
 
- TLeaf* HLT_IsoMu27_leaf = m_Tree->GetLeaf("HLT_IsoMu27");
- HLT_IsoMu27_leaf->GetBranch()->GetEntry(jentry);
+ //TLeaf* HLT_IsoMu27_leaf = m_Tree->GetLeaf("HLT_IsoMu27");
+ //HLT_IsoMu27_leaf->GetBranch()->GetEntry(jentry);
  if(!Lepton_Cut(jentry)) 
  {
-  if(HLT_IsoMu27_leaf->GetValue() != false)
-  {
+  //if(HLT_IsoMu27_leaf->GetValue() != false)
+  //{
    //if(MHT.Pt() > 60.)
    //{ 
     return false; 
    //}
-  }
+  //}
  }
  return true;
 }
@@ -531,9 +414,9 @@ inline void Eff_Nano::Analyze(){
    vector<TLeaf*> vect_leaf;
    vector<TEfficiency*> vect_Eff;
    //bins is number of bins-1
-   int bins = 24;
+   int bins = 20;
    //array size is the number of bins
-   double bin_edges[25] = {0.,50.,75.,90.,100.,110.,120.,130.,140.0,150.,160.,170.,180.,190.,200.,210.,220.,230.,240.,250.,275.,300.,350.,400.,500.};
+   double bin_edges[21] = {100.,110.,120.,130.,140.0,150.,160.,170.,180.,190.,200.,210.,220.,230.,240.,250.,275.,300.,350.,400.,500.};
    for(int i=0; i < int(m_Triggers.size()); i++)
    {
     TEfficiency* eff = new TEfficiency(m_Triggers.at(i).c_str(),(m_Triggers.at(i)+";"+m_x+";Efficiency").c_str(),bins,bin_edges);

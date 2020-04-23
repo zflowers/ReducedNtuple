@@ -19,16 +19,27 @@ void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, 
 void Plotter_Eff_Nano(string inFile = "output_quick.root"){
  //string inFile ="output_quick.root";
  //vector<string> tags_2016 = {"WJets_2016", "TTJets_2016"};//, "DY_2016", "TChiWZ_2016", "Stop_2016"};
- vector<string> tags_2017 = {"WWTo2L2Nu_2017", "DY_2017", "ZZTo2L2Nu_2017", "TTJets_2017", "T2_4bd_500_420_2017", "T2_4bd_500_490_2017", "TChiWZ_2017"};//, "DY_2017", "TChiWZ_2016", "Stop_2016"};
- //vector<string> tags_2017 = {"ZZTo2L2Nu_2017"};
+ //vector<string> tags_2017 = {"WWTo2L2Nu_2017", "DY_2017", "WJets_2017", "ZZTo2L2Nu_2017", "TTJets_2017", "T2_4bd_500_420_2017", "T2_4bd_500_490_2017", "TChiWZ_2017"};//, "DY_2017", "TChiWZ_2016", "Stop_2016"};
+ vector<string> tags_2017a = {"T2_4bd_500_490_2017"};
+ vector<string> tags_2017b = {"TTJets_2017"};
+ vector<string> tags_2017c = {"WWTo2L2Nu_2017"};
+ vector<string> tags_2017d = {"TChiWZ_2017"};
  //vector<string> tags_2018 = {"WJets_2018", "TTJets_2018"};//, "DY_2018", "TChiWZ_2016", "Stop_2016"};
- vector<int> colors = {kPink, kGreen, kCyan, kMagenta, kYellow, kGray};
+ vector<int> colors = {kPink, kGreen, kCyan, };//kMagenta, kYellow, kGray, kViolet+2, kAzure+7};
 
  vector<string> Triggers_90{
    "HLT_PFMET90_PFMHT90_IDTight",
  };
  vector<string> Triggers_100{
-   "HLT_PFMET100_PFMHT100_IDTight",
+   "HLT_PFMET100_PFMHT100_IDTight_PFHT60",
+   "HLT_PFMETTypeOne100_PFMHT100_IDTight_PFHT60",
+   "HLT_PFMETNoMu100_PFMHTNoMu100_IDTight_PFHT60",
+ };
+ vector<string> Triggers_100_TypeOne{
+   "HLT_PFMETTypeOne100_PFMHT100_IDTight_PFHT60",
+ };
+ vector<string> Triggers_100_NoMu{
+   "HLT_PFMETNoMu100_PFMHTNoMu100_IDTight_PFHT60",
  };
  vector<string> Triggers_110{
    "HLT_PFMET110_PFMHT110_IDTight",
@@ -45,9 +56,17 @@ void Plotter_Eff_Nano(string inFile = "output_quick.root"){
  vector<string> Triggers_DoubleMu3_DZ_PFMET50_PFMHT60_2017_2018{
    "HLT_DoubleMu3_DZ_PFMET50_PFMHT60",
  };
+
+ Get_Plot(tags_2017a,Triggers_100,colors,inFile,tags_2017a[0],"Tag");
+ Get_Plot(tags_2017b,Triggers_100,colors,inFile,tags_2017b[0],"Tag");
+ Get_Plot(tags_2017c,Triggers_100,colors,inFile,tags_2017c[0],"Tag");
+ Get_Plot(tags_2017d,Triggers_100,colors,inFile,tags_2017d[0],"Tag");
+ //Get_Plot(tags_2017,Triggers_100,colors,inFile,"2017_HLT_PFMET100","Trigger");
+ //Get_Plot(tags_2017,Triggers_100_TypeOne,colors,inFile,"2017_HLT_PFMET100_TypeOne","Trigger");
+ //Get_Plot(tags_2017,Triggers_100_NoMu,colors,inFile,"2017_HLT_PFMET100_NoMu","Trigger");
  
  //Get_Plot(tags_2016,Triggers_DoubleMu3_PFMET50_2016,colors,inFile,"2016_HLT_DoubleMu3_PFMET50","Trigger");
- Get_Plot(tags_2017,Triggers_DoubleMu3_DZ_PFMET50_PFMHT60_2017_2018,colors,inFile,"2017_HLT_DoubleMu3_DZ_PFMET50_PFMHT60","Trigger");
+ //Get_Plot(tags_2017,Triggers_DoubleMu3_DZ_PFMET50_PFMHT60_2017_2018,colors,inFile,"2017_HLT_DoubleMu3_DZ_PFMET50_PFMHT60","Trigger");
  //Get_Plot(tags_2017,Triggers_HLT_PFMET120_Mu5_2017,colors,inFile,"2017_HLT_PFMET120_Mu5","Trigger");
  //Get_Plot(tags_2018,Triggers_DoubleMu3_PFMET50_2017_2018,colors,inFile,"2018_HLT_DoubleMu3_PFMET50_PFMHT60","Trigger");
 
@@ -56,10 +75,10 @@ void Plotter_Eff_Nano(string inFile = "output_quick.root"){
  //Get_Plot(tags_2016,Triggers_110,colors,inFile,"2016_HLT_PFMET110_PFMHT110_IDTight","Trigger");
  //Get_Plot(tags_2016,Triggers_120,colors,inFile,"2016_HLT_PFMET120_PFMHT120_IDTight","Trigger");
 
- Get_Plot(tags_2017,Triggers_110,colors,inFile,"2017_HLT_PFMET110_PFMHT110_IDTight","Trigger");
- Get_Plot(tags_2017,Triggers_120,colors,inFile,"2017_HLT_PFMET120_PFMHT120_IDTight","Trigger");
- Get_Plot(tags_2017,Triggers_130,colors,inFile,"2017_HLT_PFMET130_PFMHT130_IDTight","Trigger");
- Get_Plot(tags_2017,Triggers_140,colors,inFile,"2017_HLT_PFMET140_PFMHT140_IDTight","Trigger");
+ //Get_Plot(tags_2017,Triggers_110,colors,inFile,"2017_HLT_PFMET110_PFMHT110_IDTight","Trigger");
+ //Get_Plot(tags_2017,Triggers_120,colors,inFile,"2017_HLT_PFMET120_PFMHT120_IDTight","Trigger");
+ //Get_Plot(tags_2017,Triggers_130,colors,inFile,"2017_HLT_PFMET130_PFMHT130_IDTight","Trigger");
+ //Get_Plot(tags_2017,Triggers_140,colors,inFile,"2017_HLT_PFMET140_PFMHT140_IDTight","Trigger");
 
  //Get_Plot(tags_2018,Triggers_110,colors,inFile,"2018_HLT_PFMET110_PFMHT110_IDTight","Trigger");
  //Get_Plot(tags_2018,Triggers_120,colors,inFile,"2018_HLT_PFMET120_PFMHT120_IDTight","Trigger");
