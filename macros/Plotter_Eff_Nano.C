@@ -19,7 +19,7 @@ void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, 
 void Plotter_Eff_Nano(string inFile = "output_quick.root"){
  //string inFile ="output_quick.root";
  //vector<string> tags_2016 = {"WJets_2016", "TTJets_2016"};//, "DY_2016", "TChiWZ_2016", "Stop_2016"};
- vector<string> tags_2017 = {"WWTo2L2Nu_2017", "WJets_2017", "ZZTo2L2Nu_2017", "TTJets_2017", "T2_4bd_500_420_2017", "T2_4bd_500_490_2017"};
+ vector<string> tags_2017 = {"WWTo2L2Nu_2017", "WJets_2017", "TTJets_2017", "T2_4bd_500_420_2017", "T2_4bd_500_490_2017"};
  vector<string> tags_2017a = {"T2_4bd_500_490_2017"};
  vector<string> tags_2017b = {"TTJets_2017"};
  vector<string> tags_2017c = {"WWTo2L2Nu_2017"};
@@ -73,6 +73,8 @@ void Plotter_Eff_Nano(string inFile = "output_quick.root"){
  //Get_Plot(tags_2017,Triggers_100_NoMu,colors,inFile,"2017_HLT_PFMET100_NoMu","Trigger");
  
  Get_Plot(tags_2017,METtrigger,colors,inFile,"METtrigger_2017","Trigger");
+ Get_Plot(tags_2017,METHTtrigger,colors,inFile,"METHTtrigger_2017","Trigger");
+ Get_Plot(tags_2017,METORtrigger,colors,inFile,"METORtrigger_2017","Trigger");
  
  //Get_Plot(tags_2016,Triggers_DoubleMu3_PFMET50_2016,colors,inFile,"2016_HLT_DoubleMu3_PFMET50","Trigger");
  //Get_Plot(tags_2017,Triggers_DoubleMu3_DZ_PFMET50_PFMHT60_2017_2018,colors,inFile,"2017_HLT_DoubleMu3_DZ_PFMET50_PFMHT60","Trigger");
@@ -105,7 +107,7 @@ void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, 
   gStyle->SetFrameLineColor(kWhite);
  }
 
- TLegend* leg = new TLegend(0.69,0.21,0.89,0.51); 
+ TLegend* leg = new TLegend(0.5,0.2,0.95,0.5); 
  leg->SetTextFont(132);
  leg->SetTextSize(0.045);
  
@@ -172,7 +174,6 @@ void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, 
 
  TFile* output = TFile::Open(outFile.c_str(),"UPDATE");
  can->Write();
- can->SaveAs((name+".pdf").c_str());
  output->Close();
  delete leg;
  delete mg;

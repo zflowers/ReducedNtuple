@@ -108,14 +108,14 @@ void run_Eff_Nano_Hist(string outFile = "output_test_KU.root"){
   chain_2017_ZZTo2L2Nu->Add((path+"Fall17_102X/ZZTo2L2Nu_13TeV_powheg_pythia8_Fall17_102X.root").c_str());
   Eff_Nano Eff_2017_ZZTo2L2Nu(outFile,Triggers_2017,"ZZTo2L2Nu_2017",x_2017,chain_2017_ZZTo2L2Nu);
   Eff_2017_ZZTo2L2Nu.Analyze();
-
+/*
   //DY
   std::cout << "Processing DY 2017" << endl;
   TChain* chain_2017_DY = new TChain("KUAnalysis");
   chain_2017_DY->Add((path+"Fall17_102X/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8_Fall17_102X.root").c_str());
   Eff_Nano Eff_2017_DY(outFile,Triggers_2017,"DY_2017",x_2017,chain_2017_DY);
   Eff_2017_DY.Analyze();
-
+*/
 
 /*
  //2018
