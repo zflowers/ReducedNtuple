@@ -4,6 +4,7 @@
 vector<string> Get_2018_Triggers()
 {
    vector<string> vect_string_Trigger{
+/*
    "HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL",
    "HLT_Mu19_TrkIsoVVL_Mu9_TrkIsoVVL",
    "HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ",
@@ -54,6 +55,10 @@ vector<string> Get_2018_Triggers()
    "HLT_Mu15_IsoVVVL_PFHT450_PFMET50",
    "HLT_IsoMu27_MET90",
    "HLT_PFMET100_PFMHT100_IDTight_PFHT60",
+*/
+   "METtrigger",
+   "METHTtrigger",
+   "METORtrigger",
    };
    return vect_string_Trigger;
 };

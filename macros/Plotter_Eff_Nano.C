@@ -19,14 +19,15 @@ void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, 
 void Plotter_Eff_Nano(string inFile = "output_quick.root"){
  //string inFile ="output_quick.root";
  //vector<string> tags_2016 = {"WJets_2016", "TTJets_2016"};//, "DY_2016", "TChiWZ_2016", "Stop_2016"};
- //vector<string> tags_2017 = {"WWTo2L2Nu_2017", "DY_2017", "WJets_2017", "ZZTo2L2Nu_2017", "TTJets_2017", "T2_4bd_500_420_2017", "T2_4bd_500_490_2017", "TChiWZ_2017"};//, "DY_2017", "TChiWZ_2016", "Stop_2016"};
+ vector<string> tags_2017 = {"WWTo2L2Nu_2017", "WJets_2017", "ZZTo2L2Nu_2017", "TTJets_2017", "T2_4bd_500_420_2017", "T2_4bd_500_490_2017"};
  vector<string> tags_2017a = {"T2_4bd_500_490_2017"};
  vector<string> tags_2017b = {"TTJets_2017"};
  vector<string> tags_2017c = {"WWTo2L2Nu_2017"};
  vector<string> tags_2017d = {"TChiWZ_2017"};
+ vector<string> tags_2017e = {"WJets_2017"};
  //vector<string> tags_2018 = {"WJets_2018", "TTJets_2018"};//, "DY_2018", "TChiWZ_2016", "Stop_2016"};
- vector<int> colors = {kPink, kGreen, kCyan, };//kMagenta, kYellow, kGray, kViolet+2, kAzure+7};
-
+ vector<int> colors = {kPink, kGreen, kCyan, kMagenta, kYellow, kViolet+2 };
+/*
  vector<string> Triggers_90{
    "HLT_PFMET90_PFMHT90_IDTight",
  };
@@ -56,14 +57,22 @@ void Plotter_Eff_Nano(string inFile = "output_quick.root"){
  vector<string> Triggers_DoubleMu3_DZ_PFMET50_PFMHT60_2017_2018{
    "HLT_DoubleMu3_DZ_PFMET50_PFMHT60",
  };
+*/
+ vector<string> METtrigger{ "METtrigger" };
+ vector<string> METHTtrigger{ "METHTtrigger" };
+ vector<string> METORtrigger{ "METORtrigger" };
+ vector<string> METAlltrigger { "METtrigger", "METHTtrigger", "METORtrigger" };
 
- Get_Plot(tags_2017a,Triggers_100,colors,inFile,tags_2017a[0],"Tag");
- Get_Plot(tags_2017b,Triggers_100,colors,inFile,tags_2017b[0],"Tag");
- Get_Plot(tags_2017c,Triggers_100,colors,inFile,tags_2017c[0],"Tag");
- Get_Plot(tags_2017d,Triggers_100,colors,inFile,tags_2017d[0],"Tag");
+ //Get_Plot(tags_2017a,Triggers_100,colors,inFile,tags_2017a[0],"Tag");
+ //Get_Plot(tags_2017b,Triggers_100,colors,inFile,tags_2017b[0],"Tag");
+ //Get_Plot(tags_2017c,Triggers_100,colors,inFile,tags_2017c[0],"Tag");
+ //Get_Plot(tags_2017d,Triggers_100,colors,inFile,tags_2017d[0],"Tag");
+ //Get_Plot(tags_2017e,METtrigger,colors,inFile,tags_2017e[0],"Tag");
  //Get_Plot(tags_2017,Triggers_100,colors,inFile,"2017_HLT_PFMET100","Trigger");
  //Get_Plot(tags_2017,Triggers_100_TypeOne,colors,inFile,"2017_HLT_PFMET100_TypeOne","Trigger");
  //Get_Plot(tags_2017,Triggers_100_NoMu,colors,inFile,"2017_HLT_PFMET100_NoMu","Trigger");
+ 
+ Get_Plot(tags_2017,METtrigger,colors,inFile,"METtrigger_2017","Trigger");
  
  //Get_Plot(tags_2016,Triggers_DoubleMu3_PFMET50_2016,colors,inFile,"2016_HLT_DoubleMu3_PFMET50","Trigger");
  //Get_Plot(tags_2017,Triggers_DoubleMu3_DZ_PFMET50_PFMHT60_2017_2018,colors,inFile,"2017_HLT_DoubleMu3_DZ_PFMET50_PFMHT60","Trigger");
@@ -96,12 +105,12 @@ void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, 
   gStyle->SetFrameLineColor(kWhite);
  }
 
- TLegend* leg = new TLegend(0.588,0.546,0.945,0.904); 
+ TLegend* leg = new TLegend(0.69,0.21,0.89,0.51); 
  leg->SetTextFont(132);
  leg->SetTextSize(0.045);
  
  TLatex l;
- TCanvas* can = new TCanvas(name.c_str(),"",600.,500);
+ TCanvas* can = new TCanvas((name).c_str(),"",600.,500);
  can->SetLeftMargin(0.13);
  can->SetRightMargin(0.04);
  can->SetBottomMargin(0.15);
@@ -151,16 +160,19 @@ void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, 
  l.SetTextFont(42);
  if(option.compare("Tag") == 0)
  {
-  l.DrawLatex(0.53,0.93,tags.at(0).c_str());
+  l.DrawLatex(0.65,0.93,tags.at(0).c_str());
  }
  else if(option.compare("Trigger") == 0)
  {
-  l.DrawLatex(0.61,0.93,Triggers.at(0).c_str());
+  l.DrawLatex(0.65,0.93,Triggers.at(0).c_str());
  }
  l.DrawLatex(0.13,0.93,"#bf{#it{CMS}} Internal 13 TeV Simulation");
+ can->Modified();
+ can->Update();
 
- TFile* output = new TFile(outFile.c_str(),"UPDATE");
+ TFile* output = TFile::Open(outFile.c_str(),"UPDATE");
  can->Write();
+ can->SaveAs((name+".pdf").c_str());
  output->Close();
  delete leg;
  delete mg;
@@ -209,5 +221,7 @@ TMultiGraph* get_mg(string fname, vector<string> tags, vector<string> Triggers, 
    mg->Add(gr);
   }
  }
+ f->Close();
+ delete f;
  return mg;
 }

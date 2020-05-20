@@ -1,7 +1,7 @@
 #To run: condor_submit scripts/CONDOR_Plot.sh
 
 universe = vanilla
-executable = /home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/ForCONDOR.sh 
+executable = /home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/run_Eff_Nano.x
 getenv = True
 priority = 10
 use_x509userproxy = true

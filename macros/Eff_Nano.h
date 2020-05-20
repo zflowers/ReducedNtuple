@@ -11,6 +11,9 @@
 #include "MET_2016_Triggers.h"
 #include "MET_2017_Triggers.h"
 #include "MET_2018_Triggers.h"
+#include <vector>
+
+using namespace std;
 
 class Eff_Nano{
   private:
@@ -383,8 +386,8 @@ inline bool Eff_Nano::global_cuts(const Long64_t& jentry, double x_val)
 
  //TLeaf* HLT_IsoMu27_leaf = m_Tree->GetLeaf("HLT_IsoMu27");
  //HLT_IsoMu27_leaf->GetBranch()->GetEntry(jentry);
- if(!Lepton_Cut(jentry)) 
- {
+ //if(!Lepton_Cut(jentry)) 
+ //{
   //if(HLT_IsoMu27_leaf->GetValue() != false)
   //{
    //if(MHT.Pt() > 60.)
@@ -392,7 +395,7 @@ inline bool Eff_Nano::global_cuts(const Long64_t& jentry, double x_val)
     return false; 
    //}
   //}
- }
+ //}
  return true;
 }
 
@@ -410,7 +413,7 @@ inline bool Eff_Nano::Other_Bools(const Long64_t& jentry)
 
 inline void Eff_Nano::Analyze(){
    TLeaf* x_leaf = m_Tree->GetLeaf(m_x.c_str());
-   TLeaf* weight_leaf = m_Tree->GetLeaf("Generator_weight");
+   TLeaf* weight_leaf = m_Tree->GetLeaf("weight");
    vector<TLeaf*> vect_leaf;
    vector<TEfficiency*> vect_Eff;
    //bins is number of bins-1
@@ -437,7 +440,7 @@ inline void Eff_Nano::Analyze(){
       x_leaf->GetBranch()->GetEntry(jentry);    
       weight_leaf->GetBranch()->GetEntry(jentry);    
       if(jentry%((std::max(nentries,percent))/percent) == 0) { cout << "Processing Event: " << jentry << " out of: " << nentries << " Entries" << endl; }
-      if(global_cuts(jentry,x_leaf->GetValue())) continue;
+      //if(global_cuts(jentry,x_leaf->GetValue())) continue;
       for(int i=0; i < int(m_Triggers.size()); i++)
       {
        vect_leaf.at(i)->GetBranch()->GetEntry(jentry);

@@ -1,6 +1,9 @@
 #ifndef MET_2016_TRIGGERS_H
 #define MET_2016_TRIGGERS_H
 
+#include <vector>
+
+using namespace std;
 vector<string> Get_2016_Triggers()
 {
    vector<string> vect_string_Trigger{
@@ -116,7 +119,6 @@ vector<string> Get_2016_Triggers()
    "HLT_Ele12_CaloIdL_TrackIdL_IsoVL",
    "HLT_Ele17_CaloIdL_GsfTrkIdVL",
    "HLT_Ele17_CaloIdL_TrackIdL_IsoVL",
-   */
    "HLT_Ele23_CaloIdL_TrackIdL_IsoVL",
    "HLT_PFMET90_PFMHT90_IDTight",
    "HLT_PFMET100_PFMHT100_IDTight",
@@ -147,6 +149,10 @@ vector<string> Get_2016_Triggers()
    "HLT_PFMET400",
    "HLT_PFMET500",
    "HLT_PFMET600",
+   */
+   "METtrigger",
+   "METHTtrigger",
+   "METORtrigger",
    };
    return vect_string_Trigger;
 };
