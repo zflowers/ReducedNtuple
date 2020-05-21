@@ -72,9 +72,11 @@ void Plotter_Eff_Nano(string inFile = "output_quick.root"){
  //Get_Plot(tags_2017,Triggers_100_TypeOne,colors,inFile,"2017_HLT_PFMET100_TypeOne","Trigger");
  //Get_Plot(tags_2017,Triggers_100_NoMu,colors,inFile,"2017_HLT_PFMET100_NoMu","Trigger");
  
- Get_Plot(tags_2017,METtrigger,colors,inFile,"METtrigger_2017","Trigger");
- Get_Plot(tags_2017,METHTtrigger,colors,inFile,"METHTtrigger_2017","Trigger");
- Get_Plot(tags_2017,METORtrigger,colors,inFile,"METORtrigger_2017","Trigger");
+ Get_Plot(tags_2017,METHTtrigger,colors,inFile,"METALLtrigger_2017","Trigger"); //hacked together (we use METHT as METALL (see Eff_Nano)
+
+ //Get_Plot(tags_2017,METtrigger,colors,inFile,"METtrigger_2017","Trigger");
+ //Get_Plot(tags_2017,METHTtrigger,colors,inFile,"METHTtrigger_2017","Trigger");
+ //Get_Plot(tags_2017,METORtrigger,colors,inFile,"METORtrigger_2017","Trigger");
  
  //Get_Plot(tags_2016,Triggers_DoubleMu3_PFMET50_2016,colors,inFile,"2016_HLT_DoubleMu3_PFMET50","Trigger");
  //Get_Plot(tags_2017,Triggers_DoubleMu3_DZ_PFMET50_PFMHT60_2017_2018,colors,inFile,"2017_HLT_DoubleMu3_DZ_PFMET50_PFMHT60","Trigger");

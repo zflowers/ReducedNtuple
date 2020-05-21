@@ -11,8 +11,9 @@
 #include "Plotter_Eff_Nano.C"
 using namespace std;
 
-void run_Eff_Nano_Hist(string outFile = "output_test_KU.root"){
+void run_Eff_Nano_Hist(string outFile = "output_MET_Weighted.root"){
  Long64_t start = gSystem->Now();
+ std::cout << "Outputting to: " << outFile << endl;
  gSystem->Exec(("rm "+outFile).c_str());
  //.L Eff_Nano.h; //++
  //.L MET_2016_Triggers.h;
@@ -102,13 +103,13 @@ void run_Eff_Nano_Hist(string outFile = "output_test_KU.root"){
   chain_2017_WWTo2L2Nu->Add((path+"Fall17_102X/WWTo2L2Nu_NNPDF31_TuneCP5_13TeV-powheg-pythia8_Fall17_102X.root").c_str());
   Eff_Nano Eff_2017_WWTo2L2Nu(outFile,Triggers_2017,"WWTo2L2Nu_2017",x_2017,chain_2017_WWTo2L2Nu);
   Eff_2017_WWTo2L2Nu.Analyze();
-
+/*
   std::cout << "Processing ZZTo2L2Nu 2017" << endl;
   TChain* chain_2017_ZZTo2L2Nu = new TChain("KUAnalysis");
   chain_2017_ZZTo2L2Nu->Add((path+"Fall17_102X/ZZTo2L2Nu_13TeV_powheg_pythia8_Fall17_102X.root").c_str());
   Eff_Nano Eff_2017_ZZTo2L2Nu(outFile,Triggers_2017,"ZZTo2L2Nu_2017",x_2017,chain_2017_ZZTo2L2Nu);
   Eff_2017_ZZTo2L2Nu.Analyze();
-/*
+
   //DY
   std::cout << "Processing DY 2017" << endl;
   TChain* chain_2017_DY = new TChain("KUAnalysis");
@@ -149,7 +150,7 @@ void run_Eff_Nano_Hist(string outFile = "output_test_KU.root"){
 
 int main()
 {
- run_Eff_Nano_Hist("output_test_KU.root");
+ run_Eff_Nano_Hist("output_RISR.root");
  return 0;
 }
 

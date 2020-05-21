@@ -150,7 +150,7 @@ vector<string> Get_2016_Triggers()
    "HLT_PFMET500",
    "HLT_PFMET600",
    */
-   "METtrigger",
+   //"METtrigger",
    "METHTtrigger",
    "METORtrigger",
    };

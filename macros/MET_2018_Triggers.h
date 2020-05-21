@@ -56,7 +56,7 @@ vector<string> Get_2018_Triggers()
    "HLT_IsoMu27_MET90",
    "HLT_PFMET100_PFMHT100_IDTight_PFHT60",
 */
-   "METtrigger",
+   //"METtrigger",
    "METHTtrigger",
    "METORtrigger",
    };
