@@ -388,7 +388,8 @@ inline bool Eff_Nano::global_cuts(const Long64_t& jentry, double x_val)
 
  TLeaf* PTISR_leaf = m_Tree->GetLeaf("PTISR");
  PTISR_leaf->GetBranch()->GetEntry(jentry);
- if(PTISR_leaf->GetValue() > 800.)
+ //if(PTISR_leaf->GetValue() > 0. && Nmu > 0 && Njet_S == 0)
+ if(PTISR_leaf->GetValue() > 0.)
  {
   return false;
  }
@@ -426,10 +427,10 @@ inline void Eff_Nano::Analyze(){
    vector<TLeaf*> vect_leaf;
    vector<TEfficiency*> vect_Eff;
    //bins is number of bins-1
-   int bins = 20;
+   int bins = 9;
    //array size is the number of bins
-   //double bin_edges[10] = {.5,.6,.7,.8,.9,.95,1.,1.05,1.1,1.2};
-   double bin_edges[21] = {100.,110.,120.,130.,140.0,150.,160.,170.,180.,190.,200.,210.,220.,230.,240.,250.,275.,300.,350.,400.,500.};
+   double bin_edges[10] = {.5,.6,.7,.8,.9,.95,1.,1.05,1.1,1.2};
+   //double bin_edges[21] = {100.,110.,120.,130.,140.0,150.,160.,170.,180.,190.,200.,210.,220.,230.,240.,250.,275.,300.,350.,400.,500.};
    for(int i=0; i < int(m_Triggers.size()); i++)
    {
     TEfficiency* eff = new TEfficiency(m_Triggers.at(i).c_str(),(m_Triggers.at(i)+";"+m_x+";Efficiency").c_str(),bins,bin_edges);
@@ -451,7 +452,7 @@ inline void Eff_Nano::Analyze(){
       weight_leaf->GetBranch()->GetEntry(jentry);    
       if(jentry%((std::max(nentries,percent))/percent) == 0) { cout << "Processing Event: " << jentry << " out of: " << nentries << " Entries" << endl; }
       //if(global_cuts(jentry,x_leaf->GetValue())) continue;
-      /*
+      
       for(int i=0; i < int(m_Triggers.size()); i++)
       {
        vect_leaf.at(i)->GetBranch()->GetEntry(jentry);
@@ -459,10 +460,11 @@ inline void Eff_Nano::Analyze(){
        //vect_Eff.at(i)->Fill((vect_leaf.at(i)->GetValue() && Other_Bools(jentry)),x_leaf->GetValue());
        //vect_Eff.at(i)->Fill(vect_leaf.at(i)->GetValue(),x_leaf->GetValue());
       }
-      */
-      vect_leaf.at(0)->GetBranch()->GetEntry(jentry);
-      vect_leaf.at(1)->GetBranch()->GetEntry(jentry);
-      vect_Eff.at(0)->FillWeighted((vect_leaf.at(0)->GetValue() || vect_leaf.at(1)->GetValue()),weight_leaf->GetValue(),x_leaf->GetValue());
+      
+      //For combining triggers
+      //vect_leaf.at(0)->GetBranch()->GetEntry(jentry);
+      //vect_leaf.at(1)->GetBranch()->GetEntry(jentry);
+      //vect_Eff.at(0)->FillWeighted((vect_leaf.at(0)->GetValue() || vect_leaf.at(1)->GetValue()),weight_leaf->GetValue(),x_leaf->GetValue());
    }
    cout << "Finished Event Loop" << endl;
    TFile* output = new TFile(m_outFile.c_str(),"UPDATE");

@@ -11,7 +11,7 @@
 #include "Plotter_Eff_Nano.C"
 using namespace std;
 
-void run_Eff_Nano_Hist(string outFile = "output_MET_Weighted.root"){
+void run_Eff_Nano_Hist(string outFile = "output_RISR.root"){
  Long64_t start = gSystem->Now();
  std::cout << "Outputting to: " << outFile << endl;
  gSystem->Exec(("rm "+outFile).c_str());
@@ -37,7 +37,7 @@ void run_Eff_Nano_Hist(string outFile = "output_MET_Weighted.root"){
  //string path = "/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/output/";
  string path = "~/../crogan/NTUPLES/NANO/NEW_12_05_20/";
  x_2016 = "MET";
- x_2017 = "MET";
+ x_2017 = "RISR";
  x_2018 = "MET";
 
 /* 
