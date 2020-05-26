@@ -25,6 +25,7 @@ class Eff_Nano{
    string m_Tag;
    string m_x;
    TTree* m_Tree;
+   double PTISR_Cut = 0.;
   public:
    Eff_Nano();
    Eff_Nano(string outFile, vector<string> Triggers, string Tag, string x, TTree* Tree);
@@ -36,6 +37,7 @@ class Eff_Nano{
    void Set_x(string x);
    void Set_Tree(TTree* tree);
    void Set_Output(string outFile);
+   void Set_PTISR_Cut(double val);
 };
 
 #endif
@@ -352,6 +354,11 @@ inline bool Eff_Nano::Lepton_Cut(const Long64_t& jentry)
    return selection; 
 }
 
+inline void Eff_Nano::Set_PTISR_Cut(double val)
+{
+ PTISR_Cut = val;
+}
+
 inline bool Eff_Nano::global_cuts(const Long64_t& jentry, double x_val)
 {
  //return false to keep the event
@@ -388,8 +395,13 @@ inline bool Eff_Nano::global_cuts(const Long64_t& jentry, double x_val)
 
  TLeaf* PTISR_leaf = m_Tree->GetLeaf("PTISR");
  PTISR_leaf->GetBranch()->GetEntry(jentry);
- //if(PTISR_leaf->GetValue() > 0. && Nmu > 0 && Njet_S == 0)
- if(PTISR_leaf->GetValue() > 0.)
+ TLeaf* Nmu_leaf = m_Tree->GetLeaf("Nmu");
+ Nmu_leaf->GetBranch()->GetEntry(jentry);
+ TLeaf* Nele_leaf = m_Tree->GetLeaf("Nele");
+ Nele_leaf->GetBranch()->GetEntry(jentry);
+ TLeaf* Njet_S_leaf = m_Tree->GetLeaf("Njet_S");
+ Njet_S_leaf->GetBranch()->GetEntry(jentry);
+ if(PTISR_leaf->GetValue() > PTISR_Cut && Nmu_leaf->GetValue() == 0 && Njet_S_leaf->GetValue() == 0 && Nele_leaf->GetValue() > 0)
  {
   return false;
  }
@@ -427,13 +439,24 @@ inline void Eff_Nano::Analyze(){
    vector<TLeaf*> vect_leaf;
    vector<TEfficiency*> vect_Eff;
    //bins is number of bins-1
-   int bins = 9;
    //array size is the number of bins
-   double bin_edges[10] = {.5,.6,.7,.8,.9,.95,1.,1.05,1.1,1.2};
-   //double bin_edges[21] = {100.,110.,120.,130.,140.0,150.,160.,170.,180.,190.,200.,210.,220.,230.,240.,250.,275.,300.,350.,400.,500.};
+   int bins = 20;
+   double* bin_edges_ptr = NULL;
+   if(m_x == "MET")
+   {
+    bins = 20;
+    double bin_edges[21] = {100.,110.,120.,130.,140.0,150.,160.,170.,180.,190.,200.,210.,220.,230.,240.,250.,275.,300.,350.,400.,500.};
+    bin_edges_ptr = bin_edges;
+   }
+   else if(m_x == "RISR")
+   {
+    bins = 9;
+    double bin_edges[10] = {.5,.6,.7,.8,.9,.95,1.,1.05,1.1,1.2};
+    bin_edges_ptr = bin_edges;
+   }
    for(int i=0; i < int(m_Triggers.size()); i++)
    {
-    TEfficiency* eff = new TEfficiency(m_Triggers.at(i).c_str(),(m_Triggers.at(i)+";"+m_x+";Efficiency").c_str(),bins,bin_edges);
+    TEfficiency* eff = new TEfficiency(m_Triggers.at(i).c_str(),(m_Triggers.at(i)+";"+m_x+";Efficiency").c_str(),bins,bin_edges_ptr);
     eff->SetUseWeightedEvents();
     eff->SetStatisticOption(TEfficiency::kBUniform);
     vect_Eff.push_back(eff);
@@ -451,7 +474,7 @@ inline void Eff_Nano::Analyze(){
       x_leaf->GetBranch()->GetEntry(jentry);    
       weight_leaf->GetBranch()->GetEntry(jentry);    
       if(jentry%((std::max(nentries,percent))/percent) == 0) { cout << "Processing Event: " << jentry << " out of: " << nentries << " Entries" << endl; }
-      //if(global_cuts(jentry,x_leaf->GetValue())) continue;
+      if(global_cuts(jentry,x_leaf->GetValue())) continue;
       
       for(int i=0; i < int(m_Triggers.size()); i++)
       {

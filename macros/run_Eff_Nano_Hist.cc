@@ -11,8 +11,7 @@
 #include "Plotter_Eff_Nano.C"
 using namespace std;
 
-void run_Eff_Nano_Hist(string outFile = "output_RISR.root"){
- Long64_t start = gSystem->Now();
+void Eff_Nano_Hist(string outFile = "output_test.root", string x = "MET", double PTISR_Cut = 0.){
  std::cout << "Outputting to: " << outFile << endl;
  gSystem->Exec(("rm "+outFile).c_str());
  //.L Eff_Nano.h; //++
@@ -30,15 +29,15 @@ void run_Eff_Nano_Hist(string outFile = "output_RISR.root"){
  std::vector<string> Triggers_2016 = Get_2016_Triggers();
  std::vector<string> Triggers_2017 = Get_2017_Triggers();
  std::vector<string> Triggers_2018 = Get_2018_Triggers();
- string x_2016 = "MET_pt";
- string x_2017 = "METFixEE2017_pt";
- string x_2018 = "MET_pt";
+ //string x_2016 = "MET_pt";
+ //string x_2017 = "METFixEE2017_pt";
+ //string x_2018 = "MET_pt";
 
  //string path = "/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/output/";
  string path = "~/../crogan/NTUPLES/NANO/NEW_12_05_20/";
- x_2016 = "MET";
- x_2017 = "RISR";
- x_2018 = "MET";
+ string x_2016 = x;
+ string x_2017 = x;
+ string x_2018 = x;
 
 /* 
  //2016
@@ -71,6 +70,7 @@ void run_Eff_Nano_Hist(string outFile = "output_RISR.root"){
   TChain* chain_2017_WJets = new TChain("KUAnalysis");
   chain_2017_WJets->Add((path+"Fall17_102X/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root").c_str());
   Eff_Nano Eff_2017_WJets(outFile,Triggers_2017,"WJets_2017",x_2017,chain_2017_WJets);
+  Eff_2017_WJets.Set_PTISR_Cut(PTISR_Cut);
   Eff_2017_WJets.Analyze();
 
   //TTJets
@@ -78,36 +78,42 @@ void run_Eff_Nano_Hist(string outFile = "output_RISR.root"){
   TChain* chain_2017_TTJets = new TChain("KUAnalysis");
   chain_2017_TTJets->Add((path+"Fall17_102X/TTJets_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root").c_str());
   Eff_Nano Eff_2017_TTJets(outFile,Triggers_2017,"TTJets_2017",x_2017,chain_2017_TTJets);
+  Eff_2017_TTJets.Set_PTISR_Cut(PTISR_Cut);
   Eff_2017_TTJets.Analyze();
 
   std::cout << "Processing T2-4bd 500 490 2017" << endl;
   TChain* chain_2017_T2_4bd_500_490 = new TChain("SMS_500_490");
   chain_2017_T2_4bd_500_490->Add((path+"Fall17_102X_SMS/SMS-T2-4bd_genMET-80_mStop-500_mLSP-490_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root").c_str());
   Eff_Nano Eff_2017_T2_4bd_500_490(outFile,Triggers_2017,"T2_4bd_500_490_2017",x_2017,chain_2017_T2_4bd_500_490);
+  Eff_2017_T2_4bd_500_490.Set_PTISR_Cut(PTISR_Cut);
   Eff_2017_T2_4bd_500_490.Analyze();
 
   std::cout << "Processing T2-4bd 500 420 2017" << endl;
   TChain* chain_2017_T2_4bd_500_420 = new TChain("SMS_500_420");
   chain_2017_T2_4bd_500_420->Add((path+"Fall17_102X_SMS/SMS-T2-4bd_genMET-80_mStop-500_mLSP-420_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root").c_str());
   Eff_Nano Eff_2017_T2_4bd_500_420(outFile,Triggers_2017,"T2_4bd_500_420_2017",x_2017,chain_2017_T2_4bd_500_420);
+  Eff_2017_T2_4bd_500_420.Set_PTISR_Cut(PTISR_Cut);
   Eff_2017_T2_4bd_500_420.Analyze();
 /*
   std::cout << "Processing TChiWZ 2017" << endl;
   TChain* chain_2017_TChiWZ = new TChain("KUAnalysis");
   chain_2017_TChiWZ->Add((path+"Fall17_102X_SMS/SMS-TChiWZ_ZToLL_mZMin-0p1_TuneCP2_13TeV-madgraphMLM-pythia8_Fall17_102X.root").c_str());
   Eff_Nano Eff_2017_TChiWZ(outFile,Triggers_2017,"TChiWZ_2017",x_2017,chain_2017_TChiWZ);
+  Eff_2017_TChiWZ.Set_PTISR_Cut(PTISR_Cut);
   Eff_2017_TChiWZ.Analyze();
 */
   std::cout << "Processing WWTo2L2Nu 2017" << endl;
   TChain* chain_2017_WWTo2L2Nu = new TChain("KUAnalysis");
   chain_2017_WWTo2L2Nu->Add((path+"Fall17_102X/WWTo2L2Nu_NNPDF31_TuneCP5_13TeV-powheg-pythia8_Fall17_102X.root").c_str());
   Eff_Nano Eff_2017_WWTo2L2Nu(outFile,Triggers_2017,"WWTo2L2Nu_2017",x_2017,chain_2017_WWTo2L2Nu);
+  Eff_2017_WWTo2L2Nu.Set_PTISR_Cut(PTISR_Cut);
   Eff_2017_WWTo2L2Nu.Analyze();
 /*
   std::cout << "Processing ZZTo2L2Nu 2017" << endl;
   TChain* chain_2017_ZZTo2L2Nu = new TChain("KUAnalysis");
   chain_2017_ZZTo2L2Nu->Add((path+"Fall17_102X/ZZTo2L2Nu_13TeV_powheg_pythia8_Fall17_102X.root").c_str());
   Eff_Nano Eff_2017_ZZTo2L2Nu(outFile,Triggers_2017,"ZZTo2L2Nu_2017",x_2017,chain_2017_ZZTo2L2Nu);
+  Eff_2017_ZZTo2L2Nu.Set_PTISR_Cut(PTISR_Cut);
   Eff_2017_ZZTo2L2Nu.Analyze();
 
   //DY
@@ -115,6 +121,7 @@ void run_Eff_Nano_Hist(string outFile = "output_RISR.root"){
   TChain* chain_2017_DY = new TChain("KUAnalysis");
   chain_2017_DY->Add((path+"Fall17_102X/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8_Fall17_102X.root").c_str());
   Eff_Nano Eff_2017_DY(outFile,Triggers_2017,"DY_2017",x_2017,chain_2017_DY);
+  Eff_2017_DY.Set_PTISR_Cut(PTISR_Cut);
   Eff_2017_DY.Analyze();
 */
 
@@ -144,13 +151,41 @@ void run_Eff_Nano_Hist(string outFile = "output_RISR.root"){
 
  std::cout << "Running Plotter" << endl;
  Plotter_Eff_Nano(outFile.c_str());
+}
+
+void run_Eff_Nano_Hist()
+{
+ Long64_t start = gSystem->Now();
+ vector<double> PTISR_Cut = {0., 100., 200., 300., 400., 500.};
+ string outFile = "output_";
+ string x = "MET";
+ //string cut = "_NmuGe1_NJetSGe1";
+ //string cut = "_NmuGe1_NJetSE0";
+ //string cut = "_NmuE0_NJetSGe1";
+ //string cut = "_NmuE0_NJetSE0";
+ string cut = "_NmuE0_NJetSE0_NeleE0";
+ string cut = "_NmuE0_NJetSE0_NeleGe1";
+ //string cut = "";
+ for(int i = 0; i < int(PTISR_Cut.size()); i++)
+ {
+  outFile += (x + "_PTISR" + std::to_string(int(PTISR_Cut[i])) + cut + ".root");
+  Eff_Nano_Hist(outFile, x, PTISR_Cut[i]);
+  outFile = "output_";
+ }
+ x = "RISR";
+ for(int i = 0; i < int(PTISR_Cut.size()); i++)
+ {
+  outFile += (x + "_PTISR" + std::to_string(int(PTISR_Cut[i])) + cut + ".root");
+  Eff_Nano_Hist(outFile, x, PTISR_Cut[i]);
+  outFile = "output_";
+ }
  Long64_t end = gSystem->Now();
  std::cout << "Time to Run: " << (end-start)/1000.0 << " seconds" << endl;
 }
 
 int main()
 {
- run_Eff_Nano_Hist("output_RISR.root");
+ run_Eff_Nano_Hist();
  return 0;
 }
 
