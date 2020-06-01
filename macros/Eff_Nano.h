@@ -17,7 +17,7 @@ using namespace std;
 
 class Eff_Nano{
   private:
-   bool global_cuts(const Long64_t& jentry, double x_val);
+   bool global_cuts(const Long64_t& jentry);
    bool Lepton_Cut(const Long64_t& jentry);
    bool Other_Bools(const Long64_t& jentry);
    string m_outFile = "output_test.root";
@@ -25,7 +25,7 @@ class Eff_Nano{
    string m_Tag;
    string m_x;
    TTree* m_Tree;
-   double PTISR_Cut = 0.;
+   string m_cut = "";
   public:
    Eff_Nano();
    Eff_Nano(string outFile, vector<string> Triggers, string Tag, string x, TTree* Tree);
@@ -37,7 +37,8 @@ class Eff_Nano{
    void Set_x(string x);
    void Set_Tree(TTree* tree);
    void Set_Output(string outFile);
-   void Set_PTISR_Cut(double val);
+   void Set_Cut(string cut);
+   bool Get_Cut(const Long64_t& jentry, string name, string& current_cut);
 };
 
 #endif
@@ -354,12 +355,94 @@ inline bool Eff_Nano::Lepton_Cut(const Long64_t& jentry)
    return selection; 
 }
 
-inline void Eff_Nano::Set_PTISR_Cut(double val)
+inline void Eff_Nano::Set_Cut(string cut)
 {
- PTISR_Cut = val;
+ m_cut = cut+"_";
 }
 
-inline bool Eff_Nano::global_cuts(const Long64_t& jentry, double x_val)
+std::string get_str_between_two_str(const std::string &s, const std::string &start_delim, const std::string &stop_delim)
+{
+ unsigned first_delim_pos = s.find(start_delim);
+ unsigned end_pos_of_first_delim = first_delim_pos + start_delim.length();
+ unsigned last_delim_pos = s.find_first_of(stop_delim, end_pos_of_first_delim);
+ return s.substr(end_pos_of_first_delim,last_delim_pos - end_pos_of_first_delim);
+}
+
+void eraseSubStr(std::string & mainStr, const std::string & toErase)
+{
+ size_t pos = mainStr.find(toErase);
+ if (pos != std::string::npos)
+ {
+  mainStr.erase(pos, toErase.length());
+ }
+}
+
+inline bool Eff_Nano::Get_Cut(const Long64_t& jentry, string name, string& current_cut)
+{
+ bool cut = false;
+ if(current_cut.find(name) != std::string::npos)
+ {
+  TLeaf* leaf = m_Tree->GetLeaf(name.c_str());
+  leaf->GetBranch()->GetEntry(jentry);
+  string cut_value = get_str_between_two_str(current_cut,name,"_");
+  string cut_type = get_str_between_two_str(current_cut,name,"_");
+  if(cut_type.find("E") != std::string::npos)
+  {
+   cut_value.erase(0,1);
+   eraseSubStr(cut_type,cut_value);
+   if(leaf->GetValue() == std::stod(cut_value))
+   {
+    cut = true;
+   }
+  }
+  else if(cut_type.find("Ge") != std::string::npos)
+  {
+   cut_value.erase(0,1);
+   cut_value.erase(0,1);
+   eraseSubStr(cut_type,cut_value);
+   if(leaf->GetValue() >= std::stod(cut_value))
+   {
+    cut = true;
+   }
+  }
+  else if(cut_type.find("G") != std::string::npos)
+  {
+   cut_value.erase(0,1);
+   eraseSubStr(cut_type,cut_value);
+   if(leaf->GetValue() > std::stod(cut_value))
+   {
+    cut = true;
+   }
+  }
+  else if(cut_type.find("Le") != std::string::npos)
+  {
+   cut_value.erase(0,1);
+   cut_value.erase(0,1);
+   eraseSubStr(cut_type,cut_value);
+   if(leaf->GetValue() <= std::stod(cut_value))
+   {
+    cut = true;
+   }
+  }
+  else if(cut_type.find("L") != std::string::npos)
+  {
+   cut_value.erase(0,1);
+   eraseSubStr(cut_type,cut_value);
+   if(leaf->GetValue() < std::stod(cut_value))
+   {
+    cut = true;
+   }
+  }
+  eraseSubStr(current_cut,(name+cut_type+cut_value+"_"));
+ }
+ else
+ {
+  cout << "Couldn't find: " << name << " in: " << current_cut << "!" << endl;
+ }
+ return cut;
+}
+
+inline bool Eff_Nano::global_cuts(const Long64_t& jentry)
 {
  //return false to keep the event
  //Example Cut
@@ -391,34 +474,50 @@ inline bool Eff_Nano::global_cuts(const Long64_t& jentry, double x_val)
  // dummy.SetPtEtaPhiM(Jet_pt_leaf->GetValue(i),Jet_eta_leaf->GetValue(i),Jet_phi_leaf->GetValue(i),Jet_mass_leaf->GetValue(i));
  // MHT -= dummy;
  //}
+ 
+ string current_cut = m_cut;
 
+ bool PTISR_cut = true;
+ bool Nmu_cut = true;
+ bool Nele_cut = true;
+ bool Nlep_cut = true;
 
- TLeaf* PTISR_leaf = m_Tree->GetLeaf("PTISR");
- PTISR_leaf->GetBranch()->GetEntry(jentry);
- TLeaf* Nmu_leaf = m_Tree->GetLeaf("Nmu");
- Nmu_leaf->GetBranch()->GetEntry(jentry);
- TLeaf* Nele_leaf = m_Tree->GetLeaf("Nele");
- Nele_leaf->GetBranch()->GetEntry(jentry);
- TLeaf* Njet_S_leaf = m_Tree->GetLeaf("Njet_S");
- Njet_S_leaf->GetBranch()->GetEntry(jentry);
- if(PTISR_leaf->GetValue() > PTISR_Cut && Nmu_leaf->GetValue() == 0 && Njet_S_leaf->GetValue() == 0 && Nele_leaf->GetValue() > 0)
+ if(current_cut.find("PTISR") != std::string::npos)
+ {
+  PTISR_cut = Get_Cut(jentry,"PTISR",current_cut);
+ }
+
+ if(current_cut.find("Nmu") != std::string::npos)
+ {
+  Nmu_cut = Get_Cut(jentry,"Nmu",current_cut);
+ }
+
+ if(current_cut.find("Nele") != std::string::npos)
+ {
+  Nele_cut = Get_Cut(jentry,"Nele",current_cut);
+ }
+
+ if(current_cut.find("Nlep") != std::string::npos)
+ {
+  Nlep_cut = Get_Cut(jentry,"Nlep",current_cut);
+ }
+
+ if(current_cut.compare("NoCuts_") == 0)
  {
   return false;
  }
 
- //TLeaf* HLT_IsoMu27_leaf = m_Tree->GetLeaf("HLT_IsoMu27");
- //HLT_IsoMu27_leaf->GetBranch()->GetEntry(jentry);
- //if(!Lepton_Cut(jentry)) 
- //{
-  //if(HLT_IsoMu27_leaf->GetValue() != false)
-  //{
-   //if(MHT.Pt() > 60.)
-   //{ 
-    //return false; 
-   //}
-  //}
- //}
+ if(current_cut.compare("") != 0)
+ {
+  cout << "ERROR: Some cuts not applied: " << current_cut << endl;
+ }
+
+ if(PTISR_cut && Nmu_cut && Nele_cut && Nlep_cut)
+ {
+  return false;
+ }
  return true;
+
 }
 
 inline bool Eff_Nano::Other_Bools(const Long64_t& jentry)
@@ -463,6 +562,10 @@ inline void Eff_Nano::Analyze(){
     TLeaf* trig = m_Tree->GetLeaf(m_Triggers.at(i).c_str());
     vect_leaf.push_back(trig);
    }
+   TEfficiency* eff = new TEfficiency("SuperOR",("SuperOR;"+m_x+";Efficiency").c_str(),bins,bin_edges_ptr);
+   eff->SetUseWeightedEvents();
+   eff->SetStatisticOption(TEfficiency::kBUniform);
+   vect_Eff.push_back(eff);
 
    Long64_t nentries = m_Tree->GetEntriesFast();
    Long64_t percent = 10.0;
@@ -474,26 +577,23 @@ inline void Eff_Nano::Analyze(){
       x_leaf->GetBranch()->GetEntry(jentry);    
       weight_leaf->GetBranch()->GetEntry(jentry);    
       if(jentry%((std::max(nentries,percent))/percent) == 0) { cout << "Processing Event: " << jentry << " out of: " << nentries << " Entries" << endl; }
-      if(global_cuts(jentry,x_leaf->GetValue())) continue;
-      
+      if(global_cuts(jentry)) continue;
+      bool SuperOR = false;
       for(int i=0; i < int(m_Triggers.size()); i++)
       {
        vect_leaf.at(i)->GetBranch()->GetEntry(jentry);
        vect_Eff.at(i)->FillWeighted(vect_leaf.at(i)->GetValue(),weight_leaf->GetValue(),x_leaf->GetValue());
+       SuperOR = (SuperOR || vect_leaf.at(i)->GetValue());
        //vect_Eff.at(i)->Fill((vect_leaf.at(i)->GetValue() && Other_Bools(jentry)),x_leaf->GetValue());
        //vect_Eff.at(i)->Fill(vect_leaf.at(i)->GetValue(),x_leaf->GetValue());
       }
-      
-      //For combining triggers
-      //vect_leaf.at(0)->GetBranch()->GetEntry(jentry);
-      //vect_leaf.at(1)->GetBranch()->GetEntry(jentry);
-      //vect_Eff.at(0)->FillWeighted((vect_leaf.at(0)->GetValue() || vect_leaf.at(1)->GetValue()),weight_leaf->GetValue(),x_leaf->GetValue());
+      vect_Eff.at(int(vect_Eff.size()-1))->FillWeighted(SuperOR,weight_leaf->GetValue(),x_leaf->GetValue());
    }
    cout << "Finished Event Loop" << endl;
    TFile* output = new TFile(m_outFile.c_str(),"UPDATE");
    output->mkdir(m_Tag.c_str());
    output->cd(m_Tag.c_str());
-   for(int i=0; i < int(m_Triggers.size()); i++)
+   for(int i=0; i < int(vect_Eff.size()); i++)
    {
     vect_Eff.at(i)->Write();
     delete vect_Eff.at(i);

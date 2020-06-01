@@ -56,7 +56,7 @@ vector<string> Get_2017_Triggers()
    "HLT_DoubleMu3_DZ_PFMET90_PFMHT90",
    */
    "METtrigger",
-   "METHTtrigger",
+   //"METHTtrigger",
    "METORtrigger",
    };
    return vect_string_Trigger;
