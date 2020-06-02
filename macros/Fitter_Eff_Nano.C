@@ -1,9 +1,17 @@
 //Code for Fitting TGraphs
 //function: Error function or CDF for gaussian or Fermi function or Soft Heaviside
+//run after running plotter?
+
 vector<TCanvas*> Fitter_Eff_Nano(vector<TGraphAsymmErrors*> vect_gr, vector<int> colors)
 {
+ vector<string> tags_2017 = {"WWTo2L2Nu_2017", "WJets_2017", "TTJets_2017", "T2_4bd_500_420_2017", "T2_4bd_500_490_2017"};
+ vector<int> colors = {kPink, kGreen, kCyan, kMagenta, kYellow, kViolet+2, kAzure+7, kGray};
+
+ vector<string> METtrigger{ "METtrigger" };
+ vector<string> METORtrigger{ "METORtrigger" };
+ vector<string> SuperOR { "SuperOR" };
+
  vector<TF1*> funcs;
- vector<TCanvas*> canvases;
 
  //Err Function
  double Norm=1.;
@@ -16,24 +24,28 @@ vector<TCanvas*> Fitter_Eff_Nano(vector<TGraphAsymmErrors*> vect_gr, vector<int>
  func_Erf->SetParName(1,"Mean");
  
  funcs.push_back(func_Erf);
+ //Call Get_Fit and send it whatever functions we need
+ Get_Fit(tags_2017,METtrigger,colors,"output_MET_NoCuts.root","Test","")
 
+
+
+/*
  for(int i = 0; i < int(vect_gr.size()); i++)
  {
   canvases.push_back(Fit_Graph_With_Funcs(vect_gr[i],funcs,colors));
  }
  return canvases
+*/
+
 }
 
-TCanvas* Fit_Graph_With_Funcs(TGraphAsymmErrors* gr, vector<TF1*> funcs, vector<int> colors)
+void Fit_Graph_With_Funcs(TCanvas*& canv, TGraphAsymmErrors*& gr, vector<TF1*> funcs, const vector<int>& colors)
 {
- string name = gr->GetName();
- cout << "Fitting " << name << endl;
- TCanvas* canvas = new TCanvas(("canv"+name).c_str(),"",750,500);
- canvas->cd();
  gr->Draw("AP");
+ TLegend leg(0.55,0.2,0.98,0.8,"");
  for(int i = 0; i < int(funcs.size()); i++)
  {
-  TGraphAsymmErrors* gr_clone = (TGraphAsymmErrors*)(gr->Clone());
+  //TGraphAsymmErrors* gr_clone = (TGraphAsymmErrors*)(gr->Clone());
   funcs[i]->SetLineColor(colors[i]);
   gr->Fit(funcs[i],"EMR");
   TString status_func = gMinuit->fCstatu;
@@ -52,28 +64,67 @@ TCanvas* Fit_Graph_With_Funcs(TGraphAsymmErrors* gr, vector<TF1*> funcs, vector<
   TString status_func_leg = "Status = ";
   status_func_leg+=status_func;
   
-  TLegend* leg = new TLegend(0.55,0.4-i*.1,0.98,0.5-i*.1,"");
-  leg->SetTextFont(42);
-  leg->SetTextSize(0.04);
-  leg->SetFillColor(kWhite);
-  leg->SetTextColor(colors[i]);
-  leg->AddEntry((TObject*)0, status_func_leg, "");
-  leg->Draw("SAMES");
-  
+  //TLegend leg(0.55,0.4-i*.1,0.98,0.5-i*.1,"");
+  leg.SetTextFont(132);
+  leg.SetTextSize(0.04);
+  leg.SetFillColor(kWhite);
+  leg.AddEntry((TObject*)0, status_func_leg, "");
+  leg.SetTextColor(colors[i]);
+  if(invert_colors)
+  {
+   leg.SetTextColor(kWhite);
+   leg.SetFillColor(kBlack);
+   leg.SetLineColor(kBlack);
+   leg.SetShadowColor(kBlack); 
+  }
+ 
   canvas->Update();
+  leg.Draw("SAMES");
+  canvas->Update();
+
  }
- return canvas;
 }
 
-//get all Eff on one plot
-void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, string outFile, string name, string option)
+TGraphAsymmErrors* get_gr(vector<string> tags, vector<string> Triggers, string fname, vector<int> colors, TCanvas*& can)
+{
+ TKey *key;
+ TFile *f = TFile::Open(fname.c_str(), "READ");
+ if(!f || f->IsZombie())
+ {
+  cout << "Unable to open " << fname << " for reading..." << endl;
+  return mg;
+ }
+ for(int i = 0; i < int(tags.size()); i++)
+ {
+  TDirectoryFile* folder = nullptr;
+  f->GetObject(tags[i].c_str(),folder);
+  folder->cd();
+  for(int j = 0; j < int(Triggers.size()); j++)
+  {
+   TEfficiency* eff = nullptr;
+   folder->GetObject(Triggers.at(j).c_str(),eff);
+   eff->Draw("AP");
+   can->Update();
+   TGraphAsymmErrors* gr = eff->GetPaintedGraph();
+   gr->SetMarkerStyle(20);
+   gr->SetMarkerColor(colors[i+j]);
+   gr->SetLineColor(colors[i+j]);
+  }
+ }
+ f->Close();
+ delete f;
+ 
+ return gr;
+}
+
+void Get_Fit(vector<string> tags, vector<string> Triggers, vector<int> colors, string inFile, string name)
 {
  if(invert_colors)
  {
   gStyle->SetFrameFillColor(kBlack);
   gStyle->SetFrameLineColor(kWhite);
  }
-
+ 
  TLatex l;
  TCanvas* can = new TCanvas((name).c_str(),"",600.,500);
  can->SetLeftMargin(0.13);
@@ -84,11 +135,10 @@ void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, 
  can->SetGridy();
  can->Draw();
  can->cd();
- //TMultiGraph* mg = get_mg(outFile,tags,Triggers,colors,leg,can,option);
- TGraphAsymmErrors* gr = get_mg(outFile,tags,Triggers,colors,leg,can,option);
+ TMultiGraph* gr = get_gr(tags,Triggers,inFile,colors,can);
+ Fit_Graph_With_Funcs(can,
  can->Clear();
 
- gr->Draw("AP"); 
  gr->GetXaxis()->CenterTitle(true);
  gr->GetXaxis()->SetTitleFont(132);
  gr->GetXaxis()->SetTitleSize(0.06);
@@ -111,82 +161,22 @@ void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, 
   gr->GetXaxis()->SetLabelColor(kWhite);
   gr->GetYaxis()->SetLabelColor(kWhite);
   can->SetFillColor(kBlack);
-  //leg->SetTextColor(kWhite);
-  //leg->SetFillColor(kBlack);
-  //leg->SetLineColor(kBlack);
-  //leg->SetShadowColor(kBlack); 
   l.SetTextColor(kWhite);
  }
-
- //leg->Draw("SAME");
 
  l.SetTextFont(42);
  l.SetNDC();
  l.SetTextSize(0.04);
  l.SetTextFont(42);
- if(option.compare("Tag") == 0)
- {
-  l.DrawLatex(0.65,0.93,name.c_str());
- }
- else if(option.compare("Trigger") == 0)
- {
-  l.DrawLatex(0.65,0.93,name.c_str());
- }
+ l.DrawLatex(0.62,0.93,name.c_str());
  l.DrawLatex(0.13,0.93,"#bf{#it{CMS}} Internal 13 TeV Simulation");
  can->Modified();
  can->Update();
 
- TFile* output = TFile::Open(outFile.c_str(),"UPDATE");
+ TFile* output = TFile::Open(inFile.c_str(),"UPDATE");
  can->Write();
  output->Close();
- delete leg;
  delete mg;
  delete can;
  delete output;
-}
-
-TMultiGraph* get_mg(string fname, vector<string> tags, vector<string> Triggers, vector<int> colors, TLegend*& leg, TCanvas*& can, string option)
-{
- TMultiGraph* mg = new TMultiGraph();
- TKey *key;
- TFile *f = TFile::Open(fname.c_str(), "READ");
- if(!f || f->IsZombie())
- {
-  cout << "Unable to open " << fname << " for reading..." << endl;
-  return mg;
- }
- for(int i = 0; i < int(tags.size()); i++)
- {
-  TDirectoryFile* folder = nullptr;
-  f->GetObject(tags[i].c_str(),folder);
-  folder->cd();
-  for(int j = 0; j < int(Triggers.size()); j++)
-  {
-   TEfficiency* eff = nullptr;
-   folder->GetObject(Triggers.at(j).c_str(),eff);
-   eff->Draw("AP");
-   can->Update();
-   TGraphAsymmErrors* gr = eff->GetPaintedGraph();
-   if((i+j) == 0)
-   {
-    string title = " ;";
-    mg->SetTitle((title+gr->GetXaxis()->GetTitle()+";"+gr->GetYaxis()->GetTitle()).c_str());
-   }
-   if(option.compare("Tag") == 0)
-   {
-    leg->AddEntry(gr,Triggers.at(j).c_str(),"PL");
-   }
-   else if(option.compare("Trigger") == 0)
-   {
-    leg->AddEntry(gr,tags.at(i).c_str(),"PL");
-   }
-   gr->SetMarkerStyle(20);
-   gr->SetMarkerColor(colors[i+j]);
-   gr->SetLineColor(colors[i+j]);
-   mg->Add(gr);
-  }
- }
- f->Close();
- delete f;
- return mg;
 }
