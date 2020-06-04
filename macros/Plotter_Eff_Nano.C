@@ -10,8 +10,7 @@
 #include <TColor.h>
 #include <TStyle.h>
 #include <TEfficiency.h>
-
-bool invert_colors = true;
+#include "Fitter_Eff_Nano.C"
 
 void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, string outFile, string name, string option);
 void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, vector<string> inFile, vector<string> cut, string name, string option);
@@ -83,25 +82,25 @@ void Plotter_Eff_Nano(vector<string> inFile, vector<string> cut){
 
  //combining files
  Get_Plot(tags_2017a,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017a[0],"FinalState");
- Get_Plot(tags_2017a,METHTtrigger,colors,inFile,cut,METHTtrigger[0]+"_"+tags_2017a[0],"FinalState");
+ //Get_Plot(tags_2017a,METHTtrigger,colors,inFile,cut,METHTtrigger[0]+"_"+tags_2017a[0],"FinalState");
  Get_Plot(tags_2017a,METORtrigger,colors,inFile,cut,METORtrigger[0]+"_"+tags_2017a[0],"FinalState");
- Get_Plot(tags_2017a,SuperOR,colors,inFile,cut,SuperOR[0]+"_"+tags_2017a[0],"FinalState");
- Get_Plot(tags_2017b,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017b[0],"FinalState");
- Get_Plot(tags_2017b,METHTtrigger,colors,inFile,cut,METHTtrigger[0]+"_"+tags_2017b[0],"FinalState");
- Get_Plot(tags_2017b,METORtrigger,colors,inFile,cut,METORtrigger[0]+"_"+tags_2017b[0],"FinalState");
- Get_Plot(tags_2017b,SuperOR,colors,inFile,cut,SuperOR[0]+"_"+tags_2017b[0],"FinalState");
- Get_Plot(tags_2017c,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017c[0],"FinalState");
- Get_Plot(tags_2017c,METHTtrigger,colors,inFile,cut,METHTtrigger[0]+"_"+tags_2017c[0],"FinalState");
- Get_Plot(tags_2017c,METORtrigger,colors,inFile,cut,METORtrigger[0]+"_"+tags_2017c[0],"FinalState");
- Get_Plot(tags_2017c,SuperOR,colors,inFile,cut,SuperOR[0]+"_"+tags_2017c[0],"FinalState");
- Get_Plot(tags_2017d,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017d[0],"FinalState");
- Get_Plot(tags_2017d,METHTtrigger,colors,inFile,cut,METHTtrigger[0]+"_"+tags_2017d[0],"FinalState");
- Get_Plot(tags_2017d,METORtrigger,colors,inFile,cut,METORtrigger[0]+"_"+tags_2017d[0],"FinalState");
- Get_Plot(tags_2017d,SuperOR,colors,inFile,cut,SuperOR[0]+"_"+tags_2017d[0],"FinalState");
- Get_Plot(tags_2017e,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017e[0],"FinalState");
- Get_Plot(tags_2017e,METHTtrigger,colors,inFile,cut,METHTtrigger[0]+"_"+tags_2017e[0],"FinalState");
- Get_Plot(tags_2017e,METORtrigger,colors,inFile,cut,METORtrigger[0]+"_"+tags_2017e[0],"FinalState");
- Get_Plot(tags_2017e,SuperOR,colors,inFile,cut,SuperOR[0]+"_"+tags_2017e[0],"FinalState");
+ //Get_Plot(tags_2017a,SuperOR,colors,inFile,cut,SuperOR[0]+"_"+tags_2017a[0],"FinalState");
+ //Get_Plot(tags_2017b,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017b[0],"FinalState");
+ //Get_Plot(tags_2017b,METHTtrigger,colors,inFile,cut,METHTtrigger[0]+"_"+tags_2017b[0],"FinalState");
+ //Get_Plot(tags_2017b,METORtrigger,colors,inFile,cut,METORtrigger[0]+"_"+tags_2017b[0],"FinalState");
+ //Get_Plot(tags_2017b,SuperOR,colors,inFile,cut,SuperOR[0]+"_"+tags_2017b[0],"FinalState");
+ //Get_Plot(tags_2017c,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017c[0],"FinalState");
+ //Get_Plot(tags_2017c,METHTtrigger,colors,inFile,cut,METHTtrigger[0]+"_"+tags_2017c[0],"FinalState");
+ //Get_Plot(tags_2017c,METORtrigger,colors,inFile,cut,METORtrigger[0]+"_"+tags_2017c[0],"FinalState");
+ //Get_Plot(tags_2017c,SuperOR,colors,inFile,cut,SuperOR[0]+"_"+tags_2017c[0],"FinalState");
+ //Get_Plot(tags_2017d,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017d[0],"FinalState");
+ //Get_Plot(tags_2017d,METHTtrigger,colors,inFile,cut,METHTtrigger[0]+"_"+tags_2017d[0],"FinalState");
+ //Get_Plot(tags_2017d,METORtrigger,colors,inFile,cut,METORtrigger[0]+"_"+tags_2017d[0],"FinalState");
+ //Get_Plot(tags_2017d,SuperOR,colors,inFile,cut,SuperOR[0]+"_"+tags_2017d[0],"FinalState");
+ //Get_Plot(tags_2017e,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017e[0],"FinalState");
+ //Get_Plot(tags_2017e,METHTtrigger,colors,inFile,cut,METHTtrigger[0]+"_"+tags_2017e[0],"FinalState");
+ //Get_Plot(tags_2017e,METORtrigger,colors,inFile,cut,METORtrigger[0]+"_"+tags_2017e[0],"FinalState");
+ //Get_Plot(tags_2017e,SuperOR,colors,inFile,cut,SuperOR[0]+"_"+tags_2017e[0],"FinalState");
  
  //Get_Plot(tags_2016,Triggers_DoubleMu3_PFMET50_2016,colors,inFile,"2016_HLT_DoubleMu3_PFMET50","Trigger");
  //Get_Plot(tags_2017,Triggers_DoubleMu3_DZ_PFMET50_PFMHT60_2017_2018,colors,inFile,"2017_HLT_DoubleMu3_DZ_PFMET50_PFMHT60","Trigger");
@@ -347,6 +346,8 @@ TMultiGraph* get_mg(vector<string> cut, vector<string> tags, vector<string> Trig
     eff->Draw("AP");
     can->Update();
     TGraphAsymmErrors* gr = eff->GetPaintedGraph();
+    //call Fitter
+    Fitter_Eff_Nano(gr,colors,Triggers[j]+"_"+tags[i]+"_"+cut[k]);
     if((i+j) == 0)
     {
      string title = " ;";

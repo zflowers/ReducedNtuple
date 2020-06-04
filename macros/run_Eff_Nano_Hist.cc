@@ -9,13 +9,14 @@
 #include "MET_2018_Triggers.h"
 #include "Eff_Nano.h"
 #include "Plotter_Eff_Nano.C"
-#include "Fitter_Eff_Nano.C"
 
 using namespace std;
 
 void Eff_Nano_Hist(string outFile = "output_test.root", string x = "MET", string cut = ""){
  std::cout << "Outputting to: " << outFile << endl;
  gSystem->Exec(("rm "+outFile).c_str());
+ string FitFile = "output_Fits.root";
+ gSystem->Exec(("rm "+FitFile).c_str());
  //.L Eff_Nano.h; //++
  //.L MET_2016_Triggers.h;
  //.L MET_2017_Triggers.h;
@@ -36,7 +37,7 @@ void Eff_Nano_Hist(string outFile = "output_test.root", string x = "MET", string
  //string x_2018 = "MET_pt";
 
  //string path = "/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/output/";
- string path = "~/../crogan/NTUPLES/NANO/NEW_23_05_20/";
+ string path = "~/../crogan/NTUPLES/NANO/NEW_31_05_20/";
  string x_2016 = x;
  string x_2017 = x;
  string x_2018 = x;
@@ -166,9 +167,10 @@ void run_Eff_Nano_Hist()
 
  cut.push_back("NoCuts");
  cut.push_back("PTISRG200");
- cut.push_back("PTISRG350");
- cut.push_back("PTISRG500");
- cut.push_back("PTISRG700");
+ //cut.push_back("PTISRG350");
+ //cut.push_back("PTISRG500");
+ //cut.push_back("PTISRG700");
+ //
  //cut.push_back("PTISRG200_NmuE0");
  //cut.push_back("PTISRG200_NmuGe1");
  //cut.push_back("PTISRG200_NmuE2");
