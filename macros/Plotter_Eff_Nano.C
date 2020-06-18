@@ -27,7 +27,7 @@ void Plotter_Eff_Nano(vector<string> inFile, vector<string> cut){
  vector<string> tags_2017d = {"T2_4bd_500_490_2017"};
  vector<string> tags_2017e = {"T2_4bd_500_420_2017"};
  //vector<string> tags_2018 = {"WJets_2018", "TTJets_2018"};//, "DY_2018", "TChiWZ_2016", "Stop_2016"};
- vector<int> colors = {kPink, kGreen, kCyan, kMagenta, kYellow, kViolet+2, kAzure+7, kGray};
+ vector<int> colors = {kCyan, kMagenta, kYellow, kViolet+2, kAzure+7, kPink, kGreen, kGray};
 /*
  vector<string> Triggers_90{
    "HLT_PFMET90_PFMHT90_IDTight",
@@ -83,21 +83,21 @@ void Plotter_Eff_Nano(vector<string> inFile, vector<string> cut){
  //combining files
  Get_Plot(tags_2017a,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017a[0],"FinalState");
  //Get_Plot(tags_2017a,METHTtrigger,colors,inFile,cut,METHTtrigger[0]+"_"+tags_2017a[0],"FinalState");
- Get_Plot(tags_2017a,METORtrigger,colors,inFile,cut,METORtrigger[0]+"_"+tags_2017a[0],"FinalState");
+ //Get_Plot(tags_2017a,METORtrigger,colors,inFile,cut,METORtrigger[0]+"_"+tags_2017a[0],"FinalState");
  //Get_Plot(tags_2017a,SuperOR,colors,inFile,cut,SuperOR[0]+"_"+tags_2017a[0],"FinalState");
- //Get_Plot(tags_2017b,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017b[0],"FinalState");
+ Get_Plot(tags_2017b,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017b[0],"FinalState");
  //Get_Plot(tags_2017b,METHTtrigger,colors,inFile,cut,METHTtrigger[0]+"_"+tags_2017b[0],"FinalState");
  //Get_Plot(tags_2017b,METORtrigger,colors,inFile,cut,METORtrigger[0]+"_"+tags_2017b[0],"FinalState");
  //Get_Plot(tags_2017b,SuperOR,colors,inFile,cut,SuperOR[0]+"_"+tags_2017b[0],"FinalState");
- //Get_Plot(tags_2017c,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017c[0],"FinalState");
+ Get_Plot(tags_2017c,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017c[0],"FinalState");
  //Get_Plot(tags_2017c,METHTtrigger,colors,inFile,cut,METHTtrigger[0]+"_"+tags_2017c[0],"FinalState");
  //Get_Plot(tags_2017c,METORtrigger,colors,inFile,cut,METORtrigger[0]+"_"+tags_2017c[0],"FinalState");
  //Get_Plot(tags_2017c,SuperOR,colors,inFile,cut,SuperOR[0]+"_"+tags_2017c[0],"FinalState");
- //Get_Plot(tags_2017d,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017d[0],"FinalState");
+ Get_Plot(tags_2017d,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017d[0],"FinalState");
  //Get_Plot(tags_2017d,METHTtrigger,colors,inFile,cut,METHTtrigger[0]+"_"+tags_2017d[0],"FinalState");
  //Get_Plot(tags_2017d,METORtrigger,colors,inFile,cut,METORtrigger[0]+"_"+tags_2017d[0],"FinalState");
  //Get_Plot(tags_2017d,SuperOR,colors,inFile,cut,SuperOR[0]+"_"+tags_2017d[0],"FinalState");
- //Get_Plot(tags_2017e,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017e[0],"FinalState");
+ Get_Plot(tags_2017e,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017e[0],"FinalState");
  //Get_Plot(tags_2017e,METHTtrigger,colors,inFile,cut,METHTtrigger[0]+"_"+tags_2017e[0],"FinalState");
  //Get_Plot(tags_2017e,METORtrigger,colors,inFile,cut,METORtrigger[0]+"_"+tags_2017e[0],"FinalState");
  //Get_Plot(tags_2017e,SuperOR,colors,inFile,cut,SuperOR[0]+"_"+tags_2017e[0],"FinalState");

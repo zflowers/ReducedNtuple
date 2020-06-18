@@ -17,6 +17,9 @@ void Eff_Nano_Hist(string outFile = "output_test.root", string x = "MET", string
  gSystem->Exec(("rm "+outFile).c_str());
  string FitFile = "output_Fits.root";
  gSystem->Exec(("rm "+FitFile).c_str());
+ string Fit_Parameters_Output = "Fit_Parameters_Output.csv";
+ gSystem->Exec(("rm "+Fit_Parameters_Output).c_str());
+ 
  //.L Eff_Nano.h; //++
  //.L MET_2016_Triggers.h;
  //.L MET_2017_Triggers.h;
@@ -167,6 +170,8 @@ void run_Eff_Nano_Hist()
 
  cut.push_back("NoCuts");
  cut.push_back("PTISRG200");
+ cut.push_back("PTISRG200_NjetGe4");
+ cut.push_back("PTISRG200_NjetL4");
  //cut.push_back("PTISRG350");
  //cut.push_back("PTISRG500");
  //cut.push_back("PTISRG700");

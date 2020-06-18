@@ -481,6 +481,7 @@ inline bool Eff_Nano::global_cuts(const Long64_t& jentry)
  bool Nmu_cut = true;
  bool Nele_cut = true;
  bool Nlep_cut = true;
+ bool Njet_cut = true;
 
  if(current_cut.find("PTISR") != std::string::npos)
  {
@@ -502,6 +503,11 @@ inline bool Eff_Nano::global_cuts(const Long64_t& jentry)
   Nlep_cut = Get_Cut(jentry,"Nlep",current_cut);
  }
 
+ if(current_cut.find("Njet") != std::string::npos)
+ {
+  Njet_cut = Get_Cut(jentry,"Njet",current_cut);
+ }
+
  if(current_cut.compare("NoCuts_") == 0)
  {
   return false;
@@ -512,7 +518,7 @@ inline bool Eff_Nano::global_cuts(const Long64_t& jentry)
   cout << "ERROR: Some cuts not applied: " << current_cut << endl;
  }
 
- if(PTISR_cut && Nmu_cut && Nele_cut && Nlep_cut)
+ if(PTISR_cut && Nmu_cut && Nele_cut && Nlep_cut && Njet_cut)
  {
   return false;
  }
@@ -543,8 +549,8 @@ inline void Eff_Nano::Analyze(){
    double* bin_edges_ptr = NULL;
    if(m_x == "MET")
    {
-    bins = 20;
-    double bin_edges[21] = {100.,110.,120.,130.,140.0,150.,160.,170.,180.,190.,200.,210.,220.,230.,240.,250.,275.,300.,350.,400.,500.};
+    bins = 23;
+    double bin_edges[24] = {150.,160.,170.,175.,180.,185.,190.,195.,200.,205.,210.,215.,220.,225.,230.,235.,240.,245.,250.,275.,300.,350.,400.,500.};
     bin_edges_ptr = bin_edges;
    }
    else if(m_x == "RISR")

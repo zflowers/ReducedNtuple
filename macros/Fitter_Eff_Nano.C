@@ -2,9 +2,11 @@
 //function: Error function or CDF for gaussian or Fermi function or Soft Heaviside
 
 #include <TMinuit.h>
+#include <fstream>
+#include <sys/stat.h>
 
 void Get_Fit(TGraphAsymmErrors*& gr, vector<TF1*> funcs, vector<int> colors, string outFile, string name);
-void Fit_Graph_With_Funcs(TCanvas*& canv, TGraphAsymmErrors*& gr, vector<TF1*> funcs, const vector<int>& colors);
+void Fit_Graph_With_Funcs(TCanvas*& canv, TGraphAsymmErrors*& gr, vector<TF1*> funcs, const vector<int>& colors, string name);
 
 Double_t Error_Func(Double_t *x, Double_t *par)
 {
@@ -18,10 +20,20 @@ Double_t Gaussian_CDF_Func(Double_t *x, Double_t *par)
 
 Double_t Double_Gaussian_CDF_Func(Double_t *x, Double_t *par)
 {
- return par[0]*(par[3]*ROOT::Math::normal_cdf(x[0],par[2],par[1])+(1.-par[3])*ROOT::Math::normal_cdf(x[0],par[4],par[1]));
+ return par[0]*((TMath::Cos(par[4])*TMath::Cos(par[4]))*ROOT::Math::normal_cdf(x[0],par[2]*par[3],par[1])+(TMath::Sin(par[4])*TMath::Sin(par[4]))*ROOT::Math::normal_cdf(x[0],par[2],par[1]));
 }
 
 bool invert_colors = true;
+
+bool fileExists(const std::string& filename)
+{
+    struct stat buf;
+    if (stat(filename.c_str(), &buf) != -1)
+    {
+        return true;
+    }
+    return false;
+}
 
 void Fitter_Eff_Nano(TGraphAsymmErrors* gr_given, vector<int> colors, string name)
 {
@@ -61,9 +73,9 @@ void Fitter_Eff_Nano(TGraphAsymmErrors* gr_given, vector<int> colors, string nam
  func_Gaussian_CDF0->SetParName(1,"Mean_Gauss_CDF");
  func_Gaussian_CDF0->SetParName(2,"Sigma_Gauss_CDF");
  
- funcs.push_back(func_Gaussian_CDF0);
+ //funcs.push_back(func_Gaussian_CDF0);
 
- TF1* func_Gaussian_CDF1 = new TF1("func_Gaussian_CDF1",Gaussian_CDF_Func,160.,x_max,3);
+ TF1* func_Gaussian_CDF1 = new TF1("func_Gaussian_CDF1",Gaussian_CDF_Func,170.,x_max,3);
  func_Gaussian_CDF1->SetParameter(0,Norm_Gauss_CDF);
  func_Gaussian_CDF1->SetParameter(1,Mean_Gauss_CDF);
  func_Gaussian_CDF1->SetParameter(2,Sigma_Gauss_CDF);
@@ -71,12 +83,98 @@ void Fitter_Eff_Nano(TGraphAsymmErrors* gr_given, vector<int> colors, string nam
  func_Gaussian_CDF1->SetParName(1,"Mean_Gauss_CDF");
  func_Gaussian_CDF1->SetParName(2,"Sigma_Gauss_CDF");
  
- funcs.push_back(func_Gaussian_CDF1);
+ //funcs.push_back(func_Gaussian_CDF1);
+
+ //Double Gaussian CDF Function
+ double Norm_Double_Gauss_CDF=1.;
+ double Mean_Double_Gauss_CDF=100.;
+ double Sigma_Double_Gauss_CDF=10.;
+ double SigmaScale_Double_Gauss_CDF=10.;
+ double Weight_Double_Gauss_CDF=.5;
+
+ TF1* func_Double_Gaussian_CDF0 = new TF1("func_Double_Gaussian_CDF0",Double_Gaussian_CDF_Func,x_min,x_max,5);
+ func_Double_Gaussian_CDF0->SetParameter(0,Norm_Double_Gauss_CDF);
+ func_Double_Gaussian_CDF0->SetParameter(1,Mean_Double_Gauss_CDF);
+ func_Double_Gaussian_CDF0->SetParameter(2,Sigma_Double_Gauss_CDF);
+ func_Double_Gaussian_CDF0->SetParameter(3,SigmaScale_Double_Gauss_CDF);
+ func_Double_Gaussian_CDF0->SetParameter(4,Weight_Double_Gauss_CDF);
+ //func_Double_Gaussian_CDF0->SetParLimits(3,1.,100.);
+ //func_Double_Gaussian_CDF0->SetParLimits(4,-TMath::Pi()/2.,TMath::Pi()/2.);
+ func_Double_Gaussian_CDF0->SetParName(0,"Norm_Double_Gauss_CDF0");
+ func_Double_Gaussian_CDF0->SetParName(1,"Mean_Double_Gauss_CDF0");
+ func_Double_Gaussian_CDF0->SetParName(2,"Sigma_Double_Gauss_CDF0");
+ func_Double_Gaussian_CDF0->SetParName(3,"Scale_Double_Gauss_CDF0");
+ func_Double_Gaussian_CDF0->SetParName(4,"Weight_Double_Gauss_CDF0");
+ 
+ funcs.push_back(func_Double_Gaussian_CDF0);
+
+ TF1* func_Double_Gaussian_CDF1 = new TF1("func_Double_Gaussian_CDF1",Double_Gaussian_CDF_Func,170.,x_max,5);
+ func_Double_Gaussian_CDF1->SetParameter(0,Norm_Double_Gauss_CDF);
+ func_Double_Gaussian_CDF1->SetParameter(1,Mean_Double_Gauss_CDF);
+ func_Double_Gaussian_CDF1->SetParameter(2,Sigma_Double_Gauss_CDF);
+ func_Double_Gaussian_CDF1->SetParameter(3,SigmaScale_Double_Gauss_CDF);
+ func_Double_Gaussian_CDF1->SetParameter(4,Weight_Double_Gauss_CDF);
+ //func_Double_Gaussian_CDF1->SetParLimits(3,1.,100.);
+ //func_Double_Gaussian_CDF1->SetParLimits(4,-TMath::Pi()/2.,TMath::Pi()/2.);
+ func_Double_Gaussian_CDF1->SetParName(0,"Norm_Double_Gauss_CDF1");
+ func_Double_Gaussian_CDF1->SetParName(1,"Mean_Double_Gauss_CDF1");
+ func_Double_Gaussian_CDF1->SetParName(2,"Sigma_Double_Gauss_CDF1");
+ func_Double_Gaussian_CDF1->SetParName(3,"Scale_Double_Gauss_CDF1");
+ func_Double_Gaussian_CDF1->SetParName(4,"Weight_Double_Gauss_CDF1");
+ 
+ funcs.push_back(func_Double_Gaussian_CDF1);
+
+ if(!fileExists("Fit_Parameters_Output.csv"))
+ {
+  ofstream output;
+  output.open("Fit_Parameters_Output.csv",fstream::app);
+  output << "Efficiency";
+ 
+  for(int i = 0; i < int(funcs.size()); i++)
+  {
+   output << " " << ",";
+   for(int j = 0; j < funcs[i]->GetNpar(); j++)
+   {
+    output << funcs[i]->GetParName(j) << ",";
+   }
+   output << "ChiSquared" << "," << "NDF" << "," << "Status" << endl;
+  }
+  output.close();
+ }
+
 
 
  //Call Get_Fit and send it whatever functions we need
  Get_Fit(gr_given,funcs,colors,"output_Fits.root",name);
 
+
+}
+
+void Format_Graph(TMultiGraph*& gr)
+{
+  gr->GetXaxis()->CenterTitle(true);
+  gr->GetXaxis()->SetTitleFont(132);
+  gr->GetXaxis()->SetTitleSize(0.06);
+  gr->GetXaxis()->SetTitleOffset(1.06);
+  gr->GetXaxis()->SetLabelFont(132);
+  gr->GetXaxis()->SetLabelSize(0.05);
+  //gr->GetXaxis()->SetLabelSize(0.00000001);
+  gr->GetYaxis()->CenterTitle(true);
+  gr->GetYaxis()->SetTitleFont(132);
+  gr->GetYaxis()->SetTitleSize(0.06);
+  gr->GetYaxis()->SetTitleOffset(.6);
+  gr->GetYaxis()->SetLabelFont(132);
+  gr->GetYaxis()->SetLabelSize(0.05);
+
+  if(invert_colors)
+  {
+   gr->GetXaxis()->SetAxisColor(kWhite);
+   gr->GetYaxis()->SetAxisColor(kWhite);
+   gr->GetXaxis()->SetTitleColor(kWhite);
+   gr->GetYaxis()->SetTitleColor(kWhite);
+   gr->GetXaxis()->SetLabelColor(kWhite);
+   gr->GetYaxis()->SetLabelColor(kWhite);
+  }
 }
 
 void Format_Graph(TGraphAsymmErrors*& gr)
@@ -87,12 +185,39 @@ void Format_Graph(TGraphAsymmErrors*& gr)
   gr->GetXaxis()->SetTitleOffset(1.06);
   gr->GetXaxis()->SetLabelFont(132);
   gr->GetXaxis()->SetLabelSize(0.05);
+  //gr->GetXaxis()->SetLabelSize(0.00000001);
   gr->GetYaxis()->CenterTitle(true);
   gr->GetYaxis()->SetTitleFont(132);
   gr->GetYaxis()->SetTitleSize(0.06);
-  gr->GetYaxis()->SetTitleOffset(1.);
+  gr->GetYaxis()->SetTitleOffset(.6);
   gr->GetYaxis()->SetLabelFont(132);
   gr->GetYaxis()->SetLabelSize(0.05);
+
+  if(invert_colors)
+  {
+   gr->GetXaxis()->SetAxisColor(kWhite);
+   gr->GetYaxis()->SetAxisColor(kWhite);
+   gr->GetXaxis()->SetTitleColor(kWhite);
+   gr->GetYaxis()->SetTitleColor(kWhite);
+   gr->GetXaxis()->SetLabelColor(kWhite);
+   gr->GetYaxis()->SetLabelColor(kWhite);
+  }
+}
+
+void Format_Graph_res(TMultiGraph*& gr)
+{
+  gr->GetXaxis()->CenterTitle(true);
+  gr->GetXaxis()->SetTitleFont(132);
+  gr->GetXaxis()->SetTitleSize(0.12);
+  gr->GetXaxis()->SetTitleOffset(.7);
+  gr->GetXaxis()->SetLabelFont(132);
+  gr->GetXaxis()->SetLabelSize(0.1);
+  gr->GetYaxis()->CenterTitle(true);
+  gr->GetYaxis()->SetTitleFont(132);
+  gr->GetYaxis()->SetTitleSize(0.12);
+  gr->GetYaxis()->SetTitleOffset(.35);
+  gr->GetYaxis()->SetLabelFont(132);
+  gr->GetYaxis()->SetLabelSize(0.1);
 
   if(invert_colors)
   {
@@ -117,7 +242,7 @@ TGraphAsymmErrors* TGAE_TF1(TGraphAsymmErrors *gr, TF1 *fit_func)
   double x,y,ex,ey;
   gr->GetPoint(i, x, y);
   xnew[i] = x;
-  ynew[i] = fit_func->Eval(x)-y;
+  ynew[i] = y-fit_func->Eval(x);
  }
  TGraphAsymmErrors* res_gr = new TGraphAsymmErrors(N,xnew,ynew);
  for(int i=0; i < N; i++)
@@ -136,12 +261,8 @@ void Get_Fit(TGraphAsymmErrors*& gr, vector<TF1*> funcs, vector<int> colors, str
   gStyle->SetFrameLineColor(kWhite);
  }
  
- TLatex l;
- TCanvas* can = new TCanvas(name.c_str(),"",600.,500);
- can->SetLeftMargin(0.13);
- can->SetRightMargin(0.04);
- can->SetBottomMargin(0.15);
- can->SetTopMargin(0.085);
+ //TCanvas* can = new TCanvas(name.c_str(),"",600.,500);
+ TCanvas* can = new TCanvas(name.c_str(),"",864.,468.);
  can->SetGridx();
  can->SetGridy();
  can->Draw();
@@ -149,47 +270,48 @@ void Get_Fit(TGraphAsymmErrors*& gr, vector<TF1*> funcs, vector<int> colors, str
  if(invert_colors)
  {
   can->SetFillColor(kBlack);
-  l.SetTextColor(kWhite);
  }
 
  can->Modified();
  can->Update();
  //TGraph* gr = get_gr(tags,Triggers,inFile,colors,can);
- Fit_Graph_With_Funcs(can,gr,funcs,colors);
- l.SetTextFont(42);
- l.SetNDC();
- l.SetTextSize(0.04);
- l.SetTextFont(42);
- l.DrawLatex(0.55,0.93,name.c_str());
- l.DrawLatex(0.13,0.93,"#bf{#it{CMS}} Internal 13 TeV Simulation");
-
+ Fit_Graph_With_Funcs(can,gr,funcs,colors,name);
 
  TFile* output = TFile::Open(outFile.c_str(),"UPDATE");
  can->Write();
+ can->SaveAs(("Plots/"+name+".pdf").c_str());
  output->Close();
  delete can;
  delete output;
 }
 
-void Fit_Graph_With_Funcs(TCanvas*& canv, TGraphAsymmErrors*& gr_given, vector<TF1*> funcs, const vector<int>& colors)
+void Output_Fit(TF1* func, string name, string status)
+{
+ ofstream output;
+ output.open("Fit_Parameters_Output.csv",fstream::app);
+ output << name << ",";
+ for(int j = 0; j < func->GetNpar(); j++)
+ {
+  output << func->GetParameter(j) << "+/-" << func->GetParError(j) << ",";
+ }
+ output << func->GetChisquare() << "," << func->GetNDF() << "," << status << endl;
+
+ output.close();
+
+
+}
+
+void Fit_Graph_With_Funcs(TCanvas*& canv, TGraphAsymmErrors*& gr_given, vector<TF1*> funcs, const vector<int>& colors, string name)
 {
  gStyle->SetOptFit(1111);
  canv->cd();
  TPad* pad_gr = new TPad("pad_gr","pad_gr",0,.3,1.,1.);
- pad_gr->SetBottomMargin(0.95);
+ pad_gr->SetGridx();
+ pad_gr->SetGridy();
  pad_gr->Draw();
  pad_gr->cd();
  canv->Update();
- TLegend leg(0.55,0.2,0.98,0.8,"");
- leg.SetTextFont(132);
- leg.SetTextSize(0.04);
- if(invert_colors)
- {
-  leg.SetFillColor(kBlack);
-  leg.SetLineColor(kBlack);
-  leg.SetShadowColor(kBlack); 
- }
- //TMultiGraph* mg = new TMultiGraph();
+
  vector<TGraphAsymmErrors*> vect_gr;
  for(int i = 0; i < int(funcs.size()); i++)
  {
@@ -198,29 +320,53 @@ void Fit_Graph_With_Funcs(TCanvas*& canv, TGraphAsymmErrors*& gr_given, vector<T
   vect_gr.push_back(gr);
  }
  vector<TPaveStats*> vect_stats;
+ vector<TLegend> vect_leg;
+
+ string XTitle = vect_gr[0]->GetXaxis()->GetTitle();
+ double y1 = 0.8;
+ double y2 = 0.8-.06*(funcs[0]->GetNpar());
+
+ TMultiGraph* mg = new TMultiGraph();
 
  for(int i = 0; i < int(funcs.size()); i++)
  {
   vect_gr[i]->SetMarkerColor(kWhite);
   vect_gr[i]->SetLineColor(kWhite);
+  vect_gr[i]->GetXaxis()->SetTitle("");
 
   if(invert_colors)
   {
    canv->SetFillColor(kBlack);
    pad_gr->SetFillColor(kBlack);
   }
-  funcs[i]->SetNpx(1000000);
+  funcs[i]->SetNpx(10000);
   funcs[i]->SetLineColor(colors[i]);
-  vect_gr[i]->Fit(funcs[i],"EMR0");
-  //mg->Add(vect_gr[i]);
+  cout << endl << "Fitting " << name << " with " << funcs[i]->GetName() << endl;
+  vect_gr[i]->Fit(funcs[i],"EMR+");
+  mg->Add(vect_gr[i]); //
+
+  TLegend leg(0.4,y1,0.6,y2,"");
+  leg.SetTextFont(42);
+  leg.SetTextSize(0.04);
+  leg.SetFillColor(kWhite);
+  leg.SetTextColor(colors[i]);
+  leg.SetLineColor(colors[i]);
+  TString func_name = funcs[i]->GetName();
+  leg.AddEntry((TObject*)0, func_name, "");
   TString status_func = gMinuit->fCstatu;
   TString status_func_leg = "Status = ";
   status_func_leg+=status_func;
   leg.AddEntry((TObject*)0, status_func_leg, "");
-  leg.SetTextColor(colors[i]);
+  if(invert_colors)
+  {
+   leg.SetFillColor(kBlack);
+   leg.SetShadowColor(kBlack); 
+  }
+  vect_leg.push_back(leg);
+
   pad_gr->Update();
   
-  vect_gr[i]->Draw("AP SAMES");
+  vect_gr[i]->Draw("AP SAMES"); //
   pad_gr->Update();
   canv->Update();
   TPaveStats *stats = (TPaveStats*)vect_gr[i]->GetListOfFunctions()->FindObject("stats");
@@ -228,58 +374,95 @@ void Fit_Graph_With_Funcs(TCanvas*& canv, TGraphAsymmErrors*& gr_given, vector<T
   stats->SetName(("stats_"+stats_name).c_str());
   stats->SetTextColor(colors[i]);
   stats->SetLineColor(colors[i]);
-  stats->SetY1NDC(0.8-i*.2);
-  stats->SetY2NDC(0.6-i*.2);
+  stats->SetY1NDC(y1);
+  stats->SetY2NDC(y2);
+  y1 = y2;
+  y2 = y2-.06*(funcs[i]->GetNpar());
+  stats->SetX1NDC(0.6);
+  stats->SetX2NDC(0.9);
   vect_stats.push_back(stats);
   pad_gr->Update();
   
-  //TLegend leg(0.55,0.4-i*.1,0.98,0.5-i*.1,"");
   if(invert_colors)
   {
    stats->SetFillColor(kBlack);
   }
- 
+  pad_gr->Clear();
   pad_gr->Update();
   canv->Update();
 
+  Output_Fit(funcs[i],name,string(status_func));
+
  }
+ mg->Draw("AP SAMES");
+ Format_Graph(mg);
+ mg->GetYaxis()->SetTitle("Efficiency");
  for(int i = 0; i < int(funcs.size()); i++)
  {
+  vect_leg[i].Draw("");
   vect_stats[i]->Draw("SAMES");
-  funcs[i]->Draw("SAMES");
+  //funcs[i]->Draw("SAMES");
  }
- //mg->Draw("AP SAMES");
- leg.Draw("SAMES");
  pad_gr->Update();
  pad_gr->Modified();
  canv->Update();
+ TLatex l;
+ if(invert_colors)
+ {
+  l.SetTextColor(kWhite);
+ }
+ 
+ l.SetTextFont(42);
+ l.SetNDC();
+ l.SetTextSize(0.04);
+ l.SetTextFont(42);
+ l.DrawLatex(0.55,0.93,name.c_str());
+ l.DrawLatex(0.13,0.93,"#bf{#it{CMS}} Internal 13 TeV Simulation");
 
- TPad *pad_res = new TPad("pad_res", "pad_res", 0, 0.05, 1, 0.3);
+ pad_gr->Update();
+ canv->Update();
+
+ canv->cd();
+ TPad *pad_res = new TPad("pad_res", "pad_res", 0, 0.03, 1, 0.3);
+ pad_res->SetGridx();
+ pad_res->SetGridy();
+ pad_res->SetTopMargin(1.3);
+ pad_res->SetBottomMargin(0.2);
  pad_res->Draw();
- pad_res->SetTopMargin(0.05);
- pad_res->Update();
  pad_res->cd();
+ pad_res->Update();
  canv->Update();
 
  TMultiGraph* mg_res = new TMultiGraph();
+ TGraphAsymmErrors* res = NULL;
  for(int i = 0; i < int(funcs.size()); i++)
  {
-  TGraphAsymmErrors* res=TGAE_TF1(vect_gr[i],funcs[i]);
+  res=TGAE_TF1(vect_gr[i],funcs[i]);
   Format_Graph(res);
   res->SetMarkerColor(colors[i]);
   res->SetLineColor(colors[i]);
+
+  if(invert_colors)
+  {
+   pad_res->SetFillColor(kBlack);
+  }
   mg_res->Add(res);
  }
 
  mg_res->Draw("AP");
- mg_res->GetXaxis()->SetLabelSize(0.12);
- mg_res->GetYaxis()->SetLabelSize(0.12);
- 
- //TLine* line = new TLine(res->GetXaxis()->GetXmin(),0.0,res->GetXaxis()->GetXmax(),0.0);
- //line->SetLineColor(kBlack);
- //line->SetLineStyle(2);
- //line->Draw();
+ mg_res->GetXaxis()->SetLimits(mg->GetXaxis()->GetXmin(),mg->GetXaxis()->GetXmax());
+ mg_res->GetXaxis()->SetTitle(XTitle.c_str());
+ mg_res->GetYaxis()->SetTitle("Eff - Fit");
+ Format_Graph_res(mg_res);
+ pad_res->Modified();
  pad_res->Update();
+
+ TLine* line = new TLine(mg_res->GetXaxis()->GetXmin(),0.0,mg_res->GetXaxis()->GetXmax(),0.0);
+ line->SetLineColor(kWhite);
+ line->SetLineStyle(1);
+ line->Draw("SAMES");
+ pad_res->Update();
+ pad_res->Modified();
  canv->Update();
 
 }
