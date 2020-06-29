@@ -41,3 +41,4 @@ void KUAnalysis::Loop()
       // if (Cut(ientry) < 0) continue;
    }
 }
+#undef KUAnalysis_cxx

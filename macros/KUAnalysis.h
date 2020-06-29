@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Wed May 20 10:42:51 2020 by ROOT version 6.12/07
+// Wed Jun 24 17:29:05 2020 by ROOT version 6.12/07
 // from TTree KUAnalysis/KUAnalysis
 // found on file: /home/t3-ku/z374f439/../crogan/NTUPLES/NANO/NEW_12_05_20/Fall17_102X/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root
 //////////////////////////////////////////////////////////

@@ -7,4 +7,5 @@
 *.so
 *.root
 *.pcm
-macros/Plots/
+*.pdf
+*.csv

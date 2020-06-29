@@ -4,6 +4,7 @@
 #include <TMinuit.h>
 #include <fstream>
 #include <sys/stat.h>
+#include <algorithm>
 
 void Get_Fit(TGraphAsymmErrors*& gr, vector<TF1*> funcs, vector<int> colors, string outFile, string name);
 void Fit_Graph_With_Funcs(TCanvas*& canv, TGraphAsymmErrors*& gr, vector<TF1*> funcs, const vector<int>& colors, string name);
@@ -18,21 +19,26 @@ Double_t Gaussian_CDF_Func(Double_t *x, Double_t *par)
  return par[0]*ROOT::Math::normal_cdf(x[0],par[2],par[1]);
 }
 
-Double_t Double_Gaussian_CDF_Func(Double_t *x, Double_t *par)
+Double_t Double_Gaussian_CDF_Func_Add(Double_t *x, Double_t *par)
 {
- return par[0]*((TMath::Cos(par[4])*TMath::Cos(par[4]))*ROOT::Math::normal_cdf(x[0],par[2]*par[3],par[1])+(TMath::Sin(par[4])*TMath::Sin(par[4]))*ROOT::Math::normal_cdf(x[0],par[2],par[1]));
+ return par[0]*((TMath::Cos(par[4])*TMath::Cos(par[4]))*ROOT::Math::normal_cdf(x[0],par[2],par[1])+(TMath::Sin(par[4])*TMath::Sin(par[4]))*ROOT::Math::normal_cdf(x[0],par[2]+par[3],par[1]));
+}
+
+Double_t Double_Gaussian_CDF_Func_Multi(Double_t *x, Double_t *par)
+{
+ return par[0]*((TMath::Cos(par[4])*TMath::Cos(par[4]))*ROOT::Math::normal_cdf(x[0],par[2],par[1])+(TMath::Sin(par[4])*TMath::Sin(par[4]))*ROOT::Math::normal_cdf(x[0],par[2]*par[3],par[1]));
 }
 
 bool invert_colors = true;
 
 bool fileExists(const std::string& filename)
 {
-    struct stat buf;
-    if (stat(filename.c_str(), &buf) != -1)
-    {
-        return true;
-    }
-    return false;
+ struct stat buf;
+ if (stat(filename.c_str(), &buf) != -1)
+ {
+     return true;
+ }
+ return false;
 }
 
 void Fitter_Eff_Nano(TGraphAsymmErrors* gr_given, vector<int> colors, string name)
@@ -75,16 +81,6 @@ void Fitter_Eff_Nano(TGraphAsymmErrors* gr_given, vector<int> colors, string nam
  
  //funcs.push_back(func_Gaussian_CDF0);
 
- TF1* func_Gaussian_CDF1 = new TF1("func_Gaussian_CDF1",Gaussian_CDF_Func,170.,x_max,3);
- func_Gaussian_CDF1->SetParameter(0,Norm_Gauss_CDF);
- func_Gaussian_CDF1->SetParameter(1,Mean_Gauss_CDF);
- func_Gaussian_CDF1->SetParameter(2,Sigma_Gauss_CDF);
- func_Gaussian_CDF1->SetParName(0,"Norm_Gauss_CDF");
- func_Gaussian_CDF1->SetParName(1,"Mean_Gauss_CDF");
- func_Gaussian_CDF1->SetParName(2,"Sigma_Gauss_CDF");
- 
- //funcs.push_back(func_Gaussian_CDF1);
-
  //Double Gaussian CDF Function
  double Norm_Double_Gauss_CDF=1.;
  double Mean_Double_Gauss_CDF=100.;
@@ -92,37 +88,37 @@ void Fitter_Eff_Nano(TGraphAsymmErrors* gr_given, vector<int> colors, string nam
  double SigmaScale_Double_Gauss_CDF=10.;
  double Weight_Double_Gauss_CDF=.5;
 
- TF1* func_Double_Gaussian_CDF0 = new TF1("func_Double_Gaussian_CDF0",Double_Gaussian_CDF_Func,x_min,x_max,5);
- func_Double_Gaussian_CDF0->SetParameter(0,Norm_Double_Gauss_CDF);
- func_Double_Gaussian_CDF0->SetParameter(1,Mean_Double_Gauss_CDF);
- func_Double_Gaussian_CDF0->SetParameter(2,Sigma_Double_Gauss_CDF);
- func_Double_Gaussian_CDF0->SetParameter(3,SigmaScale_Double_Gauss_CDF);
- func_Double_Gaussian_CDF0->SetParameter(4,Weight_Double_Gauss_CDF);
- //func_Double_Gaussian_CDF0->SetParLimits(3,1.,100.);
- //func_Double_Gaussian_CDF0->SetParLimits(4,-TMath::Pi()/2.,TMath::Pi()/2.);
- func_Double_Gaussian_CDF0->SetParName(0,"Norm_Double_Gauss_CDF0");
- func_Double_Gaussian_CDF0->SetParName(1,"Mean_Double_Gauss_CDF0");
- func_Double_Gaussian_CDF0->SetParName(2,"Sigma_Double_Gauss_CDF0");
- func_Double_Gaussian_CDF0->SetParName(3,"Scale_Double_Gauss_CDF0");
- func_Double_Gaussian_CDF0->SetParName(4,"Weight_Double_Gauss_CDF0");
+ TF1* func_Double_Gaussian_CDF_Add0 = new TF1("func_Double_Gaussian_CDF_Add0",Double_Gaussian_CDF_Func_Add,x_min,x_max,5);
+ func_Double_Gaussian_CDF_Add0->SetParameter(0,Norm_Double_Gauss_CDF);
+ func_Double_Gaussian_CDF_Add0->SetParameter(1,Mean_Double_Gauss_CDF);
+ func_Double_Gaussian_CDF_Add0->SetParameter(2,Sigma_Double_Gauss_CDF);
+ func_Double_Gaussian_CDF_Add0->SetParameter(3,SigmaScale_Double_Gauss_CDF);
+ func_Double_Gaussian_CDF_Add0->SetParameter(4,Weight_Double_Gauss_CDF);
+ //func_Double_Gaussian_CDF_Add0->SetParLimits(3,1.,100.);
+ //func_Double_Gaussian_CDF_Add0->SetParLimits(4,-TMath::Pi()/2.,TMath::Pi()/2.);
+ func_Double_Gaussian_CDF_Add0->SetParName(0,"Norm_Double_Gauss_CDF0");
+ func_Double_Gaussian_CDF_Add0->SetParName(1,"Mean_Double_Gauss_CDF0");
+ func_Double_Gaussian_CDF_Add0->SetParName(2,"Sigma_Double_Gauss_CDF0");
+ func_Double_Gaussian_CDF_Add0->SetParName(3,"Scale_Double_Gauss_CDF0");
+ func_Double_Gaussian_CDF_Add0->SetParName(4,"Weight_Double_Gauss_CDF0");
  
- funcs.push_back(func_Double_Gaussian_CDF0);
+ funcs.push_back(func_Double_Gaussian_CDF_Add0);
 
- TF1* func_Double_Gaussian_CDF1 = new TF1("func_Double_Gaussian_CDF1",Double_Gaussian_CDF_Func,170.,x_max,5);
- func_Double_Gaussian_CDF1->SetParameter(0,Norm_Double_Gauss_CDF);
- func_Double_Gaussian_CDF1->SetParameter(1,Mean_Double_Gauss_CDF);
- func_Double_Gaussian_CDF1->SetParameter(2,Sigma_Double_Gauss_CDF);
- func_Double_Gaussian_CDF1->SetParameter(3,SigmaScale_Double_Gauss_CDF);
- func_Double_Gaussian_CDF1->SetParameter(4,Weight_Double_Gauss_CDF);
- //func_Double_Gaussian_CDF1->SetParLimits(3,1.,100.);
- //func_Double_Gaussian_CDF1->SetParLimits(4,-TMath::Pi()/2.,TMath::Pi()/2.);
- func_Double_Gaussian_CDF1->SetParName(0,"Norm_Double_Gauss_CDF1");
- func_Double_Gaussian_CDF1->SetParName(1,"Mean_Double_Gauss_CDF1");
- func_Double_Gaussian_CDF1->SetParName(2,"Sigma_Double_Gauss_CDF1");
- func_Double_Gaussian_CDF1->SetParName(3,"Scale_Double_Gauss_CDF1");
- func_Double_Gaussian_CDF1->SetParName(4,"Weight_Double_Gauss_CDF1");
+ TF1* func_Double_Gaussian_CDF_Multi0 = new TF1("func_Double_Gaussian_CDF_Multi0",Double_Gaussian_CDF_Func_Multi,x_min,x_max,5);
+ func_Double_Gaussian_CDF_Multi0->SetParameter(0,Norm_Double_Gauss_CDF);
+ func_Double_Gaussian_CDF_Multi0->SetParameter(1,Mean_Double_Gauss_CDF);
+ func_Double_Gaussian_CDF_Multi0->SetParameter(2,Sigma_Double_Gauss_CDF);
+ func_Double_Gaussian_CDF_Multi0->SetParameter(3,SigmaScale_Double_Gauss_CDF);
+ func_Double_Gaussian_CDF_Multi0->SetParameter(4,Weight_Double_Gauss_CDF);
+ //func_Double_Gaussian_CDF_Multi0->SetParLimits(3,1.,100.);
+ //func_Double_Gaussian_CDF_Multi0->SetParLimits(4,-TMath::Pi()/2.,TMath::Pi()/2.);
+ func_Double_Gaussian_CDF_Multi0->SetParName(0,"Norm_Double_Gauss_CDF0");
+ func_Double_Gaussian_CDF_Multi0->SetParName(1,"Mean_Double_Gauss_CDF0");
+ func_Double_Gaussian_CDF_Multi0->SetParName(2,"Sigma_Double_Gauss_CDF0");
+ func_Double_Gaussian_CDF_Multi0->SetParName(3,"Scale_Double_Gauss_CDF0");
+ func_Double_Gaussian_CDF_Multi0->SetParName(4,"Weight_Double_Gauss_CDF0");
  
- funcs.push_back(func_Double_Gaussian_CDF1);
+ funcs.push_back(func_Double_Gaussian_CDF_Multi0);
 
  if(!fileExists("Fit_Parameters_Output.csv"))
  {
@@ -285,16 +281,90 @@ void Get_Fit(TGraphAsymmErrors*& gr, vector<TF1*> funcs, vector<int> colors, str
  delete output;
 }
 
-void Output_Fit(TF1* func, string name, string status)
+//Code for rounding numbers
+double toPrecision(double num, int n) 
+{
+ if(num == 0) {
+   return 0.0;
+ }
+
+ double d = std::ceil(std::log10(num < 0 ? -num : num));
+ int power = n - (int)d;
+ double magnitude = std::pow(10., power);
+ long shifted = std::round(num*magnitude);
+
+ std::ostringstream oss;
+ oss << shifted/magnitude;
+ string num_str = oss.str();
+ return atof(num_str.c_str());
+}
+
+int getPrecision(double num)
+{
+ string num_str = std::to_string(num);
+ num_str.erase ( num_str.find_last_not_of('0') + 1, std::string::npos );
+ int pre = 0;
+ bool point = false;
+ int num_str_length = num_str.length();
+ for(int i=0; i<num_str_length; i++)
+ {
+  if(point)
+  {
+   pre++;
+  }
+  if(num_str.at(i) == '.')
+  {
+   point = true;
+  }
+ }
+ return pre;
+}
+
+double Round(const double& num)
+{
+ //int precision = getPrecision(num);
+ //return (toPrecision(num,precision));
+ return (toPrecision(num,3));
+}
+
+void Output_Fit(TF1* func, string name, string status, TFitResultPtr result)
 {
  ofstream output;
  output.open("Fit_Parameters_Output.csv",fstream::app);
  output << name << ",";
  for(int j = 0; j < func->GetNpar(); j++)
  {
-  output << func->GetParameter(j) << "+/-" << func->GetParError(j) << ",";
+  string ParName = func->GetParName(j);
+  if(ParName.find("Weight") != std::string::npos)
+  {
+   output << Round(TMath::Cos(func->GetParameter(j))*TMath::Cos(func->GetParameter(j))) << " +/- " << Round(fabs(-TMath::Sin(2.*func->GetParameter(j))*func->GetParError(j)-TMath::Cos(2.*func->GetParameter(j))*func->GetParError(j)*func->GetParError(j))) << ",";
+  }
+  else if(ParName.find("Scale") != std::string::npos)
+  {
+   double scale = func->GetParameter(j);
+   double sigma = func->GetParameter(j-1);
+   double scale_err = func->GetParError(j);
+   double sigma_err = func->GetParError(j-1);
+   TMatrixDSym cov = result->GetCovarianceMatrix();
+   double cov_sigmascale = cov(j,j-1);
+   string func_name = func->GetName();
+   if(func_name.find("Multi") != std::string::npos)
+   {
+    //for multiplying
+    output << Round(scale*sigma) << " +/- " << Round(sqrt(sigma*scale_err*sigma*scale_err+sigma_err*scale*sigma_err*scale+2.*sigma*scale*cov_sigmascale*cov_sigmascale)) << ",";
+   }
+   else if(func_name.find("Add") != std::string::npos)
+   {
+    //for adding
+    output << Round(scale+sigma) << " +/- " << Round(sqrt(scale_err*scale_err+sigma_err*sigma_err)) << ",";
+   }
+  }
+  else
+  {
+   output << Round(func->GetParameter(j)) << " +/- " << Round(func->GetParError(j)) << ",";
+  }
  }
- output << func->GetChisquare() << "," << func->GetNDF() << "," << status << endl;
+ output << Round(func->GetChisquare()) << "," << func->GetNDF() << "," << status << endl;
 
  output.close();
 
@@ -342,7 +412,7 @@ void Fit_Graph_With_Funcs(TCanvas*& canv, TGraphAsymmErrors*& gr_given, vector<T
   funcs[i]->SetNpx(10000);
   funcs[i]->SetLineColor(colors[i]);
   cout << endl << "Fitting " << name << " with " << funcs[i]->GetName() << endl;
-  vect_gr[i]->Fit(funcs[i],"EMR+");
+  TFitResultPtr result = vect_gr[i]->Fit(funcs[i],"EMS+");
   mg->Add(vect_gr[i]); //
 
   TLegend leg(0.4,y1,0.6,y2,"");
@@ -391,7 +461,7 @@ void Fit_Graph_With_Funcs(TCanvas*& canv, TGraphAsymmErrors*& gr_given, vector<T
   pad_gr->Update();
   canv->Update();
 
-  Output_Fit(funcs[i],name,string(status_func));
+  Output_Fit(funcs[i],name,string(status_func),result);
 
  }
  mg->Draw("AP SAMES");
