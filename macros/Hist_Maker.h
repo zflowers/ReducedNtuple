@@ -1,11 +1,4 @@
-#include <iostream>
-#include <algorithm>
-#include <TFile.h>
-#include <TTree.h>
-#include <TEfficiency.h>
-#include <TLeaf.h>
-#include <TLorentzVector.h>
-#include <vector>
+#include "Analysis_Base.h"
 #include "KUAnalysis.C"
 
 class HistClass{
@@ -67,10 +60,15 @@ void HistClass::write_hist( string outFile, string Tag ){
   {
    output->cd(Tag.c_str());
   }
-  if( hist1f ) {cout << hist1f->GetName() << endl; hist1f->Write();}
-  if( hist2f ) {cout << hist2f->GetName() << endl; hist2f->Write();}
-  if( hist1d ) {cout << hist1d->GetName() << endl; hist1d->Write();}
-  if( hist2d ) {cout << hist2d->GetName() << endl; hist2d->Write();}
+//  if( hist1f ) {cout << hist1f->GetName() << endl; hist1f->Write();}
+//  if( hist2f ) {cout << hist2f->GetName() << endl; hist2f->Write();}
+//  if( hist1d ) {cout << hist1d->GetName() << endl; hist1d->Write();}
+//  if( hist2d ) {cout << hist2d->GetName() << endl; hist2d->Write();}
+
+  if( hist1f ) {cout << hist1f->GetName() << endl; hist1f->SetDirectory(0); hist1f->Write();}
+  if( hist2f ) {cout << hist2f->GetName() << endl; hist2f->SetDirectory(0); hist2f->Write();}
+  if( hist1d ) {cout << hist1d->GetName() << endl; hist1d->SetDirectory(0); hist1d->Write();}
+  if( hist2d ) {cout << hist2d->GetName() << endl; hist2d->SetDirectory(0); hist2d->Write();}
   output->Close();
   delete output;
 }
@@ -80,26 +78,12 @@ vector<HistClass*> Setup_Hists(TTree* tree);
 #ifndef HISTCLASS_H
 #define HISTCLASS_H
 
-class Hist_Maker{
-  private:
-   string m_outFile = "output_test.root";
-  protected:
-   string m_Tag;
-   TTree* m_Tree;
-   string m_cut = "";
+class Hist_Maker:public Analysis_Base{
   public:
    Hist_Maker();
    Hist_Maker(string outFile, string Tag, TTree* Tree);
    void Analyze();
-   void Set_Tag(string tag);
-   void Set_Tree(TTree* tree);
-   void Set_Output(string outFile);
-   void Set_Cut(string cut);
-   bool Get_Cut(const Long64_t& jentry, string name, string& current_cut);
-   bool global_cuts(const Long64_t& jentry);
 };
-
-#endif
 
 inline Hist_Maker::Hist_Maker()
 {
@@ -113,198 +97,6 @@ inline Hist_Maker::Hist_Maker(string outFile, string Tag, TTree* Tree)
  m_outFile = outFile;
  m_Tag = Tag;
  m_Tree = Tree;
-}
-
-inline void Hist_Maker::Set_Tag(string tag)
-{
- m_Tag = tag;
-}
-
-inline void Hist_Maker::Set_Tree(TTree* Tree)
-{
- m_Tree = Tree;
-}
-
-inline void Hist_Maker::Set_Output(string outFile)
-{
- m_outFile = outFile;
-}
-
-inline void Hist_Maker::Set_Cut(string cut)
-{
- m_cut = cut+"_";
-}
-
-inline bool Hist_Maker::Get_Cut(const Long64_t& jentry, string name, string& current_cut)
-{
- bool cut = false;
- if(current_cut.find(name) != std::string::npos)
- {
-  TLeaf* leaf = m_Tree->GetLeaf(name.c_str());
-  leaf->GetBranch()->GetEntry(jentry);
-  string cut_value = get_str_between_two_str(current_cut,name,"_");
-  string cut_type = get_str_between_two_str(current_cut,name,"_");
-  if(cut_type.find("E") != std::string::npos)
-  {
-   cut_value.erase(0,1);
-   eraseSubStr(cut_type,cut_value);
-   if(leaf->GetValue() == std::stod(cut_value))
-   {
-    cut = true;
-   }
-  }
-  else if(cut_type.find("Ge") != std::string::npos)
-  {
-   cut_value.erase(0,1);
-   cut_value.erase(0,1);
-   eraseSubStr(cut_type,cut_value);
-   if(leaf->GetValue() >= std::stod(cut_value))
-   {
-    cut = true;
-   }
-  }
-  else if(cut_type.find("G") != std::string::npos)
-  {
-   cut_value.erase(0,1);
-   eraseSubStr(cut_type,cut_value);
-   if(leaf->GetValue() > std::stod(cut_value))
-   {
-    cut = true;
-   }
-  }
-  else if(cut_type.find("Le") != std::string::npos)
-  {
-   cut_value.erase(0,1);
-   cut_value.erase(0,1);
-   eraseSubStr(cut_type,cut_value);
-   if(leaf->GetValue() <= std::stod(cut_value))
-   {
-    cut = true;
-   }
-  }
-  else if(cut_type.find("L") != std::string::npos)
-  {
-   cut_value.erase(0,1);
-   eraseSubStr(cut_type,cut_value);
-   if(leaf->GetValue() < std::stod(cut_value))
-   {
-    cut = true;
-   }
-  }
-  eraseSubStr(current_cut,(name+cut_type+cut_value+"_"));
- }
- else
- {
-  cout << "Couldn't find: " << name << " in: " << current_cut << "!" << endl;
- }
- return cut;
-}
-
-inline bool Hist_Maker::global_cuts(const Long64_t& jentry)
-{
- //return false to keep the event
- //Example Cut
- ///////////////////////////////////////////////////////
- //TLeaf* CaloMET_pt_leaf = m_Tree->GetLeaf("CaloMET_pt");
- //CaloMET_pt_leaf->GetBranch()->GetEntry(jentry);
- //if(x_val/CaloMET_pt_leaf->GetValue() > 5.) cut = true;
- //this skips every event with MET/CaloMET > 5.
- ///////////////////////////////////////////////////////
- //
- //Calculate PFMHT
- //TLeaf* nJet_leaf = m_Tree->GetLeaf("nJet");
- //nJet_leaf->GetBranch()->GetEntry(jentry);
- //TLeaf* Jet_pt_leaf = m_Tree->GetLeaf("Jet_pt");
- //Jet_pt_leaf->GetBranch()->GetEntry(jentry);
- //TLeaf* Jet_eta_leaf = m_Tree->GetLeaf("Jet_eta");
- //Jet_eta_leaf->GetBranch()->GetEntry(jentry);
- //TLeaf* Jet_phi_leaf = m_Tree->GetLeaf("Jet_phi");
- //Jet_phi_leaf->GetBranch()->GetEntry(jentry);
- //TLeaf* Jet_mass_leaf = m_Tree->GetLeaf("Jet_mass");
- //Jet_mass_leaf->GetBranch()->GetEntry(jentry);
- //TLorentzVector MHT(0.,0.,0.,0.);
- //double HT = 0.;
- //for(int i = 0; i < nJet_leaf->GetValue(); i++)
- //{
- // HT+=Jet_pt_leaf->GetValue(i);
- // TLorentzVector dummy;
- // dummy.SetPtEtaPhiM(Jet_pt_leaf->GetValue(i),Jet_eta_leaf->GetValue(i),Jet_phi_leaf->GetValue(i),Jet_mass_leaf->GetValue(i));
- // MHT -= dummy;
- //}
- 
- string current_cut = m_cut;
-
- bool PTISR_cut = true;
- bool MET_cut = true;
- bool Nmu_cut = true;
- bool Nele_cut = true;
- bool Nlep_cut = true;
- bool Njet_cut = true;
- bool METtrigger_cut = true;
- bool METORtrigger_cut = true;
- bool METHTtrigger_cut = true;
-
- if(current_cut.find("PTISR") != std::string::npos)
- {
-  PTISR_cut = Get_Cut(jentry,"PTISR",current_cut);
- }
-
- if(current_cut.find("Nmu") != std::string::npos)
- {
-  Nmu_cut = Get_Cut(jentry,"Nmu",current_cut);
- }
-
- if(current_cut.find("Nele") != std::string::npos)
- {
-  Nele_cut = Get_Cut(jentry,"Nele",current_cut);
- }
-
- if(current_cut.find("Nlep") != std::string::npos)
- {
-  Nlep_cut = Get_Cut(jentry,"Nlep",current_cut);
- }
-
- if(current_cut.find("Njet") != std::string::npos)
- {
-  Njet_cut = Get_Cut(jentry,"Njet",current_cut);
- }
-
- if(current_cut.find("METtrigger") != std::string::npos)
- {
-  METtrigger_cut = Get_Cut(jentry,"METtrigger",current_cut);
- }
-
- if(current_cut.find("METORtrigger") != std::string::npos)
- {
-  METORtrigger_cut = Get_Cut(jentry,"METORtrigger",current_cut);
- }
-
- if(current_cut.find("METHTtrigger") != std::string::npos)
- {
-  METHTtrigger_cut = Get_Cut(jentry,"METHTtrigger",current_cut);
- }
-
- if(current_cut.find("MET") != std::string::npos)
- {
-  MET_cut = Get_Cut(jentry,"MET",current_cut);
- }
-
- if(current_cut.compare("NoCuts_") == 0)
- {
-  return false;
- }
-
- if(current_cut.compare("") != 0)
- {
-  cout << "ERROR: Some cuts not applied: " << current_cut << endl;
- }
-
- if(PTISR_cut && Nmu_cut && Nele_cut && Nlep_cut && Njet_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut)
- {
-  return false;
- }
- return true;
-
 }
 
 inline void Hist_Maker::Analyze(){
@@ -384,3 +176,5 @@ vector<HistClass*> Setup_Hists(TTree* tree){
  for( auto histclass : Classes ){ histclass->init_hist(tree); }
  return Classes;
 }
+
+#endif

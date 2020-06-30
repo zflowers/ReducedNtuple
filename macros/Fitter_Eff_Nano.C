@@ -5,6 +5,11 @@
 #include <fstream>
 #include <sys/stat.h>
 #include <algorithm>
+#include <TMatrixDSym.h>
+#include <TPaveStats.h>
+#include <TLine.h>
+#include <TFitResult.h>
+#include <Math/ProbFunc.h>
 
 void Get_Fit(TGraphAsymmErrors*& gr, vector<TF1*> funcs, vector<int> colors, string outFile, string name);
 void Fit_Graph_With_Funcs(TCanvas*& canv, TGraphAsymmErrors*& gr, vector<TF1*> funcs, const vector<int>& colors, string name);
@@ -43,6 +48,7 @@ bool fileExists(const std::string& filename)
 
 void Fitter_Eff_Nano(TGraphAsymmErrors* gr_given, vector<int> colors, string name)
 {
+ if(name.find("triggerE") != std::string::npos) return;
  //TGraphAsymmErrors* gr = (TGraphAsymmErrors*)(gr_given->Clone());
  for(int j = 0; j < int(gr_given->GetN()); j++)
  {
@@ -118,7 +124,7 @@ void Fitter_Eff_Nano(TGraphAsymmErrors* gr_given, vector<int> colors, string nam
  func_Double_Gaussian_CDF_Multi0->SetParName(3,"Scale_Double_Gauss_CDF0");
  func_Double_Gaussian_CDF_Multi0->SetParName(4,"Weight_Double_Gauss_CDF0");
  
- funcs.push_back(func_Double_Gaussian_CDF_Multi0);
+ //funcs.push_back(func_Double_Gaussian_CDF_Multi0);
 
  if(!fileExists("Fit_Parameters_Output.csv"))
  {
@@ -534,7 +540,6 @@ void Fit_Graph_With_Funcs(TCanvas*& canv, TGraphAsymmErrors*& gr_given, vector<T
  pad_res->Update();
  pad_res->Modified();
  canv->Update();
-
 }
 
 TGraphAsymmErrors* get_gr(vector<string> tags, vector<string> Triggers, string fname, vector<int> colors, TCanvas*& can)

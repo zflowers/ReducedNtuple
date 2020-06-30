@@ -39,5 +39,6 @@ clean:
 setup:
 	rm -f *.x
 	rm -f *.log
-	rm -f *.pdf
 	rm -f *.root
+	rm -f *.d*
+	rm -f *.pcm*

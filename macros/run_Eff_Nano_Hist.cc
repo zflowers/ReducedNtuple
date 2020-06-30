@@ -167,6 +167,11 @@ void run_Eff_Nano_Hist()
 
  //cut.push_back("NoCuts");
  //cut.push_back("PTISRG200");
+ //cut.push_back("METtriggerE0");
+
+
+
+ cut.push_back("PTISRG200_NlepG0");
  cut.push_back("PTISRG200_NlepG0_METtriggerE0_METG300");
  cut.push_back("PTISRG200_NlepG0_METtriggerE1_METG300");
  //cut.push_back("PTISRG200_METG300");
@@ -180,11 +185,11 @@ void run_Eff_Nano_Hist()
  {
   outFile += (x + "_" + cut[i] + ".root");
   Files.push_back(outFile);
-//  Eff_Nano_Eff(outFile, x, cut[i]);
+  Eff_Nano_Eff(outFile, x, cut[i]);
   outFile = "Eff_output_";
  }
- std::cout << "Running Plotter" << endl;
-// Plotter_Eff_Nano(Files,cut);
+// std::cout << "Running Plotter" << endl;
+ Plotter_Eff_Nano(Files,cut);
 
  outFile = "Hist_output_";
 
