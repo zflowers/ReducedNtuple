@@ -556,6 +556,7 @@ TGraphAsymmErrors* get_gr(vector<string> tags, vector<string> Triggers, string f
  {
   TDirectoryFile* folder = nullptr;
   f->GetObject(tags[i].c_str(),folder);
+  if(folder == NULL) continue;
   folder->cd();
   for(int j = 0; j < int(Triggers.size()); j++)
   {

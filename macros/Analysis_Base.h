@@ -90,14 +90,316 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
 {
  bool cut = false;
  TBranch* branch = NULL;
+
+ bool Bronze = false;
+ bool Silver = false;
+ bool Gold = false;
+ int numBronze = 0;
+ int numSilver = 0;
+ int numGold = 0;
+ if(name.find("Bronze") != std::string::npos)
+ {
+  Bronze = true;
+  eraseSubStr(name,("Bronze"));
+  eraseSubStr(current_cut,("Bronze"));
+  if(name.find("Nlep") != std::string::npos)
+  {
+   TBranch* b_Nlep = NULL;
+   Int_t Nlep = 0;
+   m_Tree->SetBranchAddress(name.c_str(),&Nlep,&b_Nlep);
+   b_Nlep->GetEntry(jentry);
+   TBranch* b_PDGID_lep = NULL;
+   vector<int>* PDGID_lep = 0;
+   m_Tree->SetBranchAddress("PDGID_lep",&PDGID_lep,&b_PDGID_lep);
+   b_PDGID_lep->GetEntry(jentry);
+   TBranch* b_ID_lep = NULL;
+   vector<int>* ID_lep = 0;
+   m_Tree->SetBranchAddress("ID_lep",&ID_lep,&b_ID_lep);
+   b_ID_lep->GetEntry(jentry);
+   for(int i = 0; i < Nlep; i++)
+   {
+    if(abs(PDGID_lep->at(i)) == 11)
+    {
+     if(ID_lep->at(i) >= 1 )
+     {
+      numBronze++;
+     }
+    }
+    else if(abs(PDGID_lep->at(i)) == 13)
+    {
+     if(ID_lep->at(i) >= 1 )
+     {
+      numBronze++;
+     }
+    }
+   }
+  }
+  else if(name.find("Nele") != std::string::npos)
+  {
+   TBranch* b_Nele = NULL;
+   Int_t Nele = 0;
+   m_Tree->SetBranchAddress(name.c_str(),&Nele,&b_Nele);
+   b_Nele->GetEntry(jentry);
+   TBranch* b_PDGID_lep = NULL;
+   vector<int>* PDGID_lep = 0;
+   m_Tree->SetBranchAddress("PDGID_lep",&PDGID_lep,&b_PDGID_lep);
+   b_PDGID_lep->GetEntry(jentry);
+   TBranch* b_ID_lep = NULL;
+   vector<int>* ID_lep = 0;
+   m_Tree->SetBranchAddress("ID_lep",&ID_lep,&b_ID_lep);
+   b_ID_lep->GetEntry(jentry);
+   for(int i = 0; i < Nele; i++)
+   {
+    if(abs(PDGID_lep->at(i)) == 11)
+    {
+     if(ID_lep->at(i) >= 1 )
+     {
+      numBronze++;
+     }
+    }
+   }
+  }
+  else if(name.find("Nmu") != std::string::npos)
+  {
+   TBranch* b_Nmu = NULL;
+   Int_t Nmu = 0;
+   m_Tree->SetBranchAddress(name.c_str(),&Nmu,&b_Nmu);
+   b_Nmu->GetEntry(jentry);
+   TBranch* b_PDGID_lep = NULL;
+   vector<int>* PDGID_lep = 0;
+   m_Tree->SetBranchAddress("PDGID_lep",&PDGID_lep,&b_PDGID_lep);
+   b_PDGID_lep->GetEntry(jentry);
+   TBranch* b_ID_lep = NULL;
+   vector<int>* ID_lep = 0;
+   m_Tree->SetBranchAddress("ID_lep",&ID_lep,&b_ID_lep);
+   b_ID_lep->GetEntry(jentry);
+   for(int i = 0; i < Nmu; i++)
+   {
+    if(abs(PDGID_lep->at(i)) == 13)
+    {
+     if(ID_lep->at(i) >= 1 )
+     {
+      numBronze++;
+     }
+    }
+   }
+  }
+ }
+ else if(name.find("Silver") != std::string::npos)
+ {
+  Silver = true;
+  eraseSubStr(name,("Silver"));
+  eraseSubStr(current_cut,("Silver"));
+  if(name.find("Nlep") != std::string::npos)
+  {
+   TBranch* b_Nlep = NULL;
+   Int_t Nlep = 0;
+   m_Tree->SetBranchAddress(name.c_str(),&Nlep,&b_Nlep);
+   b_Nlep->GetEntry(jentry);
+   TBranch* b_PDGID_lep = NULL;
+   vector<int>* PDGID_lep = 0;
+   m_Tree->SetBranchAddress("PDGID_lep",&PDGID_lep,&b_PDGID_lep);
+   b_PDGID_lep->GetEntry(jentry);
+   TBranch* b_ID_lep = NULL;
+   vector<int>* ID_lep = 0;
+   m_Tree->SetBranchAddress("ID_lep",&ID_lep,&b_ID_lep);
+   b_ID_lep->GetEntry(jentry);
+   for(int i = 0; i < Nlep; i++)
+   {
+    if(abs(PDGID_lep->at(i)) == 11)
+    {
+     if(ID_lep->at(i) >= 4)
+     {
+      numSilver++;
+     }
+    }
+    else if(abs(PDGID_lep->at(i)) == 13)
+    {
+     if(ID_lep->at(i) >= 3)
+     {
+      numSilver++;
+     }
+    }
+   }
+  }
+  else if(name.find("Nele") != std::string::npos)
+  {
+   TBranch* b_Nele = NULL;
+   Int_t Nele = 0;
+   m_Tree->SetBranchAddress(name.c_str(),&Nele,&b_Nele);
+   b_Nele->GetEntry(jentry);
+   TBranch* b_PDGID_lep = NULL;
+   vector<int>* PDGID_lep = 0;
+   m_Tree->SetBranchAddress("PDGID_lep",&PDGID_lep,&b_PDGID_lep);
+   b_PDGID_lep->GetEntry(jentry);
+   TBranch* b_ID_lep = NULL;
+   vector<int>* ID_lep = 0;
+   m_Tree->SetBranchAddress("ID_lep",&ID_lep,&b_ID_lep);
+   b_ID_lep->GetEntry(jentry);
+   for(int i = 0; i < Nele; i++)
+   {
+    if(abs(PDGID_lep->at(i)) == 11)
+    {
+     if(ID_lep->at(i) >= 4)
+     {
+      numSilver++;
+     }
+    }
+   }
+  }
+  else if(name.find("Nmu") != std::string::npos)
+  {
+   TBranch* b_Nmu = NULL;
+   Int_t Nmu = 0;
+   m_Tree->SetBranchAddress(name.c_str(),&Nmu,&b_Nmu);
+   b_Nmu->GetEntry(jentry);
+   TBranch* b_PDGID_lep = NULL;
+   vector<int>* PDGID_lep = 0;
+   m_Tree->SetBranchAddress("PDGID_lep",&PDGID_lep,&b_PDGID_lep);
+   b_PDGID_lep->GetEntry(jentry);
+   TBranch* b_ID_lep = NULL;
+   vector<int>* ID_lep = 0;
+   m_Tree->SetBranchAddress("ID_lep",&ID_lep,&b_ID_lep);
+   b_ID_lep->GetEntry(jentry);
+   for(int i = 0; i < Nmu; i++)
+   {
+    if(abs(PDGID_lep->at(i)) == 13)
+    {
+     if(ID_lep->at(i) >= 3)
+     {
+      numSilver++;
+     }
+    }
+   }
+  }
+ }
+ if(name.find("Gold") != std::string::npos)
+ {
+  Gold = true;
+  eraseSubStr(name,("Gold"));
+  eraseSubStr(current_cut,("Gold"));
+  if(name.find("Nlep") != std::string::npos)
+  {
+   TBranch* b_Nlep = NULL;
+   Int_t Nlep = 0;
+   m_Tree->SetBranchAddress(name.c_str(),&Nlep,&b_Nlep);
+   b_Nlep->GetEntry(jentry);
+   TBranch* b_PDGID_lep = NULL;
+   vector<int>* PDGID_lep = 0;
+   m_Tree->SetBranchAddress("PDGID_lep",&PDGID_lep,&b_PDGID_lep);
+   b_PDGID_lep->GetEntry(jentry);
+   TBranch* b_ID_lep = NULL;
+   vector<int>* ID_lep = 0;
+   m_Tree->SetBranchAddress("ID_lep",&ID_lep,&b_ID_lep);
+   b_ID_lep->GetEntry(jentry);
+   TBranch* b_MiniIso_lep = NULL;
+   vector<double>* MiniIso_lep = 0;
+   m_Tree->SetBranchAddress("MiniIso_lep",&MiniIso_lep,&b_MiniIso_lep);
+   b_MiniIso_lep->GetEntry(jentry);
+   TBranch* b_SIP3D_lep = NULL;
+   vector<double>* SIP3D_lep = 0;
+   m_Tree->SetBranchAddress("SIP3D_lep",&SIP3D_lep,&b_SIP3D_lep);
+   b_SIP3D_lep->GetEntry(jentry);
+   TBranch* b_PT_lep = NULL;
+   vector<double>* PT_lep = 0;
+   m_Tree->SetBranchAddress("PT_lep",&PT_lep,&b_PT_lep);
+   b_PT_lep->GetEntry(jentry);
+   for(int i = 0; i < Nlep; i++)
+   {
+    if(abs(PDGID_lep->at(i)) == 11)
+    {
+     if(ID_lep->at(i) >= 4 && PT_lep->at(i)*MiniIso_lep->at(i) < 5. && SIP3D_lep->at(i) < 4.)
+     {
+      numGold++;
+     }
+    }
+    else if(abs(PDGID_lep->at(i)) == 13)
+    {
+     if(ID_lep->at(i) >= 3 && PT_lep->at(i)*MiniIso_lep->at(i) < 5. && SIP3D_lep->at(i) < 4.)
+     {
+      numGold++;
+     }
+    }
+   }
+  }
+  else if(name.find("Nele") != std::string::npos)
+  {
+   TBranch* b_Nele = NULL;
+   Int_t Nele = 0;
+   m_Tree->SetBranchAddress(name.c_str(),&Nele,&b_Nele);
+   b_Nele->GetEntry(jentry);
+   TBranch* b_PDGID_lep = NULL;
+   vector<int>* PDGID_lep = 0;
+   m_Tree->SetBranchAddress("PDGID_lep",&PDGID_lep,&b_PDGID_lep);
+   b_PDGID_lep->GetEntry(jentry);
+   TBranch* b_ID_lep = NULL;
+   vector<int>* ID_lep = 0;
+   m_Tree->SetBranchAddress("ID_lep",&ID_lep,&b_ID_lep);
+   b_ID_lep->GetEntry(jentry);
+   TBranch* b_MiniIso_lep = NULL;
+   vector<double>* MiniIso_lep = 0;
+   m_Tree->SetBranchAddress("MiniIso_lep",&MiniIso_lep,&b_MiniIso_lep);
+   b_MiniIso_lep->GetEntry(jentry);
+   TBranch* b_SIP3D_lep = NULL;
+   vector<double>* SIP3D_lep = 0;
+   m_Tree->SetBranchAddress("SIP3D_lep",&SIP3D_lep,&b_SIP3D_lep);
+   b_SIP3D_lep->GetEntry(jentry);
+   TBranch* b_PT_lep = NULL;
+   vector<double>* PT_lep = 0;
+   m_Tree->SetBranchAddress("PT_lep",&PT_lep,&b_PT_lep);
+   b_PT_lep->GetEntry(jentry);
+   for(int i = 0; i < Nele; i++)
+   {
+    if(abs(PDGID_lep->at(i)) == 11 && ID_lep->at(i) >= 4 && PT_lep->at(i)*MiniIso_lep->at(i) < 5. && SIP3D_lep->at(i) < 4.)
+    {
+     numGold++;
+    }
+   }
+  }
+  else if(name.find("Nmu") != std::string::npos)
+  {
+   TBranch* b_Nmu = NULL;
+   Int_t Nmu = 0;
+   m_Tree->SetBranchAddress(name.c_str(),&Nmu,&b_Nmu);
+   b_Nmu->GetEntry(jentry);
+   TBranch* b_PDGID_lep = NULL;
+   vector<int>* PDGID_lep = 0;
+   m_Tree->SetBranchAddress("PDGID_lep",&PDGID_lep,&b_PDGID_lep);
+   b_PDGID_lep->GetEntry(jentry);
+   TBranch* b_ID_lep = NULL;
+   vector<int>* ID_lep = 0;
+   m_Tree->SetBranchAddress("ID_lep",&ID_lep,&b_ID_lep);
+   b_ID_lep->GetEntry(jentry);
+   TBranch* b_MiniIso_lep = NULL;
+   vector<double>* MiniIso_lep = 0;
+   m_Tree->SetBranchAddress("MiniIso_lep",&MiniIso_lep,&b_MiniIso_lep);
+   b_MiniIso_lep->GetEntry(jentry);
+   TBranch* b_SIP3D_lep = NULL;
+   vector<double>* SIP3D_lep = 0;
+   m_Tree->SetBranchAddress("SIP3D_lep",&SIP3D_lep,&b_SIP3D_lep);
+   b_SIP3D_lep->GetEntry(jentry);
+   TBranch* b_PT_lep = NULL;
+   vector<double>* PT_lep = 0;
+   m_Tree->SetBranchAddress("PT_lep",&PT_lep,&b_PT_lep);
+   b_PT_lep->GetEntry(jentry);
+   for(int i = 0; i < Nmu; i++)
+   {
+    if(abs(PDGID_lep->at(i)) == 13 && ID_lep->at(i) >= 3 && PT_lep->at(i)*MiniIso_lep->at(i) < 5. && SIP3D_lep->at(i) < 4.)
+    {
+     numGold++;
+    }
+   }
+  }
+ }
+
  if(current_cut.find(name) != std::string::npos)
  {
   string cut_value = get_str_between_two_str(current_cut,name,"_");
   string cut_type = get_str_between_two_str(current_cut,name,"_");
-  double val = 0.;
 
   string type = m_Tree->GetBranch(name.c_str())->GetLeaf(name.c_str())->GetTypeName();
 
+  double val = 0.;
   if(type == "Long64_t")
   {
    Long64_t val_type = 0.;
@@ -194,6 +496,19 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
    cout << "Could not find type: " << type << "!" << endl;
   }
 
+  if(Bronze)
+  {
+   val = numBronze;
+  }
+  else if(Silver)
+  {
+   val = numSilver;
+  }
+  else if(Gold)
+  {
+   val = numGold;
+  }
+
   if(cut_type.find("E") != std::string::npos)
   {
    cut_value.erase(0,1);
@@ -258,33 +573,68 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
  string current_cut = m_cut;
 
  bool PTISR_cut = true;
+ bool PTCM_cut = true;
+ bool dphiCMI_cut = true;
  bool MET_cut = true;
  bool Nmu_cut = true;
  bool Nele_cut = true;
  bool Nlep_cut = true;
+
+ bool NmuBronze_cut = true;
+ bool NeleBronze_cut = true;
+ bool NlepBronze_cut = true;
+
+ bool NmuSilver_cut = true;
+ bool NeleSilver_cut = true;
+ bool NlepSilver_cut = true;
+
+ bool NmuGold_cut = true;
+ bool NeleGold_cut = true;
+ bool NlepGold_cut = true;
+
  bool Njet_cut = true;
  bool METtrigger_cut = true;
  bool METORtrigger_cut = true;
  bool METHTtrigger_cut = true;
+ bool EventFilter_cut = true;
 
  if(current_cut.find("PTISR") != std::string::npos)
  {
   PTISR_cut = Get_Cut(jentry,"PTISR",current_cut);
  }
 
+ if(current_cut.find("PTCM") != std::string::npos)
+ {
+  PTCM_cut = Get_Cut(jentry,"PTCM",current_cut);
+ }
+
+ if(current_cut.find("dphiCMI") != std::string::npos)
+ {
+  dphiCMI_cut = Get_Cut(jentry,"dphiCMI",current_cut);
+ }
+
  if(current_cut.find("Nmu") != std::string::npos)
  {
-  Nmu_cut = Get_Cut(jentry,"Nmu",current_cut);
+  if(current_cut.find("NmuBronze") != std::string::npos) { NmuBronze_cut = Get_Cut(jentry,"NmuBronze",current_cut); }
+  else if(current_cut.find("NmuSilver") != std::string::npos) { NmuSilver_cut = Get_Cut(jentry,"NmuSilver",current_cut); }
+  else if(current_cut.find("NmuGold") != std::string::npos) { NmuGold_cut = Get_Cut(jentry,"NmuGold",current_cut); }
+  else { Nmu_cut = Get_Cut(jentry,"Nmu",current_cut); }
  }
 
  if(current_cut.find("Nele") != std::string::npos)
  {
-  Nele_cut = Get_Cut(jentry,"Nele",current_cut);
+  if(current_cut.find("NeleBronze") != std::string::npos) { NeleBronze_cut = Get_Cut(jentry,"NeleBronze",current_cut); }
+  else if(current_cut.find("NeleSilver") != std::string::npos) { NeleSilver_cut = Get_Cut(jentry,"NeleSilver",current_cut); }
+  else if(current_cut.find("NeleGold") != std::string::npos) { NeleGold_cut = Get_Cut(jentry,"NeleGold",current_cut); }
+  else { Nele_cut = Get_Cut(jentry,"Nele",current_cut); }
  }
 
  if(current_cut.find("Nlep") != std::string::npos)
  {
-  Nlep_cut = Get_Cut(jentry,"Nlep",current_cut);
+  if(current_cut.find("NlepBronze") != std::string::npos) { NlepBronze_cut = Get_Cut(jentry,"NlepBronze",current_cut); }
+  else if(current_cut.find("NlepSilver") != std::string::npos) { NlepSilver_cut = Get_Cut(jentry,"NlepSilver",current_cut); }
+  else if(current_cut.find("NlepGold") != std::string::npos) { NlepGold_cut = Get_Cut(jentry,"NlepGold",current_cut); }
+  else { Nlep_cut = Get_Cut(jentry,"Nlep",current_cut); }
  }
 
  if(current_cut.find("Njet") != std::string::npos)
@@ -307,6 +657,13 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
   METHTtrigger_cut = Get_Cut(jentry,"METHTtrigger",current_cut);
  }
 
+ string EventFilter_str = "EventFilterE1";
+ EventFilter_cut = Get_Cut(jentry,"EventFilter",EventFilter_str);
+ if(current_cut.find("EventFilter") != std::string::npos)
+ {
+  EventFilter_cut = Get_Cut(jentry,"EventFilter",current_cut);
+ }
+
  if(current_cut.find("MET") != std::string::npos)
  {
   MET_cut = Get_Cut(jentry,"MET",current_cut);
@@ -322,7 +679,7 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
   cout << "ERROR: Some cuts not applied: " << current_cut << endl;
  }
 
- if(PTISR_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && Njet_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut)
+ if(PTISR_cut && PTCM_cut && dphiCMI_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && NmuBronze_cut && NeleBronze_cut && NlepBronze_cut && NmuSilver_cut && NeleSilver_cut && NlepSilver_cut && NmuGold_cut && NeleGold_cut && NlepGold_cut && Njet_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut && EventFilter_cut)
  {
   return false;
  }
