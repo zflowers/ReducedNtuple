@@ -1,0 +1,4 @@
+NoCuts
+NmuBronzeG0
+NmuSilverG0
+NmuGoldG0

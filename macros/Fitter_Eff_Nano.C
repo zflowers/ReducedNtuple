@@ -3,6 +3,8 @@
 
 #include <TMinuit.h>
 #include <fstream>
+#include <vector>
+#include <string>
 #include <sys/stat.h>
 #include <algorithm>
 #include <TMatrixDSym.h>
@@ -10,6 +12,8 @@
 #include <TLine.h>
 #include <TFitResult.h>
 #include <Math/ProbFunc.h>
+
+using namespace std;
 
 void Get_Fit(TGraphAsymmErrors*& gr, vector<TF1*> funcs, vector<int> colors, string outFile, string name);
 void Fit_Graph_With_Funcs(TCanvas*& canv, TGraphAsymmErrors*& gr, vector<TF1*> funcs, const vector<int>& colors, string name);

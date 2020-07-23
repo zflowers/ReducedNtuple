@@ -8,7 +8,6 @@
 #include "MET_2017_Triggers.h"
 #include "MET_2018_Triggers.h"
 #include "Eff_Nano.h"
-#include "Plotter_Eff_Nano.C"
 
 using namespace std;
 
@@ -30,7 +29,6 @@ void Eff_Nano_Eff(string outFile = "output_test.root", string x = "MET", string 
  //string x_2016 = "MET_pt";
  //string x_2017 = "METFixEE2017_pt";
  //string x_2018 = "MET_pt";
- //.L Plotter_Eff_Nano.C; //++
  
  std::vector<string> Triggers_2016 = Get_2016_Triggers();
  std::vector<string> Triggers_2017 = Get_2017_Triggers();

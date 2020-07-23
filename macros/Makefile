@@ -36,6 +36,18 @@ run_Eff_Nano_Hist.x: $(SRCDIR)Eff_Nano_Hist.C $(OBJ_FILES) $(HH_FILES)
 	$(CXX) $(CXXFLAGS) -o run_Eff_Nano_Hist.x $(GLIBS) $ $< 
 	touch run_Eff_Nano_Hist.x
 
+Plot: Plotter.x
+
+Plotter.x: $(SRCDIR)Plotter_Eff_Nano.C $(OBJ_FILES) $(HH_FILES)
+	$(CXX) $(CXXFLAGS) -o Plotter.x $(GLIBS) $ $< 
+	touch Plotter.x
+
+Stack: Stacker.x
+
+Stacker.x: $(SRCDIR)Stacker.C $(OBJ_FILES) $(HH_FILES)
+	$(CXX) $(CXXFLAGS) -o Stacker.x $(GLIBS) $ $< 
+	touch Stacker.x
+
 all: run_Eff_Nano.x
 
 run_Eff_Nano.x: $(SRCDIR)run_Eff_Nano_Hist.cc $(OBJ_FILES) $(HH_FILES)

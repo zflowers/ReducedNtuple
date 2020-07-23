@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <vector>
+#include <fstream>
 #include <TFile.h>
 #include <TTree.h>
 #include <TBranch.h>
@@ -15,7 +17,8 @@
 #include <TH1D.h>
 #include <TH2D.h>
 #include <TStyle.h>
-#include "Analysis_Base.h"
+
+using namespace std;
 
 double evaluateZbi(double Nsig, double Nbkg, double sys)
 {
@@ -24,6 +27,23 @@ double evaluateZbi(double Nsig, double Nbkg, double sys)
     double aux = Nbkg*tau;
     double Pvalue = TMath::BetaIncomplete(1./(1.+tau),Nobs,aux+1.);
     return sqrt(2.)*TMath::ErfcInverse(Pvalue*2.);
+}
+
+std::string get_str_between_two_str(const std::string &s, const std::string &start_delim, const std::string &stop_delim)
+{
+ unsigned first_delim_pos = s.find(start_delim);
+ unsigned end_pos_of_first_delim = first_delim_pos + start_delim.length();
+ unsigned last_delim_pos = s.find_first_of(stop_delim, end_pos_of_first_delim);
+ return s.substr(end_pos_of_first_delim,last_delim_pos - end_pos_of_first_delim);
+}
+
+void eraseSubStr(std::string & mainStr, const std::string & toErase)
+{
+ size_t pos = mainStr.find(toErase);
+ if (pos != std::string::npos)
+ {
+  mainStr.erase(pos, toErase.length());
+ }
 }
 
 vector<TH1D*> list_histos(string fname, vector<string> dir_names, string hist_name)
@@ -607,3 +627,38 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
  cout << "BKG Events: " << bkg_Entries << endl;
 */
 }
+
+int main(int argc, char* argv[])
+{
+ string cutsFile = "cuts.txt";
+ vector<string> cuts;
+ vector<string> files;
+
+ if(argc < 1)
+ {
+  cout << "ERROR: Need to specify cuts file" << endl;
+  cout << "Example: ./Stacker.x -cuts=cuts.txt" << endl;
+  return 1;
+ }
+
+ for(int i = 0; i < argc; i++)
+ {
+  if(strncmp(argv[i],"-cuts",5)==0)
+  {
+   cutsFile=argv[i];
+   cutsFile.erase(0,6);
+  }
+ }
+ 
+ string cut = "";
+ std::ifstream fs(cutsFile);
+ while(std::getline(fs,cut))
+ {
+  cuts.push_back(cut);
+  files.push_back("Hist_output_MET_"+cut+".root");
+ }
+
+ Stacker(files,cuts);
+ return 0;
+}
+

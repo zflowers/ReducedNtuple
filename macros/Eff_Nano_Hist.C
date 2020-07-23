@@ -7,7 +7,6 @@
 #include "MET_2016_Triggers.h"
 #include "MET_2017_Triggers.h"
 #include "MET_2018_Triggers.h"
-#include "Stacker.C"
 #include "Hist_Maker.h"
 
 using namespace std;
@@ -145,7 +144,7 @@ int main(int argc, char* argv[])
   return 1;
  }
 
- for(int i = 1; i < argc; i++)
+ for(int i = 0; i < argc; i++)
  {
   if(strncmp(argv[i],"-cut",4)==0)
   {

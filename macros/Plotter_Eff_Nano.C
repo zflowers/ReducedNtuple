@@ -1,5 +1,8 @@
 #include <TFile.h>
 #include <iostream>
+#include <vector>
+#include <fstream>
+#include <string>
 #include <TTree.h>
 #include <TGraphAsymmErrors.h>
 #include <TMultiGraph.h>
@@ -11,6 +14,8 @@
 #include <TStyle.h>
 #include <TEfficiency.h>
 #include "Fitter_Eff_Nano.C"
+
+using namespace std;
 
 void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, string outFile, string name, string option);
 void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, vector<string> inFile, vector<string> cut, string name, string option);
@@ -385,7 +390,7 @@ TMultiGraph* get_mg(vector<string> cut, vector<string> tags, vector<string> Trig
     can->Update();
     TGraphAsymmErrors* gr = eff->GetPaintedGraph();
     //call Fitter
-    //Fitter_Eff_Nano(gr,colors,Triggers[j]+"_"+tags[i]+"_"+cut[k]);
+    Fitter_Eff_Nano(gr,colors,Triggers[j]+"_"+tags[i]+"_"+cut[k]);
     if((i+j) == 0)
     {
      string title = " ;";
@@ -415,3 +420,36 @@ TMultiGraph* get_mg(vector<string> cut, vector<string> tags, vector<string> Trig
  return mg;
 }
 
+int main(int argc, char* argv[])
+{
+ string cutsFile = "cuts.txt";
+ vector<string> cuts;
+ vector<string> files;
+
+ if(argc < 1)
+ {
+  cout << "ERROR: Need to specify cuts file" << endl;
+  cout << "Example: ./Plotter.x -cuts=cuts.txt" << endl;
+  return 1;
+ }
+
+ for(int i = 0; i < argc; i++)
+ {
+  if(strncmp(argv[i],"-cuts",5)==0)
+  {
+   cutsFile=argv[i];
+   cutsFile.erase(0,6);
+  }
+ }
+ 
+ string cut = "";
+ std::ifstream fs(cutsFile);
+ while(std::getline(fs,cut))
+ {
+  cuts.push_back(cut);
+  files.push_back("Eff_output_MET_"+cut+".root");
+ }
+
+ Plotter_Eff_Nano(files,cuts);
+ return 0;
+}
