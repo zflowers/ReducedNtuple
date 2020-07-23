@@ -285,7 +285,6 @@ void Get_Fit(TGraphAsymmErrors*& gr, vector<TF1*> funcs, vector<int> colors, str
 
  TFile* output = TFile::Open(outFile.c_str(),"UPDATE");
  can->Write();
- can->SaveAs(("Plots/"+name+".pdf").c_str());
  output->Close();
  delete can;
  delete output;
