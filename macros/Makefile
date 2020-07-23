@@ -24,6 +24,18 @@ CC_FILES := $(wildcard src/*.C)
 HH_FILES := $(wildcard include/*.h)
 OBJ_FILES := $(addprefix $(OUTOBJ),$(notdir $(CC_FILES:.C=.o)))
 
+Eff: run_Eff_Nano_Eff.x
+
+run_Eff_Nano_Eff.x: $(SRCDIR)Eff_Nano_Eff.C $(OBJ_FILES) $(HH_FILES)
+	$(CXX) $(CXXFLAGS) -o run_Eff_Nano_Eff.x $(GLIBS) $ $< 
+	touch run_Eff_Nano_Eff.x
+
+Hist: run_Eff_Nano_Hist.x
+
+run_Eff_Nano_Hist.x: $(SRCDIR)Eff_Nano_Hist.C $(OBJ_FILES) $(HH_FILES)
+	$(CXX) $(CXXFLAGS) -o run_Eff_Nano_Hist.x $(GLIBS) $ $< 
+	touch run_Eff_Nano_Hist.x
+
 all: run_Eff_Nano.x
 
 run_Eff_Nano.x: $(SRCDIR)run_Eff_Nano_Hist.cc $(OBJ_FILES) $(HH_FILES)
@@ -36,8 +48,10 @@ $(OUTOBJ)%.o: /%.C /%.h
 clean:
 	rm -f $(OUTOBJ)*.o 
 	rm -f *.x
+	rm -f *.so
 setup:
 	rm -f *.x
+	rm -f *.so
 	rm -f *.log
 	rm -f *.root
 	rm -f *.d*

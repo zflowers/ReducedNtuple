@@ -15,6 +15,7 @@
 #include <TH1D.h>
 #include <TH2D.h>
 #include <TStyle.h>
+#include "Analysis_Base.h"
 
 double evaluateZbi(double Nsig, double Nbkg, double sys)
 {
