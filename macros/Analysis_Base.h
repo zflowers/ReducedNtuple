@@ -598,6 +598,8 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
  bool METHTtrigger_cut = true;
  bool EventFilter_cut = true;
 
+ string PTISR_str = "PTISRG200";
+ PTISR_cut = Get_Cut(jentry,"PTISR",PTISR_str);
  if(current_cut.find("PTISR") != std::string::npos)
  {
   PTISR_cut = Get_Cut(jentry,"PTISR",current_cut);
@@ -669,9 +671,13 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
   MET_cut = Get_Cut(jentry,"MET",current_cut);
  }
 
- if(current_cut.compare("NoCuts_") == 0)
+ if(current_cut.find("NoCuts") == 0)
  {
-  return false;
+  current_cut = "";
+  if(PTISR_cut && PTCM_cut && dphiCMI_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && NmuBronze_cut && NeleBronze_cut && NlepBronze_cut && NmuSilver_cut && NeleSilver_cut && NlepSilver_cut && NmuGold_cut && NeleGold_cut && NlepGold_cut && Njet_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut && EventFilter_cut)
+  {
+   return false;
+  }
  }
 
  if(current_cut.compare("") != 0)

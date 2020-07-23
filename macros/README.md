@@ -1,6 +1,6 @@
 To run:
 
-root -l 'run_Eff_Nano_Hist.cc("output_filename.root")'
+root -l -b run_Eff_Nano_Hist.cc
 
 To make plots with CONDOR
 

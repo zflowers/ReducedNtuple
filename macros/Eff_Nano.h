@@ -106,7 +106,7 @@ inline void Eff_Nano::Analyze(){
    vect_Eff.push_back(eff);
 
    Long64_t nentries = m_Tree->GetEntriesFast();
-   Long64_t percent = 10.0;
+   Long64_t percent = 20.0;
    Long64_t nbytes = 0, nb = 0;
 
    for (Long64_t jentry=0; jentry<nentries;jentry++) {

@@ -85,7 +85,7 @@ void Fitter_Eff_Nano(TGraphAsymmErrors* gr_given, vector<int> colors, string nam
  func_Gaussian_CDF0->SetParName(1,"Mean_Gauss_CDF");
  func_Gaussian_CDF0->SetParName(2,"Sigma_Gauss_CDF");
  
- //funcs.push_back(func_Gaussian_CDF0);
+ funcs.push_back(func_Gaussian_CDF0);
 
  //Double Gaussian CDF Function
  double Norm_Double_Gauss_CDF=1.;

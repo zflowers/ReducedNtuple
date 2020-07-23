@@ -109,6 +109,11 @@ void Plotter_Eff_Nano(vector<string> inFile, vector<string> cut){
   Get_Plot(WWTo2L2Nu,METtrigger,colors,inFile[i],METtrigger[0]+"WWTo2L2Nu","Trigger");
  }
 
+ Get_Plot(tags_SingleElectron_2017,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_SingleElectron_2017[0],"FinalState");
+ Get_Plot(tags_SingleMuon_2017,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_SingleMuon_2017[0],"FinalState");
+ Get_Plot(tags_2017a,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017a[0],"FinalState");
+ Get_Plot(tags_2017c,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017c[0],"FinalState");
+
 /*
  //combining files
  Get_Plot(tags_2017a,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017a[0],"FinalState");
@@ -380,7 +385,7 @@ TMultiGraph* get_mg(vector<string> cut, vector<string> tags, vector<string> Trig
     can->Update();
     TGraphAsymmErrors* gr = eff->GetPaintedGraph();
     //call Fitter
-    Fitter_Eff_Nano(gr,colors,Triggers[j]+"_"+tags[i]+"_"+cut[k]);
+    //Fitter_Eff_Nano(gr,colors,Triggers[j]+"_"+tags[i]+"_"+cut[k]);
     if((i+j) == 0)
     {
      string title = " ;";

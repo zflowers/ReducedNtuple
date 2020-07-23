@@ -733,7 +733,7 @@ void KUAnalysis::Init(TTree *tree)
    fChain->SetBranchAddress("PTISR", &PTISR, &b_PTISR);
    fChain->SetBranchAddress("RISR", &RISR, &b_RISR);
    fChain->SetBranchAddress("MISR", &MISR, &b_MISR);
-   fChain->SetBranchAddress("NPU", &NPU, &b_NPU);
+//   fChain->SetBranchAddress("NPU", &NPU, &b_NPU);
 //   fChain->SetBranchAddress("genMET", &genMET, &b_genMET);
 //   fChain->SetBranchAddress("genMET_phi", &genMET_phi, &b_genMET_phi);
 //   fChain->SetBranchAddress("genNele", &genNele, &b_genNele);

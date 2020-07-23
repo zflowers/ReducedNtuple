@@ -104,7 +104,7 @@ inline void Hist_Maker::Analyze(){
 
    vector<HistClass*> Classes = Setup_Hists(m_Tree);
    Long64_t nentries = m_Tree->GetEntriesFast();
-   Long64_t percent = 10.0;
+   Long64_t percent = 20.0;
 
    for (Long64_t jentry=0; jentry<nentries;jentry++) {      
       if(jentry%((std::max(nentries,percent))/percent) == 0) { cout << "Processing Event: " << jentry << " out of: " << nentries << " Entries" << endl; }
