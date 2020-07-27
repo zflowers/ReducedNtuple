@@ -1,0 +1,6 @@
+PTCML50_dphiCMIG1_NmuBronzeG0
+PTCML50_dphiCMIG1_NmuSilverG0
+PTCML50_dphiCMIG1_NmuGoldG0
+PTCML50_dphiCMIG1_NeleBronzeG0
+PTCML50_dphiCMIG1_NeleSilverG0
+PTCML50_dphiCMIG1_NeleGoldG0

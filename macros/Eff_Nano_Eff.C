@@ -11,6 +11,14 @@
 
 using namespace std;
 
+void MemCheck()
+{
+ ProcInfo_t procInfo;
+ gSystem->GetProcInfo(&procInfo);
+ cout << "Memory Used: " << procInfo.fMemVirtual/1.e6 << endl;
+}
+
+
 void Eff_Nano_Eff(string outFile = "output_test.root", string x = "MET", string cut = ""){
  std::cout << "Outputting to: " << outFile << endl;
  gSystem->Exec(("rm "+outFile).c_str());
@@ -108,9 +116,10 @@ void Eff_Nano_Eff(string outFile = "output_test.root", string x = "MET", string 
   Eff_2016_SingleMuon.Analyze();
   delete chain_2016_SingleMuon;
 
-
+ 
  //2017
   //WJets
+  
   std::cout << "Processing WJets 2017" << endl;
   TChain* chain_2017_WJets = new TChain("KUAnalysis");
   chain_2017_WJets->Add((path+"Fall17_102X/WJetsToLNu_HT-70To100_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root").c_str(),0);
@@ -135,7 +144,7 @@ void Eff_Nano_Eff(string outFile = "output_test.root", string x = "MET", string 
   Eff_2017_TTJets.Set_Cut(cut);
   Eff_2017_TTJets.Analyze();
   delete chain_2017_TTJets;
-
+ 
 /*
   std::cout << "Processing T2-4bd 500 490 2017" << endl;
   TChain* chain_2017_T2_4bd_500_490 = new TChain("SMS_500_490");
@@ -153,6 +162,7 @@ void Eff_Nano_Eff(string outFile = "output_test.root", string x = "MET", string 
   Eff_2017_T2_4bd_500_420.Analyze();
   delete chain_2017_T2_4bd_500_420;
 */
+ 
   std::cout << "Processing WWTo2L2Nu 2017" << endl;
   TChain* chain_2017_WWTo2L2Nu = new TChain("KUAnalysis");
   chain_2017_WWTo2L2Nu->Add((path+"Fall17_102X/WWTo2L2Nu_NNPDF31_TuneCP5_13TeV-powheg-pythia8_Fall17_102X.root").c_str(),0);
@@ -160,6 +170,7 @@ void Eff_Nano_Eff(string outFile = "output_test.root", string x = "MET", string 
   Eff_2017_WWTo2L2Nu.Set_Cut(cut);
   Eff_2017_WWTo2L2Nu.Analyze();
   delete chain_2017_WWTo2L2Nu;
+ 
 /*
   std::cout << "Processing TChiWZ 2017" << endl;
   TChain* chain_2017_TChiWZ = new TChain("KUAnalysis");
@@ -167,9 +178,7 @@ void Eff_Nano_Eff(string outFile = "output_test.root", string x = "MET", string 
   Eff_Nano Eff_2017_TChiWZ(outFile,Triggers_2017,"TChiWZ_2017",x_2017,chain_2017_TChiWZ);
   Eff_2017_TChiWZ.Set_Cut(cut);
   Eff_2017_TChiWZ.Analyze();
-*/
 
-/*
   std::cout << "Processing ZZTo2L2Nu 2017" << endl;
   TChain* chain_2017_ZZTo2L2Nu = new TChain("KUAnalysis");
   chain_2017_ZZTo2L2Nu->Add((path+"Fall17_102X/ZZTo2L2Nu_13TeV_powheg_pythia8_Fall17_102X.root").c_str(),0);
@@ -187,6 +196,7 @@ void Eff_Nano_Eff(string outFile = "output_test.root", string x = "MET", string 
 */
  //Data 2017
  //
+ 
   std::cout << "Processing SingleElectron 2017" << endl;
   TChain* chain_2017_SingleElectron = new TChain("KUAnalysis");
   chain_2017_SingleElectron->Add((path+"Fall17_102X_Data/SingleElectron_Run2017B-Nano25Oct2019-v1_2017_Fall17_102X.root").c_str(),0);
@@ -270,7 +280,7 @@ void Eff_Nano_Eff(string outFile = "output_test.root", string x = "MET", string 
   Eff_2018_SingleMuon.Set_Cut(cut);
   Eff_2018_SingleMuon.Analyze();
   delete chain_2018_SingleMuon;
-
+  
 }
 
 int main(int argc, char* argv[])

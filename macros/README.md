@@ -3,9 +3,14 @@ To run:
 root -l -b run_Eff_Nano_Hist.cc
 
 To make plots with CONDOR (Almost Only Option)
+Make sure you define what cuts you need (see .sh file)
 
-condor_submit ../scripts/CONDOR_Plot.sh Cuts/cuts_Example.txt
+condor_submit ../scripts/CONDOR_Plot.sh
 
 After jobs finish do
 
-./Plotter Cuts/cuts_Example.txt 
+./Plotter.x Cuts/cuts_Example.txt 
+
+For local tests:
+
+./run_Eff_Nano_Eff.x -x=MET -cut=NoCuts -oFile=Test

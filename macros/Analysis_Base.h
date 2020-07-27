@@ -38,11 +38,11 @@ class Analysis_Base{
    virtual bool global_cuts(const Long64_t& jentry);
   public:
    Analysis_Base();
-   Analysis_Base(string outFile, string Tag, TTree* Tree);
+   Analysis_Base(string outFile, string Tag, TTree*& Tree);
    ~Analysis_Base();
    virtual void Analyze();
    virtual void Set_Tag(const string& tag);
-   virtual void Set_Tree(TTree* tree);
+   virtual void Set_Tree(TTree*& tree);
    virtual void Set_Output(const string& outFile);
    virtual void Set_Cut(const string& cut);
 };
@@ -54,16 +54,16 @@ inline Analysis_Base::Analysis_Base()
  m_cut = "";
 }
 
-inline Analysis_Base::Analysis_Base(string outFile, string Tag, TTree* Tree)
+inline Analysis_Base::Analysis_Base(string outFile, string Tag, TTree*& tree)
 {
  m_outFile = outFile;
  m_Tag = Tag;
- m_Tree = Tree;
+ m_Tree = tree;
 }
 
 inline Analysis_Base::~Analysis_Base()
 {
- //if(m_Tree != NULL) delete m_Tree;
+// if(m_Tree != NULL) delete m_Tree;
 }
 
 inline void Analysis_Base::Set_Tag(const string& tag)
@@ -71,7 +71,7 @@ inline void Analysis_Base::Set_Tag(const string& tag)
  m_Tag = tag;
 }
 
-inline void Analysis_Base::Set_Tree(TTree* tree)
+inline void Analysis_Base::Set_Tree(TTree*& tree)
 {
  m_Tree = tree;
 }
@@ -89,7 +89,6 @@ inline void Analysis_Base::Set_Cut(const string& cut)
 inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& current_cut)
 {
  bool cut = false;
- TBranch* branch = NULL;
 
  bool Bronze = false;
  bool Silver = false;
@@ -133,6 +132,11 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
      }
     }
    }
+   PDGID_lep->clear();
+   ID_lep->clear();
+   b_Nlep->ResetAddress();
+   b_PDGID_lep->ResetAddress();
+   b_ID_lep->ResetAddress();
   }
   else if(name.find("Nele") != std::string::npos)
   {
@@ -158,6 +162,11 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
      }
     }
    }
+   PDGID_lep->clear();
+   ID_lep->clear();
+   b_Nele->ResetAddress();
+   b_PDGID_lep->ResetAddress();
+   b_ID_lep->ResetAddress();
   }
   else if(name.find("Nmu") != std::string::npos)
   {
@@ -183,6 +192,11 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
      }
     }
    }
+   PDGID_lep->clear();
+   ID_lep->clear();
+   b_Nmu->ResetAddress();
+   b_PDGID_lep->ResetAddress();
+   b_ID_lep->ResetAddress();
   }
  }
  else if(name.find("Silver") != std::string::npos)
@@ -221,6 +235,11 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
      }
     }
    }
+   PDGID_lep->clear();
+   ID_lep->clear();
+   b_Nlep->ResetAddress();
+   b_PDGID_lep->ResetAddress();
+   b_ID_lep->ResetAddress();
   }
   else if(name.find("Nele") != std::string::npos)
   {
@@ -246,6 +265,11 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
      }
     }
    }
+   PDGID_lep->clear();
+   ID_lep->clear();
+   b_Nele->ResetAddress();
+   b_PDGID_lep->ResetAddress();
+   b_ID_lep->ResetAddress();
   }
   else if(name.find("Nmu") != std::string::npos)
   {
@@ -271,6 +295,11 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
      }
     }
    }
+   PDGID_lep->clear();
+   ID_lep->clear();
+   b_Nmu->ResetAddress();
+   b_PDGID_lep->ResetAddress();
+   b_ID_lep->ResetAddress();
   }
  }
  if(name.find("Gold") != std::string::npos)
@@ -321,6 +350,17 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
      }
     }
    }
+   PDGID_lep->clear();
+   ID_lep->clear();
+   MiniIso_lep->clear();
+   SIP3D_lep->clear();
+   PT_lep->clear();
+   b_Nlep->ResetAddress();
+   b_PDGID_lep->ResetAddress();
+   b_ID_lep->ResetAddress();
+   b_MiniIso_lep->ResetAddress();
+   b_SIP3D_lep->ResetAddress();
+   b_PT_lep->ResetAddress();
   }
   else if(name.find("Nele") != std::string::npos)
   {
@@ -355,6 +395,17 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
      numGold++;
     }
    }
+   PDGID_lep->clear();
+   ID_lep->clear();
+   MiniIso_lep->clear();
+   SIP3D_lep->clear();
+   PT_lep->clear();
+   b_Nele->ResetAddress();
+   b_PDGID_lep->ResetAddress();
+   b_ID_lep->ResetAddress();
+   b_MiniIso_lep->ResetAddress();
+   b_SIP3D_lep->ResetAddress();
+   b_PT_lep->ResetAddress();
   }
   else if(name.find("Nmu") != std::string::npos)
   {
@@ -389,6 +440,17 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
      numGold++;
     }
    }
+   PDGID_lep->clear();
+   ID_lep->clear();
+   MiniIso_lep->clear();
+   SIP3D_lep->clear();
+   PT_lep->clear();
+   b_Nmu->ResetAddress();
+   b_PDGID_lep->ResetAddress();
+   b_ID_lep->ResetAddress();
+   b_MiniIso_lep->ResetAddress();
+   b_SIP3D_lep->ResetAddress();
+   b_PT_lep->ResetAddress();
   }
  }
 
@@ -402,94 +464,133 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
   double val = 0.;
   if(type == "Long64_t")
   {
+   TBranch* branch = NULL;
    Long64_t val_type = 0.;
    m_Tree->SetBranchAddress(name.c_str(),&val_type,&branch);
    branch->GetEntry(jentry);
    val = val_type;
+   branch->ResetAddress();
+   //delete branch;
   }
   else if(type == "ULong64_t")
   {
+   TBranch* branch = NULL;
    ULong64_t val_type = 0.;
    m_Tree->SetBranchAddress(name.c_str(),&val_type,&branch);
    branch->GetEntry(jentry);
    val = val_type;
+   branch->ResetAddress();
+   //delete branch;
   }
   else if(type == "Double32_t")
   {
+   TBranch* branch = NULL;
    Double32_t val_type = 0.;
    m_Tree->SetBranchAddress(name.c_str(),&val_type,&branch);
    branch->GetEntry(jentry);
    val = val_type;
+   branch->ResetAddress();
+   //delete branch;
   }
   else if(type == "Double_t")
   {
+   TBranch* branch = NULL;
    Double_t val_type = 0.;
    m_Tree->SetBranchAddress(name.c_str(),&val_type,&branch);
    branch->GetEntry(jentry);
    val = val_type;
+   branch->ResetAddress();
+   //delete branch;
   }
   else if(type == "Float16_t")
   {
+   TBranch* branch = NULL;
    Float16_t val_type = 0.;
    m_Tree->SetBranchAddress(name.c_str(),&val_type,&branch);
    branch->GetEntry(jentry);
    val = val_type;
+   branch->ResetAddress();
+   //delete branch;
   }
   else if(type == "Float_t")
   {
+   TBranch* branch = NULL;
    Float_t val_type = 0.;
    m_Tree->SetBranchAddress(name.c_str(),&val_type,&branch);
    branch->GetEntry(jentry);
    val = val_type;
+   branch->ResetAddress();
+   //delete branch;
   }
   else if(type == "UInt_t")
   {
+   TBranch* branch = NULL;
    UInt_t val_type = 0.;
    m_Tree->SetBranchAddress(name.c_str(),&val_type,&branch);
    branch->GetEntry(jentry);
    val = val_type;
+   branch->ResetAddress();
+   //delete branch;
   }
   else if(type == "Int_t")
   {
+   TBranch* branch = NULL;
    Int_t val_type = 0.;
    m_Tree->SetBranchAddress(name.c_str(),&val_type,&branch);
    branch->GetEntry(jentry);
    val = val_type;
+   branch->ResetAddress();
+   //delete branch;
   }
   else if(type == "UShort_t")
   {
+   TBranch* branch = NULL;
    UShort_t val_type = 0.;
    m_Tree->SetBranchAddress(name.c_str(),&val_type,&branch);
    branch->GetEntry(jentry);
    val = val_type;
+   branch->ResetAddress();
+   //delete branch;
   }
   else if(type == "Short_t")
   {
+   TBranch* branch = NULL;
    Short_t val_type = 0.;
    m_Tree->SetBranchAddress(name.c_str(),&val_type,&branch);
    branch->GetEntry(jentry);
    val = val_type;
+   branch->ResetAddress();
+   //delete branch;
   }
   else if(type == "UChar_t")
   {
+   TBranch* branch = NULL;
    UChar_t val_type = 0.;
    m_Tree->SetBranchAddress(name.c_str(),&val_type,&branch);
    branch->GetEntry(jentry);
    val = val_type;
+   branch->ResetAddress();
+   //delete branch;
   }
   else if(type == "Char_t")
   {
+   TBranch* branch = NULL;
    Char_t val_type = 0.;
    m_Tree->SetBranchAddress(name.c_str(),&val_type,&branch);
    branch->GetEntry(jentry);
    val = val_type;
+   branch->ResetAddress();
+   //delete branch;
   }
   else if(type == "Bool_t")
   {
+   TBranch* branch = NULL;
    Bool_t val_type = 0.;
    m_Tree->SetBranchAddress(name.c_str(),&val_type,&branch);
    branch->GetEntry(jentry);
    val = val_type;
+   branch->ResetAddress();
+   //delete branch;
   }
   else
   {
@@ -562,7 +663,7 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
  {
   cout << "Couldn't find: " << name << " in: " << current_cut << "!" << endl;
  }
- branch->ResetAddress();
+ //m_Tree->ResetBranchAddresses();
  return cut;
 }
 

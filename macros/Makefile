@@ -65,6 +65,5 @@ setup:
 	rm -f *.x
 	rm -f *.so
 	rm -f *.log
-	rm -f *.root
 	rm -f *.d*
 	rm -f *.pcm*

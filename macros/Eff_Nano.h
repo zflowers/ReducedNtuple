@@ -65,9 +65,10 @@ inline void Eff_Nano::Set_x(string x)
 inline void Eff_Nano::Analyze(){
    TBranch* weight_branch = NULL;
    Double_t weight = 0.;
-   m_Tree->SetBranchAddress("weight",&weight,&weight_branch);
    TBranch* x_branch = NULL;
    Double_t x = 0.;
+   TBranch* branch = NULL;
+   m_Tree->SetBranchAddress("weight",&weight,&weight_branch);
    m_Tree->SetBranchAddress(m_x.c_str(),&x,&x_branch);
    vector<TEfficiency*> vect_Eff;
    //bins is number of bins-1
@@ -106,25 +107,26 @@ inline void Eff_Nano::Analyze(){
    vect_Eff.push_back(eff);
 
    Long64_t nentries = m_Tree->GetEntriesFast();
-   Long64_t percent = 20.0;
+   Long64_t percent = 5.0;
    Long64_t nbytes = 0, nb = 0;
 
    for (Long64_t jentry=0; jentry<nentries;jentry++) {
       Long64_t ientry = m_Tree->LoadTree(jentry);
       //nb = m_Tree->GetEntry(jentry);   nbytes += nb;
+      if(jentry%((std::max(nentries,percent))/percent) == 0) { cout << "Processing Event: " << jentry << " out of: " << nentries << " Entries" << endl;}
+      if(global_cuts(jentry)) continue;
       x_branch->GetEntry(jentry);    
       weight_branch->GetEntry(jentry);    
-      if(jentry%((std::max(nentries,percent))/percent) == 0) { cout << "Processing Event: " << jentry << " out of: " << nentries << " Entries" << endl; }
-      if(global_cuts(jentry)) continue;
       bool SuperOR = false;
       for(int i=0; i < int(m_Triggers.size()); i++)
       {
-       TBranch* branch = NULL;
+       branch = NULL;
        Bool_t trig = 0;
        m_Tree->SetBranchAddress(m_Triggers.at(i).c_str(),&trig,&branch);
        branch->GetEntry(jentry);
        vect_Eff.at(i)->FillWeighted(trig,weight,x);
        SuperOR = (SuperOR || trig);
+       branch->ResetAddress();
       }
       vect_Eff.at(int(vect_Eff.size()-1))->FillWeighted(SuperOR,weight,x);
    }
@@ -134,12 +136,15 @@ inline void Eff_Nano::Analyze(){
    output->cd(m_Tag.c_str());
    for(int i=0; i < int(vect_Eff.size()); i++)
    {
-    vect_Eff.at(i)->SetDirectory(0);
     vect_Eff.at(i)->Write();
     delete vect_Eff.at(i);
    }
+   vect_Eff.clear();
    output->Close();
    delete output;
+   weight_branch->ResetAddress();
+   x_branch->ResetAddress();
+   m_Tree->ResetBranchAddresses();
 }
 
 #endif

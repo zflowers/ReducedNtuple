@@ -11,9 +11,9 @@
 condor_q z374f439 
 
 #JOB_ID=$1
-#JOB_ID="3469409.0"
+#JOB_ID="3512908.1"
 
-#condor_tail -maxbytes 2000 3469411.0 >> tail.txt
+#condor_tail -maxbytes 2000 $JOB_ID >> tail.txt
 #condor_tail -maxbytes 2000 $JOB_ID
 
 #condor_tail -stderr $JOB_ID
