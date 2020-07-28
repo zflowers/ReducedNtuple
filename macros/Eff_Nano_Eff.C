@@ -134,6 +134,14 @@ void Eff_Nano_Eff(string outFile = "output_test.root", string x = "MET", string 
   Eff_2017_WJets.Analyze();
   delete chain_2017_WJets;
 
+  std::cout << "Processing Old WJets 2017" << endl;
+  TChain* chain_2017_WJets_Old = new TChain("KUAnalysis");
+  chain_2017_WJets_Old->Add((path+"Fall17_102X/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root").c_str(),0);
+  Eff_Nano Eff_2017_WJets_Old(outFile,Triggers_2017,"WJets_2017_Old",x_2017,chain_2017_WJets_Old);
+  Eff_2017_WJets_Old.Set_Cut(cut);
+  Eff_2017_WJets_Old.Analyze();
+  delete chain_2017_WJets_Old;
+
   //TTJets
   std::cout << "Processing TTJets 2017" << endl;
   TChain* chain_2017_TTJets = new TChain("KUAnalysis");

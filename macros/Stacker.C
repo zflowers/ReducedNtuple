@@ -544,11 +544,12 @@ void Get_Overlay(vector<string> outFiles, string hist_name, vector<string> sampl
 void Stacker(vector<string> inFiles, vector<string> cuts){
  cout << "Running Stacker..." << endl;
  vector<string> WJets_directories{"WJets_2017"};
+ vector<string> WJets_Old_directories{"WJets_2017_Old"};
  vector<string> TTJets_directories{"TTJets_2017"};
  vector<string> sig_directories{""};
  //vector<string> sig_directories{"TChiWW_SMS_275_235"};
  //vector<string> directories_2D{"TChiWW_SMS_275_235", "TTJets", "WJets", "DiBoson", "DYJetsToLL", "ST"};
- vector<string> directories_2D{"TTJets_2017", "WJets_2017", "SingleElectron_2017", "SingleMuon_2017"};
+ vector<string> directories_2D{"TTJets_2017", "WJets_2017", "WJets_2017_Old"};
  vector<int> colors = {kCyan, kMagenta, kYellow, kViolet+2, kAzure+7, kPink, kGreen, kGray};
  vector<int> colors_bkg = { kAzure+1, kGreen-9, kPink, kTeal+2, kYellow-4 };
  vector<int> colors_sig = { kMagenta, kCyan+2, };
@@ -558,10 +559,13 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
 
 //compare across: sample, selection/final state, hist?, ..., 
  Get_Overlay(inFiles,"met_Hist",WJets_directories,cuts,colors,"Cuts",false);
+ Get_Overlay(inFiles,"met_Hist",WJets_Old_directories,cuts,colors,"Cuts",false);
  Get_Overlay(inFiles,"met_Hist",TTJets_directories,cuts,colors,"Cuts",false);
  Get_Overlay(inFiles,"met_Phi_Hist",WJets_directories,cuts,colors,"Cuts",false);
+ Get_Overlay(inFiles,"met_Phi_Hist",WJets_Old_directories,cuts,colors,"Cuts",false);
  Get_Overlay(inFiles,"met_Phi_Hist",TTJets_directories,cuts,colors,"Cuts",false);
  Get_Overlay(inFiles,"PTCM_Hist",WJets_directories,cuts,colors,"Cuts",false);
+ Get_Overlay(inFiles,"PTCM_Hist",WJets_Old_directories,cuts,colors,"Cuts",false);
  Get_Overlay(inFiles,"PTCM_Hist",TTJets_directories,cuts,colors,"Cuts",false);
  //Get_Overlay(inFiles,"dphiMET_lep_Hist",WJets_directories,cuts,colors,"Cuts",false);
  //Get_Overlay(inFiles,"dphiMET_lep_Hist",TTJets_directories,cuts,colors,"Cuts",false);
@@ -590,12 +594,15 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
  //Get_Overlay(inFiles,"mu_PT_proj_METperp_Hist",WJets_directories,cuts,colors,"Cuts",false);
  //Get_Overlay(inFiles,"mu_PT_proj_METperp_Hist",TTJets_directories,cuts,colors,"Cuts",false);
  Get_Overlay(inFiles,"dphiCMI_Hist",WJets_directories,cuts,colors,"Cuts",false);
+ Get_Overlay(inFiles,"dphiCMI_Hist",WJets_Old_directories,cuts,colors,"Cuts",false);
  Get_Overlay(inFiles,"dphiCMI_Hist",TTJets_directories,cuts,colors,"Cuts",false);
 
-// Get_Overlay(inFiles,"genmet_Hist",WJets_directories,cuts,colors,"Cuts",false);
-// Get_Overlay(inFiles,"genmet_Hist",TTJets_directories,cuts,colors,"Cuts",false);
-// Get_Overlay(inFiles,"genmet_Phi_Hist",WJets_directories,cuts,colors,"Cuts",false);
-// Get_Overlay(inFiles,"genmet_Phi_Hist",TTJets_directories,cuts,colors,"Cuts",false);
+ Get_Overlay(inFiles,"genmet_Hist",WJets_directories,cuts,colors,"Cuts",false);
+ Get_Overlay(inFiles,"genmet_Hist",WJets_Old_directories,cuts,colors,"Cuts",false);
+ Get_Overlay(inFiles,"genmet_Hist",TTJets_directories,cuts,colors,"Cuts",false);
+ Get_Overlay(inFiles,"genmet_Phi_Hist",WJets_directories,cuts,colors,"Cuts",false);
+ Get_Overlay(inFiles,"genmet_Phi_Hist",WJets_Old_directories,cuts,colors,"Cuts",false);
+ Get_Overlay(inFiles,"genmet_Phi_Hist",TTJets_directories,cuts,colors,"Cuts",false);
  //Get_Overlay(inFiles,"gendphiMET_lep_Hist",WJets_directories,cuts,colors,"Cuts",false);
  //Get_Overlay(inFiles,"gendphiMET_lep_Hist",TTJets_directories,cuts,colors,"Cuts",false);
  //Get_Overlay(inFiles,"gendphiMET_ele_Hist",WJets_directories,cuts,colors,"Cuts",false);
@@ -655,7 +662,7 @@ int main(int argc, char* argv[])
  while(std::getline(fs,cut))
  {
   cuts.push_back(cut);
-  files.push_back("Hist_output_MET_"+cut+".root");
+  files.push_back("Hist_output_"+cut+".root");
  }
 
  Stacker(files,cuts);

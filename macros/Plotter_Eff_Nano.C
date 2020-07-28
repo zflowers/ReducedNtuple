@@ -44,9 +44,11 @@ void Plotter_Eff_Nano(vector<string> inFile, vector<string> cut){
  vector<string> tags_2017e = {"T2_4bd_500_420_2017"};
  vector<string> SingleMuon = {"SingleMuon_2016","SingleMuon_2017","SingleMuon_2018"};
  vector<string> SingleElectron = {"SingleElectron_2016","SingleElectron_2017","SingleElectron_2018"};
- vector<string> WJets = {"WJets_2016","WJets_2017","WJets_2018"};
- vector<string> TTJets = {"TTJets_2016","TTJets_2017","TTJets_2018"};
- vector<string> WWTo2L2Nu = {"WWTo2L2Nu_2016","WWTo2L2Nu_2017","WWTo2L2Nu_2018"};
+ vector<string> WJets_years = {"WJets_2016","WJets_2017","WJets_2018"};
+ vector<string> TTJets_years = {"TTJets_2016","TTJets_2017","TTJets_2018"};
+ vector<string> WWTo2L2Nu_years = {"WWTo2L2Nu_2016","WWTo2L2Nu_2017","WWTo2L2Nu_2018"};
+ vector<string> WJets = {"WJets_2017", "WJets_2017_Old"};
+ vector<string> WJets_Old = {"WJets_2017_Old"};
  //vector<string> tags_2018 = {"WJets_2018", "TTJets_2018"};//, "DY_2018", "TChiWZ_2016", "Stop_2016"};
  vector<int> colors = {kCyan, kMagenta, kYellow, kViolet+2, kAzure+7, kPink, kGreen, kGray};
 /*
@@ -95,8 +97,6 @@ void Plotter_Eff_Nano(vector<string> inFile, vector<string> cut){
  //Get_Plot(tags_2017,Triggers_100_TypeOne,colors,inFile,"2017_HLT_PFMET100_TypeOne","Trigger");
  //Get_Plot(tags_2017,Triggers_100_NoMu,colors,inFile,"2017_HLT_PFMET100_NoMu","Trigger");
  
- //Get_Plot(tags_2017,METHTtrigger,colors,inFile,"METALLtrigger_2017","Trigger"); //hacked together (we use METHT as METALL (see Eff_Nano)
- 
  //Get_Plot(tags_2017,METtrigger,colors,inFile,"METtrigger_2017","Trigger");
  //Get_Plot(tags_2017,METHTtrigger,colors,inFile,"METHTtrigger_2017","Trigger");
  //Get_Plot(tags_2017,METORtrigger,colors,inFile,"METORtrigger_2017","Trigger");
@@ -111,11 +111,13 @@ void Plotter_Eff_Nano(vector<string> inFile, vector<string> cut){
   Get_Plot(tags_2017,METtrigger,colors,inFile[i],METtrigger[0]+cut[i]+"_2017","Trigger");
   Get_Plot(tags_2018,METtrigger,colors,inFile[i],METtrigger[0]+cut[i]+"_2018","Trigger");
 
-  Get_Plot(SingleMuon,METtrigger,colors,inFile[i],METtrigger[0]+"SingleMuon","Trigger");
-  Get_Plot(SingleElectron,METtrigger,colors,inFile[i],METtrigger[0]+"SingleElectron","Trigger");
-  Get_Plot(WJets,METtrigger,colors,inFile[i],METtrigger[0]+"WJets","Trigger");
-  Get_Plot(TTJets,METtrigger,colors,inFile[i],METtrigger[0]+"TTJets","Trigger");
-  Get_Plot(WWTo2L2Nu,METtrigger,colors,inFile[i],METtrigger[0]+"WWTo2L2Nu","Trigger");
+  Get_Plot(SingleMuon,METtrigger,colors,inFile[i],METtrigger[0]+"SingleMuon"+cut[i]+"_","Trigger");
+  Get_Plot(SingleElectron,METtrigger,colors,inFile[i],METtrigger[0]+"SingleElectron"+"_"+cut[i],"Trigger");
+  Get_Plot(WJets_years,METtrigger,colors,inFile[i],METtrigger[0]+"WJets"+"_"+cut[i],"Trigger");
+  Get_Plot(TTJets_years,METtrigger,colors,inFile[i],METtrigger[0]+"TTJets"+"_"+cut[i],"Trigger");
+  Get_Plot(WWTo2L2Nu_years,METtrigger,colors,inFile[i],METtrigger[0]+"WWTo2L2Nu"+"_"+cut[i],"Trigger");
+
+  Get_Plot(WJets,METtrigger,colors,inFile[i],METtrigger[0]+"WJets_Old_"+cut[i],"Trigger");
  }
 
  Get_Plot(tags_SingleElectron_2016,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_SingleElectron_2016[0],"FinalState");
@@ -127,6 +129,7 @@ void Plotter_Eff_Nano(vector<string> inFile, vector<string> cut){
 
  Get_Plot(tags_2017a,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017a[0],"FinalState");
  Get_Plot(tags_2017c,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017c[0],"FinalState");
+ Get_Plot(WJets_Old,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+WJets_Old[0],"FinalState");
 
 /*
  //combining files
@@ -242,7 +245,7 @@ void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, 
  can->Modified();
  can->Update();
 
- TFile* output = TFile::Open(outFile.c_str(),"UPDATE");
+ TFile* output = TFile::Open("output_Plots.root","UPDATE");
  can->Write();
  output->Close();
  delete leg;
@@ -364,7 +367,7 @@ void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, 
  can->Modified();
  can->Update();
 
- TFile* output = TFile::Open(inFile[0].c_str(),"UPDATE");
+ TFile* output = TFile::Open("output_Plots.root","UPDATE");
  can->Write();
  output->Close();
  delete leg;

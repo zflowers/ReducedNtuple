@@ -11,92 +11,88 @@
 
 using namespace std;
 
-void Eff_Nano_Hist(string outFile = "output_test.root", string cut = ""){
+void Hist_Maker_Hist(string outFile = "output_test.root", string cut = ""){
  std::cout << "Outputting to: " << outFile << endl;
  gSystem->Exec(("rm "+outFile).c_str());
 
  //string path = "/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/output/";
  string path = "~/../crogan/NTUPLES/NANO/NEW_31_05_20/";
 
-/* 
  //2016
+/*
+  //WJets
   std::cout << "Processing WJets 2016" << endl;
-  //WJets
   TChain* chain_2016_WJets = new TChain("KUAnalysis");
-  chain_2016_WJets->Add((path+"Summer16_102X/WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Summer16_102X/WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Summer16_102X.root").c_str(),0);
+  chain_2016_WJets->Add((path+"Summer16_102X/WJetsToLNu_HT-70To100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Summer16_102X.root").c_str(),0);
+  chain_2016_WJets->Add((path+"Summer16_102X/WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Summer16_102X.root").c_str(),0);
+  chain_2016_WJets->Add((path+"Summer16_102X/WJetsToLNu_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Summer16_102X.root").c_str(),0);
+  chain_2016_WJets->Add((path+"Summer16_102X/WJetsToLNu_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Summer16_102X.root").c_str(),0);
+  chain_2016_WJets->Add((path+"Summer16_102X/WJetsToLNu_HT-600To800_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Summer16_102X.root").c_str(),0);
+  chain_2016_WJets->Add((path+"Summer16_102X/WJetsToLNu_HT-800To1200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Summer16_102X.root").c_str(),0);
+  chain_2016_WJets->Add((path+"Summer16_102X/WJetsToLNu_HT-1200To2500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Summer16_102X.root").c_str(),0);
   Hist_Maker Hist_2016_WJets(outFile,"WJets_2016",chain_2016_WJets);
+  Hist_2016_WJets.Set_Cut(cut);
   Hist_2016_WJets.Analyze();
-*/
+  delete chain_2016_WJets;
 
- //2017
+  //TTJets
+  std::cout << "Processing TTJets 2016" << endl;
+  TChain* chain_2016_TTJets = new TChain("KUAnalysis");
+  chain_2016_TTJets->Add((path+"Summer16_102X/TTJets_SingleLeptFromTbar_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Summer16_102X.root").c_str(),0);
+  chain_2016_TTJets->Add((path+"Summer16_102X/TTJets_SingleLeptFromT_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Summer16_102X.root").c_str(),0);
+  chain_2016_TTJets->Add((path+"Summer16_102X/TTJets_DiLept_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Summer16_102X.root").c_str(),0);
+  Hist_Maker Hist_2016_TTJets(outFile,"TTJets_2016",chain_2016_TTJets);
+  Hist_2016_TTJets.Set_Cut(cut);
+  Hist_2016_TTJets.Analyze();
+  delete chain_2016_TTJets;
+*/
+/*
+  std::cout << "Processing WWTo2L2Nu 2016" << endl;
+  TChain* chain_2016_WWTo2L2Nu = new TChain("KUAnalysis");
+  chain_2016_WWTo2L2Nu->Add((path+"Summer16_102X/WWTo2L2Nu_13TeV-powheg_Summer16_102X.root").c_str(),0);
+  Hist_Maker Hist_2016_WWTo2L2Nu(outFile,"WWTo2L2Nu_2016",chain_2016_WWTo2L2Nu);
+  Hist_2016_WWTo2L2Nu.Set_Cut(cut);
+  Hist_2016_WWTo2L2Nu.Analyze();
+  delete chain_2016_WWTo2L2Nu;
+*/
  
+ //2017
   //WJets
+  
   std::cout << "Processing WJets 2017" << endl;
   TChain* chain_2017_WJets = new TChain("KUAnalysis");
-  chain_2017_WJets->Add((path+"Fall17_102X/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root").c_str(),0);
+  chain_2017_WJets->Add((path+"Fall17_102X/WJetsToLNu_HT-70To100_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root").c_str(),0);
+  chain_2017_WJets->Add((path+"Fall17_102X/WJetsToLNu_HT-100To200_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root").c_str(),0);
+  chain_2017_WJets->Add((path+"Fall17_102X/WJetsToLNu_HT-200To400_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root").c_str(),0);
+  chain_2017_WJets->Add((path+"Fall17_102X/WJetsToLNu_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root").c_str(),0);
+  chain_2017_WJets->Add((path+"Fall17_102X/WJetsToLNu_HT-600To800_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root").c_str(),0);
+  chain_2017_WJets->Add((path+"Fall17_102X/WJetsToLNu_HT-800To1200_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root").c_str(),0);
+  chain_2017_WJets->Add((path+"Fall17_102X/WJetsToLNu_HT-1200To2500_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root").c_str(),0);
   Hist_Maker Hist_2017_WJets(outFile,"WJets_2017",chain_2017_WJets);
   Hist_2017_WJets.Set_Cut(cut);
   Hist_2017_WJets.Analyze();
   delete chain_2017_WJets;
 
+  std::cout << "Processing Old WJets 2017" << endl;
+  TChain* chain_2017_WJets_Old = new TChain("KUAnalysis");
+  chain_2017_WJets_Old->Add((path+"Fall17_102X/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root").c_str(),0);
+  Hist_Maker Hist_2017_WJets_Old(outFile,"WJets_2017_Old",chain_2017_WJets_Old);
+  Hist_2017_WJets_Old.Set_Cut(cut);
+  Hist_2017_WJets_Old.Analyze();
+  delete chain_2017_WJets_Old;
+
   //TTJets
   std::cout << "Processing TTJets 2017" << endl;
   TChain* chain_2017_TTJets = new TChain("KUAnalysis");
-  chain_2017_TTJets->Add((path+"Fall17_102X/TTJets_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root").c_str(),0);
+  chain_2017_TTJets->Add((path+"Fall17_102X/TTJets_SingleLeptFromTbar_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root").c_str(),0);
+  chain_2017_TTJets->Add((path+"Fall17_102X/TTJets_SingleLeptFromT_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root").c_str(),0);
+  chain_2017_TTJets->Add((path+"Fall17_102X/TTJets_DiLept_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root").c_str(),0);
   Hist_Maker Hist_2017_TTJets(outFile,"TTJets_2017",chain_2017_TTJets);
   Hist_2017_TTJets.Set_Cut(cut);
   Hist_2017_TTJets.Analyze();
   delete chain_2017_TTJets;
 
-  std::cout << "Processing SingleElectron 2017" << endl;
-  TChain* chain_2017_SingleElectron = new TChain("KUAnalysis");
-  chain_2017_SingleElectron->Add((path+"Fall17_102X_Data/SingleElectron_Run2017B-Nano25Oct2019-v1_2017_Fall17_102X.root").c_str(),0);
-  chain_2017_SingleElectron->Add((path+"Fall17_102X_Data/SingleElectron_Run2017C-Nano25Oct2019-v1_2017_Fall17_102X.root").c_str(),0);
-  chain_2017_SingleElectron->Add((path+"Fall17_102X_Data/SingleElectron_Run2017D-Nano25Oct2019-v1_2017_Fall17_102X.root").c_str(),0);
-  chain_2017_SingleElectron->Add((path+"Fall17_102X_Data/SingleElectron_Run2017E-Nano25Oct2019-v1_2017_Fall17_102X.root").c_str(),0);
-  chain_2017_SingleElectron->Add((path+"Fall17_102X_Data/SingleElectron_Run2017F-Nano25Oct2019-v1_2017_Fall17_102X.root").c_str(),0);
-  Hist_Maker Hist_2017_SingleElectron(outFile,"SingleElectron_2017",chain_2017_SingleElectron);
-  Hist_2017_SingleElectron.Set_Cut(cut);
-  Hist_2017_SingleElectron.Analyze();
-  delete chain_2017_SingleElectron;
-
-  std::cout << "Processing SingleMuon 2017" << endl;
-  TChain* chain_2017_SingleMuon = new TChain("KUAnalysis");
-  chain_2017_SingleMuon->Add((path+"Fall17_102X_Data/SingleMuon_Run2017B-Nano25Oct2019-v1_2017_Fall17_102X.root").c_str(),0);
-  chain_2017_SingleMuon->Add((path+"Fall17_102X_Data/SingleMuon_Run2017C-Nano25Oct2019-v1_2017_Fall17_102X.root").c_str(),0);
-  chain_2017_SingleMuon->Add((path+"Fall17_102X_Data/SingleMuon_Run2017D-Nano25Oct2019-v1_2017_Fall17_102X.root").c_str(),0);
-  chain_2017_SingleMuon->Add((path+"Fall17_102X_Data/SingleMuon_Run2017E-Nano25Oct2019-v1_2017_Fall17_102X.root").c_str(),0);
-  chain_2017_SingleMuon->Add((path+"Fall17_102X_Data/SingleMuon_Run2017F-Nano25Oct2019-v1_2017_Fall17_102X.root").c_str(),0);
-  Hist_Maker Hist_2017_SingleMuon(outFile,"SingleMuon_2017",chain_2017_SingleMuon);
-  Hist_2017_SingleMuon.Set_Cut(cut);
-  Hist_2017_SingleMuon.Analyze();
-  delete chain_2017_SingleMuon;
-
-/*
-  std::cout << "Processing T2-4bd 500 490 2017" << endl;
-  TChain* chain_2017_T2_4bd_500_490 = new TChain("SMS_500_490");
-  chain_2017_T2_4bd_500_490->Add((path+"Fall17_102X_SMS/SMS-T2-4bd_genMET-80_mStop-500_mLSP-490_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root").c_str(),0);
-  Hist_Maker Hist_2017_T2_4bd_500_490(outFile,"T2_4bd_500_490_2017",chain_2017_T2_4bd_500_490);
-  Hist_2017_T2_4bd_500_490.Set_Cut(cut);
-  Hist_2017_T2_4bd_500_490.Analyze();
-  delete chain_2017_T2_4bd_500_490;
-
-  std::cout << "Processing T2-4bd 500 420 2017" << endl;
-  TChain* chain_2017_T2_4bd_500_420 = new TChain("SMS_500_420");
-  chain_2017_T2_4bd_500_420->Add((path+"Fall17_102X_SMS/SMS-T2-4bd_genMET-80_mStop-500_mLSP-420_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root").c_str(),0);
-  Hist_Maker Hist_2017_T2_4bd_500_420(outFile,"T2_4bd_500_420_2017",chain_2017_T2_4bd_500_420);
-  Hist_2017_T2_4bd_500_420.Set_Cut(cut);
-  Hist_2017_T2_4bd_500_420.Analyze();
-  delete chain_2017_T2_4bd_500_420;
-*/
-/*
-  std::cout << "Processing TChiWZ 2017" << endl;
-  TChain* chain_2017_TChiWZ = new TChain("KUAnalysis");
-  chain_2017_TChiWZ->Add((path+"Fall17_102X_SMS/SMS-TChiWZ_ZToLL_mZMin-0p1_TuneCP2_13TeV-madgraphMLM-pythia8_Fall17_102X.root").c_str(),0);
-  Hist_Maker Hist_2017_TChiWZ(outFile,"TChiWZ_2017",chain_2017_TChiWZ);
-  Hist_2017_TChiWZ.Set_Cut(cut);
-  Hist_2017_TChiWZ.Analyze();
-
+ /*
   std::cout << "Processing WWTo2L2Nu 2017" << endl;
   TChain* chain_2017_WWTo2L2Nu = new TChain("KUAnalysis");
   chain_2017_WWTo2L2Nu->Add((path+"Fall17_102X/WWTo2L2Nu_NNPDF31_TuneCP5_13TeV-powheg-pythia8_Fall17_102X.root").c_str(),0);
@@ -104,43 +100,55 @@ void Eff_Nano_Hist(string outFile = "output_test.root", string cut = ""){
   Hist_2017_WWTo2L2Nu.Set_Cut(cut);
   Hist_2017_WWTo2L2Nu.Analyze();
   delete chain_2017_WWTo2L2Nu;
+*/ 
 
-  std::cout << "Processing ZZTo2L2Nu 2017" << endl;
-  TChain* chain_2017_ZZTo2L2Nu = new TChain("KUAnalysis");
-  chain_2017_ZZTo2L2Nu->Add((path+"Fall17_102X/ZZTo2L2Nu_13TeV_powheg_pythia8_Fall17_102X.root").c_str(),0);
-  Hist_Maker Hist_2017_ZZTo2L2Nu(outFile,"ZZTo2L2Nu_2017",chain_2017_ZZTo2L2Nu);
-  Hist_2017_ZZTo2L2Nu.Set_Cut(cut);
-  Hist_2017_ZZTo2L2Nu.Analyze();
-
-  //DY
-  std::cout << "Processing DY 2017" << endl;
-  TChain* chain_2017_DY = new TChain("KUAnalysis");
-  chain_2017_DY->Add((path+"Fall17_102X/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8_Fall17_102X.root").c_str(),0);
-  Hist_Maker Hist_2017_DY(outFile,"DY_2017",chain_2017_DY);
-  Hist_2017_DY.Set_Cut(cut);
-  Hist_2017_DY.Analyze();
-*/
-
-/*
  //2018
+ /*
   //WJets
   std::cout << "Processing WJets 2018" << endl;
   TChain* chain_2018_WJets = new TChain("KUAnalysis");
-  chain_2018_WJets->Add((path+"Autumn18_102X/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8_Autumn18_102X/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8_Autumn18_102X.root").c_str(),0);
+  chain_2018_WJets->Add((path+"Autumn18_102X/WJetsToLNu_HT-70To100_TuneCP5_13TeV-madgraphMLM-pythia8_Autumn18_102X.root").c_str(),0);
+  chain_2018_WJets->Add((path+"Autumn18_102X/WJetsToLNu_HT-100To200_TuneCP5_13TeV-madgraphMLM-pythia8_Autumn18_102X.root").c_str(),0);
+  chain_2018_WJets->Add((path+"Autumn18_102X/WJetsToLNu_HT-200To400_TuneCP5_13TeV-madgraphMLM-pythia8_Autumn18_102X.root").c_str(),0);
+  chain_2018_WJets->Add((path+"Autumn18_102X/WJetsToLNu_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8_Autumn18_102X.root").c_str(),0);
+  chain_2018_WJets->Add((path+"Autumn18_102X/WJetsToLNu_HT-600To800_TuneCP5_13TeV-madgraphMLM-pythia8_Autumn18_102X.root").c_str(),0);
+  chain_2018_WJets->Add((path+"Autumn18_102X/WJetsToLNu_HT-800To1200_TuneCP5_13TeV-madgraphMLM-pythia8_Autumn18_102X.root").c_str(),0);
+  chain_2018_WJets->Add((path+"Autumn18_102X/WJetsToLNu_HT-1200To2500_TuneCP5_13TeV-madgraphMLM-pythia8_Autumn18_102X.root").c_str(),0);
   Hist_Maker Hist_2018_WJets(outFile,"WJets_2018",chain_2018_WJets);
+  Hist_2018_WJets.Set_Cut(cut);
   Hist_2018_WJets.Analyze();
+  delete chain_2018_WJets;
+
+  //TTJets
+  std::cout << "Processing TTJets 2018" << endl;
+  TChain* chain_2018_TTJets = new TChain("KUAnalysis");
+  chain_2018_TTJets->Add((path+"Autumn18_102X/TTJets_SingleLeptFromTbar_TuneCP5_13TeV-madgraphMLM-pythia8_Autumn18_102X.root").c_str(),0);
+  chain_2018_TTJets->Add((path+"Autumn18_102X/TTJets_SingleLeptFromT_TuneCP5_13TeV-madgraphMLM-pythia8_Autumn18_102X.root").c_str(),0);
+  chain_2018_TTJets->Add((path+"Autumn18_102X/TTJets_DiLept_TuneCP5_13TeV-madgraphMLM-pythia8_Autumn18_102X.root").c_str(),0);
+  Hist_Maker Hist_2018_TTJets(outFile,"TTJets_2018",chain_2018_TTJets);
+  Hist_2018_TTJets.Set_Cut(cut);
+  Hist_2018_TTJets.Analyze();
+  delete chain_2018_TTJets;
+
+  std::cout << "Processing WWTo2L2Nu 2018" << endl;
+  TChain* chain_2018_WWTo2L2Nu = new TChain("KUAnalysis");
+  chain_2018_WWTo2L2Nu->Add((path+"Autumn18_102X/WWTo2L2Nu_NNPDF31_TuneCP5_13TeV-powheg-pythia8_Autumn18_102X.root").c_str(),0);
+  Hist_Maker Hist_2018_WWTo2L2Nu(outFile,"WWTo2L2Nu_2018",chain_2018_WWTo2L2Nu);
+  Hist_2018_WWTo2L2Nu.Set_Cut(cut);
+  Hist_2018_WWTo2L2Nu.Analyze();
+  delete chain_2018_WWTo2L2Nu;
 */
 }
 
 int main(int argc, char* argv[])
 {
- string outFile = "Eff_output_";
+ string outFile = "Hist_output_";
  string cut = "";
 
  if(argc < 1)
  {
   cout << "ERROR: Need to specify cut" << endl;
-  cout << "Example: ./run_Eff_Nano_Hist -cut=NoCuts" << endl;
+  cout << "Example: ./run_Hist_Maker_Hist -cut=NoCuts" << endl;
   return 1;
  }
 
@@ -159,6 +167,6 @@ int main(int argc, char* argv[])
  }
  outFile += cut+".root";
 
- Eff_Nano_Hist(outFile,cut);
+ Hist_Maker_Hist(outFile,cut);
  return 0;
 }

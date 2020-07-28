@@ -1085,8 +1085,8 @@ vector<HistClass*> Setup_Hists(TTree* tree){
  Classes.push_back(new dphiCMI_v_PTCM_Hist);
 
 //gen hists
-// Classes.push_back(new genmet_Hist);
-// Classes.push_back(new genmet_Phi_Hist);
+ Classes.push_back(new genmet_Hist);
+ Classes.push_back(new genmet_Phi_Hist);
  //Classes.push_back(new gendphiMET_lep_Hist);
  //Classes.push_back(new genele_PT_Hist);
  //Classes.push_back(new genmu_PT_Hist);
