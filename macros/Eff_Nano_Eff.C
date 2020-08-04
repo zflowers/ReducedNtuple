@@ -529,7 +529,7 @@ int main(int argc, char* argv[])
  if(argc < 2)
  {
   cout << "ERROR: Need to specify x and cut" << endl;
-  cout << "Example: ./run_Eff_Nano_Eff -x=MET -cut=NoCuts" << endl;
+  cout << "Example: ./run_Eff_Nano_Eff -x=MET -cut=PreSelection" << endl;
   return 1;
  }
 

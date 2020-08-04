@@ -28,7 +28,7 @@ void run_Eff_Nano_Hist()
 
  vector<string> cut;
 
- cut.push_back("NoCuts");
+ cut.push_back("PreSelection");
  //cut.push_back("PTISRG200");
  //cut.push_back("PTISRG200_EventFilterE0");
  cut.push_back("NeleBronzeG0");

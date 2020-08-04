@@ -148,7 +148,7 @@ int main(int argc, char* argv[])
  if(argc < 1)
  {
   cout << "ERROR: Need to specify cut" << endl;
-  cout << "Example: ./run_Hist_Maker_Hist -cut=NoCuts" << endl;
+  cout << "Example: ./run_Hist_Maker_Hist -cut=PreSelection" << endl;
   return 1;
  }
 

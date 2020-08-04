@@ -785,7 +785,7 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
   MET_cut = Get_Cut(jentry,"MET",current_cut);
  }
 
- if(current_cut.find("NoCuts") == 0)
+ if(current_cut.find("PreSelection") == 0)
  {
   current_cut = "";
   if(PTISR_cut && RISR_cut && PTCM_cut && dphiCMI_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && NmuBronze_cut && NeleBronze_cut && NlepBronze_cut && NmuSilver_cut && NeleSilver_cut && NlepSilver_cut && NmuGold_cut && NeleGold_cut && NlepGold_cut && Njet_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut && EventFilter_cut)

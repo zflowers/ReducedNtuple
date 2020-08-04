@@ -13,4 +13,4 @@ After jobs finish do
 
 For local tests:
 
-./run_Eff_Nano_Eff.x -x=MET -cut=NoCuts -oFile=Test
+./run_Eff_Nano_Eff.x -x=MET -cut=PreSelection -oFile=Test
