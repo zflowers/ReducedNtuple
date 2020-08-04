@@ -1,7 +1,7 @@
 #To run: condor_submit scripts/CONDOR_Plot.sh
 
 universe = vanilla
-executable = /home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/run_Eff_Nano_Hist.x
+executable = /home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/Eff_Nano_Hist.x
 notify_user = z374f439@ku.edu
 notification = Complete
 getenv = True

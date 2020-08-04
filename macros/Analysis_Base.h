@@ -700,8 +700,8 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
  bool METHTtrigger_cut = true;
  bool EventFilter_cut = true;
 
- if(m_Tag.find("SingleElectron")) current_cut += "_NeleBronzeG0";
- if(m_Tag.find("SingleMuon")) current_cut += "_NmuBronzeG0";
+ if(m_Tag.find("SingleElectron") != std::string::npos) current_cut += "NeleBronzeG0";
+ if(m_Tag.find("SingleMuon") != std::string::npos) current_cut += "NmuBronzeG0";
 
  string PTISR_str = "PTISRG200";
  PTISR_cut = Get_Cut(jentry,"PTISR",PTISR_str);

@@ -49,42 +49,10 @@ void Plotter_Eff_Nano(vector<string> inFile, vector<string> cut){
  vector<string> TTJets_years = {"TTJets_2016","TTJets_2017","TTJets_2018"};
  vector<string> WWTo2L2Nu_years = {"WWTo2L2Nu_2016","WWTo2L2Nu_2017","WWTo2L2Nu_2018"};
  vector<string> ZJetsToNuNu_years = {"ZJetsToNuNu_2016","ZJetsToNuNu_2017","ZJetsToNuNu_2018"};
- vector<string> WJets = {"WJets_2017", "WJets_2017_Old"};
- vector<string> WJets_Old = {"WJets_2017_Old"};
- vector<string> WJets_HT = {"WJets70To100_2017", "WJets100To200_2017", "WJets200To400_2017", "WJets400To600_2017", "WJets600To800_2017", "WJets800To1200_2017", "WJets1200To2500_2017", "WJets2500ToInf_2017"};
- //vector<string> tags_2018 = {"WJets_2018", "TTJets_2018"};//, "DY_2018", "TChiWZ_2016", "Stop_2016"};
+ vector<string> ZJets_HT = {"ZJets100To200_2017", "ZJets200To400_2017", "ZJets400To600_2017", "ZJets600To800_2017", "ZJets800To1200_2017", "ZJets1200To2500_2017", "ZJets2500ToInf_2017"};
+
  vector<int> colors = {kCyan, kMagenta, kYellow, kViolet+2, kAzure+7, kPink, kGreen, kGray};
-/*
- vector<string> Triggers_90{
-   "HLT_PFMET90_PFMHT90_IDTight",
- };
- vector<string> Triggers_100{
-   "HLT_PFMET100_PFMHT100_IDTight_PFHT60",
-   "HLT_PFMETTypeOne100_PFMHT100_IDTight_PFHT60",
-   "HLT_PFMETNoMu100_PFMHTNoMu100_IDTight_PFHT60",
- };
- vector<string> Triggers_100_TypeOne{
-   "HLT_PFMETTypeOne100_PFMHT100_IDTight_PFHT60",
- };
- vector<string> Triggers_100_NoMu{
-   "HLT_PFMETNoMu100_PFMHTNoMu100_IDTight_PFHT60",
- };
- vector<string> Triggers_110{
-   "HLT_PFMET110_PFMHT110_IDTight",
- };
- vector<string> Triggers_120{
-   "HLT_PFMET120_PFMHT120_IDTight",
- };
- vector<string> Triggers_130{
-   "HLT_PFMET130_PFMHT130_IDTight",
- };
- vector<string> Triggers_140{
-   "HLT_PFMET140_PFMHT140_IDTight",
- };
- vector<string> Triggers_DoubleMu3_DZ_PFMET50_PFMHT60_2017_2018{
-   "HLT_DoubleMu3_DZ_PFMET50_PFMHT60",
- };
-*/
+
  vector<string> METtrigger{ "METtrigger" };
  vector<string> METHTtrigger{ "METHTtrigger" };
  vector<string> METORtrigger{ "METORtrigger" };
@@ -121,8 +89,7 @@ void Plotter_Eff_Nano(vector<string> inFile, vector<string> cut){
   Get_Plot(WWTo2L2Nu_years,METtrigger,colors,inFile[i],METtrigger[0]+"WWTo2L2Nu"+"_"+cut[i],"Trigger");
   Get_Plot(ZJetsToNuNu_years,METtrigger,colors,inFile[i],METtrigger[0]+"ZJetsToNuNu"+"_"+cut[i],"Trigger");
 
-  Get_Plot(WJets,METtrigger,colors,inFile[i],METtrigger[0]+"WJets_Old_"+cut[i],"Trigger");
-  Get_Plot(WJets_HT,METtrigger,colors,inFile[i],METtrigger[0]+"WJets_HT_"+cut[i],"Trigger");
+  Get_Plot(ZJets_HT,METtrigger,colors,inFile[i],METtrigger[0]+"ZJets_HT_"+cut[i],"Trigger");
  }
 
  Get_Plot(tags_SingleElectron_2016,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_SingleElectron_2016[0],"FinalState");
@@ -134,7 +101,6 @@ void Plotter_Eff_Nano(vector<string> inFile, vector<string> cut){
 
  Get_Plot(tags_2017a,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017a[0],"FinalState");
  Get_Plot(tags_2017c,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017c[0],"FinalState");
- Get_Plot(WJets_Old,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+WJets_Old[0],"FinalState");
 
 /*
  //combining files
