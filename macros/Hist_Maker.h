@@ -323,18 +323,22 @@ void dphiMET_lep_Hist::fill_hist(Long64_t jentry){
  selector.b_ID_lep->GetEntry(jentry);
  selector.b_MiniIso_lep->GetEntry(jentry);
  selector.b_SIP3D_lep->GetEntry(jentry);
+ selector.b_Nlep->GetEntry(jentry);
  selector.b_weight->GetEntry(jentry);
 //
 //Option B: Load all branches:
 //
  m_Tree->GetEntry(jentry);
 //
- TLorentzVector lep;
- TVector3 MET;
- lep.SetPtEtaPhiM(selector.PT_lep->at(0),selector.Eta_lep->at(0),selector.Phi_lep->at(0),selector.M_lep->at(0));
- MET.SetPtEtaPhi(selector.MET,0.,selector.MET_phi);
+ if(selector.Nlep > 0)
+ {
+  TLorentzVector lep;
+  TVector3 MET;
+  lep.SetPtEtaPhiM(selector.PT_lep->at(0),selector.Eta_lep->at(0),selector.Phi_lep->at(0),selector.M_lep->at(0));
+  MET.SetPtEtaPhi(selector.MET,0.,selector.MET_phi);
 
- hist1d->Fill(MET.DeltaPhi(lep.Vect()),selector.weight);
+  hist1d->Fill(MET.DeltaPhi(lep.Vect()),selector.weight);
+ }
 }
 
 class dphiMET_ele_Hist:public HistClass, public Hist_Maker{
@@ -958,13 +962,15 @@ void gendphiMET_lep_Hist::fill_hist(Long64_t jentry){
  m_Tree->GetEntry(jentry);
 //
  selector.b_genNlep->GetEntry(jentry);
- if(selector.genNlep == 0) return;
- TLorentzVector genlep;
- TVector3 genMET;
- genlep.SetPtEtaPhiM(selector.genPT_lep->at(0),selector.genEta_lep->at(0),selector.genPhi_lep->at(0),selector.genM_lep->at(0));
- genMET.SetPtEtaPhi(selector.genMET,0.,selector.genMET_phi);
+ if(selector.genNlep > 0)
+ {
+  TLorentzVector genlep;
+  TVector3 genMET;
+  genlep.SetPtEtaPhiM(selector.genPT_lep->at(0),selector.genEta_lep->at(0),selector.genPhi_lep->at(0),selector.genM_lep->at(0));
+  genMET.SetPtEtaPhi(selector.genMET,0.,selector.genMET_phi);
 
- hist1d->Fill(genMET.DeltaPhi(genlep.Vect()),selector.weight);
+  hist1d->Fill(genMET.DeltaPhi(genlep.Vect()),selector.weight);
+ }
 }
 
 class gendphiMET_ele_Hist:public HistClass, public Hist_Maker{
@@ -1047,8 +1053,6 @@ void gendphiMET_mu_Hist::fill_hist(Long64_t jentry){
 //
  m_Tree->GetEntry(jentry);
 //
- selector.b_genNlep->GetEntry(jentry);
- if(selector.genNlep == 0) return;
  TLorentzVector genlep;
  TVector3 genMET;
  genMET.SetPtEtaPhi(selector.genMET,0.,selector.genMET_phi);
@@ -1061,6 +1065,7 @@ void gendphiMET_mu_Hist::fill_hist(Long64_t jentry){
   }
   break;
  }
+ 
 }
 
 vector<HistClass*> Setup_Hists(TTree* tree){
@@ -1068,32 +1073,32 @@ vector<HistClass*> Setup_Hists(TTree* tree){
  Classes.push_back(new met_Hist);
  Classes.push_back(new met_Phi_Hist);
  Classes.push_back(new PTCM_Hist);
- //Classes.push_back(new dphiMET_lep_Hist);
- //Classes.push_back(new ele_PT_Hist);
- //Classes.push_back(new mu_PT_Hist);
- //Classes.push_back(new ele_Phi_Hist);
- //Classes.push_back(new mu_Phi_Hist);
- //Classes.push_back(new dphiMET_ele_Hist);
- //Classes.push_back(new dphiMET_mu_Hist);
+ Classes.push_back(new dphiMET_lep_Hist);
+ Classes.push_back(new ele_PT_Hist);
+ Classes.push_back(new mu_PT_Hist);
+ Classes.push_back(new ele_Phi_Hist);
+ Classes.push_back(new mu_Phi_Hist);
+ Classes.push_back(new dphiMET_ele_Hist);
+ Classes.push_back(new dphiMET_mu_Hist);
  Classes.push_back(new dphiCMI_Hist);
  //Classes.push_back(new jet_PT_Hist);
  //Classes.push_back(new jet_Phi_Hist);
- //Classes.push_back(new ele_PT_proj_MET_Hist);
- //Classes.push_back(new ele_PT_proj_METperp_Hist);
- //Classes.push_back(new mu_PT_proj_MET_Hist);
- //Classes.push_back(new mu_PT_proj_METperp_Hist);
+ Classes.push_back(new ele_PT_proj_MET_Hist);
+ Classes.push_back(new ele_PT_proj_METperp_Hist);
+ Classes.push_back(new mu_PT_proj_MET_Hist);
+ Classes.push_back(new mu_PT_proj_METperp_Hist);
  Classes.push_back(new dphiCMI_v_PTCM_Hist);
 
 //gen hists
  Classes.push_back(new genmet_Hist);
  Classes.push_back(new genmet_Phi_Hist);
  //Classes.push_back(new gendphiMET_lep_Hist);
- //Classes.push_back(new genele_PT_Hist);
- //Classes.push_back(new genmu_PT_Hist);
- //Classes.push_back(new genele_Phi_Hist);
- //Classes.push_back(new genmu_Phi_Hist);
- //Classes.push_back(new genele_Eta_Hist);
- //Classes.push_back(new genmu_Eta_Hist);
+ Classes.push_back(new genele_PT_Hist);
+ Classes.push_back(new genmu_PT_Hist);
+ Classes.push_back(new genele_Phi_Hist);
+ Classes.push_back(new genmu_Phi_Hist);
+ Classes.push_back(new genele_Eta_Hist);
+ Classes.push_back(new genmu_Eta_Hist);
  //Classes.push_back(new gendphiMET_ele_Hist);
  //Classes.push_back(new gendphiMET_mu_Hist);
  for( auto histclass : Classes ){ histclass->init_hist(tree); }

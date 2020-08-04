@@ -441,6 +441,7 @@ KUAnalysis::KUAnalysis(TTree *tree) : fChain(0)
 {
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
+/*
    if (tree == 0) {
       TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/home/t3-ku/z374f439/../crogan/NTUPLES/NANO/NEW_12_05_20/Fall17_102X/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root");
       if (!f || !f->IsOpen()) {
@@ -449,6 +450,7 @@ KUAnalysis::KUAnalysis(TTree *tree) : fChain(0)
       f->GetObject("KUAnalysis",tree);
 
    }
+*/
    Init(tree);
 }
 

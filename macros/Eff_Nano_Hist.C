@@ -58,7 +58,6 @@ void Hist_Maker_Hist(string outFile = "output_test.root", string cut = ""){
  
  //2017
   //WJets
-  
   std::cout << "Processing WJets 2017" << endl;
   TChain* chain_2017_WJets = new TChain("KUAnalysis");
   chain_2017_WJets->Add((path+"Fall17_102X/WJetsToLNu_HT-70To100_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root").c_str(),0);
@@ -68,6 +67,7 @@ void Hist_Maker_Hist(string outFile = "output_test.root", string cut = ""){
   chain_2017_WJets->Add((path+"Fall17_102X/WJetsToLNu_HT-600To800_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root").c_str(),0);
   chain_2017_WJets->Add((path+"Fall17_102X/WJetsToLNu_HT-800To1200_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root").c_str(),0);
   chain_2017_WJets->Add((path+"Fall17_102X/WJetsToLNu_HT-1200To2500_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root").c_str(),0);
+  chain_2017_WJets->Add((path+"Fall17_102X/WJetsToLNu_HT-2500ToInf_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root").c_str(),0);
   Hist_Maker Hist_2017_WJets(outFile,"WJets_2017",chain_2017_WJets);
   Hist_2017_WJets.Set_Cut(cut);
   Hist_2017_WJets.Analyze();

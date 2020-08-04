@@ -12,103 +12,142 @@
 #include <TLatex.h>
 #include <TColor.h>
 #include <TStyle.h>
+#include <TLine.h>
 #include <TEfficiency.h>
 
 using namespace std;
 
-void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, string outFile, string name, string option);
-void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, vector<string> inFile, vector<string> cut, string name, string option);
-TMultiGraph* get_mg(string fname, vector<string> tags, vector<string> Triggers, vector<int> colors, TLegend*& leg, TCanvas*& can, string option);
-TMultiGraph* get_mg(vector<string> cut, vector<string> tags, vector<string> Triggers, vector<string> fname, vector<int> colors, TLegend*& leg, TCanvas*& can, string option);
+bool invert_colors = true;
+
+double Get_ScaleFactor(string bkg_tag, string data_tag, string Trigger, vector<int> colors, string outFile, string name, string option);
+TGraphAsymmErrors* get_gr(string fname, string tag, string Trigger, int color, TLegend*& leg, TCanvas*& can);
+TGraphAsymmErrors* TGAE_Ratio(TGraphAsymmErrors* gr_bkg, TGraphAsymmErrors* gr_data);
 
 void ScaleFactors(vector<string> inFile, vector<string> cut){
  //string inFile ="output_quick.root";
- //vector<string> tags_2016 = {"WJets_2016", "TTJets_2016"};//, "DY_2016", "TChiWZ_2016", "Stop_2016"};
- vector<string> tags_bkg_2016 = {"WWTo2L2Nu_2016", "WJets_2016", "TTJets_2016"};
- vector<string> tags_bkg_2017 = {"WJets_2017", "TTJets_2017", "WWTo2L2Nu_2017"};//,"T2_4bd_500_420_2017", "T2_4bd_500_490_2017"};
- vector<string> tags_bkg_2018 = {"WWTo2L2Nu_2018", "WJets_2018", "TTJets_2018"};
- vector<string> tags_data_2016 = {"SingleElectron_2016", "SingleMuon_2016"};
- vector<string> tags_data_2017 = {"SingleElectron_2017", "SingleMuon_2017"};
- vector<string> tags_data_2018 = {"SingleElectron_2018", "SingleMuon_2018"};
- vector<string> tags_SingleElectron_2016 = {"SingleElectron_2016"};
- vector<string> tags_SingleElectron_2017 = {"SingleElectron_2017"};
- vector<string> tags_SingleElectron_2018 = {"SingleElectron_2018"};
- vector<string> tags_SingleMuon_2016 = {"SingleMuon_2016"};
- vector<string> tags_SingleMuon_2017 = {"SingleMuon_2017"};
- vector<string> tags_SingleMuon_2018 = {"SingleMuon_2018"};
- vector<string> tags_2017a = {"TTJets_2017"};
- vector<string> tags_2017b = {"WWTo2L2Nu_2017"};
- vector<string> tags_2017c = {"WJets_2017"};
- vector<string> tags_2017d = {"T2_4bd_500_490_2017"};
- vector<string> tags_2017e = {"T2_4bd_500_420_2017"};
- vector<string> SingleMuon = {"SingleMuon_2016","SingleMuon_2017","SingleMuon_2018"};
- vector<string> SingleElectron = {"SingleElectron_2016","SingleElectron_2017","SingleElectron_2018"};
- vector<string> WJets = {"WJets_2016","WJets_2017","WJets_2018"};
- vector<string> TTJets = {"TTJets_2016","TTJets_2017","TTJets_2018"};
- vector<string> WWTo2L2Nu = {"WWTo2L2Nu_2016","WWTo2L2Nu_2017","WWTo2L2Nu_2018"};
- //vector<string> tags_2018 = {"WJets_2018", "TTJets_2018"};//, "DY_2018", "TChiWZ_2016", "Stop_2016"};
  
  vector<int> colors = {kCyan, kMagenta, kYellow, kViolet+2, kAzure+7, kPink, kGreen, kGray};
- vector<string> METtrigger{ "METtrigger" };
- vector<string> METHTtrigger{ "METHTtrigger" };
- vector<string> METORtrigger{ "METORtrigger" };
- vector<string> METAlltrigger { "METtrigger", "METORtrigger" };
- vector<string> SuperOR { "SuperOR" };
 
+ double scale_Ratio_2016 = Get_ScaleFactor("Bkg_2016", "Data_2016", "METtrigger", colors, inFile[0], "METtrigger"+cut[0], "Ratio");
+ //double scale_Fit_2016 = Get_ScaleFactor("Bkg_2016", "Data_2016", "METtrigger", colors, inFile[0], "METtrigger"+cut[0], "Fit");
+ double scale_Ratio_2017 = Get_ScaleFactor("Bkg_2017", "Data_2017", "METtrigger", colors, inFile[0], "METtrigger"+cut[0], "Ratio");
+ //double scale_Fit_2017 = Get_ScaleFactor("Bkg_2017", "Data_2017", "METtrigger", colors, inFile[0], "METtrigger"+cut[0], "Fit");
+ double scale_Ratio_2018 = Get_ScaleFactor("Bkg_2018", "Data_2018", "METtrigger", colors, inFile[0], "METtrigger"+cut[0], "Ratio");
+ //double scale_Fit_2018 = Get_ScaleFactor("Bkg_2018", "Data_2018", "METtrigger", colors, inFile[0], "METtrigger"+cut[0], "Fit");
+ if(inFile.size() > 1)
+ {
+ double scale_Ratio_2016 = Get_ScaleFactor("Bkg_2016", "Data_2016", "METtrigger", colors, inFile[1], "METtrigger"+cut[0], "Ratio");
+ //double scale_Fit_2016 = Get_ScaleFactor("Bkg_2016", "Data_2016", "METtrigger", colors, inFile[1], "METtrigger"+cut[0], "Fit");
+ double scale_Ratio_2017 = Get_ScaleFactor("Bkg_2017", "Data_2017", "METtrigger", colors, inFile[1], "METtrigger"+cut[0], "Ratio");
+ //double scale_Fit_2017 = Get_ScaleFactor("Bkg_2017", "Data_2017", "METtrigger", colors, inFile[1], "METtrigger"+cut[0], "Fit");
+ double scale_Ratio_2018 = Get_ScaleFactor("Bkg_2018", "Data_2018", "METtrigger", colors, inFile[1], "METtrigger"+cut[0], "Ratio");
+ //double scale_Fit_2018 = Get_ScaleFactor("Bkg_2018", "Data_2018", "METtrigger", colors, inFile[1], "METtrigger"+cut[0], "Fit");
+ }
+}
 
- double scale = Get_ScaleFactor(tags_bkg_2017, tags_data_2017);
+void Format_Graph(TMultiGraph*& gr)
+{
+ gr->GetXaxis()->CenterTitle(true);
+ gr->GetXaxis()->SetTitleFont(132);
+ gr->GetXaxis()->SetTitleSize(0.06);
+ gr->GetXaxis()->SetTitleOffset(1.06);
+ gr->GetXaxis()->SetLabelFont(132);
+ gr->GetXaxis()->SetLabelSize(0.05);
+ //gr->GetXaxis()->SetLabelSize(0.00000001);
+ gr->GetYaxis()->CenterTitle(true);
+ gr->GetYaxis()->SetTitleFont(132);
+ gr->GetYaxis()->SetTitleSize(0.06);
+ gr->GetYaxis()->SetTitleOffset(.6);
+ gr->GetYaxis()->SetLabelFont(132);
+ gr->GetYaxis()->SetLabelSize(0.05);
 
+ if(invert_colors)
+ {
+  gr->GetXaxis()->SetAxisColor(kWhite);
+  gr->GetYaxis()->SetAxisColor(kWhite);
+  gr->GetXaxis()->SetTitleColor(kWhite);
+  gr->GetYaxis()->SetTitleColor(kWhite);
+  gr->GetXaxis()->SetLabelColor(kWhite);
+  gr->GetYaxis()->SetLabelColor(kWhite);
+ }
+}
+
+void Format_Graph(TGraphAsymmErrors*& gr)
+{
+ gr->GetXaxis()->CenterTitle(true);
+ gr->GetXaxis()->SetTitleFont(132);
+ gr->GetXaxis()->SetTitleSize(0.12);
+ gr->GetXaxis()->SetTitleOffset(.7);
+ gr->GetXaxis()->SetLabelFont(132);
+ gr->GetXaxis()->SetLabelSize(0.1);
+ gr->GetYaxis()->CenterTitle(true);
+ gr->GetYaxis()->SetTitleFont(132);
+ gr->GetYaxis()->SetTitleSize(0.12);
+ gr->GetYaxis()->SetTitleOffset(.3);
+ gr->GetYaxis()->SetLabelFont(132);
+ gr->GetYaxis()->SetLabelSize(0.1);
+
+ if(invert_colors)
+ {
+  gr->GetXaxis()->SetAxisColor(kWhite);
+  gr->GetYaxis()->SetAxisColor(kWhite);
+  gr->GetXaxis()->SetTitleColor(kWhite);
+  gr->GetYaxis()->SetTitleColor(kWhite);
+  gr->GetXaxis()->SetLabelColor(kWhite);
+  gr->GetYaxis()->SetLabelColor(kWhite);
+ }
 }
 
 //get all Eff on one plot
-void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, string outFile, string name, string option)
+double Get_ScaleFactor(string bkg_tag, string data_tag, string Trigger, vector<int> colors, string outFile, string name, string option)
 {
+ double scale = 0;
  if(invert_colors)
  {
   gStyle->SetFrameFillColor(kBlack);
   gStyle->SetFrameLineColor(kWhite);
  }
 
- TLegend* leg = new TLegend(0.5,0.2,0.95,0.5); 
+ TLegend* leg = new TLegend(0.55,0.3,0.85,0.6); 
  leg->SetTextFont(132);
  leg->SetTextSize(0.045);
  
  TLatex l;
- TCanvas* can = new TCanvas((name).c_str(),"",600.,500);
- can->SetLeftMargin(0.13);
- can->SetRightMargin(0.04);
- can->SetBottomMargin(0.15);
- can->SetTopMargin(0.085);
+ TCanvas* can = new TCanvas((name).c_str(),"",864.,468.);
  can->SetGridx();
  can->SetGridy();
  can->Draw();
  can->cd();
- TMultiGraph* mg = get_mg(outFile,tags,Triggers,colors,leg,can,option);
+ if(invert_colors) can->SetFillColor(kBlack);
+ can->Modified();
+ can->Update();
+ TGraphAsymmErrors* gr_bkg = get_gr(outFile,bkg_tag,Trigger,colors[0],leg,can);
+ TGraphAsymmErrors* gr_data = get_gr(outFile,data_tag,Trigger,colors[1],leg,can);
  can->Clear();
+ Format_Graph(gr_bkg);
+ Format_Graph(gr_data);
+ can->cd();
 
+ TPad* pad_gr = new TPad("pad_gr","pad_gr",0,.3,1.,1.);
+ pad_gr->SetGridx();
+ pad_gr->SetGridy();
+ pad_gr->Draw();
+ pad_gr->cd();
+ can->Update();
+
+ TMultiGraph* mg = new TMultiGraph();
+ mg->Add(gr_bkg);
+ mg->Add(gr_data);
  mg->Draw("AP"); 
- mg->GetXaxis()->CenterTitle(true);
- mg->GetXaxis()->SetTitleFont(132);
- mg->GetXaxis()->SetTitleSize(0.06);
- mg->GetXaxis()->SetTitleOffset(1.06);
- mg->GetXaxis()->SetLabelFont(132);
- mg->GetXaxis()->SetLabelSize(0.05);
- mg->GetYaxis()->CenterTitle(true);
- mg->GetYaxis()->SetTitleFont(132);
- mg->GetYaxis()->SetTitleSize(0.06);
- mg->GetYaxis()->SetTitleOffset(1.);
- mg->GetYaxis()->SetLabelFont(132);
- mg->GetYaxis()->SetLabelSize(0.05);
+ Format_Graph(mg);
+ pad_gr->Update();
+ pad_gr->Modified();
+ can->Update();
+ mg->GetYaxis()->SetTitle("Efficiency");
 
  if(invert_colors)
  {
-  mg->GetXaxis()->SetAxisColor(kWhite);
-  mg->GetYaxis()->SetAxisColor(kWhite);
-  mg->GetXaxis()->SetTitleColor(kWhite);
-  mg->GetYaxis()->SetTitleColor(kWhite);
-  mg->GetXaxis()->SetLabelColor(kWhite);
-  mg->GetYaxis()->SetLabelColor(kWhite);
-  can->SetFillColor(kBlack);
+  pad_gr->SetFillColor(kBlack);
   leg->SetTextColor(kWhite);
   leg->SetFillColor(kBlack);
   leg->SetLineColor(kBlack);
@@ -124,9 +163,54 @@ void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, 
  l.SetTextFont(42);
  l.DrawLatex(0.65,0.93,name.c_str());
  l.DrawLatex(0.13,0.93,"#bf{#it{CMS}} Internal 13 TeV Simulation");
+ pad_gr->Update();
+ can->Update();
+ can->cd();
+
+//This is where we evaluate scale factors (Ratio or Fit)
+ TPad *pad_res = new TPad("pad_res","pad_res",0,0.03,1,0.3);
+ pad_res->SetGridx(); 
+ pad_res->SetGridy();
+ pad_res->SetTopMargin(1.3);
+ pad_res->SetBottomMargin(0.2);
+ pad_res->Draw();
+ pad_res->cd();
+ pad_res->Update();
+ can->Update();
+ if(invert_colors) pad_res->SetFillColor(kBlack);
+ TGraphAsymmErrors* res_ratio = TGAE_Ratio(gr_bkg,gr_data);
+ if(res_ratio == NULL) cout << "Bin MisMatch between data and bkg!" << endl;
+ Format_Graph(res_ratio);
+ res_ratio->SetMarkerColor(colors[2]);
+ res_ratio->SetLineColor(colors[2]);
+ res_ratio->Draw("AP");
+ res_ratio->GetYaxis()->SetTitle("Data/Bkg");
+ res_ratio->GetXaxis()->SetTitle("MET");
+ pad_res->Modified();
+ pad_res->Update();
+ TLine* line = new TLine(res_ratio->GetXaxis()->GetXmin(),0.0,res_ratio->GetXaxis()->GetXmax(),0.0);
+ line->SetLineColor(kWhite);
+ line->SetLineStyle(1);
+ line->Draw("SAMES");
+ pad_res->Modified();
+ pad_res->Update();
  can->Modified();
  can->Update();
+/*
+ if(option.compare("Ratio") == 0)
+ {
 
+ }
+ else if(option.compare("Fit") == 0)
+ {
+
+ }
+*/
+
+
+
+
+//Save stuff
  TFile* output = TFile::Open(outFile.c_str(),"UPDATE");
  can->Write();
  output->Close();
@@ -134,184 +218,74 @@ void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, 
  delete mg;
  delete can;
  delete output;
+
+
+//Return scale factor
+return scale;
+
+
+
+
 }
 
-TMultiGraph* get_mg(string fname, vector<string> tags, vector<string> Triggers, vector<int> colors, TLegend*& leg, TCanvas*& can, string option)
+TGraphAsymmErrors* TGAE_Ratio(TGraphAsymmErrors* gr_bkg, TGraphAsymmErrors* gr_data)
 {
- TMultiGraph* mg = new TMultiGraph();
+ TGraphAsymmErrors* mg = NULL;
+ int N = gr_bkg->GetN();
+ if(N != gr_data->GetN()) return mg;
+ double xnew[N];
+ double ynew[N];
+ for(int i=0; i<N; i++)
+ {
+  double x_bkg,y_bkg,x_data,y_data;
+  gr_bkg->GetPoint(i,x_bkg,y_bkg);
+  gr_data->GetPoint(i,x_data,y_data);
+  if(x_bkg != x_data) return mg;
+  xnew[i]=x_bkg;
+  ynew[i]=y_data/y_bkg;
+ }
+ mg = new TGraphAsymmErrors(N,xnew,ynew);
+ for(int i=0; i<N; i++)
+ {
+  double bkg_ey_h = gr_bkg->GetErrorYhigh(i);
+  double bkg_ey_l = gr_bkg->GetErrorYlow(i);
+  double data_ey_h = gr_data->GetErrorYhigh(i);
+  double data_ey_l = gr_data->GetErrorYlow(i);
+  double x_bkg,y_bkg,x_data,y_data;
+  gr_bkg->GetPoint(i,x_bkg,y_bkg);
+  gr_data->GetPoint(i,x_data,y_data);
+  mg->SetPointError(i,gr_bkg->GetErrorXlow(i),gr_data->GetErrorXhigh(i),sqrt((data_ey_l*data_ey_l)*((y_data/y_bkg)*(y_data/y_bkg))/(y_data*y_data)+(bkg_ey_l*bkg_ey_l)*((y_data/y_bkg)*(y_data/y_bkg))/(y_bkg*y_bkg)),sqrt((data_ey_h*data_ey_h)*((y_data/y_bkg)*(y_data/y_bkg))/(y_data*y_data)+(bkg_ey_h*bkg_ey_h)*((y_data/y_bkg)*(y_data/y_bkg))/(y_bkg*y_bkg)));
+ }
+ return mg;
+}
+
+TGraphAsymmErrors* get_gr(string fname, string tag, string Trigger, int color, TLegend*& leg, TCanvas*& can)
+{
+ TGraphAsymmErrors* gr;
  TKey *key;
  TFile *f = TFile::Open(fname.c_str(), "READ");
  if(!f || f->IsZombie())
  {
   cout << "Unable to open " << fname << " for reading..." << endl;
-  return mg;
+  return gr;
  }
- for(int i = 0; i < int(tags.size()); i++)
- {
-  TDirectoryFile* folder = nullptr;
-  f->GetObject(tags[i].c_str(),folder);
-  folder->cd();
-  for(int j = 0; j < int(Triggers.size()); j++)
-  {
-   TEfficiency* eff = nullptr;
-   folder->GetObject(Triggers.at(j).c_str(),eff);
-   eff->Draw("AP");
-   can->Update();
-   TGraphAsymmErrors* gr = eff->GetPaintedGraph();
-   if((i+j) == 0)
-   {
-    string title = " ;";
-    mg->SetTitle((title+gr->GetXaxis()->GetTitle()+";"+gr->GetYaxis()->GetTitle()).c_str());
-   }
-   if(option.compare("Tag") == 0)
-   {
-    leg->AddEntry(gr,Triggers.at(j).c_str(),"PL");
-   }
-   else if(option.compare("Trigger") == 0)
-   {
-    leg->AddEntry(gr,tags.at(i).c_str(),"PL");
-   }
-   gr->SetMarkerStyle(20);
-   gr->SetMarkerColor(colors[i+j]);
-   gr->SetLineColor(colors[i+j]);
-   mg->Add(gr);
-  }
- }
+ TDirectoryFile* folder = nullptr;
+ f->GetObject(tag.c_str(),folder);
+ folder->cd();
+ TEfficiency* eff = nullptr;
+ folder->GetObject(Trigger.c_str(),eff);
+ eff->Draw("AP");
+ can->Update();
+ gr = eff->GetPaintedGraph();
+ string title = " ;";
+ gr->SetTitle((title+gr->GetXaxis()->GetTitle()+";"+gr->GetYaxis()->GetTitle()).c_str());
+ leg->AddEntry(gr,tag.c_str(),"PL");
+ gr->SetMarkerStyle(20);
+ gr->SetMarkerColor(color);
+ gr->SetLineColor(color);
  f->Close();
  delete f;
- return mg;
-}
-
-//get all Eff on one plot
-void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, vector<string> inFile, vector<string> cut, string name, string option)
-{
- if(invert_colors)
- {
-  gStyle->SetFrameFillColor(kBlack);
-  gStyle->SetFrameLineColor(kWhite);
- }
-
- TLegend* leg = new TLegend(0.5,0.2,0.95,0.5); 
- leg->SetTextFont(132);
- leg->SetTextSize(0.045);
- 
- TLatex l;
- TCanvas* can = new TCanvas((name).c_str(),"",600.,500);
- can->SetLeftMargin(0.13);
- can->SetRightMargin(0.04);
- can->SetBottomMargin(0.15);
- can->SetTopMargin(0.085);
- can->SetGridx();
- can->SetGridy();
- can->Draw();
- can->cd();
- TMultiGraph* mg = get_mg(cut,tags,Triggers,inFile,colors,leg,can,option);
- can->Clear();
-
- mg->Draw("AP"); 
- mg->GetXaxis()->CenterTitle(true);
- mg->GetXaxis()->SetTitleFont(132);
- mg->GetXaxis()->SetTitleSize(0.06);
- mg->GetXaxis()->SetTitleOffset(1.06);
- mg->GetXaxis()->SetLabelFont(132);
- mg->GetXaxis()->SetLabelSize(0.05);
- mg->GetYaxis()->CenterTitle(true);
- mg->GetYaxis()->SetTitleFont(132);
- mg->GetYaxis()->SetTitleSize(0.06);
- mg->GetYaxis()->SetTitleOffset(1.);
- mg->GetYaxis()->SetLabelFont(132);
- mg->GetYaxis()->SetLabelSize(0.05);
-
- if(invert_colors)
- {
-  mg->GetXaxis()->SetAxisColor(kWhite);
-  mg->GetYaxis()->SetAxisColor(kWhite);
-  mg->GetXaxis()->SetTitleColor(kWhite);
-  mg->GetYaxis()->SetTitleColor(kWhite);
-  mg->GetXaxis()->SetLabelColor(kWhite);
-  mg->GetYaxis()->SetLabelColor(kWhite);
-  can->SetFillColor(kBlack);
-  leg->SetTextColor(kWhite);
-  leg->SetFillColor(kBlack);
-  leg->SetLineColor(kBlack);
-  leg->SetShadowColor(kBlack); 
-  l.SetTextColor(kWhite);
- }
-
- leg->Draw("SAME");
-
- l.SetTextFont(42);
- l.SetNDC();
- l.SetTextSize(0.04);
- l.SetTextFont(42);
- l.DrawLatex(0.62,0.93,name.c_str());
- l.DrawLatex(0.13,0.93,"#bf{#it{CMS}} Internal 13 TeV Simulation");
- can->Modified();
- can->Update();
-
- TFile* output = TFile::Open(inFile[0].c_str(),"UPDATE");
- can->Write();
- output->Close();
- delete leg;
- delete mg;
- delete can;
- delete output;
-}
-
-TMultiGraph* get_mg(vector<string> cut, vector<string> tags, vector<string> Triggers, vector<string> fname, vector<int> colors, TLegend*& leg, TCanvas*& can, string option)
-{
- TMultiGraph* mg = new TMultiGraph();
- for(int k = 0; k < int(fname.size()); k++)
- {
-  TKey *key;
-  TFile *f = TFile::Open(fname[k].c_str(), "READ");
-  if(!f || f->IsZombie())
-  {
-   cout << "Unable to open " << fname[k] << " for reading..." << endl;
-   return mg;
-  }
-  for(int i = 0; i < int(tags.size()); i++)
-  {
-   TDirectoryFile* folder = nullptr;
-   f->GetObject(tags[i].c_str(),folder);
-   folder->cd();
-   if(folder == nullptr) continue;
-   for(int j = 0; j < int(Triggers.size()); j++)
-   {
-    TEfficiency* eff = nullptr;
-    folder->GetObject(Triggers.at(j).c_str(),eff);
-    eff->Draw("AP");
-    can->Update();
-    TGraphAsymmErrors* gr = eff->GetPaintedGraph();
-    //call Fitter
-    Fitter_Eff_Nano(gr,colors,Triggers[j]+"_"+tags[i]+"_"+cut[k]);
-    if((i+j) == 0)
-    {
-     string title = " ;";
-     mg->SetTitle((title+gr->GetXaxis()->GetTitle()+";"+gr->GetYaxis()->GetTitle()).c_str());
-    }
-    if(option.compare("Tag") == 0)
-    {
-     leg->AddEntry(gr,Triggers.at(j).c_str(),"PL");
-    }
-    else if(option.compare("Trigger") == 0)
-    {
-     leg->AddEntry(gr,tags.at(i).c_str(),"PL");
-    }
-    else if(option.compare("FinalState") == 0)
-    {
-     leg->AddEntry(gr,cut.at(k).c_str(),"PL");
-    }
-    gr->SetMarkerStyle(20);
-    gr->SetMarkerColor(colors[i+j+k]);
-    gr->SetLineColor(colors[i+j+k]);
-    mg->Add(gr);
-   }
-  }
-  f->Close();
-  delete f;
- }
- return mg;
+ return gr;
 }
 
 int main(int argc, char* argv[])
@@ -323,7 +297,7 @@ int main(int argc, char* argv[])
  if(argc < 1)
  {
   cout << "ERROR: Need to specify cuts file" << endl;
-  cout << "Example: ./Plotter.x -cuts=cuts.txt" << endl;
+  cout << "Example: ./Scale.x -cuts=cuts.txt" << endl;
   return 1;
  }
 
@@ -341,9 +315,10 @@ int main(int argc, char* argv[])
  while(std::getline(fs,cut))
  {
   cuts.push_back(cut);
-  files.push_back("Eff_output_MET_"+cut+".root");
+  files.push_back("Eff_output_Scale_MET_"+cut+".root");
+  //files.push_back("NoLowHTScale_MET_NoCuts.root");
  }
 
- Plotter_Eff_Nano(files,cuts);
+ ScaleFactors(files,cuts);
  return 0;
 }

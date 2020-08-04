@@ -675,6 +675,7 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
 
  bool PTISR_cut = true;
  bool PTCM_cut = true;
+ bool RISR_cut = true;
  bool dphiCMI_cut = true;
  bool MET_cut = true;
  bool Nmu_cut = true;
@@ -699,6 +700,9 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
  bool METHTtrigger_cut = true;
  bool EventFilter_cut = true;
 
+ if(m_Tag.find("SingleElectron")) current_cut += "_NeleBronzeG0";
+ if(m_Tag.find("SingleMuon")) current_cut += "_NmuBronzeG0";
+
  string PTISR_str = "PTISRG200";
  PTISR_cut = Get_Cut(jentry,"PTISR",PTISR_str);
  if(current_cut.find("PTISR") != std::string::npos)
@@ -706,6 +710,15 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
   PTISR_cut = Get_Cut(jentry,"PTISR",current_cut);
  }
 
+ string RISR_str = "RISRG0.5";
+ RISR_cut = Get_Cut(jentry,"RISR",RISR_str);
+ if(current_cut.find("RISR") != std::string::npos)
+ {
+  RISR_cut = Get_Cut(jentry,"RISR",current_cut);
+ }
+
+ string PTCM_str = "PTCML100";
+ PTCM_cut = Get_Cut(jentry,"PTCM",PTCM_str);
  if(current_cut.find("PTCM") != std::string::npos)
  {
   PTCM_cut = Get_Cut(jentry,"PTCM",current_cut);
@@ -775,7 +788,7 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
  if(current_cut.find("NoCuts") == 0)
  {
   current_cut = "";
-  if(PTISR_cut && PTCM_cut && dphiCMI_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && NmuBronze_cut && NeleBronze_cut && NlepBronze_cut && NmuSilver_cut && NeleSilver_cut && NlepSilver_cut && NmuGold_cut && NeleGold_cut && NlepGold_cut && Njet_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut && EventFilter_cut)
+  if(PTISR_cut && RISR_cut && PTCM_cut && dphiCMI_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && NmuBronze_cut && NeleBronze_cut && NlepBronze_cut && NmuSilver_cut && NeleSilver_cut && NlepSilver_cut && NmuGold_cut && NeleGold_cut && NlepGold_cut && Njet_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut && EventFilter_cut)
   {
    return false;
   }
@@ -786,7 +799,7 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
   cout << "ERROR: Some cuts not applied: " << current_cut << endl;
  }
 
- if(PTISR_cut && PTCM_cut && dphiCMI_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && NmuBronze_cut && NeleBronze_cut && NlepBronze_cut && NmuSilver_cut && NeleSilver_cut && NlepSilver_cut && NmuGold_cut && NeleGold_cut && NlepGold_cut && Njet_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut && EventFilter_cut)
+ if(PTISR_cut && RISR_cut && PTCM_cut && dphiCMI_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && NmuBronze_cut && NeleBronze_cut && NlepBronze_cut && NmuSilver_cut && NeleSilver_cut && NlepSilver_cut && NmuGold_cut && NeleGold_cut && NlepGold_cut && Njet_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut && EventFilter_cut)
  {
   return false;
  }

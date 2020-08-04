@@ -7,10 +7,12 @@ notification = Complete
 getenv = True
 priority = 10
 use_x509userproxy = true
-request_memory = 18000
-output = out_test_$(CUT).log
-error = err_test_$(CUT).log
-log = log_test_$(CUT).log
+request_memory = 24000
+output = out_eff_test_$(CUT).log
+error = err_eff_$(CUT).log
+log = log_eff_$(CUT).log
 Requirements = (Machine != "red-node000.unl.edu")
 Arguments = "-x=MET -cut=$(CUT)"
-queue CUT from /home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/Cuts/WJets.txt
+#Arguments = "-x=MET -cut=$(CUT) --scale"
+#Arguments = "-x=MET -cut=$(CUT) --scale -oFile=NoLowHT"
+queue CUT from /home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/Cuts/NoCuts.txt

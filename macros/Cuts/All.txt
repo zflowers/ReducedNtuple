@@ -1,0 +1,16 @@
+NoCuts
+NmuBronzeG0PTCML100_dphiCMIG1.5
+NmuBronzeG0PTCML50_dphiCMIG1
+NmuBronzeG0PTCML25_dphiCMIG0.5
+NeleBronzeG0PTCML100_dphiCMIG1.5
+NeleBronzeG0PTCML50_dphiCMIG1
+NeleBronzeG0PTCML25_dphiCMIG0.5
+NeleBronzeG0
+NeleSilverG0
+NeleGoldG0
+NmuBronzeG0
+NmuSilverG0
+NmuGoldG0
+NlepBronzeG0
+NlepBronzeG0_NjetsGe4
+NlepBronzeG0_NjetsL4

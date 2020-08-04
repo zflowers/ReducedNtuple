@@ -24,17 +24,17 @@ CC_FILES := $(wildcard src/*.C)
 HH_FILES := $(wildcard include/*.h)
 OBJ_FILES := $(addprefix $(OUTOBJ),$(notdir $(CC_FILES:.C=.o)))
 
-Eff: run_Eff_Nano_Eff.x
+Eff: Eff_Nano_Eff.x
 
-run_Eff_Nano_Eff.x: $(SRCDIR)Eff_Nano_Eff.C $(OBJ_FILES) $(HH_FILES)
-	$(CXX) $(CXXFLAGS) -o run_Eff_Nano_Eff.x $(GLIBS) $ $< 
-	touch run_Eff_Nano_Eff.x
+Eff_Nano_Eff.x: $(SRCDIR)Eff_Nano_Eff.C $(OBJ_FILES) $(HH_FILES)
+	$(CXX) $(CXXFLAGS) -o Eff_Nano_Eff.x $(GLIBS) $ $< 
+	touch Eff_Nano_Eff.x
 
-Hist: run_Eff_Nano_Hist.x
+Hist: Eff_Nano_Hist.x
 
-run_Eff_Nano_Hist.x: $(SRCDIR)Eff_Nano_Hist.C $(OBJ_FILES) $(HH_FILES)
-	$(CXX) $(CXXFLAGS) -o run_Eff_Nano_Hist.x $(GLIBS) $ $< 
-	touch run_Eff_Nano_Hist.x
+Eff_Nano_Hist.x: $(SRCDIR)Eff_Nano_Hist.C $(OBJ_FILES) $(HH_FILES)
+	$(CXX) $(CXXFLAGS) -o Eff_Nano_Hist.x $(GLIBS) $ $< 
+	touch Eff_Nano_Hist.x
 
 Plot: Plotter.x
 
@@ -47,6 +47,12 @@ Stack: Stacker.x
 Stacker.x: $(SRCDIR)Stacker.C $(OBJ_FILES) $(HH_FILES)
 	$(CXX) $(CXXFLAGS) -o Stacker.x $(GLIBS) $ $< 
 	touch Stacker.x
+
+Scale: Scale.x
+
+Scale.x: $(SRCDIR)ScaleFactors.C $(OBJ_FILES) $(HH_FILES)
+	$(CXX) $(CXXFLAGS) -o Scale.x $(GLIBS) $ $< 
+	touch Scale.x
 
 all: run_Eff_Nano.x
 
