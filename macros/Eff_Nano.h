@@ -115,6 +115,7 @@ inline void Eff_Nano::Analyze(){
       //nb = m_Tree->GetEntry(jentry);   nbytes += nb;
       if(jentry%((std::max(nentries,percent))/percent) == 0) { cout << "Processing Event: " << jentry << " out of: " << nentries << " Entries" << endl;}
       if(global_cuts(jentry)) continue;
+
       x_branch->GetEntry(jentry);    
       weight_branch->GetEntry(jentry);    
       bool SuperOR = false;

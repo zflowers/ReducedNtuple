@@ -700,28 +700,51 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
  bool METHTtrigger_cut = true;
  bool EventFilter_cut = true;
 
- if(m_Tag.find("SingleElectron") != std::string::npos) current_cut += "NeleBronzeG0";
- if(m_Tag.find("SingleMuon") != std::string::npos) current_cut += "NmuBronzeG0";
+//PreSelection Cuts
+/*
+ if(m_Tag.find("SingleElectron") != std::string::npos)
+ {
+  string Nele_str = "NeleBronzeG0";
+  NeleBronze_cut = Get_Cut(jentry,"NeleBronze",Nele_str);
+ }
+
+ if(m_Tag.find("SingleMuon") != std::string::npos)
+ {
+  string Nmu_str = "NmuBronzeG0";
+  NmuBronze_cut = Get_Cut(jentry,"NmuBronze",Nmu_str);
+ }
 
  string PTISR_str = "PTISRG200";
  PTISR_cut = Get_Cut(jentry,"PTISR",PTISR_str);
+
+ string RISR_str = "RISRG0.5";
+ RISR_cut = Get_Cut(jentry,"RISR",RISR_str);
+
+ string PTCM_str = "PTCML100";
+ PTCM_cut = Get_Cut(jentry,"PTCM",PTCM_str);
+
+ string EventFilter_str = "EventFilterE1";
+ EventFilter_cut = Get_Cut(jentry,"EventFilter",EventFilter_str);
+*/
+
  if(current_cut.find("PTISR") != std::string::npos)
  {
   PTISR_cut = Get_Cut(jentry,"PTISR",current_cut);
  }
 
- string RISR_str = "RISRG0.5";
- RISR_cut = Get_Cut(jentry,"RISR",RISR_str);
- if(current_cut.find("RISR") != std::string::npos)
+ if(current_cut.find("EventFilter") != std::string::npos)
  {
-  RISR_cut = Get_Cut(jentry,"RISR",current_cut);
+  EventFilter_cut = Get_Cut(jentry,"EventFilter",current_cut);
  }
 
- string PTCM_str = "PTCML100";
- PTCM_cut = Get_Cut(jentry,"PTCM",PTCM_str);
  if(current_cut.find("PTCM") != std::string::npos)
  {
   PTCM_cut = Get_Cut(jentry,"PTCM",current_cut);
+ }
+
+ if(current_cut.find("RISR") != std::string::npos)
+ {
+  RISR_cut = Get_Cut(jentry,"RISR",current_cut);
  }
 
  if(current_cut.find("dphiCMI") != std::string::npos)
@@ -771,13 +794,6 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
  if(current_cut.find("METHTtrigger") != std::string::npos)
  {
   METHTtrigger_cut = Get_Cut(jentry,"METHTtrigger",current_cut);
- }
-
- string EventFilter_str = "EventFilterE1";
- EventFilter_cut = Get_Cut(jentry,"EventFilter",EventFilter_str);
- if(current_cut.find("EventFilter") != std::string::npos)
- {
-  EventFilter_cut = Get_Cut(jentry,"EventFilter",current_cut);
  }
 
  if(current_cut.find("MET") != std::string::npos)

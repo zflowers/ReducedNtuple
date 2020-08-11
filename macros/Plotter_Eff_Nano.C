@@ -24,10 +24,12 @@ TMultiGraph* get_mg(vector<string> cut, vector<string> tags, vector<string> Trig
 
 void Plotter_Eff_Nano(vector<string> inFile, vector<string> cut){
  //string inFile ="output_quick.root";
- //vector<string> tags_2016 = {"WJets_2016", "TTJets_2016"};//, "DY_2016", "TChiWZ_2016", "Stop_2016"};
- vector<string> tags_2016 = {"WWTo2L2Nu_2016", "WJets_2016", "TTJets_2016", "ZJetsToNuNu_2016"};
- vector<string> tags_2017 = {"WJets_2017", "TTJets_2017", "WWTo2L2Nu_2017", "ZJetsToNuNu_2017"};
- vector<string> tags_2018 = {"WWTo2L2Nu_2018", "WJets_2018", "TTJets_2018", "ZJetsToNuNu_2018"};
+ vector<string> tags_2016 = {"QCD_2016", "WJets_2016", "TTJets_2016", "ZJetsToNuNu_2016", "SingleElectron_2016", "SingleMuon_2016"};
+ vector<string> tags_2017 = {"QCD_2017", "WJets_2017", "TTJets_2017", "ZJetsToNuNu_2017", "SingleElectron_2017", "SingleMuon_2017"};
+ vector<string> tags_2018 = {"QCD_2018", "WJets_2018", "TTJets_2018", "ZJetsToNuNu_2018", "SingleElectron_2018", "SingleMuon_2018"};
+ vector<string> tags_bkg_2016 = {"QCD_2016", "WJets_2016", "TTJets_2016", "ZJetsToNuNu_2016"};
+ vector<string> tags_bkg_2017 = {"QCD_2017", "WJets_2017", "TTJets_2017", "ZJetsToNuNu_2017"};
+ vector<string> tags_bkg_2018 = {"QCD_2018", "WJets_2018", "TTJets_2018", "ZJetsToNuNu_2018"};
  vector<string> tags_data_2016 = {"SingleElectron_2016", "SingleMuon_2016"};
  vector<string> tags_data_2017 = {"SingleElectron_2017", "SingleMuon_2017"};
  vector<string> tags_data_2018 = {"SingleElectron_2018", "SingleMuon_2018"};
@@ -37,19 +39,24 @@ void Plotter_Eff_Nano(vector<string> inFile, vector<string> cut){
  vector<string> tags_SingleMuon_2016 = {"SingleMuon_2016"};
  vector<string> tags_SingleMuon_2017 = {"SingleMuon_2017"};
  vector<string> tags_SingleMuon_2018 = {"SingleMuon_2018"};
- vector<string> tags_2017a = {"TTJets_2017"};
- vector<string> tags_2017b = {"WWTo2L2Nu_2017"};
- vector<string> tags_2017f = {"ZJetsToNuNu_2017"};
- vector<string> tags_2017c = {"WJets_2017"};
- vector<string> tags_2017d = {"T2_4bd_500_490_2017"};
- vector<string> tags_2017e = {"T2_4bd_500_420_2017"};
+ vector<string> tags_TTJets_2016 = {"TTJets_2016"};
+ vector<string> tags_ZJets_2016 = {"ZJetsToNuNu_2016"};
+ vector<string> tags_WJets_2016 = {"WJets_2016"};
+ vector<string> tags_QCD_2016 = {"WJets_2016"};
+ vector<string> tags_TTJets_2017 = {"TTJets_2017"};
+ vector<string> tags_ZJets_2017 = {"ZJetsToNuNu_2017"};
+ vector<string> tags_WJets_2017 = {"WJets_2017"};
+ vector<string> tags_QCD_2017 = {"WJets_2017"};
+ vector<string> tags_TTJets_2018 = {"TTJets_2018"};
+ vector<string> tags_ZJets_2018 = {"ZJetsToNuNu_2018"};
+ vector<string> tags_WJets_2018 = {"WJets_2018"};
+ vector<string> tags_QCD_2018 = {"WJets_2018"};
  vector<string> SingleMuon = {"SingleMuon_2016","SingleMuon_2017","SingleMuon_2018"};
  vector<string> SingleElectron = {"SingleElectron_2016","SingleElectron_2017","SingleElectron_2018"};
  vector<string> WJets_years = {"WJets_2016","WJets_2017","WJets_2018"};
  vector<string> TTJets_years = {"TTJets_2016","TTJets_2017","TTJets_2018"};
  vector<string> WWTo2L2Nu_years = {"WWTo2L2Nu_2016","WWTo2L2Nu_2017","WWTo2L2Nu_2018"};
- vector<string> ZJetsToNuNu_years = {"ZJetsToNuNu_2016","ZJetsToNuNu_2017","ZJetsToNuNu_2018"};
- vector<string> ZJets_HT = {"ZJets100To200_2017", "ZJets200To400_2017", "ZJets400To600_2017", "ZJets600To800_2017", "ZJets800To1200_2017", "ZJets1200To2500_2017", "ZJets2500ToInf_2017"};
+ vector<string> ZJets_years = {"ZJetsToNuNu_2016","ZJetsToNuNu_2017","ZJetsToNuNu_2018"};
 
  vector<int> colors = {kCyan, kMagenta, kYellow, kViolet+2, kAzure+7, kPink, kGreen, kGray};
 
@@ -72,79 +79,33 @@ void Plotter_Eff_Nano(vector<string> inFile, vector<string> cut){
  //Get_Plot(tags_2017,METHTtrigger,colors,inFile,"METHTtrigger_2017","Trigger");
  //Get_Plot(tags_2017,METORtrigger,colors,inFile,"METORtrigger_2017","Trigger");
  
- vector<string> tags_DataMC_2017 = {"SingleElectron_2017","SingleMuon_2017","WJets_2017","TTJets_2017"};
- 
  for(int i = 0; i < inFile.size(); i++)
  {
-  Get_Plot(tags_DataMC_2017,METtrigger,colors,inFile[i],cut[i]+"_METtrigger_2017","Trigger");
+  Get_Plot(tags_2016,METtrigger,colors,inFile[i],METtrigger[0]+"_"+cut[i]+"_2016","Trigger");
+  Get_Plot(tags_2017,METtrigger,colors,inFile[i],METtrigger[0]+"_"+cut[i]+"_2017","Trigger");
+  Get_Plot(tags_2018,METtrigger,colors,inFile[i],METtrigger[0]+"_"+cut[i]+"_2018","Trigger");
 
-  Get_Plot(tags_2016,METtrigger,colors,inFile[i],METtrigger[0]+cut[i]+"_2016","Trigger");
-  Get_Plot(tags_2017,METtrigger,colors,inFile[i],METtrigger[0]+cut[i]+"_2017","Trigger");
-  Get_Plot(tags_2018,METtrigger,colors,inFile[i],METtrigger[0]+cut[i]+"_2018","Trigger");
+//  Get_Plot(SingleMuon,METtrigger,colors,inFile[i],METtrigger[0]+"SingleMuon"+cut[i]+"_","Trigger");
+//  Get_Plot(SingleElectron,METtrigger,colors,inFile[i],METtrigger[0]+"SingleElectron"+"_"+cut[i],"Trigger");
+//  Get_Plot(WJets_years,METtrigger,colors,inFile[i],METtrigger[0]+"WJets"+"_"+cut[i],"Trigger");
+//  Get_Plot(TTJets_years,METtrigger,colors,inFile[i],METtrigger[0]+"TTJets"+"_"+cut[i],"Trigger");
+//  Get_Plot(WWTo2L2Nu_years,METtrigger,colors,inFile[i],METtrigger[0]+"WWTo2L2Nu"+"_"+cut[i],"Trigger");
+//  Get_Plot(ZJetsToNuNu_years,METtrigger,colors,inFile[i],METtrigger[0]+"ZJetsToNuNu"+"_"+cut[i],"Trigger");
 
-  Get_Plot(SingleMuon,METtrigger,colors,inFile[i],METtrigger[0]+"SingleMuon"+cut[i]+"_","Trigger");
-  Get_Plot(SingleElectron,METtrigger,colors,inFile[i],METtrigger[0]+"SingleElectron"+"_"+cut[i],"Trigger");
-  Get_Plot(WJets_years,METtrigger,colors,inFile[i],METtrigger[0]+"WJets"+"_"+cut[i],"Trigger");
-  Get_Plot(TTJets_years,METtrigger,colors,inFile[i],METtrigger[0]+"TTJets"+"_"+cut[i],"Trigger");
-  Get_Plot(WWTo2L2Nu_years,METtrigger,colors,inFile[i],METtrigger[0]+"WWTo2L2Nu"+"_"+cut[i],"Trigger");
-  Get_Plot(ZJetsToNuNu_years,METtrigger,colors,inFile[i],METtrigger[0]+"ZJetsToNuNu"+"_"+cut[i],"Trigger");
-
-  Get_Plot(ZJets_HT,METtrigger,colors,inFile[i],METtrigger[0]+"ZJets_HT_"+cut[i],"Trigger");
  }
-
- Get_Plot(tags_SingleElectron_2016,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_SingleElectron_2016[0],"FinalState");
- Get_Plot(tags_SingleMuon_2016,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_SingleMuon_2016[0],"FinalState");
- Get_Plot(tags_SingleElectron_2017,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_SingleElectron_2017[0],"FinalState");
- Get_Plot(tags_SingleMuon_2017,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_SingleMuon_2017[0],"FinalState");
- Get_Plot(tags_SingleElectron_2018,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_SingleElectron_2018[0],"FinalState");
- Get_Plot(tags_SingleMuon_2018,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_SingleMuon_2018[0],"FinalState");
-
- Get_Plot(tags_2017a,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017a[0],"FinalState");
- Get_Plot(tags_2017c,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017c[0],"FinalState");
-
-/*
- //combining files
- Get_Plot(tags_2017a,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017a[0],"FinalState");
- //Get_Plot(tags_2017a,METHTtrigger,colors,inFile,cut,METHTtrigger[0]+"_"+tags_2017a[0],"FinalState");
- //Get_Plot(tags_2017a,METORtrigger,colors,inFile,cut,METORtrigger[0]+"_"+tags_2017a[0],"FinalState");
- //Get_Plot(tags_2017a,SuperOR,colors,inFile,cut,SuperOR[0]+"_"+tags_2017a[0],"FinalState");
- Get_Plot(tags_2017b,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017b[0],"FinalState");
- //Get_Plot(tags_2017b,METHTtrigger,colors,inFile,cut,METHTtrigger[0]+"_"+tags_2017b[0],"FinalState");
- //Get_Plot(tags_2017b,METORtrigger,colors,inFile,cut,METORtrigger[0]+"_"+tags_2017b[0],"FinalState");
- //Get_Plot(tags_2017b,SuperOR,colors,inFile,cut,SuperOR[0]+"_"+tags_2017b[0],"FinalState");
- Get_Plot(tags_2017c,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017c[0],"FinalState");
- //Get_Plot(tags_2017c,METHTtrigger,colors,inFile,cut,METHTtrigger[0]+"_"+tags_2017c[0],"FinalState");
- //Get_Plot(tags_2017c,METORtrigger,colors,inFile,cut,METORtrigger[0]+"_"+tags_2017c[0],"FinalState");
- //Get_Plot(tags_2017c,SuperOR,colors,inFile,cut,SuperOR[0]+"_"+tags_2017c[0],"FinalState");
- Get_Plot(tags_2017d,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017d[0],"FinalState");
- //Get_Plot(tags_2017d,METHTtrigger,colors,inFile,cut,METHTtrigger[0]+"_"+tags_2017d[0],"FinalState");
- //Get_Plot(tags_2017d,METORtrigger,colors,inFile,cut,METORtrigger[0]+"_"+tags_2017d[0],"FinalState");
- //Get_Plot(tags_2017d,SuperOR,colors,inFile,cut,SuperOR[0]+"_"+tags_2017d[0],"FinalState");
- Get_Plot(tags_2017e,METtrigger,colors,inFile,cut,METtrigger[0]+"_"+tags_2017e[0],"FinalState");
- //Get_Plot(tags_2017e,METHTtrigger,colors,inFile,cut,METHTtrigger[0]+"_"+tags_2017e[0],"FinalState");
- //Get_Plot(tags_2017e,METORtrigger,colors,inFile,cut,METORtrigger[0]+"_"+tags_2017e[0],"FinalState");
- //Get_Plot(tags_2017e,SuperOR,colors,inFile,cut,SuperOR[0]+"_"+tags_2017e[0],"FinalState");
-*/ 
- //Get_Plot(tags_2016,Triggers_DoubleMu3_PFMET50_2016,colors,inFile,"2016_HLT_DoubleMu3_PFMET50","Trigger");
- //Get_Plot(tags_2017,Triggers_DoubleMu3_DZ_PFMET50_PFMHT60_2017_2018,colors,inFile,"2017_HLT_DoubleMu3_DZ_PFMET50_PFMHT60","Trigger");
- //Get_Plot(tags_2017,Triggers_HLT_PFMET120_Mu5_2017,colors,inFile,"2017_HLT_PFMET120_Mu5","Trigger");
- //Get_Plot(tags_2018,Triggers_DoubleMu3_PFMET50_2017_2018,colors,inFile,"2018_HLT_DoubleMu3_PFMET50_PFMHT60","Trigger");
-
- //Get_Plot(tags_2016,Triggers_90,colors,inFile,"2016_HLT_PFMET90_PFMHT90_IDTight","Trigger");
- //Get_Plot(tags_2016,Triggers_100,colors,inFile,"2016_HLT_PFMET100_PFMHT100_IDTight","Trigger");
- //Get_Plot(tags_2016,Triggers_110,colors,inFile,"2016_HLT_PFMET110_PFMHT110_IDTight","Trigger");
- //Get_Plot(tags_2016,Triggers_120,colors,inFile,"2016_HLT_PFMET120_PFMHT120_IDTight","Trigger");
-
- //Get_Plot(tags_2017,Triggers_110,colors,inFile,"2017_HLT_PFMET110_PFMHT110_IDTight","Trigger");
- //Get_Plot(tags_2017,Triggers_120,colors,inFile,"2017_HLT_PFMET120_PFMHT120_IDTight","Trigger");
- //Get_Plot(tags_2017,Triggers_130,colors,inFile,"2017_HLT_PFMET130_PFMHT130_IDTight","Trigger");
- //Get_Plot(tags_2017,Triggers_140,colors,inFile,"2017_HLT_PFMET140_PFMHT140_IDTight","Trigger");
-
- //Get_Plot(tags_2018,Triggers_110,colors,inFile,"2018_HLT_PFMET110_PFMHT110_IDTight","Trigger");
- //Get_Plot(tags_2018,Triggers_120,colors,inFile,"2018_HLT_PFMET120_PFMHT120_IDTight","Trigger");
- //Get_Plot(tags_2018,Triggers_130,colors,inFile,"2018_HLT_PFMET130_PFMHT130_IDTight","Trigger");
- //Get_Plot(tags_2018,Triggers_140,colors,inFile,"2018_HLT_PFMET140_PFMHT140_IDTight","Trigger");
  
+ Get_Plot(tags_TTJets_2016,METtrigger,colors,inFile,cut,"METtrigger_2016_TTJets","FinalState");
+ Get_Plot(tags_ZJets_2016,METtrigger,colors,inFile,cut,"METtrigger_2016_ZJets","FinalState");
+ Get_Plot(tags_WJets_2016,METtrigger,colors,inFile,cut,"METtrigger_2016_WJets","FinalState");
+ Get_Plot(tags_QCD_2016,METtrigger,colors,inFile,cut,"METtrigger_2016_QCD","FinalState");
+ Get_Plot(tags_TTJets_2017,METtrigger,colors,inFile,cut,"METtrigger_2017_TTJets","FinalState");
+ Get_Plot(tags_ZJets_2017,METtrigger,colors,inFile,cut,"METtrigger_2017_ZJets","FinalState");
+ Get_Plot(tags_WJets_2017,METtrigger,colors,inFile,cut,"METtrigger_2017_WJets","FinalState");
+ Get_Plot(tags_QCD_2017,METtrigger,colors,inFile,cut,"METtrigger_2017_QCD","FinalState");
+ Get_Plot(tags_TTJets_2018,METtrigger,colors,inFile,cut,"METtrigger_2018_TTJets","FinalState");
+ Get_Plot(tags_ZJets_2018,METtrigger,colors,inFile,cut,"METtrigger_2018_ZJets","FinalState");
+ Get_Plot(tags_WJets_2018,METtrigger,colors,inFile,cut,"METtrigger_2018_WJets","FinalState");
+ Get_Plot(tags_QCD_2018,METtrigger,colors,inFile,cut,"METtrigger_2018_QCD","FinalState");
  
 
 }

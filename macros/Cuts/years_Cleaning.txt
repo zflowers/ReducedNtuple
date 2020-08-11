@@ -1,4 +1,2 @@
-NmuBronzeG0
-NmuGoldG0
-PTCML50_dphiCMIG1_NmuBronzeG0
-PTCML50_dphiCMIG1_NmuGoldG0
+PTCML50
+PTCML25

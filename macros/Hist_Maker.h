@@ -1070,25 +1070,26 @@ void gendphiMET_mu_Hist::fill_hist(Long64_t jentry){
 
 vector<HistClass*> Setup_Hists(TTree* tree){
  vector<HistClass*> Classes;
- Classes.push_back(new met_Hist);
- Classes.push_back(new met_Phi_Hist);
- Classes.push_back(new PTCM_Hist);
- Classes.push_back(new dphiMET_lep_Hist);
- Classes.push_back(new ele_PT_Hist);
- Classes.push_back(new mu_PT_Hist);
- Classes.push_back(new ele_Phi_Hist);
- Classes.push_back(new mu_Phi_Hist);
- Classes.push_back(new dphiMET_ele_Hist);
- Classes.push_back(new dphiMET_mu_Hist);
- Classes.push_back(new dphiCMI_Hist);
+ //Classes.push_back(new met_Hist);
+ //Classes.push_back(new met_Phi_Hist);
+ //Classes.push_back(new PTCM_Hist);
+ //Classes.push_back(new dphiMET_lep_Hist);
+ //Classes.push_back(new ele_PT_Hist);
+ //Classes.push_back(new mu_PT_Hist);
+ //Classes.push_back(new ele_Phi_Hist);
+ //Classes.push_back(new mu_Phi_Hist);
+ //Classes.push_back(new dphiMET_ele_Hist);
+ //Classes.push_back(new dphiMET_mu_Hist);
+ //Classes.push_back(new dphiCMI_Hist);
  //Classes.push_back(new jet_PT_Hist);
  //Classes.push_back(new jet_Phi_Hist);
- Classes.push_back(new ele_PT_proj_MET_Hist);
- Classes.push_back(new ele_PT_proj_METperp_Hist);
- Classes.push_back(new mu_PT_proj_MET_Hist);
- Classes.push_back(new mu_PT_proj_METperp_Hist);
+ //Classes.push_back(new ele_PT_proj_MET_Hist);
+ //Classes.push_back(new ele_PT_proj_METperp_Hist);
+ //Classes.push_back(new mu_PT_proj_MET_Hist);
+ //Classes.push_back(new mu_PT_proj_METperp_Hist);
  Classes.push_back(new dphiCMI_v_PTCM_Hist);
 
+/*
 //gen hists
  Classes.push_back(new genmet_Hist);
  Classes.push_back(new genmet_Phi_Hist);
@@ -1101,6 +1102,9 @@ vector<HistClass*> Setup_Hists(TTree* tree){
  Classes.push_back(new genmu_Eta_Hist);
  //Classes.push_back(new gendphiMET_ele_Hist);
  //Classes.push_back(new gendphiMET_mu_Hist);
+*/
+
+
  for( auto histclass : Classes ){ histclass->init_hist(tree); }
  return Classes;
 }

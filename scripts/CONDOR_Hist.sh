@@ -1,4 +1,4 @@
-#To run: condor_submit scripts/CONDOR_Plot.sh
+#To run: condor_submit scripts/CONDOR_Hist.sh
 
 universe = vanilla
 executable = /home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/Eff_Nano_Hist.x
@@ -7,7 +7,7 @@ notification = Complete
 getenv = True
 priority = 10
 use_x509userproxy = true
-request_memory = 22000
+request_memory = 20000
 output = out_hist_$(CUT).log
 error = err_hist_$(CUT).log
 log = log_hist_$(CUT).log

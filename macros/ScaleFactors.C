@@ -19,29 +19,26 @@ using namespace std;
 
 bool invert_colors = true;
 
-double Get_ScaleFactor(string bkg_tag, string data_tag, string Trigger, vector<int> colors, string outFile, string name, string option);
+double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger, vector<int> colors, string outFile, string name, string option);
 TGraphAsymmErrors* get_gr(string fname, string tag, string Trigger, int color, TLegend*& leg, TCanvas*& can);
 TGraphAsymmErrors* TGAE_Ratio(TGraphAsymmErrors* gr_bkg, TGraphAsymmErrors* gr_data);
 
 void ScaleFactors(vector<string> inFile, vector<string> cut){
  //string inFile ="output_quick.root";
+ vector<string> data_tags_2016 = {"SingleElectron_2016","SingleMuon_2016"};
+ vector<string> data_tags_2017 = {"SingleElectron_2017","SingleMuon_2017"};
+ vector<string> data_tags_2018 = {"SingleElectron_2018","SingleMuon_2018"};
  
  vector<int> colors = {kCyan, kMagenta, kYellow, kViolet+2, kAzure+7, kPink, kGreen, kGray};
 
- double scale_Ratio_2016 = Get_ScaleFactor("Bkg_2016", "Data_2016", "METtrigger", colors, inFile[0], "METtrigger"+cut[0], "Ratio");
- //double scale_Fit_2016 = Get_ScaleFactor("Bkg_2016", "Data_2016", "METtrigger", colors, inFile[0], "METtrigger"+cut[0], "Fit");
- double scale_Ratio_2017 = Get_ScaleFactor("Bkg_2017", "Data_2017", "METtrigger", colors, inFile[0], "METtrigger"+cut[0], "Ratio");
- //double scale_Fit_2017 = Get_ScaleFactor("Bkg_2017", "Data_2017", "METtrigger", colors, inFile[0], "METtrigger"+cut[0], "Fit");
- double scale_Ratio_2018 = Get_ScaleFactor("Bkg_2018", "Data_2018", "METtrigger", colors, inFile[0], "METtrigger"+cut[0], "Ratio");
- //double scale_Fit_2018 = Get_ScaleFactor("Bkg_2018", "Data_2018", "METtrigger", colors, inFile[0], "METtrigger"+cut[0], "Fit");
- if(inFile.size() > 1)
+ for(int i = 0; i < inFile.size(); i++)
  {
- double scale_Ratio_2016 = Get_ScaleFactor("Bkg_2016", "Data_2016", "METtrigger", colors, inFile[1], "METtrigger"+cut[0], "Ratio");
- //double scale_Fit_2016 = Get_ScaleFactor("Bkg_2016", "Data_2016", "METtrigger", colors, inFile[1], "METtrigger"+cut[0], "Fit");
- double scale_Ratio_2017 = Get_ScaleFactor("Bkg_2017", "Data_2017", "METtrigger", colors, inFile[1], "METtrigger"+cut[0], "Ratio");
- //double scale_Fit_2017 = Get_ScaleFactor("Bkg_2017", "Data_2017", "METtrigger", colors, inFile[1], "METtrigger"+cut[0], "Fit");
- double scale_Ratio_2018 = Get_ScaleFactor("Bkg_2018", "Data_2018", "METtrigger", colors, inFile[1], "METtrigger"+cut[0], "Ratio");
- //double scale_Fit_2018 = Get_ScaleFactor("Bkg_2018", "Data_2018", "METtrigger", colors, inFile[1], "METtrigger"+cut[0], "Fit");
+  double scale_Ratio_2016 = Get_ScaleFactor("Bkg_2016", data_tags_2016, "METtrigger", colors, inFile[i], "METtrigger"+cut[i]+"_2016", "Ratio");
+  //double scale_Fit_2016 = Get_ScaleFactor("Bkg_2016", data_tags_2016, "METtrigger", colors, inFile[i], "METtrigger"+cut[i]+"_2016", "Fit");
+  double scale_Ratio_2017 = Get_ScaleFactor("Bkg_2017", data_tags_2017, "METtrigger", colors, inFile[i], "METtrigger"+cut[i]+"_2017", "Ratio");
+  //double scale_Fit_2017 = Get_ScaleFactor("Bkg_2017", data_tags_2017, "METtrigger", colors, inFile[i], "METtrigger"+cut[i]+"_2017", "Fit");
+  double scale_Ratio_2018 = Get_ScaleFactor("Bkg_2018", data_tags_2018, "METtrigger", colors, inFile[i], "METtrigger"+cut[i]+"_2018", "Ratio");
+  //double scale_Fit_2018 = Get_ScaleFactor("Bkg_2018", data_tags_2018, "METtrigger", colors, inFile[i], "METtrigger"+cut[i]+"_2018", "Fit");
  }
 }
 
@@ -72,6 +69,32 @@ void Format_Graph(TMultiGraph*& gr)
  }
 }
 
+void Format_Graph_res(TMultiGraph*& gr)
+{
+  gr->GetXaxis()->CenterTitle(true);
+  gr->GetXaxis()->SetTitleFont(132);
+  gr->GetXaxis()->SetTitleSize(0.12);
+  gr->GetXaxis()->SetTitleOffset(.7);
+  gr->GetXaxis()->SetLabelFont(132);
+  gr->GetXaxis()->SetLabelSize(0.1);
+  gr->GetYaxis()->CenterTitle(true);
+  gr->GetYaxis()->SetTitleFont(132);
+  gr->GetYaxis()->SetTitleSize(0.12);
+  gr->GetYaxis()->SetTitleOffset(.35);
+  gr->GetYaxis()->SetLabelFont(132);
+  gr->GetYaxis()->SetLabelSize(0.1);
+
+  if(invert_colors)
+  {
+   gr->GetXaxis()->SetAxisColor(kWhite);
+   gr->GetYaxis()->SetAxisColor(kWhite);
+   gr->GetXaxis()->SetTitleColor(kWhite);
+   gr->GetYaxis()->SetTitleColor(kWhite);
+   gr->GetXaxis()->SetLabelColor(kWhite);
+   gr->GetYaxis()->SetLabelColor(kWhite);
+  }
+}
+
 void Format_Graph(TGraphAsymmErrors*& gr)
 {
  gr->GetXaxis()->CenterTitle(true);
@@ -79,13 +102,13 @@ void Format_Graph(TGraphAsymmErrors*& gr)
  gr->GetXaxis()->SetTitleSize(0.12);
  gr->GetXaxis()->SetTitleOffset(.7);
  gr->GetXaxis()->SetLabelFont(132);
- gr->GetXaxis()->SetLabelSize(0.1);
+ gr->GetXaxis()->SetLabelSize(0.0);
  gr->GetYaxis()->CenterTitle(true);
  gr->GetYaxis()->SetTitleFont(132);
- gr->GetYaxis()->SetTitleSize(0.12);
+ gr->GetYaxis()->SetTitleSize(0.1);
  gr->GetYaxis()->SetTitleOffset(.3);
  gr->GetYaxis()->SetLabelFont(132);
- gr->GetYaxis()->SetLabelSize(0.1);
+ gr->GetYaxis()->SetLabelSize(0.05);
 
  if(invert_colors)
  {
@@ -99,7 +122,7 @@ void Format_Graph(TGraphAsymmErrors*& gr)
 }
 
 //get all Eff on one plot
-double Get_ScaleFactor(string bkg_tag, string data_tag, string Trigger, vector<int> colors, string outFile, string name, string option)
+double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger, vector<int> colors, string outFile, string name, string option)
 {
  double scale = 0;
  if(invert_colors)
@@ -121,11 +144,19 @@ double Get_ScaleFactor(string bkg_tag, string data_tag, string Trigger, vector<i
  if(invert_colors) can->SetFillColor(kBlack);
  can->Modified();
  can->Update();
+ TMultiGraph* mg = new TMultiGraph();
  TGraphAsymmErrors* gr_bkg = get_gr(outFile,bkg_tag,Trigger,colors[0],leg,can);
- TGraphAsymmErrors* gr_data = get_gr(outFile,data_tag,Trigger,colors[1],leg,can);
- can->Clear();
  Format_Graph(gr_bkg);
- Format_Graph(gr_data);
+ mg->Add(gr_bkg);
+ vector<TGraphAsymmErrors*> vect_gr_data;
+ for(int i = 0; i < data_tags.size(); i++)
+ {
+  TGraphAsymmErrors* gr_data = get_gr(outFile,data_tags[i],Trigger,colors[i+1],leg,can);
+  Format_Graph(gr_data);
+  vect_gr_data.push_back(gr_data);
+  mg->Add(gr_data);
+ }
+ can->Clear();
  can->cd();
 
  TPad* pad_gr = new TPad("pad_gr","pad_gr",0,.3,1.,1.);
@@ -135,9 +166,6 @@ double Get_ScaleFactor(string bkg_tag, string data_tag, string Trigger, vector<i
  pad_gr->cd();
  can->Update();
 
- TMultiGraph* mg = new TMultiGraph();
- mg->Add(gr_bkg);
- mg->Add(gr_data);
  mg->Draw("AP"); 
  Format_Graph(mg);
  pad_gr->Update();
@@ -178,17 +206,22 @@ double Get_ScaleFactor(string bkg_tag, string data_tag, string Trigger, vector<i
  pad_res->Update();
  can->Update();
  if(invert_colors) pad_res->SetFillColor(kBlack);
- TGraphAsymmErrors* res_ratio = TGAE_Ratio(gr_bkg,gr_data);
- if(res_ratio == NULL) cout << "Bin MisMatch between data and bkg!" << endl;
- Format_Graph(res_ratio);
- res_ratio->SetMarkerColor(colors[2]);
- res_ratio->SetLineColor(colors[2]);
- res_ratio->Draw("AP");
- res_ratio->GetYaxis()->SetTitle("Data/Bkg");
- res_ratio->GetXaxis()->SetTitle("MET");
+ TMultiGraph* mg_res = new TMultiGraph();
+ for(int i = 0; i < data_tags.size(); i++)
+ {
+  TGraphAsymmErrors* res_ratio = TGAE_Ratio(gr_bkg,vect_gr_data[i]);
+  res_ratio->SetMarkerColor(colors[i+1]);
+  res_ratio->SetLineColor(colors[i+1]);
+  mg_res->Add(res_ratio);
+ }
+ mg_res->Draw("AP");
+ Format_Graph_res(mg_res);
+ mg_res->GetXaxis()->SetLimits(mg->GetXaxis()->GetXmin(),mg->GetXaxis()->GetXmax());
+ mg_res->GetYaxis()->SetTitle("Data/Bkg");
+ mg_res->GetXaxis()->SetTitle("MET");
  pad_res->Modified();
  pad_res->Update();
- TLine* line = new TLine(res_ratio->GetXaxis()->GetXmin(),0.0,res_ratio->GetXaxis()->GetXmax(),0.0);
+ TLine* line = new TLine(mg_res->GetXaxis()->GetXmin(),0.0,mg_res->GetXaxis()->GetXmax(),0.0);
  line->SetLineColor(kWhite);
  line->SetLineStyle(1);
  line->Draw("SAMES");

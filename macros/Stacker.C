@@ -544,14 +544,14 @@ void Get_Overlay(vector<string> outFiles, string hist_name, vector<string> sampl
 
 void Stacker(vector<string> inFiles, vector<string> cuts){
  cout << "Running Stacker..." << endl;
- bool trigger = true;
+ bool trigger = false;
  vector<string> WJets_directories{"WJets_2017"};
  vector<string> WJets_Old_directories{"WJets_2017_Old"};
  vector<string> TTJets_directories{"TTJets_2017"};
  vector<string> sig_directories{""};
  //vector<string> sig_directories{"TChiWW_SMS_275_235"};
  //vector<string> directories_2D{"TChiWW_SMS_275_235", "TTJets", "WJets", "DiBoson", "DYJetsToLL", "ST"};
- vector<string> directories_2D{"TTJets_2017", "WJets_2017", "WJets_2017_Old"};
+ vector<string> directories_2D{"Bkg_2016","MET_2016","T2bW_2016","Bkg_2017","MET_2017","T2bW_2017","Bkg_2018","MET_2018","T2bW_2018"};
  vector<int> colors = {kCyan, kMagenta, kYellow, kViolet+2, kAzure+7, kPink, kGreen, kGray};
  vector<int> colors_bkg = { kAzure+1, kGreen-9, kPink, kTeal+2, kYellow-4 };
  vector<int> colors_sig = { kMagenta, kCyan+2, };
@@ -560,6 +560,7 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
 // Get_Stack("dphiMET_lep_Hist",bkg_directories,sig_directories,colors_bkg,colors_sig,inFile,cut);
 
 //compare across: sample, selection/final state, hist?, ..., 
+/*
  Get_Overlay(inFiles,"met_Hist",WJets_directories,cuts,colors,"Cuts",trigger);
  Get_Overlay(inFiles,"met_Hist",WJets_Old_directories,cuts,colors,"Cuts",trigger);
  Get_Overlay(inFiles,"met_Hist",TTJets_directories,cuts,colors,"Cuts",trigger);
@@ -645,6 +646,7 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
  Get_Overlay(inFiles,"genmu_Eta_Hist",WJets_directories,cuts,colors,"Cuts",trigger);
  Get_Overlay(inFiles,"genmu_Eta_Hist",WJets_Old_directories,cuts,colors,"Cuts",trigger);
  Get_Overlay(inFiles,"genmu_Eta_Hist",TTJets_directories,cuts,colors,"Cuts",trigger);
+*/
 
  Get2D_Plot("dphiCMI_v_PTCM_Hist",directories_2D,inFiles,cuts,trigger);
 
