@@ -84,6 +84,7 @@ void Eff_Nano_Eff(string outFile = "output_test.root", string x = "MET", string 
   Eff_Nano Eff_2016_Bkg(outFile,Triggers_2016,"Bkg_2016",x_2016,chain_2016_Bkg);
   Eff_2016_Bkg.Set_Cut(cut);
   Eff_2016_Bkg.Analyze();
+  delete chain_2016_Bkg;
 
   std::cout << "Processing SingleElectron 2016" << endl;
   TChain* chain_2016_SingleElectron = new TChain("KUAnalysis");

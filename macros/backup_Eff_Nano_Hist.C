@@ -12,26 +12,15 @@
 using namespace std;
 
 string tag = "";
-string filename = "";
-string dir = "";
-string number = "";
-string cut = "";
 
-void Hist_Maker_Hist(){
+void Hist_Maker_Hist(string outFile = "output_test.root", string cut = ""){
+ std::cout << "Outputting to: " << outFile << endl;
+ gSystem->Exec(("rm "+outFile).c_str());
 
  //string path = "/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/output/";
  string path = "~/../crogan/NTUPLES/NANO/NEW_31_05_20/";
- string out = "~/Eff_Nano/ReducedNtuple/macros/HIST/";
+ if(tag == "") { cout << "Need to specify tag" << endl; }
 
- if(tag == "") { cout << "Need to specify tag!" << endl; return; }
- TChain* chain = new TChain("KUAnalysis");
- chain->Add((path+dir+"/NoHadd/"+filename+"_"+dir+"/"+filename+"_"+dir+number+".root").c_str(),0);
- Hist_Maker Hist(cut+"_"+dir+"_"+tag+"_"+filename+number+".root",tag,chain);
- Hist.Set_Cut(cut);
- Hist.Analyze();
- delete chain;
-
-/*
  else if (tag == "Bkg_2016")
  {
  std::cout << "Processing 2016 Background" << endl;
@@ -187,13 +176,15 @@ void Hist_Maker_Hist(){
  }
 
  else { cout << "Need to specify tag" << endl; }
-*/
 
 
 }
 
 int main(int argc, char* argv[])
 {
+ string outFile = "Hist_output_";
+ string cut = "";
+
  if(argc < 1)
  {
   cout << "ERROR: Need to specify cut" << endl;
@@ -208,28 +199,19 @@ int main(int argc, char* argv[])
    cut=argv[i];
    cut.erase(0,5);
   }
+  else if(strncmp(argv[i],"-oFile",6)==0)
+  {
+   outFile=argv[i];
+   outFile.erase(0,7);
+  }
   else if(strncmp(argv[i],"-tag",4)==0)
   {
-   tag=argv[i];
+   tag = argv[i];
    tag.erase(0,5);
   }
-  else if(strncmp(argv[i],"-filename",9)==0)
-  {
-   filename=argv[i];
-   filename.erase(0,10);
-  }
-  else if(strncmp(argv[i],"-dir",4)==0)
-  {
-   dir=argv[i];
-   dir.erase(0,5);
-  }
-  else if(strncmp(argv[i],"-num",4)==0)
-  {
-   number = argv[i];
-   number.erase(0,5);
-  }
  }
+ outFile += cut+"_"+tag+".root";
 
- Hist_Maker_Hist();
+ Hist_Maker_Hist(outFile,cut);
  return 0;
 }
