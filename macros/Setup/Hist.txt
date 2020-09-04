@@ -1,11 +1,6 @@
-PreSelection Bkg_2016
-EventFilterE0 Bkg_2016
-PreSelection Bkg_2017
-EventFilterE0 Bkg_2017
-PreSelection MET_2017
-EventFilterE0 MET_2017
-PreSelection Bkg_2018
-EventFilterE0 Bkg_2018
-PreSelection MET_2018
-EventFilterE0 MET_2018
-EventFilterE1 MET_2018
+PTISRG200
+PTISRG200_EventFilterE1
+PTISRG200_METtriggerE1
+PTISRG200_EventFilterE1_METtriggerE1
+PTISRG200_EventFilterE1_METtriggerE1_RISRG0.5
+PTISRG200_EventFilterE1_METtriggerE1_RISRG0.85

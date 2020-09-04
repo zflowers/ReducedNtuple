@@ -1,3 +1,4 @@
+$PWD
 *.x
 *.o
 *.dSYM
@@ -9,3 +10,9 @@
 *.pcm
 *.pdf
 *.csv
+macros/LOG_HIST/
+macros/HIST/
+macros/Shell_HIST/
+macros/LOG_EFF/
+macros/EFF/
+macros/Shell_EFF/

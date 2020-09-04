@@ -1,6 +1,8 @@
 Grid Setup
 
-voms-proxy-init --voms cms -valid 100:00 
+voms-proxy-init --voms cms -valid 185:00 
+
+eval `scramv1 runtime -sh`
 
 To make Ntuples
 

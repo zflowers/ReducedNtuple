@@ -393,8 +393,8 @@ void Get2D_Plot(string hist_name, vector<string> directories, vector<string> inF
    l.SetTextSize(0.05);
    l.SetTextFont(42);
    name = directories[j];
-   name+=cuts[i];
-   name+=trigger_name;
+   name+=("_"+cuts[i]);
+   //name+=trigger_name;
    l.DrawLatex(0.65,.94,name.c_str());
    gPad->RedrawAxis();
    gPad->RedrawAxis("G");
@@ -545,13 +545,17 @@ void Get_Overlay(vector<string> outFiles, string hist_name, vector<string> sampl
 void Stacker(vector<string> inFiles, vector<string> cuts){
  cout << "Running Stacker..." << endl;
  bool trigger = false;
- vector<string> WJets_directories{"WJets_2017"};
- vector<string> WJets_Old_directories{"WJets_2017_Old"};
- vector<string> TTJets_directories{"TTJets_2017"};
- vector<string> sig_directories{""};
+ vector<string> WJets_directories = {"WJets_2017"};
+ vector<string> WJets_Old_directories = {"WJets_2017_Old"};
+ vector<string> TTJets_directories = {"TTJets_2017"};
+ vector<string> directories_2016 = {"MET_2016","Bkg_2016"};
+ vector<string> directories_2017 = {"MET_2017","Bkg_2017"};
+ vector<string> directories_2018 = {"MET_2018","Bkg_2018"};
+ vector<string> sig_directories = {""};
  //vector<string> sig_directories{"TChiWW_SMS_275_235"};
  //vector<string> directories_2D{"TChiWW_SMS_275_235", "TTJets", "WJets", "DiBoson", "DYJetsToLL", "ST"};
- vector<string> directories_2D{"Bkg_2016","MET_2016","T2bW_2016","Bkg_2017","MET_2017","T2bW_2017","Bkg_2018","MET_2018","T2bW_2018"};
+ //vector<string> directories_2D{"Bkg_2016","MET_2016","Bkg_2017","MET_2017","Bkg_2018","MET_2018"};
+ vector<string> directories_2D{"QCD_2017","TTJets_2017","WJets_2017","ZJetsToNuNu_2017"};
  vector<int> colors = {kCyan, kMagenta, kYellow, kViolet+2, kAzure+7, kPink, kGreen, kGray};
  vector<int> colors_bkg = { kAzure+1, kGreen-9, kPink, kTeal+2, kYellow-4 };
  vector<int> colors_sig = { kMagenta, kCyan+2, };
@@ -648,6 +652,18 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
  Get_Overlay(inFiles,"genmu_Eta_Hist",TTJets_directories,cuts,colors,"Cuts",trigger);
 */
 
+ //Get_Overlay(inFiles,"dphiMET_V_Hist",directories_2016,cuts,colors,"Cuts",false);
+ //Get_Overlay(inFiles,"dphiMET_V_Hist",directories_2017,cuts,colors,"Cuts",false);
+ //Get_Overlay(inFiles,"dphiMET_V_Hist",directories_2018,cuts,colors,"Cuts",false);
+ Get2D_Plot("dphiCMI_v_PTCM_Hist",directories_2D,inFiles,cuts,trigger);
+ Get2D_Plot("dphiCMI_v_Mperp_Hist",directories_2D,inFiles,cuts,trigger);
+ Get2D_Plot("dphiCMI_v_RISR_Hist",directories_2D,inFiles,cuts,trigger);
+ Get2D_Plot("Mperp_v_PTCM_Hist",directories_2D,inFiles,cuts,trigger);
+ Get2D_Plot("RISR_v_PTCM_Hist",directories_2D,inFiles,cuts,trigger);
+ Get2D_Plot("dphiCMI_v_dphiMET_V_Hist",directories_2D,inFiles,cuts,trigger);
+ Get2D_Plot("dphiMET_V_v_RISR_Hist",directories_2D,inFiles,cuts,trigger);
+ Get2D_Plot("Mperp_v_dphiMET_V_Hist",directories_2D,inFiles,cuts,trigger);
+ Get2D_Plot("dphiMET_V_v_PTCM_Hist",directories_2D,inFiles,cuts,trigger);
  Get2D_Plot("dphiCMI_v_PTCM_Hist",directories_2D,inFiles,cuts,trigger);
 
 /*

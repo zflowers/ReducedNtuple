@@ -1,8 +1,8 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Wed Jun 24 17:29:05 2020 by ROOT version 6.12/07
+// Thu Aug 13 14:16:07 2020 by ROOT version 6.12/07
 // from TTree KUAnalysis/KUAnalysis
-// found on file: /home/t3-ku/z374f439/../crogan/NTUPLES/NANO/NEW_12_05_20/Fall17_102X/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root
+// found on file: /home/t3-ku/z374f439/../crogan/NTUPLES/NANO/NEW_31_05_20/Fall17_102X/WJetsToLNu_HT-800To1200_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root
 //////////////////////////////////////////////////////////
 
 #ifndef KUAnalysis_h
@@ -116,6 +116,7 @@ public :
    vector<int>     *index_SV_a;
    vector<int>     *index_SV_b;
    Double_t        PTCM;
+   Double_t        PzCM;
    Double_t        cosCM;
    Double_t        dphiCM;
    Double_t        dphiCMI;
@@ -146,6 +147,8 @@ public :
    Double_t        PV;
    Double_t        MVa;
    Double_t        MVb;
+   Double_t        PV_lab;
+   Double_t        dphiMET_V;
    Double_t        MJa;
    Double_t        MJb;
    Double_t        MLa;
@@ -185,8 +188,10 @@ public :
    Double_t        H11X3b;
    Double_t        H21X3a;
    Double_t        H21X3b;
+   Double_t        PISR;
    Double_t        PTISR;
    Double_t        RISR;
+   Double_t        RISRT;
    Double_t        MISR;
    Int_t           NPU;
    Double_t        genMET;
@@ -316,6 +321,7 @@ public :
    TBranch        *b_index_SV_a;   //!
    TBranch        *b_index_SV_b;   //!
    TBranch        *b_PTCM;   //!
+   TBranch        *b_PzCM;   //!
    TBranch        *b_cosCM;   //!
    TBranch        *b_dphiCM;   //!
    TBranch        *b_dphiCMI;   //!
@@ -346,6 +352,8 @@ public :
    TBranch        *b_PV;   //!
    TBranch        *b_MVa;   //!
    TBranch        *b_MVb;   //!
+   TBranch        *b_PV_lab;   //!
+   TBranch        *b_dphiMET_V;   //!
    TBranch        *b_MJa;   //!
    TBranch        *b_MJb;   //!
    TBranch        *b_MLa;   //!
@@ -385,8 +393,10 @@ public :
    TBranch        *b_H11X3b;   //!
    TBranch        *b_H21X3a;   //!
    TBranch        *b_H21X3b;   //!
+   TBranch        *b_PISR;   //!
    TBranch        *b_PTISR;   //!
    TBranch        *b_RISR;   //!
+   TBranch        *b_RISRT;   //!
    TBranch        *b_MISR;   //!
    TBranch        *b_NPU;   //!
    TBranch        *b_genMET;   //!
@@ -441,16 +451,14 @@ KUAnalysis::KUAnalysis(TTree *tree) : fChain(0)
 {
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
-/*
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/home/t3-ku/z374f439/../crogan/NTUPLES/NANO/NEW_12_05_20/Fall17_102X/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root");
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/home/t3-ku/z374f439/../crogan/NTUPLES/NANO/NEW_31_05_20/Fall17_102X/WJetsToLNu_HT-800To1200_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root");
       if (!f || !f->IsOpen()) {
-         f = new TFile("/home/t3-ku/z374f439/../crogan/NTUPLES/NANO/NEW_12_05_20/Fall17_102X/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root");
+         f = new TFile("/home/t3-ku/z374f439/../crogan/NTUPLES/NANO/NEW_31_05_20/Fall17_102X/WJetsToLNu_HT-800To1200_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root");
       }
       f->GetObject("KUAnalysis",tree);
 
    }
-*/
    Init(tree);
 }
 
@@ -663,6 +671,7 @@ void KUAnalysis::Init(TTree *tree)
    fChain->SetBranchAddress("index_SV_a", &index_SV_a, &b_index_SV_a);
    fChain->SetBranchAddress("index_SV_b", &index_SV_b, &b_index_SV_b);
    fChain->SetBranchAddress("PTCM", &PTCM, &b_PTCM);
+   fChain->SetBranchAddress("PzCM", &PzCM, &b_PzCM);
    fChain->SetBranchAddress("cosCM", &cosCM, &b_cosCM);
    fChain->SetBranchAddress("dphiCM", &dphiCM, &b_dphiCM);
    fChain->SetBranchAddress("dphiCMI", &dphiCMI, &b_dphiCMI);
@@ -693,6 +702,8 @@ void KUAnalysis::Init(TTree *tree)
    fChain->SetBranchAddress("PV", &PV, &b_PV);
    fChain->SetBranchAddress("MVa", &MVa, &b_MVa);
    fChain->SetBranchAddress("MVb", &MVb, &b_MVb);
+   fChain->SetBranchAddress("PV_lab", &PV_lab, &b_PV_lab);
+   fChain->SetBranchAddress("dphiMET_V", &dphiMET_V, &b_dphiMET_V);
    fChain->SetBranchAddress("MJa", &MJa, &b_MJa);
    fChain->SetBranchAddress("MJb", &MJb, &b_MJb);
    fChain->SetBranchAddress("MLa", &MLa, &b_MLa);
@@ -732,8 +743,10 @@ void KUAnalysis::Init(TTree *tree)
    fChain->SetBranchAddress("H11X3b", &H11X3b, &b_H11X3b);
    fChain->SetBranchAddress("H21X3a", &H21X3a, &b_H21X3a);
    fChain->SetBranchAddress("H21X3b", &H21X3b, &b_H21X3b);
+   fChain->SetBranchAddress("PISR", &PISR, &b_PISR);
    fChain->SetBranchAddress("PTISR", &PTISR, &b_PTISR);
    fChain->SetBranchAddress("RISR", &RISR, &b_RISR);
+   fChain->SetBranchAddress("RISRT", &RISRT, &b_RISRT);
    fChain->SetBranchAddress("MISR", &MISR, &b_MISR);
 //   fChain->SetBranchAddress("NPU", &NPU, &b_NPU);
 //   fChain->SetBranchAddress("genMET", &genMET, &b_genMET);

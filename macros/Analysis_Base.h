@@ -663,7 +663,21 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
  {
   cout << "Couldn't find: " << name << " in: " << current_cut << "!" << endl;
  }
- //m_Tree->ResetBranchAddresses();
+
+ //HEM Check
+ if(name == "HEM" && m_Tag.find("2018") != std::string::npos)
+ {
+  //loop over all visible objects
+  //loop over leptons
+  //loop over jets
+  //loop over SVs
+ }
+ else
+ {
+  cut = true;
+ }
+
+
  return cut;
 }
 
@@ -700,8 +714,8 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
  bool METHTtrigger_cut = true;
  bool EventFilter_cut = true;
 
-//PreSelection Cuts
-/*
+ bool HEM_cut = true;
+
  if(m_Tag.find("SingleElectron") != std::string::npos)
  {
   string Nele_str = "NeleBronzeG0";
@@ -714,6 +728,8 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
   NmuBronze_cut = Get_Cut(jentry,"NmuBronze",Nmu_str);
  }
 
+//PreSelection Cuts
+/*
  string PTISR_str = "PTISRG200";
  PTISR_cut = Get_Cut(jentry,"PTISR",PTISR_str);
 
@@ -801,10 +817,15 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
   MET_cut = Get_Cut(jentry,"MET",current_cut);
  }
 
+ if(current_cut.find("HEM") != std::string::npos)
+ {
+  HEM_cut = Get_Cut(jentry,"HEM",current_cut);
+ }
+
  if(current_cut.find("PreSelection") == 0)
  {
   current_cut = "";
-  if(PTISR_cut && RISR_cut && PTCM_cut && dphiCMI_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && NmuBronze_cut && NeleBronze_cut && NlepBronze_cut && NmuSilver_cut && NeleSilver_cut && NlepSilver_cut && NmuGold_cut && NeleGold_cut && NlepGold_cut && Njet_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut && EventFilter_cut)
+  if(PTISR_cut && RISR_cut && PTCM_cut && dphiCMI_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && NmuBronze_cut && NeleBronze_cut && NlepBronze_cut && NmuSilver_cut && NeleSilver_cut && NlepSilver_cut && NmuGold_cut && NeleGold_cut && NlepGold_cut && Njet_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut && EventFilter_cut && HEM_cut)
   {
    return false;
   }
@@ -815,7 +836,7 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
   cout << "ERROR: Some cuts not applied: " << current_cut << endl;
  }
 
- if(PTISR_cut && RISR_cut && PTCM_cut && dphiCMI_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && NmuBronze_cut && NeleBronze_cut && NlepBronze_cut && NmuSilver_cut && NeleSilver_cut && NlepSilver_cut && NmuGold_cut && NeleGold_cut && NlepGold_cut && Njet_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut && EventFilter_cut)
+ if(PTISR_cut && RISR_cut && PTCM_cut && dphiCMI_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && NmuBronze_cut && NeleBronze_cut && NlepBronze_cut && NmuSilver_cut && NeleSilver_cut && NlepSilver_cut && NmuGold_cut && NeleGold_cut && NlepGold_cut && Njet_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut && EventFilter_cut && HEM_cut)
  {
   return false;
  }

@@ -1,1 +1,9 @@
+Summer16_102X
+Summer16_102X_Data
+Summer16_102X_SMS
 Fall17_102X
+Fall17_102X_Data
+Fall17_102X_SMS
+Autumn18_102X
+Autumn18_102X_Data
+Autumn18_102X_SMS

@@ -229,10 +229,11 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
  pad_res->Update();
  can->Modified();
  can->Update();
+
 /*
  if(option.compare("Ratio") == 0)
  {
-
+  
  }
  else if(option.compare("Fit") == 0)
  {
