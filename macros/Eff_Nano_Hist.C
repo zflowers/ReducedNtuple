@@ -32,7 +32,8 @@ std::string get_str_between_two_str_unique(const std::string &s, const std::stri
 void Maker(){
 
  //string path = "/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/output/";
- string path = "~/../crogan/NTUPLES/NANO/NEW_31_05_20/";
+ //string path = "~/../crogan/NTUPLES/NANO/NEW_31_05_20/";
+ string path = "~/../crogan/NTUPLES/NANO/NEW_21_09_20/";
 
  if(tag == "") { cout << "Need to specify tag!" << endl; return; }
  TChain* chain;
@@ -58,7 +59,7 @@ void Maker(){
  }
  else
  {
-  input = path+dir+"/NoHadd/"+filename+"_"+dir_rm+"/"+filename+"_"+dir_rm+number+".root";
+  input = path+dir+"/NoHadd/"+filename+"/"+filename+number+".root";
   chain->Add(input.c_str(),0);
  }
  cout << "Input File: " << input << endl;

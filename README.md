@@ -1,6 +1,6 @@
 Grid Setup
 
-voms-proxy-init --voms cms -valid 185:00 
+voms-proxy-init --voms cms -valid 192:00 
 
 eval `scramv1 runtime -sh`
 

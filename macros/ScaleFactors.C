@@ -33,11 +33,11 @@ void ScaleFactors(vector<string> inFile, vector<string> cut){
 
  for(int i = 0; i < inFile.size(); i++)
  {
-  double scale_Ratio_2016 = Get_ScaleFactor("Bkg_2016", data_tags_2016, "METtrigger", colors, inFile[i], "METtrigger"+cut[i]+"_2016", "Ratio");
+  //double scale_Ratio_2016 = Get_ScaleFactor("Bkg_2016", data_tags_2016, "METtrigger", colors, inFile[i], "METtrigger"+cut[i]+"_2016", "Ratio");
   //double scale_Fit_2016 = Get_ScaleFactor("Bkg_2016", data_tags_2016, "METtrigger", colors, inFile[i], "METtrigger"+cut[i]+"_2016", "Fit");
   double scale_Ratio_2017 = Get_ScaleFactor("Bkg_2017", data_tags_2017, "METtrigger", colors, inFile[i], "METtrigger"+cut[i]+"_2017", "Ratio");
   //double scale_Fit_2017 = Get_ScaleFactor("Bkg_2017", data_tags_2017, "METtrigger", colors, inFile[i], "METtrigger"+cut[i]+"_2017", "Fit");
-  double scale_Ratio_2018 = Get_ScaleFactor("Bkg_2018", data_tags_2018, "METtrigger", colors, inFile[i], "METtrigger"+cut[i]+"_2018", "Ratio");
+  //double scale_Ratio_2018 = Get_ScaleFactor("Bkg_2018", data_tags_2018, "METtrigger", colors, inFile[i], "METtrigger"+cut[i]+"_2018", "Ratio");
   //double scale_Fit_2018 = Get_ScaleFactor("Bkg_2018", data_tags_2018, "METtrigger", colors, inFile[i], "METtrigger"+cut[i]+"_2018", "Fit");
  }
 }
@@ -349,7 +349,7 @@ int main(int argc, char* argv[])
  while(std::getline(fs,cut))
  {
   cuts.push_back(cut);
-  files.push_back("Eff_output_Scale_MET_"+cut+".root");
+  files.push_back("Eff_output_"+cut+".root");
   //files.push_back("NoLowHTScale_MET_PreSelection.root");
  }
 

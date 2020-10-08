@@ -1,0 +1,8 @@
+NlepBronzeG0
+NlepGoldG0
+NlepGoldE1
+NlepGoldE2
+NlepGoldE3
+NlepBronzeE1
+NlepBronzeE2
+NlepBronzeE3

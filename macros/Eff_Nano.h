@@ -62,6 +62,7 @@ inline void Eff_Nano::Set_x(string x)
  m_x = x;
 }
 
+bool Clean_cut_eff = false;
 inline void Eff_Nano::Analyze(){
    TBranch* weight_branch = NULL;
    Double_t weight = 0.;
@@ -109,12 +110,40 @@ inline void Eff_Nano::Analyze(){
    Long64_t nentries = m_Tree->GetEntriesFast();
    Long64_t percent = 5.0;
    Long64_t nbytes = 0, nb = 0;
+   if(m_cut.find("Clean") != std::string::npos) Clean_cut_eff = true;
+   eraseSubStr(m_cut,("Clean-"));
 
    for (Long64_t jentry=0; jentry<nentries;jentry++) {
       Long64_t ientry = m_Tree->LoadTree(jentry);
       //nb = m_Tree->GetEntry(jentry);   nbytes += nb;
       if(jentry%((std::max(nentries,percent))/percent) == 0) { cout << "Processing Event: " << jentry << " out of: " << nentries << " Entries" << endl;}
       if(global_cuts(jentry)) continue;
+      if(Clean_cut_eff)
+      {
+       TBranch* dphiCMI_branch = NULL;
+       Double_t dphiCMI = 0.;
+       TBranch* PTCM_branch = NULL;
+       Double_t PTCM = 0.;
+       m_Tree->SetBranchAddress("dphiCMI",&dphiCMI,&dphiCMI_branch);
+       m_Tree->SetBranchAddress("PTCM",&PTCM,&PTCM_branch);
+       dphiCMI_branch->GetEntry(jentry);
+       PTCM_branch->GetEntry(jentry);
+       if(dphiCMI < 0.25)
+       {
+        if((-1600.*(dphiCMI-0.25)*(dphiCMI-0.25)+100.-PTCM) < 0.) continue;
+       }
+       else if(dphiCMI > 0.25 && dphiCMI <= 2.5)
+       {
+        if(PTCM > 100.) continue;
+       }
+       else if(dphiCMI > 2.5)
+       {
+        if((-242.94*(dphiCMI-2.5)*(dphiCMI-2.5)+100.-PTCM) < 0.) continue;
+       }
+       dphiCMI_branch->ResetAddress();
+       PTCM_branch->ResetAddress();
+       m_Tree->ResetBranchAddresses();
+      }
 
       x_branch->GetEntry(jentry);    
       weight_branch->GetEntry(jentry);    

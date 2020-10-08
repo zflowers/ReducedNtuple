@@ -1,0 +1,6 @@
+
+
+-- Schedd: t3.unl.edu : <129.93.239.166:9618?... @ 10/08/20 14:27:11
+Total for query: 16450 jobs; 0 completed, 0 removed, 16450 idle, 0 running, 0 held, 0 suspended 
+Total for all users: 64744 jobs; 14 completed, 0 removed, 64531 idle, 199 running, 0 held, 0 suspended
+

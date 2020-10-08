@@ -1,5 +1,12 @@
 #!/bin/sh
-python Setup/setup.py
+while getopts s: flag
+do
+    case "{flag}" in
+        s) sms=${OPTARG};;
+    esac
+done
+
+python Setup_Hist/setup.py --$sms
 
 python hadd.py
 

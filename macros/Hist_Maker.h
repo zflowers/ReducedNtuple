@@ -11,7 +11,7 @@ class HistClass{
 
   virtual void init_hist(TTree* tree);
   virtual void fill_hist(Long64_t jentry);
-  virtual void write_hist( string output, string Tag );
+  virtual void write_hist(string output, string Tag);
 
   protected:
 
@@ -100,6 +100,9 @@ inline Hist_Maker::Hist_Maker(string outFile, string Tag, TTree* Tree)
  m_Tree = Tree;
 }
 
+//bool Clean_cut = false;
+//flip clean to true to satisfy preselection
+bool Clean_cut = true;
 double lumi = 1.; //store lumi for given year
 
 inline void Hist_Maker::Analyze(){
@@ -108,12 +111,14 @@ inline void Hist_Maker::Analyze(){
    Long64_t nentries = m_Tree->GetEntriesFast();
    Long64_t percent = 10.0;
    //set lumi
-   if(m_Tag.find("QCD") != std::string::npos || m_Tag.find("ST") != std::string::npos || m_Tag.find("ZJets") != std::string::npos || m_Tag.find("WJets") != std::string::npos || m_Tag.find("TTJets") != std::string::npos || m_Tag.find("Boson") != std::string::npos || m_Tag.find("Bkg") != std::string::npos)
+   if(m_Tag.find("DY") != std::string::npos || m_Tag.find("TTV") != std::string::npos || m_Tag.find("QCD") != std::string::npos || m_Tag.find("ST") != std::string::npos || m_Tag.find("ZJets") != std::string::npos || m_Tag.find("WJets") != std::string::npos || m_Tag.find("TTJets") != std::string::npos || m_Tag.find("Boson") != std::string::npos || m_Tag.find("Bkg") != std::string::npos)
    {
     if(m_Tag.find("2016") != std::string::npos) { lumi=35.922; }
     if(m_Tag.find("2017") != std::string::npos) { lumi=41.529; }
     if(m_Tag.find("2018") != std::string::npos) { lumi=59.74; }
    }
+   if(m_cut.find("Clean") != std::string::npos) Clean_cut = true;
+   eraseSubStr(m_cut,("Clean-"));
 
    for (Long64_t jentry=0; jentry<nentries;jentry++) {      
       if(jentry%((std::max(nentries,percent))/percent) == 0) { cout << "Processing Event: " << jentry << " out of: " << nentries << " Entries" << endl; }
@@ -121,6 +126,33 @@ inline void Hist_Maker::Analyze(){
       Long64_t ientry = m_Tree->LoadTree(jentry);
       if(global_cuts(jentry)) continue;
 
+      if(Clean_cut)
+      {
+       TBranch* dphiCMI_branch = NULL;
+       Double_t dphiCMI = 0.;
+       TBranch* PTCM_branch = NULL;
+       Double_t PTCM = 0.;
+       m_Tree->SetBranchAddress("dphiCMI",&dphiCMI,&dphiCMI_branch);
+       m_Tree->SetBranchAddress("PTCM",&PTCM,&PTCM_branch);
+       dphiCMI_branch->GetEntry(jentry);
+       PTCM_branch->GetEntry(jentry);
+       if(dphiCMI < 0.25)
+       {
+        if((-1600.*(dphiCMI-0.25)*(dphiCMI-0.25)+100.-PTCM) < 0.) continue;
+       }
+       else if(dphiCMI > 0.25 && dphiCMI <= 2.5)
+       {
+        if(PTCM > 100.) continue;
+       }
+       else if(dphiCMI > 2.5)
+       {
+        if((-242.94*(dphiCMI-2.5)*(dphiCMI-2.5)+100.-PTCM) < 0.) continue;
+       }
+       dphiCMI_branch->ResetAddress();
+       PTCM_branch->ResetAddress();
+       m_Tree->ResetBranchAddresses();
+      }
+ 
       for( auto histclass : Classes ){ histclass->fill_hist(jentry); }
    }
    cout << "Finished Event Loop" << endl;
@@ -213,8 +245,8 @@ class ele_PT_Hist:public HistClass, public Hist_Maker{
 void ele_PT_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist1d = new TH1D("ele_PT_Hist","",100,0.,200.);
- hist1d->GetXaxis()->SetTitle("ele_PT");
+ hist1d = new TH1D("ele_PT_Hist","",50,0.,20.);
+ hist1d->GetXaxis()->SetTitle("Electron PT");
 }
 void ele_PT_Hist::fill_hist(Long64_t jentry){
  selector.Init(m_Tree);
@@ -228,7 +260,7 @@ void ele_PT_Hist::fill_hist(Long64_t jentry){
  selector.b_weight->GetEntry(jentry);
  for(int i = 0; i < selector.Nlep; i++)
  {
-  if(abs(selector.PDGID_lep->at(i)) == 11 && selector.ID_lep->at(i) >= 4 && selector.PT_lep->at(i)*selector.MiniIso_lep->at(i) < 5. && selector.SIP3D_lep->at(i) < 4.)
+  if(abs(selector.PDGID_lep->at(i)) == 11)
   {
    hist1d->Fill(selector.PT_lep->at(i), lumi*selector.weight);
   }
@@ -244,8 +276,8 @@ class mu_PT_Hist:public HistClass, public Hist_Maker{
 void mu_PT_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist1d = new TH1D("mu_PT_Hist","",100,0.,200.);
- hist1d->GetXaxis()->SetTitle("mu_PT");
+ hist1d = new TH1D("mu_PT_Hist","",50,0.,20.);
+ hist1d->GetXaxis()->SetTitle("Muon PT");
 }
 void mu_PT_Hist::fill_hist(Long64_t jentry){
  selector.Init(m_Tree);
@@ -259,8 +291,10 @@ void mu_PT_Hist::fill_hist(Long64_t jentry){
  selector.b_weight->GetEntry(jentry);
  for(int i = 0; i < selector.Nlep; i++)
  {
-  if(abs(selector.PDGID_lep->at(i)) == 13 && selector.ID_lep->at(i) >= 3 && selector.PT_lep->at(i)*selector.MiniIso_lep->at(i) < 5. && selector.SIP3D_lep->at(i) < 4.)
-  hist1d->Fill(selector.PT_lep->at(i), lumi*selector.weight);
+  if(abs(selector.PDGID_lep->at(i)) == 13)
+  {
+   hist1d->Fill(selector.PT_lep->at(i), lumi*selector.weight);
+  }
   break;
  }
 }
@@ -540,6 +574,33 @@ void dphiCMI_v_RISR_Hist::fill_hist(Long64_t jentry){
  hist2d->Fill(selector.dphiCMI,selector.RISR,lumi*selector.weight);
 }
 
+class Mperp_v_RISR_Hist:public HistClass, public Hist_Maker{
+ public:
+ void init_hist(TTree* tree);
+ void fill_hist(Long64_t jentry);
+};
+void Mperp_v_RISR_Hist::init_hist(TTree* tree){
+ m_Tree = tree;
+ selector = KUAnalysis(m_Tree);
+ hist2d = new TH2D("Mperp_v_RISR_Hist","",128,0.,60,128,0.6,1.1);
+ hist2d->GetXaxis()->SetTitle("M_{#perp}");
+ hist2d->GetYaxis()->SetTitle("RISR");
+}
+void Mperp_v_RISR_Hist::fill_hist(Long64_t jentry){
+//Option A: Load only the branches we need:
+//
+ selector.Init(m_Tree);
+ selector.b_Mperp->GetEntry(jentry);
+ selector.b_RISR->GetEntry(jentry);
+ selector.b_weight->GetEntry(jentry);
+//
+//Option B: Load all branches:
+//
+ m_Tree->GetEntry(jentry);
+//
+ hist2d->Fill(selector.Mperp,selector.RISR,lumi*selector.weight);
+}
+
 class Mperp_v_PTCM_Hist:public HistClass, public Hist_Maker{
  public:
  void init_hist(TTree* tree);
@@ -619,6 +680,60 @@ void dphiCMI_v_PTCM_Hist::fill_hist(Long64_t jentry){
  m_Tree->GetEntry(jentry);
 //
  hist2d->Fill(selector.dphiCMI,selector.PTCM,lumi*selector.weight);
+}
+
+class dphiCMI_v_Njet_S_Hist:public HistClass, public Hist_Maker{
+ public:
+ void init_hist(TTree* tree);
+ void fill_hist(Long64_t jentry);
+};
+void dphiCMI_v_Njet_S_Hist::init_hist(TTree* tree){
+ m_Tree = tree;
+ selector = KUAnalysis(m_Tree);
+ hist2d = new TH2D("dphiCMI_v_Njet_S_Hist","",100,0.,3.5,9,0,10);
+ hist2d->GetXaxis()->SetTitle("dphiCMI");
+ hist2d->GetYaxis()->SetTitle("Njet_S");
+}
+void dphiCMI_v_Njet_S_Hist::fill_hist(Long64_t jentry){
+//Option A: Load only the branches we need:
+//
+ selector.Init(m_Tree);
+ selector.b_dphiCMI->GetEntry(jentry);
+ selector.b_Njet_S->GetEntry(jentry);
+ selector.b_weight->GetEntry(jentry);
+//
+//Option B: Load all branches:
+//
+ m_Tree->GetEntry(jentry);
+//
+ hist2d->Fill(selector.dphiCMI,selector.Njet_S,lumi*selector.weight);
+}
+
+class PTCM_v_Njet_S_Hist:public HistClass, public Hist_Maker{
+ public:
+ void init_hist(TTree* tree);
+ void fill_hist(Long64_t jentry);
+};
+void PTCM_v_Njet_S_Hist::init_hist(TTree* tree){
+ m_Tree = tree;
+ selector = KUAnalysis(m_Tree);
+ hist2d = new TH2D("PTCM_v_Njet_S_Hist","",100,0.,500.,9,0,10);
+ hist2d->GetXaxis()->SetTitle("PTCM");
+ hist2d->GetYaxis()->SetTitle("Njet_S");
+}
+void PTCM_v_Njet_S_Hist::fill_hist(Long64_t jentry){
+//Option A: Load only the branches we need:
+//
+ selector.Init(m_Tree);
+ selector.b_PTCM->GetEntry(jentry);
+ selector.b_Njet_S->GetEntry(jentry);
+ selector.b_weight->GetEntry(jentry);
+//
+//Option B: Load all branches:
+//
+ m_Tree->GetEntry(jentry);
+//
+ hist2d->Fill(selector.PTCM,selector.Njet_S,lumi*selector.weight);
 }
 
 class dphiCMI_v_dphiMET_V_Hist:public HistClass, public Hist_Maker{
@@ -710,7 +825,7 @@ class dphiMET_V_v_PTCM_Hist:public HistClass, public Hist_Maker{
 void dphiMET_V_v_PTCM_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist2d = new TH2D("dphiMET_V_v_PTCM_Hist","",100,3.5,-3.5,100,0.,500.);
+ hist2d = new TH2D("dphiMET_V_v_PTCM_Hist","",100,-3.5,3.5,100,0.,500.);
  hist2d->GetXaxis()->SetTitle("dphiMET_V");
  hist2d->GetYaxis()->SetTitle("PTCM");
 }
@@ -999,8 +1114,8 @@ class genele_PT_Hist:public HistClass, public Hist_Maker{
 void genele_PT_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist1d = new TH1D("genele_PT_Hist","",100,0.,200.);
- hist1d->GetXaxis()->SetTitle("genele_PT");
+ hist1d = new TH1D("genele_PT_Hist","",50,0.,20.);
+ hist1d->GetXaxis()->SetTitle("Generated Electron PT");
 }
 void genele_PT_Hist::fill_hist(Long64_t jentry){
  selector.Init(m_Tree);
@@ -1014,7 +1129,7 @@ void genele_PT_Hist::fill_hist(Long64_t jentry){
  selector.b_weight->GetEntry(jentry);
  for(int i = 0; i < selector.genNlep; i++)
  {
-  if(abs(selector.PDGID_lep->at(i)) == 11 && selector.ID_lep->at(i) >= 4 && selector.genPT_lep->at(i)*selector.MiniIso_lep->at(i) < 5. && selector.SIP3D_lep->at(i) < 4.)
+  if(abs(selector.PDGID_lep->at(i)) == 11)
   {
    hist1d->Fill(selector.genPT_lep->at(i), lumi*selector.weight);
   }
@@ -1030,8 +1145,8 @@ class genmu_PT_Hist:public HistClass, public Hist_Maker{
 void genmu_PT_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist1d = new TH1D("genmu_PT_Hist","",100,0.,200.);
- hist1d->GetXaxis()->SetTitle("genmu_PT");
+ hist1d = new TH1D("genmu_PT_Hist","",50,0.,20.);
+ hist1d->GetXaxis()->SetTitle("Generated Muon PT");
 }
 void genmu_PT_Hist::fill_hist(Long64_t jentry){
  selector.Init(m_Tree);
@@ -1045,8 +1160,10 @@ void genmu_PT_Hist::fill_hist(Long64_t jentry){
  selector.b_weight->GetEntry(jentry);
  for(int i = 0; i < selector.genNlep; i++)
  {
-  if(abs(selector.PDGID_lep->at(i)) == 13 && selector.ID_lep->at(i) >= 3 && selector.genPT_lep->at(i)*selector.MiniIso_lep->at(i) < 5. && selector.SIP3D_lep->at(i) < 4.)
-  hist1d->Fill(selector.genPT_lep->at(i), lumi*selector.weight);
+  if(abs(selector.PDGID_lep->at(i)) == 13)
+  {
+   hist1d->Fill(selector.genPT_lep->at(i), lumi*selector.weight);
+  }
   break;
  }
 }
@@ -1342,21 +1459,22 @@ vector<HistClass*> Setup_Hists(TTree* tree){
  Classes.push_back(new dphiMET_V_v_RISR_Hist);
  Classes.push_back(new Mperp_v_dphiMET_V_Hist);
  Classes.push_back(new dphiMET_V_v_PTCM_Hist);
+ Classes.push_back(new Mperp_v_RISR_Hist);
+ Classes.push_back(new PTCM_v_Njet_S_Hist);
+ Classes.push_back(new dphiCMI_v_Njet_S_Hist);
 
-/*
 //gen hists
- Classes.push_back(new genmet_Hist);
- Classes.push_back(new genmet_Phi_Hist);
+ //Classes.push_back(new genmet_Hist);
+ //Classes.push_back(new genmet_Phi_Hist);
  //Classes.push_back(new gendphiMET_lep_Hist);
- Classes.push_back(new genele_PT_Hist);
- Classes.push_back(new genmu_PT_Hist);
- Classes.push_back(new genele_Phi_Hist);
- Classes.push_back(new genmu_Phi_Hist);
- Classes.push_back(new genele_Eta_Hist);
- Classes.push_back(new genmu_Eta_Hist);
+ //Classes.push_back(new genele_PT_Hist);
+ //Classes.push_back(new genmu_PT_Hist);
+ //Classes.push_back(new genele_Phi_Hist);
+ //Classes.push_back(new genmu_Phi_Hist);
+ //Classes.push_back(new genele_Eta_Hist);
+ //Classes.push_back(new genmu_Eta_Hist);
  //Classes.push_back(new gendphiMET_ele_Hist);
  //Classes.push_back(new gendphiMET_mu_Hist);
-*/
 
 
  for( auto histclass : Classes ){ histclass->init_hist(tree); }

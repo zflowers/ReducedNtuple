@@ -17,6 +17,7 @@
 #include <TH1D.h>
 #include <TH2D.h>
 #include <TStyle.h>
+#include <TPaveStats.h>
 
 using namespace std;
 
@@ -93,6 +94,24 @@ vector<TH1D*> list_histos(vector<string> fname, vector<string> dir_names, string
   }
  }
  return vect_hist;
+}
+
+TH1D* get_hist(string fname, string dir_name, string hist_name)
+{
+ TH1D* h = nullptr;
+ TKey *key;
+ TFile *f = TFile::Open(fname.c_str(), "READ");
+ if(!f || f->IsZombie())
+ {
+  cout << "Unable to open " << fname << " for reading..." << endl;
+  return h;
+ }
+ TDirectoryFile* folder = nullptr;
+ f->GetObject(dir_name.c_str(),folder);
+ if(folder == NULL) return h;
+ folder->cd();
+ folder->GetObject(hist_name.c_str(),h);
+ return h;
 }
 
 vector<TH2D*> list_histos2D(string fname, vector<string> dir_names, string hist_name)
@@ -305,14 +324,14 @@ void Get2D_Plot(string hist_name, vector<string> directories, vector<string> inF
  gStyle->SetOptTitle(0);
  gStyle->SetFrameFillColor(kBlack);
  gStyle->SetFrameLineColor(kWhite);
- vector<TH2D*> hist = list_histos2D(inFiles, directories, hist_name);
- TFile* output = new TFile(inFiles[0].c_str(),"UPDATE");
  for(int i = 0; i < int(cuts.size()); i++)
  {
+  vector<TH2D*> hist = list_histos2D(inFiles[i], directories, hist_name);
+  TFile* output = new TFile(inFiles[i].c_str(),"UPDATE");
   for(int j = 0; j < int(directories.size()); j++)
   {
    string name = "can_";
-   name+=hist[i+j]->GetName();
+   name+=hist[j]->GetName();
    name+=directories[j];
    name+=cuts[i];
    string trigger_name = "";
@@ -364,26 +383,26 @@ void Get2D_Plot(string hist_name, vector<string> directories, vector<string> inF
    can->SetFillColor(kBlack);
    can->Draw();
    can->cd();
-   hist[i+j]->GetXaxis()->SetAxisColor(kWhite);
-   hist[i+j]->GetYaxis()->SetAxisColor(kWhite);
-   hist[i+j]->GetXaxis()->SetTitleColor(kWhite);
-   hist[i+j]->GetYaxis()->SetTitleColor(kWhite);
-   hist[i+j]->GetXaxis()->SetLabelColor(kWhite);
-   hist[i+j]->GetYaxis()->SetLabelColor(kWhite);
-   hist[i+j]->GetZaxis()->SetLabelColor(kWhite);
-   hist[i+j]->GetXaxis()->CenterTitle();
-   hist[i+j]->GetXaxis()->SetTitleFont(132);
-   hist[i+j]->GetXaxis()->SetTitleSize(0.06);
-   hist[i+j]->GetXaxis()->SetTitleOffset(1.06);
-   hist[i+j]->GetXaxis()->SetLabelFont(132);
-   hist[i+j]->GetXaxis()->SetLabelSize(0.05);
-   hist[i+j]->GetYaxis()->CenterTitle();
-   hist[i+j]->GetYaxis()->SetTitleFont(132);
-   hist[i+j]->GetYaxis()->SetTitleSize(0.06);
-   hist[i+j]->GetYaxis()->SetTitleOffset(1.);
-   hist[i+j]->GetYaxis()->SetLabelFont(132);
-   hist[i+j]->GetYaxis()->SetLabelSize(0.05);
-   hist[i+j]->Draw("COLZ");
+   hist[j]->GetXaxis()->SetAxisColor(kWhite);
+   hist[j]->GetYaxis()->SetAxisColor(kWhite);
+   hist[j]->GetXaxis()->SetTitleColor(kWhite);
+   hist[j]->GetYaxis()->SetTitleColor(kWhite);
+   hist[j]->GetXaxis()->SetLabelColor(kWhite);
+   hist[j]->GetYaxis()->SetLabelColor(kWhite);
+   hist[j]->GetZaxis()->SetLabelColor(kWhite);
+   hist[j]->GetXaxis()->CenterTitle();
+   hist[j]->GetXaxis()->SetTitleFont(132);
+   hist[j]->GetXaxis()->SetTitleSize(0.06);
+   hist[j]->GetXaxis()->SetTitleOffset(1.06);
+   hist[j]->GetXaxis()->SetLabelFont(132);
+   hist[j]->GetXaxis()->SetLabelSize(0.05);
+   hist[j]->GetYaxis()->CenterTitle();
+   hist[j]->GetYaxis()->SetTitleFont(132);
+   hist[j]->GetYaxis()->SetTitleSize(0.06);
+   hist[j]->GetYaxis()->SetTitleOffset(1.);
+   hist[j]->GetYaxis()->SetLabelFont(132);
+   hist[j]->GetYaxis()->SetLabelSize(0.05);
+   hist[j]->Draw("COLZ");
    TLatex l;
    l.SetNDC();
    l.SetTextColor(kWhite);
@@ -393,7 +412,7 @@ void Get2D_Plot(string hist_name, vector<string> directories, vector<string> inF
    l.SetTextSize(0.05);
    l.SetTextFont(42);
    name = directories[j];
-   name+=("_"+cuts[i]);
+   //name+=("_"+cuts[i]);
    //name+=trigger_name;
    l.DrawLatex(0.65,.94,name.c_str());
    gPad->RedrawAxis();
@@ -401,9 +420,9 @@ void Get2D_Plot(string hist_name, vector<string> directories, vector<string> inF
    can->Write();
    delete can;
   }
+  output->Close();
+  delete output;
  }
- output->Close();
- delete output;
 }
 
 void Get_Overlay(vector<string> outFiles, string hist_name, vector<string> samples, vector<string> cuts, vector<int> colors, string option, bool trigger)
@@ -542,6 +561,88 @@ void Get_Overlay(vector<string> outFiles, string hist_name, vector<string> sampl
  //l.DrawLatex(0.72,0.94,s_lumi.c_str());
 }
 
+void Get1D_Plot(vector<string> outFiles, string hist_name, vector<string> samples, vector<string> cuts, vector<int> colors)
+{
+ gStyle->SetOptTitle(0);
+ gStyle->SetFrameFillColor(kBlack);
+ gStyle->SetFrameLineColor(kWhite);
+ for(int j = 0; j < cuts.size(); j++)
+ {
+  for(int i = 0; i < samples.size(); i++)
+  {
+   TH1D* hists = get_hist(outFiles[j],samples[i],hist_name);
+   TCanvas* can = new TCanvas(("can_"+hist_name+samples[i]+"_"+cuts[j]).c_str(),"",864.,468.);
+   can->SetLeftMargin(0.15);
+   can->SetRightMargin(0.18);
+   can->SetBottomMargin(0.15);
+   can->SetGridx();
+   can->SetGridy();
+   can->SetLogz();
+   can->SetFillColor(kBlack);
+   can->Draw();
+   can->cd();
+   string x_title = hists->GetXaxis()->GetTitle();
+   string y_title = "#frac{1}{N} #frac{dN}{d("+x_title+")}";
+   //hists->GetYaxis()->SetTitle(y_title.c_str());
+   //hists->Scale(1./hists->GetEntries());
+   hists->GetYaxis()->SetTitle("Number of Events");
+   hists->Draw("HIST SAMES");
+   hists->SetLineWidth(2);
+   hists->GetXaxis()->SetAxisColor(kWhite);
+   hists->GetYaxis()->SetAxisColor(kWhite);
+   hists->GetXaxis()->SetTitleColor(kWhite);
+   hists->GetYaxis()->SetTitleColor(kWhite);
+   hists->GetXaxis()->SetLabelColor(kWhite);
+   hists->GetYaxis()->SetLabelColor(kWhite);
+   hists->SetLineColor(colors[i]);
+   hists->GetXaxis()->CenterTitle();
+   hists->GetXaxis()->SetTitleFont(132);
+   hists->GetXaxis()->SetTitleSize(0.06);
+   hists->GetXaxis()->SetTitleOffset(1.06);
+   hists->GetXaxis()->SetLabelFont(132);
+   hists->GetXaxis()->SetLabelSize(0.05);
+   //hists->GetXaxis()->SetTitle(Xname.c_str());
+   hists->GetYaxis()->CenterTitle();
+   hists->GetYaxis()->SetTitleFont(132);
+   hists->GetYaxis()->SetTitleSize(0.06);
+   hists->GetYaxis()->SetTitleOffset(1.);
+   hists->GetYaxis()->SetLabelFont(132);
+   hists->GetYaxis()->SetLabelSize(0.05);
+   //hists->GetYaxis()->SetTitle("a. u.");
+   //hists->GetYaxis()->SetTitle(Yname.c_str());
+   can->Update();
+   TPaveStats* stats = (TPaveStats*)hists->FindObject("stats");
+   stats->SetFillColor(kBlack);
+   stats->SetLineColor(kWhite);
+   stats->SetTextColor(kWhite);
+   stats->SetX1NDC(.62);
+   stats->SetY1NDC(.7);
+   stats->SetX2NDC(.82);
+   stats->SetY2NDC(.9);
+   
+   TLatex l;
+   l.SetTextColor(kWhite);
+   l.SetNDC();
+   l.SetTextSize(0.04);
+   l.SetTextFont(42);
+   l.DrawLatex(0.15,0.943,"#bf{#it{CMS}} Internal 13 TeV Simulation");
+   l.SetTextSize(0.04);
+   l.SetTextFont(42);
+   l.DrawLatex(.50,.94,(samples[i]+"   "+cuts[j]).c_str());
+
+   TFile* output = new TFile(outFiles[j].c_str(),"UPDATE");
+   can->Update();
+   can->Write();
+   output->Close();
+   delete can;
+   delete output;
+  }
+ }
+
+ //string s_lumi = "#scale[0.6]{#int} #it{L dt} = "+to_string(int(137.0))+" fb^{-1}";
+ //l.DrawLatex(0.72,0.94,s_lumi.c_str());
+}
+
 void Stacker(vector<string> inFiles, vector<string> cuts){
  cout << "Running Stacker..." << endl;
  bool trigger = false;
@@ -551,12 +652,12 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
  vector<string> directories_2016 = {"MET_2016","Bkg_2016"};
  vector<string> directories_2017 = {"MET_2017","Bkg_2017"};
  vector<string> directories_2018 = {"MET_2018","Bkg_2018"};
- vector<string> sig_directories = {""};
- //vector<string> sig_directories{"TChiWW_SMS_275_235"};
+ vector<string> sig_directories{"T2tt_500_490_2017","TChiWZ_300_297_2016","TSlepSlep_300_299_2016"};
  //vector<string> directories_2D{"TChiWW_SMS_275_235", "TTJets", "WJets", "DiBoson", "DYJetsToLL", "ST"};
- //vector<string> directories_2D{"Bkg_2016","MET_2016","Bkg_2017","MET_2017","Bkg_2018","MET_2018"};
- vector<string> directories_2D{"QCD_2017","TTJets_2017","WJets_2017","ZJetsToNuNu_2017"};
- vector<int> colors = {kCyan, kMagenta, kYellow, kViolet+2, kAzure+7, kPink, kGreen, kGray};
+ //vector<string> directories_2D{"Bkg_2016","MET_2016","Bkg_2017","MET_2017","Bkg_2018","MET_2018","QCD_2017","TTJets_2017","WJets_2017","ZJetsToNuNu_2017","T2bW_500_490_2016","T2bW_500_490_2017","T2bW_500_300_2018"};
+ //vector<string> directories_2D{"Bkg_2017","Bkg_QCD_RM_2017","MET_2017","QCD_2017","TTJets_2017","WJets_2017","ZJetsToNuNu_2017","T2bW_500_490_2017","Bkg_QCD200_RM_2017","Bkg_QCD300_RM_2017","Bkg_QCD500_RM_2017","Bkg_QCD700_RM_2017","Bkg_QCD1000_RM_2017","Bkg_QCD1500_RM_2017","Bkg_QCD2000_RM_2017","QCD_100to200_2017","QCD_200to300_2017","QCD_300to500_2017","QCD_500to700_2017","QCD_700to1000_2017","QCD_1000to1500_2017","QCD_1500to2000_2017","QCD_2000toInf_2017"};
+ vector<string> directories_2D{"Bkg_2017","T2bW_500_490_2017"};
+ vector<int> colors = {kCyan, kMagenta, kYellow, kGreen-2, kAzure+7, kPink, kGreen, kGray};
  vector<int> colors_bkg = { kAzure+1, kGreen-9, kPink, kTeal+2, kYellow-4 };
  vector<int> colors_sig = { kMagenta, kCyan+2, };
 
@@ -655,16 +756,21 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
  //Get_Overlay(inFiles,"dphiMET_V_Hist",directories_2016,cuts,colors,"Cuts",false);
  //Get_Overlay(inFiles,"dphiMET_V_Hist",directories_2017,cuts,colors,"Cuts",false);
  //Get_Overlay(inFiles,"dphiMET_V_Hist",directories_2018,cuts,colors,"Cuts",false);
- Get2D_Plot("dphiCMI_v_PTCM_Hist",directories_2D,inFiles,cuts,trigger);
- Get2D_Plot("dphiCMI_v_Mperp_Hist",directories_2D,inFiles,cuts,trigger);
- Get2D_Plot("dphiCMI_v_RISR_Hist",directories_2D,inFiles,cuts,trigger);
- Get2D_Plot("Mperp_v_PTCM_Hist",directories_2D,inFiles,cuts,trigger);
- Get2D_Plot("RISR_v_PTCM_Hist",directories_2D,inFiles,cuts,trigger);
- Get2D_Plot("dphiCMI_v_dphiMET_V_Hist",directories_2D,inFiles,cuts,trigger);
- Get2D_Plot("dphiMET_V_v_RISR_Hist",directories_2D,inFiles,cuts,trigger);
- Get2D_Plot("Mperp_v_dphiMET_V_Hist",directories_2D,inFiles,cuts,trigger);
- Get2D_Plot("dphiMET_V_v_PTCM_Hist",directories_2D,inFiles,cuts,trigger);
- Get2D_Plot("dphiCMI_v_PTCM_Hist",directories_2D,inFiles,cuts,trigger);
+ //Get2D_Plot("dphiCMI_v_PTCM_Hist",directories_2D,inFiles,cuts,trigger);
+ //Get2D_Plot("dphiCMI_v_Mperp_Hist",directories_2D,inFiles,cuts,trigger);
+ //Get2D_Plot("dphiCMI_v_RISR_Hist",directories_2D,inFiles,cuts,trigger);
+ //Get2D_Plot("Mperp_v_PTCM_Hist",directories_2D,inFiles,cuts,trigger);
+ //Get2D_Plot("RISR_v_PTCM_Hist",directories_2D,inFiles,cuts,trigger);
+ //Get2D_Plot("dphiCMI_v_dphiMET_V_Hist",directories_2D,inFiles,cuts,trigger);
+ //Get2D_Plot("dphiMET_V_v_RISR_Hist",directories_2D,inFiles,cuts,trigger);
+ //Get2D_Plot("Mperp_v_dphiMET_V_Hist",directories_2D,inFiles,cuts,trigger);
+ //Get2D_Plot("dphiMET_V_v_PTCM_Hist",directories_2D,inFiles,cuts,trigger);
+ //Get2D_Plot("Mperp_v_RISR_Hist",directories_2D,inFiles,cuts,trigger);
+ 
+ Get1D_Plot(inFiles,"ele_PT_Hist",sig_directories,cuts,colors);
+ Get1D_Plot(inFiles,"mu_PT_Hist",sig_directories,cuts,colors);
+ Get1D_Plot(inFiles,"genele_PT_Hist",sig_directories,cuts,colors);
+ Get1D_Plot(inFiles,"genmu_PT_Hist",sig_directories,cuts,colors);
 
 /*
  double bkg_Entries = 0.0;
