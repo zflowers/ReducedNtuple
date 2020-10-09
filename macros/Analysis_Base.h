@@ -231,10 +231,6 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
 
   return cut;
  }
- else
- {
-  return true;
- }
  //Finish HEM Check
 
  if(name.find("Bronze") != std::string::npos)
