@@ -268,14 +268,14 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
    {
     if(abs(PDGID_lep->at(i)) == 11)
     {
-     if(ID_lep->at(2*i) < 4 || fabs(PT_lep->at(i)*MiniIso_lep->at(i)) > 5.)
+     if((ID_lep->at(2*i) > 1 && ID_lep->at(2*i) < 4) || fabs(PT_lep->at(i)*MiniIso_lep->at(i)) >= 4. || MiniIso_lep->at(i) >= 0.3)
      {
       numBronze++;
      }
     }
     else if(abs(PDGID_lep->at(i)) == 13)
     {
-     if(ID_lep->at(2*i) < 3 || fabs(PT_lep->at(i)*MiniIso_lep->at(i)) > 5.)
+     if((ID_lep->at(2*i) > 1 && ID_lep->at(2*i) < 3) || fabs(PT_lep->at(i)*MiniIso_lep->at(i)) >= 4. || MiniIso_lep->at(i) >= 0.3)
      {
       numBronze++;
      }
@@ -323,7 +323,7 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
    {
     if(abs(PDGID_lep->at(i)) == 11)
     {
-     if(ID_lep->at(2*i) < 4 || fabs(PT_lep->at(i)*MiniIso_lep->at(i)) > 5.)
+     if((ID_lep->at(2*i) > 1 && ID_lep->at(2*i) < 4) || fabs(PT_lep->at(i)*MiniIso_lep->at(i)) >= 4. || MiniIso_lep->at(i) >= 0.3)
      {
       numBronze++;
      }
@@ -371,7 +371,7 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
    {
     if(abs(PDGID_lep->at(i)) == 13)
     {
-     if(ID_lep->at(2*i) < 3 || fabs(PT_lep->at(i)*MiniIso_lep->at(i)) > 5.)
+     if((ID_lep->at(2*i) > 1 && ID_lep->at(2*i) < 3) || fabs(PT_lep->at(i)*MiniIso_lep->at(i)) >= 4. || MiniIso_lep->at(i) >= 0.3)
      {
       numBronze++;
      }
@@ -425,14 +425,14 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
    {
     if(abs(PDGID_lep->at(i)) == 11)
     {
-     if(ID_lep->at(2*i) >= 4 && SIP3D_lep->at(i) >= 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 5.)
+     if(ID_lep->at(2*i) >= 4 && SIP3D_lep->at(i) >= 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4. && MiniIso_lep->at(i) < 0.3)
      {
       numSilver++;
      }
     }
     else if(abs(PDGID_lep->at(i)) == 13)
     {
-     if(ID_lep->at(2*i) >= 3 && SIP3D_lep->at(i) >= 2. && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 5.)
+     if(ID_lep->at(2*i) >= 3 && SIP3D_lep->at(i) >= 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4. && MiniIso_lep->at(i) < 0.3)
      {
       numSilver++;
      }
@@ -480,7 +480,7 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
    {
     if(abs(PDGID_lep->at(i)) == 11)
     {
-     if(ID_lep->at(2*i) >= 4 && SIP3D_lep->at(i) >= 2. && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 5.)
+     if(ID_lep->at(2*i) >= 4 && SIP3D_lep->at(i) >= 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4. && MiniIso_lep->at(i) < 0.3)
      {
       numSilver++;
      }
@@ -528,7 +528,7 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
    {
     if(abs(PDGID_lep->at(i)) == 13)
     {
-     if(ID_lep->at(2*i) >= 3 && SIP3D_lep->at(i) >= 2. && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 5.)
+     if(ID_lep->at(2*i) >= 3 && SIP3D_lep->at(i) >= 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4. && MiniIso_lep->at(i) < 0.3)
      {
       numSilver++;
      }
@@ -582,14 +582,14 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
    {
     if(abs(PDGID_lep->at(i)) == 11)
     {
-     if(ID_lep->at(2*i) >= 4 && PT_lep->at(i)*MiniIso_lep->at(i) < 5. && SIP3D_lep->at(i) < 2.)
+     if(ID_lep->at(2*i) >= 4 && SIP3D_lep->at(i) < 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4. && MiniIso_lep->at(i) < 0.3)
      {
       numGold++;
      }
     }
     else if(abs(PDGID_lep->at(i)) == 13)
     {
-     if(ID_lep->at(2*i) >= 3 && PT_lep->at(i)*MiniIso_lep->at(i) < 5. && SIP3D_lep->at(i) < 2.)
+     if(ID_lep->at(2*i) >= 3 && SIP3D_lep->at(i) < 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4. && MiniIso_lep->at(i) < 0.3)
      {
       numGold++;
      }
@@ -635,7 +635,7 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
    b_PT_lep->GetEntry(jentry);
    for(int i = 0; i < Nele; i++)
    {
-    if(abs(PDGID_lep->at(i)) == 11 && ID_lep->at(2*i) >= 4 && PT_lep->at(i)*MiniIso_lep->at(i) < 5. && SIP3D_lep->at(i) < 2.)
+    if(abs(PDGID_lep->at(i)) == 11 && ID_lep->at(2*i) >= 4 && SIP3D_lep->at(i) < 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4. && MiniIso_lep->at(i) < 0.3)
     {
      numGold++;
     }
@@ -680,7 +680,7 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
    b_PT_lep->GetEntry(jentry);
    for(int i = 0; i < Nmu; i++)
    {
-    if(abs(PDGID_lep->at(i)) == 13 && ID_lep->at(2*i) >= 3 && PT_lep->at(i)*MiniIso_lep->at(i) < 5. && SIP3D_lep->at(i) < 2.)
+    if(abs(PDGID_lep->at(i)) == 13 && ID_lep->at(2*i) >= 4 && SIP3D_lep->at(i) < 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4. && MiniIso_lep->at(i) < 0.3)
     {
      numGold++;
     }
@@ -962,6 +962,7 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
  }
 
 //PreSelection Cuts
+/*
  string PTISR_str = "PTISRG200";
  PTISR_cut = Get_Cut(jentry,"PTISR",PTISR_str);
 
@@ -971,6 +972,9 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
  string EventFilter_str = "EventFilterE1";
  EventFilter_cut = Get_Cut(jentry,"EventFilter",EventFilter_str);
 
+*/
+
+
  if(current_cut.find("PTISR") != std::string::npos)
  {
   PTISR_cut = Get_Cut(jentry,"PTISR",current_cut);
@@ -978,6 +982,7 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
 
  if(current_cut.find("EventFilter") != std::string::npos)
  {
+cout << "applying current cut" << endl;
   EventFilter_cut = Get_Cut(jentry,"EventFilter",current_cut);
  }
 

@@ -26,7 +26,7 @@ TGraphAsymmErrors* TGAE_Ratio(TGraphAsymmErrors* gr_bkg, TGraphAsymmErrors* gr_d
 void ScaleFactors(vector<string> inFile, vector<string> cut){
  //string inFile ="output_quick.root";
  vector<string> data_tags_2016 = {"SingleElectron_2016","SingleMuon_2016"};
- vector<string> data_tags_2017 = {"SingleElectron_2017","SingleMuon_2017"};
+ vector<string> data_tags_2017 = {"SingleElectron_2017","SingleMuon_2017","DoubleEG_2017","DoubleMuon_2017"};
  vector<string> data_tags_2018 = {"SingleElectron_2018","SingleMuon_2018"};
  
  vector<int> colors = {kCyan, kMagenta, kYellow, kViolet+2, kAzure+7, kPink, kGreen, kGray};
@@ -206,13 +206,23 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
  pad_res->Update();
  can->Update();
  if(invert_colors) pad_res->SetFillColor(kBlack);
+ bool empty_mg = true;
  TMultiGraph* mg_res = new TMultiGraph();
  for(int i = 0; i < data_tags.size(); i++)
  {
   TGraphAsymmErrors* res_ratio = TGAE_Ratio(gr_bkg,vect_gr_data[i]);
+  if(res_ratio == NULL) continue;
   res_ratio->SetMarkerColor(colors[i+1]);
   res_ratio->SetLineColor(colors[i+1]);
   mg_res->Add(res_ratio);
+  empty_mg = false;
+ }
+ if(empty_mg)
+ {
+  delete leg;
+  delete mg;
+  delete can;
+  return -1.;
  }
  mg_res->Draw("AP");
  Format_Graph_res(mg_res);

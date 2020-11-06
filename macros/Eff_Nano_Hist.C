@@ -33,7 +33,8 @@ void Maker(){
 
  //string path = "/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/output/";
  //string path = "~/../crogan/NTUPLES/NANO/NEW_31_05_20/";
- string path = "~/../crogan/NTUPLES/NANO/NEW_21_09_20/";
+ //string path = "~/../crogan/NTUPLES/NANO/NEW_21_09_20/";
+ string path = "~/Eff_NANO/ReducedNtuple/";
 
  if(tag == "") { cout << "Need to specify tag!" << endl; return; }
  TChain* chain;

@@ -3,17 +3,11 @@ import os
 import re
 import argparse
 
-store = "/home/t3-ku/z374f439/Hist_NANO/ReducedNtuple/macros/HIST/"
-log = "/home/t3-ku/z374f439/Hist_NANO/ReducedNtuple/macros/LOG_HIST/"
-shell = "/home/t3-ku/z374f439/Hist_NANO/ReducedNtuple/macros/Shell_HIST/"
-
-#options                                                                                                                           
-parser = argparse.ArgumentParser(description='Check whether using SMS')
-parser.add_argument('--sms', dest='sms', action='store_true')
-parser.set_defaults(sms=False)
-
-args = parser.parse_args()
-sms = args.sms
+store = "/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/HIST/"
+log = "/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/LOG_HIST/"
+shell = "/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/Shell_HIST/"
+#input = "/home/t3-ku/crogan/NTUPLES/NANO/NEW_21_09_20/"
+input = "/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/"
 
 print("Writing shell scripts")
 
@@ -31,7 +25,7 @@ def write_sh(Cut,Num,Dir,File,Tag):
     fsrc.write('FILENAME = '+File+'\n')
     fsrc.write('NUM = '+Num+'\n')
     fsrc.write('universe = vanilla \n')
-    fsrc.write('executable = /home/t3-ku/z374f439/Hist_NANO/ReducedNtuple/macros/Hist_Nano_Hist.x \n')
+    fsrc.write('executable = /home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/Eff_Nano_Hist.x \n')
     fsrc.write('#notify_user = z374f439@ku.edu \n')
     fsrc.write('#notification = Complete \n')
     fsrc.write('getenv = True \n')
@@ -52,22 +46,22 @@ def write_sh(Cut,Num,Dir,File,Tag):
     return f
 
 
-with open("/home/t3-ku/z374f439/Hist_NANO/ReducedNtuple/macros/Setup_Hist/Hist.txt") as cut_handle:
+with open("/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/Setup_Hist/Hist.txt") as cut_handle:
     for cut_line in cut_handle:
         Cut = cut_line.replace('\n','')
-        with open("/home/t3-ku/z374f439/Hist_NANO/ReducedNtuple/macros/Setup_Hist/Dir.txt") as dir_handle:
+        with open("/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/Setup_Hist/Dir.txt") as dir_handle:
             for dir_line in dir_handle:
                 Dir = dir_line.replace('\n','')
-                for filename in os.listdir("/home/t3-ku/z374f439/Hist_NANO/ReducedNtuple/macros/Setup_Hist/"+Dir+"/"):
+                for filename in os.listdir("/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/Setup_Hist/"+Dir+"/"):
                     File = filename.replace('.txt','')
-                    with open(os.path.join("/home/t3-ku/z374f439/Hist_NANO/ReducedNtuple/macros/Setup_Hist/"+Dir+"/",filename),'r') as tag_handle:
+                    with open(os.path.join("/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/Setup_Hist/"+Dir+"/",filename),'r') as tag_handle:
                         for tag_line in tag_handle:
                             Tag = tag_line.replace('\n','')
                             if "SMS" in Dir:
                                 Num = ''
                                 list_f.append(write_sh(Cut,Num,Dir,File,Tag))
                             else:
-                                for num_line in os.listdir("/home/t3-ku/crogan/NTUPLES/NANO/NEW_21_09_20/"+Dir+"/NoHadd/"+File+"/"):
+                                for num_line in os.listdir(input+Dir+"/NoHadd/"+File+"/"):
                                     Num = num_line.replace(File,'')
                                     Num = Num.replace('.root','')
                                     list_f.append(write_sh(Cut,Num,Dir,File,Tag))
@@ -77,13 +71,3 @@ list_f = list(dict.fromkeys(list_f))
 for f in list_f:
     os.system("condor_submit "+f)
 print("Finished Submitting Jobs")
-print("Checking if jobs finished")
-complete = False
-while complete is not True:
-    os.system("/home/t3-ku/z374f439/Hist_NANO/ReducedNtuple/scripts/Plot_watch.sh > /home/t3-ku/z374f439/Hist_NANO/ReducedNtuple/macros/watch.txt")
-    os.system("sleep 5")
-    with open('watch.txt') as watch:
-        if 'Total for query: 0 jobs; 0 completed, 0 removed, 0 idle, 0 running, 0 held, 0 suspended' in watch.read():
-            complete = True
-os.system("rm watch.txt")
-print("Finished Running Jobs")

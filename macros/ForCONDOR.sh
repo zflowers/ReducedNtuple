@@ -1,13 +1,11 @@
 #!/bin/sh
-while getopts s: flag
-do
-    case "{flag}" in
-        s) sms=${OPTARG};;
-    esac
-done
 
-python Setup_Hist/setup.py --$sms
+python Setup_Hist/setup.py
+
+python watch.py
 
 python hadd.py
+
+cp HIST/*.root ./
 
 sendmail z374f439@ku.edu < notify.txt

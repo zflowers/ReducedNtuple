@@ -4,7 +4,6 @@ import sys
 import time
 
 store = "/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/HIST/"
-long_term = "/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/"
 sleep_time = 60
 
 def hadd(Cut,Dir,File,Tag):

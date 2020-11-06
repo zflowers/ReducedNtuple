@@ -1,9 +1,5 @@
 PreSelection
-NeleGoldG0
 NeleGoldE1
 NeleGoldE2
-NeleBronzeG0
-NmuGoldG0
 NmuGoldE1
 NmuGoldE2
-NmuBronzeG0

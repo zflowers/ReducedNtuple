@@ -102,7 +102,7 @@ inline Hist_Maker::Hist_Maker(string outFile, string Tag, TTree* Tree)
 
 //bool Clean_cut = false;
 //flip clean to true to satisfy preselection
-bool Clean_cut = true;
+bool Clean_cut = false;
 double lumi = 1.; //store lumi for given year
 
 inline void Hist_Maker::Analyze(){
@@ -663,7 +663,7 @@ class dphiCMI_v_PTCM_Hist:public HistClass, public Hist_Maker{
 void dphiCMI_v_PTCM_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist2d = new TH2D("dphiCMI_v_PTCM_Hist","",100,0.,3.5,100,0.,500.);
+ hist2d = new TH2D("dphiCMI_v_PTCM_Hist","",64,0.,3.5,64,0.,500.);
  hist2d->GetXaxis()->SetTitle("dphiCMI");
  hist2d->GetYaxis()->SetTitle("PTCM");
 }
