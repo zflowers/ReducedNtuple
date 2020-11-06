@@ -3,17 +3,12 @@ import os
 import re
 import argparse
 
-store = "/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/EFF/"
-log = "/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/LOG_EFF/"
-shell = "/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/Shell_EFF/"
-
-#options                                                                                                                           
-parser = argparse.ArgumentParser(description='Check whether using SMS')
-parser.add_argument('--sms', dest='sms', action='store_true')
-parser.set_defaults(sms=False)
-
-args = parser.parse_args()
-sms = args.sms
+path = "/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/"
+store = path+"HIST/"
+log = path+"LOG_HIST/"
+shell = path+"Shell_HIST/"
+#input = "/home/t3-ku/crogan/NTUPLES/NANO/NEW_21_09_20/"
+input_path = "/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/"
 
 print("Writing shell scripts")
 
@@ -31,7 +26,7 @@ def write_sh(Cut,Num,Dir,File,Tag):
     fsrc.write('FILENAME = '+File+'\n')
     fsrc.write('NUM = '+Num+'\n')
     fsrc.write('universe = vanilla \n')
-    fsrc.write('executable = /home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/Eff_Nano_Hist.x \n')
+    fsrc.write('executable = '+path+'Eff_Nano_Hist.x \n')
     fsrc.write('#notify_user = z374f439@ku.edu \n')
     fsrc.write('#notification = Complete \n')
     fsrc.write('getenv = True \n')
@@ -52,22 +47,22 @@ def write_sh(Cut,Num,Dir,File,Tag):
     return f
 
 
-with open("/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/Setup_Eff/Eff.txt") as cut_handle:
+with open(path+"Setup_Eff/Eff.txt") as cut_handle:
     for cut_line in cut_handle:
         Cut = cut_line.replace('\n','')
-        with open("/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/Setup_Eff/Dir.txt") as dir_handle:
+        with open(path+"Setup_Eff/Dir.txt") as dir_handle:
             for dir_line in dir_handle:
                 Dir = dir_line.replace('\n','')
-                for filename in os.listdir("/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/Setup_Eff/"+Dir+"/"):
+                for filename in os.listdir(path+"Setup_Eff/"+Dir+"/"):
                     File = filename.replace('.txt','')
-                    with open(os.path.join("/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/Setup_Eff/"+Dir+"/",filename),'r') as tag_handle:
+                    with open(os.path.join(path+"Setup_Eff/"+Dir+"/",filename),'r') as tag_handle:
                         for tag_line in tag_handle:
                             Tag = tag_line.replace('\n','')
                             if "SMS" in Dir:
                                 Num = ''
                                 list_f.append(write_sh(Cut,Num,Dir,File,Tag))
                             else:
-                                for num_line in os.listdir("/home/t3-ku/crogan/NTUPLES/NANO/NEW_21_09_20/"+Dir+"/NoHadd/"+File+"/"):
+                                for num_line in os.listdir(input+Dir+"/NoHadd/"+File+"/"):
                                     Num = num_line.replace(File,'')
                                     Num = Num.replace('.root','')
                                     list_f.append(write_sh(Cut,Num,Dir,File,Tag))

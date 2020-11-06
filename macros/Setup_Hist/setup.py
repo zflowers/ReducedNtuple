@@ -3,11 +3,12 @@ import os
 import re
 import argparse
 
-store = "/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/HIST/"
-log = "/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/LOG_HIST/"
-shell = "/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/Shell_HIST/"
+path = "/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/"
+store = path+"HIST/"
+log = path+"LOG_HIST/"
+shell = path+"Shell_HIST/"
 #input = "/home/t3-ku/crogan/NTUPLES/NANO/NEW_21_09_20/"
-input = "/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/"
+input_path = "/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/"
 
 print("Writing shell scripts")
 
@@ -25,7 +26,7 @@ def write_sh(Cut,Num,Dir,File,Tag):
     fsrc.write('FILENAME = '+File+'\n')
     fsrc.write('NUM = '+Num+'\n')
     fsrc.write('universe = vanilla \n')
-    fsrc.write('executable = /home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/Eff_Nano_Hist.x \n')
+    fsrc.write('executable = '+path+'Eff_Nano_Hist.x \n')
     fsrc.write('#notify_user = z374f439@ku.edu \n')
     fsrc.write('#notification = Complete \n')
     fsrc.write('getenv = True \n')
@@ -46,15 +47,15 @@ def write_sh(Cut,Num,Dir,File,Tag):
     return f
 
 
-with open("/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/Setup_Hist/Hist.txt") as cut_handle:
+with open(path+"Setup_Hist/Hist.txt") as cut_handle:
     for cut_line in cut_handle:
         Cut = cut_line.replace('\n','')
-        with open("/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/Setup_Hist/Dir.txt") as dir_handle:
+        with open(path+"Setup_Hist/Dir.txt") as dir_handle:
             for dir_line in dir_handle:
                 Dir = dir_line.replace('\n','')
-                for filename in os.listdir("/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/Setup_Hist/"+Dir+"/"):
+                for filename in os.listdir(path+"Setup_Hist/"+Dir+"/"):
                     File = filename.replace('.txt','')
-                    with open(os.path.join("/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/Setup_Hist/"+Dir+"/",filename),'r') as tag_handle:
+                    with open(os.path.join(path+"Setup_Hist/"+Dir+"/",filename),'r') as tag_handle:
                         for tag_line in tag_handle:
                             Tag = tag_line.replace('\n','')
                             if "SMS" in Dir:
