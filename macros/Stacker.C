@@ -428,8 +428,9 @@ void Get2D_Plot(string hist_name, vector<string> directories, vector<string> inF
    l.DrawLatex(0.15,0.943,"#bf{#it{CMS}} Internal 13 TeV Simulation");
    l.SetTextSize(0.05);
    l.SetTextFont(42);
-   name = directories[j];
-   //name+=("_"+cuts[i]);
+   //name = directories[j];
+   name = cuts[i];
+   eraseSubStr(name,"PTISRG200-");
    //name+=trigger_name;
    l.DrawLatex(0.65,.94,name.c_str());
    gPad->RedrawAxis();
@@ -500,8 +501,8 @@ void Get2D_Ratio(string hist_name, vector<string> directories, vector<string> cu
    l.DrawLatex(0.15,0.943,"#bf{#it{CMS}} Internal 13 TeV Simulation");
    l.SetTextSize(0.05);
    l.SetTextFont(42);
-   name = directories[j];
-   //name+=("_"+cuts[i]);
+   //name = directories[j];
+   name = ("Ratio "+cuts[i]);
    l.DrawLatex(0.65,.94,name.c_str());
    gPad->RedrawAxis();
    gPad->RedrawAxis("G");
@@ -512,6 +513,73 @@ void Get2D_Ratio(string hist_name, vector<string> directories, vector<string> cu
    delete can;
   }
  }
+}
+
+void Get2D_Ratio(string hist_name, string cut1, string cut2, string directory){
+ gStyle->SetOptStat(0);
+ gStyle->SetOptTitle(0);
+ gStyle->SetFrameFillColor(kBlack);
+ gStyle->SetFrameLineColor(kWhite);
+ TH2D* hist_denom = get_hist_2D(("Hist_output_"+cut1+".root"), directory, hist_name);
+ hist_denom->Scale(1./hist_denom->Integral(19,36,0,6));
+ TH2D* hist = get_hist_2D(("Hist_output_"+cut2+".root"), directory, hist_name);
+ hist->Scale(1./hist->Integral(19,36,0,6));
+ string name = "can_ratio_";
+ name+=hist->GetName();
+ name+=cut1+cut2+directory;
+ TCanvas* can = new TCanvas(name.c_str(),"",600.,500);
+ can->SetLeftMargin(0.15);
+ can->SetRightMargin(0.18);
+ can->SetBottomMargin(0.15);
+ can->SetGridx();
+ can->SetGridy();
+ can->SetLogz();
+ can->SetFillColor(kBlack);
+ can->Draw();
+ can->cd();
+ TH2D* hist_ratio = (TH2D*)hist->Clone();
+ hist_ratio->Divide(hist_denom);
+ hist_ratio->GetXaxis()->SetAxisColor(kWhite);
+ hist_ratio->GetYaxis()->SetAxisColor(kWhite);
+ hist_ratio->GetXaxis()->SetTitleColor(kWhite);
+ hist_ratio->GetYaxis()->SetTitleColor(kWhite);
+ hist_ratio->GetXaxis()->SetLabelColor(kWhite);
+ hist_ratio->GetYaxis()->SetLabelColor(kWhite);
+ hist_ratio->GetZaxis()->SetLabelColor(kWhite);
+ hist_ratio->GetXaxis()->CenterTitle();
+ hist_ratio->GetXaxis()->SetTitleFont(132);
+ hist_ratio->GetXaxis()->SetTitleSize(0.06);
+ hist_ratio->GetXaxis()->SetTitleOffset(1.06);
+ hist_ratio->GetXaxis()->SetLabelFont(132);
+ hist_ratio->GetXaxis()->SetLabelSize(0.05);
+ hist_ratio->GetYaxis()->CenterTitle();
+ hist_ratio->GetYaxis()->SetTitleFont(132);
+ hist_ratio->GetYaxis()->SetTitleSize(0.06);
+ hist_ratio->GetYaxis()->SetTitleOffset(1.);
+ hist_ratio->GetYaxis()->SetLabelFont(132);
+ hist_ratio->GetYaxis()->SetLabelSize(0.05);
+ hist_ratio->Draw("COLZ");
+ TLatex l;
+ l.SetNDC();
+ l.SetTextColor(kWhite);
+ l.SetTextSize(0.05);
+ l.SetTextFont(42);
+ l.DrawLatex(0.15,0.943,"#bf{#it{CMS}} Internal 13 TeV Simulation");
+ l.SetTextSize(0.05);
+ l.SetTextFont(42);
+ //name = directories[j];
+ string cut_name = cut1;
+ eraseSubStr(cut_name,"-EventFilterE0");
+ eraseSubStr(cut_name,"PTISRG200-");
+ name = ("Ratio: "+cut_name);
+ l.DrawLatex(0.65,.94,name.c_str());
+ gPad->RedrawAxis();
+ gPad->RedrawAxis("G");
+ TFile* output = new TFile(("Hist_output_"+cut1+".root").c_str(),"UPDATE");
+ can->Write();
+ output->Close();
+ delete output;
+ delete can;
 }
 
 void Get_Overlay(vector<string> outFiles, string hist_name, vector<string> samples, vector<string> cuts, vector<int> colors, string option, bool trigger)
@@ -862,7 +930,11 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
  //Get1D_Plot(inFiles,"genele_PT_Hist",sig_directories,cuts,colors);
  //Get1D_Plot(inFiles,"genmu_PT_Hist",sig_directories,cuts,colors);
  
- Get2D_Ratio("dphiCMI_v_PTCM_Hist",directories_2D,cuts,"EventFilterE0","MET_2017");
+ //Get2D_Ratio("dphiCMI_v_PTCM_Hist","EventFilterE0","EventFilterE1","MET_2017");
+ Get2D_Ratio("dphiCMI_v_PTCM_Hist","PTISRG200-RISRG0.5-EventFilterE0","PTISRG200-RISRG0.5-EventFilterE1","MET_2017");
+ Get2D_Ratio("dphiCMI_v_PTCM_Hist","PTISRG200-RISRG0.85-EventFilterE0","PTISRG200-RISRG0.85-EventFilterE1","MET_2017");
+ Get2D_Ratio("dphiCMI_v_PTCM_Hist","PTISRG200-RISRG0.9-EventFilterE0","PTISRG200-RISRG0.9-EventFilterE1","MET_2017");
+ Get2D_Ratio("dphiCMI_v_PTCM_Hist","PTISRG200-RISRG0.95-EventFilterE0","PTISRG200-RISRG0.95-EventFilterE1","MET_2017");
 
 /*
  double bkg_Entries = 0.0;

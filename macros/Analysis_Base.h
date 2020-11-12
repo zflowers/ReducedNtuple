@@ -949,6 +949,7 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
 
  bool HEM_cut = true;
 
+/*
  if(m_Tag.find("SingleElectron") != std::string::npos)
  {
   string Nele_str = "NeleBronzeG0";
@@ -960,7 +961,7 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
   string Nmu_str = "NmuBronzeG0";
   NmuBronze_cut = Get_Cut(jentry,"NmuBronze",Nmu_str);
  }
-
+*/
 //PreSelection Cuts
 /*
  string PTISR_str = "PTISRG200";
@@ -982,7 +983,6 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
 
  if(current_cut.find("EventFilter") != std::string::npos)
  {
-cout << "applying current cut" << endl;
   EventFilter_cut = Get_Cut(jentry,"EventFilter",current_cut);
  }
 
