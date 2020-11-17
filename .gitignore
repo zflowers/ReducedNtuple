@@ -13,7 +13,9 @@ $PWD
 macros/LOG_HIST/
 macros/HIST/
 macros/Shell_HIST/
+macros/Num_HIST/
 macros/LOG_EFF/
 macros/EFF/
 macros/Shell_EFF/
+macros/Num_EFF/
 macros/config/
