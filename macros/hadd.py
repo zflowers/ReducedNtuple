@@ -3,7 +3,7 @@ import os
 import sys
 import time
 
-store = "/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/HIST/"
+store = "/stash/user/zflowers/CMSSW_10_2_20_UL/src/ReducedNtuple/macros/HIST/"
 sleep_time = 60
 
 def hadd(Cut,Dir,File,Tag):
@@ -29,15 +29,15 @@ Dir = []
 File = []
 Tag = []
 
-with open("/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/Setup_Hist/Hist.txt") as cut_handle:
+with open("/stash/user/zflowers/CMSSW_10_2_20_UL/src/ReducedNtuple/macros/Setup_Hist/Hist.txt") as cut_handle:
     for cut_line in cut_handle:
         Cut.append(cut_line.replace('\n',''))
-        with open("/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/Setup_Hist/Dir.txt") as dir_handle:
+        with open("/stash/user/zflowers/CMSSW_10_2_20_UL/src/ReducedNtuple/macros/Setup_Hist/Dir.txt") as dir_handle:
             for dir_line in dir_handle:
                 Dir.append(dir_line.replace('\n',''))
-                for filename in os.listdir("/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/Setup_Hist/"+dir_line.replace('\n','')+"/"):
+                for filename in os.listdir("/stash/user/zflowers/CMSSW_10_2_20_UL/src/ReducedNtuple/macros/Setup_Hist/"+dir_line.replace('\n','')+"/"):
                     File.append(filename.replace('.txt',''))
-                    with open(os.path.join("/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/Setup_Hist/"+dir_line.replace('\n','')+"/",filename),'r') as tag_handle:
+                    with open(os.path.join("/stash/user/zflowers/CMSSW_10_2_20_UL/src/ReducedNtuple/macros/Setup_Hist/"+dir_line.replace('\n','')+"/",filename),'r') as tag_handle:
                         for tag_line in tag_handle:
                             Tag.append(tag_line.replace('\n',''))
 Tag = rm_dupes(Tag)

@@ -34,7 +34,8 @@ void Maker(){
  //string path = "/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/output/";
  //string path = "~/../crogan/NTUPLES/NANO/NEW_31_05_20/";
  //string path = "~/../crogan/NTUPLES/NANO/NEW_21_09_20/";
- string path = "~/Eff_NANO/ReducedNtuple/";
+ //string path = "~/Eff_NANO/ReducedNtuple/";
+ string path = "root://stash.osgconnect.net:1094//user/zflowers/NTUPLES/Processing/";
 
  if(tag == "") { cout << "Need to specify tag!" << endl; return; }
  TChain* chain;
@@ -55,12 +56,13 @@ void Maker(){
  }
  if(dir.find("SMS") != std::string::npos)
  {
-  input = path+dir+"/"+filename+"_"+dir_rm+".root";
+  input = path+dir+"/"+filename+".root";
   chain->Add(input.c_str(),0);
  }
  else
  {
-  input = path+dir+"/NoHadd/"+filename+"/"+filename+number+".root";
+  //input = path+dir+"/NoHadd/"+filename+"/"+filename+number+".root";
+  input = path+dir+"/"+filename+"/"+filename+number+".root";
   chain->Add(input.c_str(),0);
  }
  cout << "Input File: " << input << endl;
