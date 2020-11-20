@@ -19,3 +19,4 @@ macros/EFF/
 macros/Shell_EFF/
 macros/Num_EFF/
 macros/config/
+macros/*.tgz

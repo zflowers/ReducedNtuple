@@ -1,0 +1,8 @@
+
+
+-- Schedd: login-el7.uscms.org : <192.170.227.182:9618?... @ 11/18/20 17:49:59
+OWNER BATCH_NAME      SUBMITTED   DONE   RUN    IDLE   HOLD  TOTAL JOB_IDS
+Total for query: 20670 jobs; 0 completed, 0 removed, 10374 idle, 10246 running, 50 held, 0 suspended 
+Total for all users: 23260 jobs; 0 completed, 0 removed, 10402 idle, 11620 running, 1238 held, 0 suspended
+
+All jobs of user "zflowers" have been released

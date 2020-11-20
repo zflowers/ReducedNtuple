@@ -65,7 +65,6 @@ void Maker(){
   input = path+dir+"/"+filename+"/"+filename+number+".root";
   chain->Add(input.c_str(),0);
  }
- cout << "Input File: " << input << endl;
  string output = cut+"_"+dir+"_"+tag+"_"+filename+number+".root";
  if(Do_Hist)
  {
