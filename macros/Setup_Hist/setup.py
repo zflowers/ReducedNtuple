@@ -11,8 +11,6 @@ num = path+"Num_HIST/"
 #input = "/home/t3-ku/crogan/NTUPLES/NANO/NEW_21_09_20/"
 input_path = "/stash/user/zflowers/NTUPLES/Processing/"
 
-print("Writing shell scripts")
-
 list_f = []
 
 def write_sh(Cut,Dir,File,Tag):
@@ -99,6 +97,8 @@ os.system("cp /stash/user/zflowers/cmssw-sandbox/cmssw_setup.sh "+path+"config/"
 os.system("tar -C "+path+"config/../ -czvf config.tgz config/")
 os.system("source "+path+"make_sandbox.sh")
 
+print("Writing shell scripts")
+
 with open(path+"Setup_Hist/Hist.txt") as cut_handle:
     for cut_line in cut_handle:
         Cut = cut_line.replace('\n','')
@@ -124,7 +124,7 @@ with open(path+"Setup_Hist/Hist.txt") as cut_handle:
 
 print("Submitting Jobs")
 list_f = list(dict.fromkeys(list_f))
-#for f in list_f:
-#    os.system("condor_submit "+f)
+for f in list_f:
+    os.system("condor_submit "+f)
 os.system("rm -rf "+path+"config/")
 print("Finished Submitting Jobs")

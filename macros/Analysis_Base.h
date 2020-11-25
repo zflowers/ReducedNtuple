@@ -34,6 +34,7 @@ class Analysis_Base{
    string m_Tag;
    TTree* m_Tree;
    string m_cut = "";
+   //bool preHEM = false;
    virtual bool Get_Cut(const Long64_t& jentry, string name, string& current_cut);
    virtual bool global_cuts(const Long64_t& jentry);
   public:
@@ -98,13 +99,90 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
  int numGold = 0;
 
  //HEM Check
- if(name == "HEM" && (m_Tag.find("2018") != std::string::npos))
+ //if(name == "HEM" || preHEM) note that we can eventually change to || to auto apply the HEM check later
+ if(name == "HEM")
  {
+
+  cut = true;
+  TBranch* b_runnum = NULL;
+  Int_t runnum = 0;
+  m_Tree->SetBranchAddress("runnum",&runnum,&b_runnum);
+  b_runnum->GetEntry(jentry);
+  if(runnum < 319077) { eraseSubStr(current_cut,"HEM-"); b_runnum->ResetAddress(); return true; }
+
+  /*
+  //simplify cuts:
+  TBranch* b_Nlep = NULL;
+  Int_t Nlep = 0;
+  m_Tree->SetBranchAddress("Nlep",&Nlep,&b_Nlep);
+  b_Nlep->GetEntry(jentry);
+  TBranch* b_PDGID_lep = NULL;
+  vector<int>* PDGID_lep = 0;
+  m_Tree->SetBranchAddress("PDGID_lep",&PDGID_lep,&b_PDGID_lep);
+  b_PDGID_lep->GetEntry(jentry);
+  TBranch* b_ID_lep = NULL;
+  vector<int>* ID_lep = 0;
+  m_Tree->SetBranchAddress("ID_lep",&ID_lep,&b_ID_lep);
+  b_ID_lep->GetEntry(jentry);
+  TBranch* b_Eta_lep = NULL;
+  vector<double>* Eta_lep = 0;
+  m_Tree->SetBranchAddress("Eta_lep",&Eta_lep,&b_Eta_lep);
+  b_Eta_lep->GetEntry(jentry);
+  TBranch* b_Phi_lep = NULL;
+  vector<double>* Phi_lep = 0;
+  m_Tree->SetBranchAddress("Phi_lep",&Phi_lep,&b_Phi_lep);
+  b_Phi_lep->GetEntry(jentry);
+  for(int i = 0; i < Nlep; i++)
+  {
+   if(abs(PDGID_lep->at(i)) == 11)
+   {
+    if(Eta_lep->at(i) > -3.2 && Eta_lep->at(i) < -1.2 && Phi_lep->at(i) > -1.77 && Phi_lep->at(i) < -0.67) { cut = false; }
+   }
+   else if(abs(PDGID_lep->at(i)) == 13)
+   {
+    if(Eta_lep->at(i) > -3.2 && Eta_lep->at(i) < -1.2 && Phi_lep->at(i) > -1.77 && Phi_lep->at(i) < -0.67) { cut = false; }
+   }
+  }
+  PDGID_lep->clear();
+  ID_lep->clear();
+  Eta_lep->clear();
+  Phi_lep->clear();
+  b_Nlep->ResetAddress();
+  b_PDGID_lep->ResetAddress();
+  b_ID_lep->ResetAddress();
+  b_Eta_lep->ResetAddress();
+  b_Phi_lep->ResetAddress();
+  
+
+  //loop over jets
+  TBranch* b_Njet = NULL;
+  Int_t Njet = 0;
+  m_Tree->SetBranchAddress("Njet",&Njet,&b_Njet);
+  b_Njet->GetEntry(jentry);
+  TBranch* b_Eta_jet = NULL;
+  vector<double>* Eta_jet = 0;
+  m_Tree->SetBranchAddress("Eta_jet",&Eta_jet,&b_Eta_jet);
+  b_Eta_jet->GetEntry(jentry);
+  TBranch* b_Phi_jet = NULL;
+  vector<double>* Phi_jet = 0;
+  m_Tree->SetBranchAddress("Phi_jet",&Phi_jet,&b_Phi_jet);
+  b_Phi_jet->GetEntry(jentry);
+  for(int i = 0; i < Njet; i++)
+  {
+   if(Eta_jet->at(i) > -3.2 && Eta_jet->at(i) < -1.2 && Phi_jet->at(i) > -1.77 && Phi_jet->at(i) < -0.67) { cut = false; }
+  }
+  Eta_jet->clear();
+  Phi_jet->clear();
+  b_Njet->ResetAddress();
+  b_Eta_jet->ResetAddress();
+  b_Phi_jet->ResetAddress();
+*/
+
   //veto event if any object falls into HEM region
   //loop over leptons
   TBranch* b_Nlep = NULL;
   Int_t Nlep = 0;
-  m_Tree->SetBranchAddress(name.c_str(),&Nlep,&b_Nlep);
+  m_Tree->SetBranchAddress("Nlep",&Nlep,&b_Nlep);
   b_Nlep->GetEntry(jentry);
   TBranch* b_PDGID_lep = NULL;
   vector<int>* PDGID_lep = 0;
@@ -118,6 +196,10 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
   vector<double>* MiniIso_lep = 0;
   m_Tree->SetBranchAddress("MiniIso_lep",&MiniIso_lep,&b_MiniIso_lep);
   b_MiniIso_lep->GetEntry(jentry);
+  TBranch* b_RelIso_lep = NULL;
+  vector<double>* RelIso_lep = 0;
+  m_Tree->SetBranchAddress("RelIso_lep",&RelIso_lep,&b_RelIso_lep);
+  b_RelIso_lep->GetEntry(jentry);
   TBranch* b_SIP3D_lep = NULL;
   vector<double>* SIP3D_lep = 0;
   m_Tree->SetBranchAddress("SIP3D_lep",&SIP3D_lep,&b_SIP3D_lep);
@@ -138,30 +220,30 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
   {
    if(abs(PDGID_lep->at(i)) == 11)
    {
-    if(ID_lep->at(2*i) < 4 || fabs(PT_lep->at(i)*MiniIso_lep->at(i)) > 5.)
+    if(ID_lep->at(2*i) < 4 || fabs(PT_lep->at(i)*MiniIso_lep->at(i)) > 4. || fabs(PT_lep->at(i)*RelIso_lep->at(i)) > 4.)
     {
      if(Eta_lep->at(i) > -3.2 && Eta_lep->at(i) < -1.2 && Phi_lep->at(i) > -1.77 && Phi_lep->at(i) < -0.67) { cut = false; }
     }
-    else if(ID_lep->at(2*i) >= 4 && SIP3D_lep->at(i) >= 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 5.)
+    else if(ID_lep->at(2*i) >= 4 && SIP3D_lep->at(i) >= 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4. && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4.)
     {
      if(Eta_lep->at(i) > -3.2 && Eta_lep->at(i) < -1.2 && Phi_lep->at(i) > -1.77 && Phi_lep->at(i) < -0.67) { cut = false; }
     }
-    else if(ID_lep->at(2*i) >= 4 && PT_lep->at(i)*MiniIso_lep->at(i) < 5. && SIP3D_lep->at(i) < 2.)
+    else if(ID_lep->at(2*i) >= 4 && PT_lep->at(i)*MiniIso_lep->at(i) < 4. && SIP3D_lep->at(i) < 2. && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4.)
     {
      if(Eta_lep->at(i) > -3.2 && Eta_lep->at(i) < -1.2 && Phi_lep->at(i) > -1.77 && Phi_lep->at(i) < -0.67) { cut = false; }
     }
    }
    else if(abs(PDGID_lep->at(i)) == 13)
    {
-    if(ID_lep->at(2*i) < 3 || fabs(PT_lep->at(i)*MiniIso_lep->at(i)) > 5.)
+    if(ID_lep->at(2*i) < 3 || fabs(PT_lep->at(i)*MiniIso_lep->at(i)) > 4. || fabs(PT_lep->at(i)*RelIso_lep->at(i)) > 4.)
     {
      if(Eta_lep->at(i) > -3.2 && Eta_lep->at(i) < -1.2 && Phi_lep->at(i) > -1.77 && Phi_lep->at(i) < -0.67) { cut = false; }
     }
-    else if(ID_lep->at(2*i) >= 3 && SIP3D_lep->at(i) >= 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 5.)
+    else if(ID_lep->at(2*i) >= 3 && SIP3D_lep->at(i) >= 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4. && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4.)
     {
      if(Eta_lep->at(i) > -3.2 && Eta_lep->at(i) < -1.2 && Phi_lep->at(i) > -1.77 && Phi_lep->at(i) < -0.67) { cut = false; }
     }
-    else if(ID_lep->at(2*i) >= 3 && PT_lep->at(i)*MiniIso_lep->at(i) < 5. && SIP3D_lep->at(i) < 2.)
+    else if(ID_lep->at(2*i) >= 3 && PT_lep->at(i)*MiniIso_lep->at(i) < 4. && SIP3D_lep->at(i) < 2. && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4.)
     {
      if(Eta_lep->at(i) > -3.2 && Eta_lep->at(i) < -1.2 && Phi_lep->at(i) > -1.77 && Phi_lep->at(i) < -0.67) { cut = false; }
     }
@@ -170,6 +252,7 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
   PDGID_lep->clear();
   ID_lep->clear();
   MiniIso_lep->clear();
+  RelIso_lep->clear();
   SIP3D_lep->clear();
   PT_lep->clear();
   Eta_lep->clear();
@@ -178,6 +261,7 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
   b_PDGID_lep->ResetAddress();
   b_ID_lep->ResetAddress();
   b_MiniIso_lep->ResetAddress();
+  b_RelIso_lep->ResetAddress();
   b_SIP3D_lep->ResetAddress();
   b_PT_lep->ResetAddress();
   b_Eta_lep->ResetAddress();
@@ -186,7 +270,7 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
   //loop over jets
   TBranch* b_Njet = NULL;
   Int_t Njet = 0;
-  m_Tree->SetBranchAddress(name.c_str(),&Njet,&b_Njet);
+  m_Tree->SetBranchAddress("Njet",&Njet,&b_Njet);
   b_Njet->GetEntry(jentry);
   TBranch* b_Eta_jet = NULL;
   vector<double>* Eta_jet = 0;
@@ -206,10 +290,12 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
   b_Eta_jet->ResetAddress();
   b_Phi_jet->ResetAddress();
 
+//What to do with SVs?
+/*
   //loop over SVs
   TBranch* b_NSV = NULL;
   Int_t NSV = 0;
-  m_Tree->SetBranchAddress(name.c_str(),&NSV,&b_NSV);
+  m_Tree->SetBranchAddress("NSV",&NSV,&b_NSV);
   b_NSV->GetEntry(jentry);
   TBranch* b_Eta_SV = NULL;
   vector<double>* Eta_SV = 0;
@@ -228,11 +314,13 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
   b_NSV->ResetAddress();
   b_Eta_SV->ResetAddress();
   b_Phi_SV->ResetAddress();
-
+*/
+  eraseSubStr(current_cut,"HEM-");
   return cut;
  }
  //Finish HEM Check
-
+ 
+ cut = false;
  if(name.find("Bronze") != std::string::npos)
  {
   Bronze = true;
@@ -963,17 +1051,18 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
  }
 */
 //PreSelection Cuts
-/*
+//
  string PTISR_str = "PTISRG200";
  PTISR_cut = Get_Cut(jentry,"PTISR",PTISR_str);
 
- string RISR_str = "RISRG0.5";
+ string RISR_str = "RISRG0.6";
  RISR_cut = Get_Cut(jentry,"RISR",RISR_str);
 
  string EventFilter_str = "EventFilterE1";
  EventFilter_cut = Get_Cut(jentry,"EventFilter",EventFilter_str);
 
-*/
+ string METtrigger_str = "METtriggerE1";
+ METtrigger_cut = Get_Cut(jentry,"METtrigger",METtrigger_str);
 
 
  if(current_cut.find("PTISR") != std::string::npos)
