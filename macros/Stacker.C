@@ -349,8 +349,8 @@ void Get2D_Plot(string hist_name, vector<string> directories, vector<string> inF
    TH2D* hist = get_hist_2D(inFiles[i], directories[j], hist_name);
    string name = "can_";
    name+=hist->GetName();
-   name+=directories[j];
-   //name+=cuts[i];
+   name+=("_"+cuts[i]);
+   //name+=directories[j];
    string trigger_name = "";
    if(trigger)
    {
@@ -423,10 +423,10 @@ void Get2D_Plot(string hist_name, vector<string> directories, vector<string> inF
    TLatex l;
    l.SetNDC();
    l.SetTextColor(kWhite);
-   l.SetTextSize(0.05);
+   l.SetTextSize(0.04);
    l.SetTextFont(42);
    l.DrawLatex(0.15,0.943,"#bf{#it{CMS}} Internal 13 TeV");
-   l.SetTextSize(0.05);
+   l.SetTextSize(0.04);
    l.SetTextFont(42);
    //name = directories[j];
    name = "Cut: "+cuts[i];
@@ -435,7 +435,7 @@ void Get2D_Plot(string hist_name, vector<string> directories, vector<string> inF
    else { name +=", preHEM"; }
    //eraseSubStr(name,"PTISRG200-");
    //name+=trigger_name;
-   l.DrawLatex(0.65,.94,name.c_str());
+   l.DrawLatex(0.45,.94,name.c_str());
    gPad->RedrawAxis();
    gPad->RedrawAxis("G");
    TFile* output = new TFile(inFiles[i].c_str(),"UPDATE");
@@ -643,9 +643,14 @@ void Get2D_Ratio(string hist_name1, string hist_name2, string cut1, string cut2,
  l.SetTextSize(0.04);
  l.SetTextFont(42);
  //name = directories[j];
- if(hist_name1.find("HEM") != std::string::npos) { name = cut1+", postHEM/"+cut2+", preHEM"; }
- else { name = cut2+", postHEM/"+cut1+", preHEM"; }
- l.DrawLatex(0.45,.94,name.c_str());
+ name = "";
+ if(hist_name2.find("HEM") != std::string::npos) { name += cut2+", postHEM / "; }
+  else { name += cut2+", preHEM / "; }
+ if(hist_name1.find("HEM") != std::string::npos) { name += cut1+", postHEM"; }
+  else { name += cut1+", preHEM"; }
+ //if(hist_name1.find("HEM") != std::string::npos) { name = cut1+", postHEM/"+cut2+", preHEM"; }
+ //else { name = cut2+", postHEM/"+cut1+", preHEM"; }
+ l.DrawLatex(0.42,.94,name.c_str());
  gPad->RedrawAxis();
  gPad->RedrawAxis("G");
  TFile* output = new TFile(("Hist_output_"+cut1+".root").c_str(),"UPDATE");
@@ -1130,6 +1135,8 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
  Get2D_Ratio("Mperp_v_dphiMET_V_Hist","Mperp_v_dphiMET_V_Hist_HEM","PreSelection","HEM","MET_2018",false);
  Get2D_Ratio("dphiMET_V_v_PTCM_Hist","dphiMET_V_v_PTCM_Hist_HEM","PreSelection","HEM","MET_2018",false);
  Get2D_Ratio("Mperp_v_RISR_Hist","Mperp_v_RISR_Hist_HEM","PreSelection","HEM","MET_2018",false);
+
+ Get2D_Ratio("dphiCMI_v_PTCM_Hist_HEM","dphiCMI_v_PTCM_Hist_HEM","PreSelection","HEM","MET_2018",true);
 
 /*
  double bkg_Entries = 0.0;

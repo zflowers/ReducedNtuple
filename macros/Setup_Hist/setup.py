@@ -68,6 +68,8 @@ def write_sh(Cut,Dir,File,Tag):
     fsrc.write('use_x509userproxy = true \n')
     fsrc.write('+ProjectName=\"cms.org.ku\" \n')
     fsrc.write('+REQUIRED_OS=\"rhel7\" \n')
+    fsrc.write('+RequiresCVMFS = True \n')
+    fsrc.write('+RequiresSharedFS = True \n')
     fsrc.write('request_memory = 4000 \n')
     fsrc.write('output = '+log+'$(CUT)/$(DIR)/$(TAG)/$(FILENAME)/out_$(FILENAME)$(NUM).log \n')
     fsrc.write('error = '+log+'$(CUT)/$(DIR)/$(TAG)/$(FILENAME)/err_$(FILENAME)$(NUM).log \n')
@@ -102,6 +104,8 @@ print("Writing shell scripts")
 with open(path+"Setup_Hist/Hist.txt") as cut_handle:
     for cut_line in cut_handle:
         Cut = cut_line.replace('\n','')
+        if(Cut.startswith('#'):
+            continue;
         with open(path+"Setup_Hist/Dir.txt") as dir_handle:
             for dir_line in dir_handle:
                 Dir = dir_line.replace('\n','')

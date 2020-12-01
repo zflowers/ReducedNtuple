@@ -220,30 +220,30 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
   {
    if(abs(PDGID_lep->at(i)) == 11)
    {
-    if(ID_lep->at(2*i) < 4 || fabs(PT_lep->at(i)*MiniIso_lep->at(i)) > 4. || fabs(PT_lep->at(i)*RelIso_lep->at(i)) > 4.)
+    if(PT_lep->at(i) > 5. && ID_lep->at(2*i) < 4 || fabs(PT_lep->at(i)*MiniIso_lep->at(i)) > 4. || fabs(PT_lep->at(i)*RelIso_lep->at(i)) > 4.)
     {
      if(Eta_lep->at(i) > -3.2 && Eta_lep->at(i) < -1.2 && Phi_lep->at(i) > -1.77 && Phi_lep->at(i) < -0.67) { cut = false; }
     }
-    else if(ID_lep->at(2*i) >= 4 && SIP3D_lep->at(i) >= 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4. && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4.)
+    else if(PT_lep->at(i) > 5. && ID_lep->at(2*i) >= 4 && SIP3D_lep->at(i) >= 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4. && fabs(PT_lep->at(i)*RelIso_lep->at(i)) < 4.)
     {
      if(Eta_lep->at(i) > -3.2 && Eta_lep->at(i) < -1.2 && Phi_lep->at(i) > -1.77 && Phi_lep->at(i) < -0.67) { cut = false; }
     }
-    else if(ID_lep->at(2*i) >= 4 && PT_lep->at(i)*MiniIso_lep->at(i) < 4. && SIP3D_lep->at(i) < 2. && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4.)
+    else if(PT_lep->at(i) > 5. && ID_lep->at(2*i) >= 4 && PT_lep->at(i)*MiniIso_lep->at(i) < 4. && SIP3D_lep->at(i) < 2. && fabs(PT_lep->at(i)*RelIso_lep->at(i)) < 4.)
     {
      if(Eta_lep->at(i) > -3.2 && Eta_lep->at(i) < -1.2 && Phi_lep->at(i) > -1.77 && Phi_lep->at(i) < -0.67) { cut = false; }
     }
    }
    else if(abs(PDGID_lep->at(i)) == 13)
    {
-    if(ID_lep->at(2*i) < 3 || fabs(PT_lep->at(i)*MiniIso_lep->at(i)) > 4. || fabs(PT_lep->at(i)*RelIso_lep->at(i)) > 4.)
+    if(PT_lep->at(i) > 3.5 && ID_lep->at(2*i) < 3 || fabs(PT_lep->at(i)*MiniIso_lep->at(i)) > 4. || fabs(PT_lep->at(i)*RelIso_lep->at(i)) > 4.)
     {
      if(Eta_lep->at(i) > -3.2 && Eta_lep->at(i) < -1.2 && Phi_lep->at(i) > -1.77 && Phi_lep->at(i) < -0.67) { cut = false; }
     }
-    else if(ID_lep->at(2*i) >= 3 && SIP3D_lep->at(i) >= 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4. && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4.)
+    else if(PT_lep->at(i) > 3.5 && ID_lep->at(2*i) >= 3 && SIP3D_lep->at(i) >= 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4. && fabs(PT_lep->at(i)*RelIso_lep->at(i)) < 4.)
     {
      if(Eta_lep->at(i) > -3.2 && Eta_lep->at(i) < -1.2 && Phi_lep->at(i) > -1.77 && Phi_lep->at(i) < -0.67) { cut = false; }
     }
-    else if(ID_lep->at(2*i) >= 3 && PT_lep->at(i)*MiniIso_lep->at(i) < 4. && SIP3D_lep->at(i) < 2. && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4.)
+    else if(PT_lep->at(i) > 3.5 && ID_lep->at(2*i) >= 3 && PT_lep->at(i)*MiniIso_lep->at(i) < 4. && SIP3D_lep->at(i) < 2. && fabs(PT_lep->at(i)*RelIso_lep->at(i)) < 4.)
     {
      if(Eta_lep->at(i) > -3.2 && Eta_lep->at(i) < -1.2 && Phi_lep->at(i) > -1.77 && Phi_lep->at(i) < -0.67) { cut = false; }
     }
@@ -1030,26 +1030,47 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
  bool NlepGold_cut = true;
 
  bool Njet_cut = true;
+
  bool METtrigger_cut = true;
  bool METORtrigger_cut = true;
  bool METHTtrigger_cut = true;
+
+ bool SingleElectrontrigger_cut = true;
+ bool SingleMuontrigger_cut = true;
+ bool DoubleElectrontrigger_cut = true;
+ bool DoubleMuontrigger_cut = true;
+
  bool EventFilter_cut = true;
+
+ bool EventFlag_FailJetID_cut = true;
+ bool EventFlag_JetInHEM_cut = true;
 
  bool HEM_cut = true;
 
-/*
  if(m_Tag.find("SingleElectron") != std::string::npos)
  {
-  string Nele_str = "NeleBronzeG0";
-  NeleBronze_cut = Get_Cut(jentry,"NeleBronze",Nele_str);
+  string SingleElectrontrigger_str = "SingleElectrontriggerE1";
+  SingleElectrontrigger_cut = Get_Cut(jentry,"SingleElectrontrigger",SingleElectrontrigger_str);
  }
 
  if(m_Tag.find("SingleMuon") != std::string::npos)
  {
-  string Nmu_str = "NmuBronzeG0";
-  NmuBronze_cut = Get_Cut(jentry,"NmuBronze",Nmu_str);
+  string SingleMuontrigger_str = "SingleMuontriggerE1";
+  SingleMuontrigger_cut = Get_Cut(jentry,"SingleMuontrigger",SingleMuontrigger_str);
  }
-*/
+
+ if(m_Tag.find("DoubleElectron") != std::string::npos)
+ {
+  string DoubleElectrontrigger_str = "DoubleElectrontriggerE1";
+  DoubleElectrontrigger_cut = Get_Cut(jentry,"DoubleElectrontrigger",DoubleElectrontrigger_str);
+ }
+
+ if(m_Tag.find("DoubleMuon") != std::string::npos)
+ {
+  string DoubleMuontrigger_str = "DoubleMuontriggerE1";
+  DoubleMuontrigger_cut = Get_Cut(jentry,"DoubleMuontrigger",DoubleMuontrigger_str);
+ }
+
 //PreSelection Cuts
 //
  string PTISR_str = "PTISRG200";
@@ -1064,6 +1085,9 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
  string METtrigger_str = "METtriggerE1";
  METtrigger_cut = Get_Cut(jentry,"METtrigger",METtrigger_str);
 
+ string MET_str = "METG175";
+ MET_cut = Get_Cut(jentry,"MET",MET_str);
+
 
  if(current_cut.find("PTISR") != std::string::npos)
  {
@@ -1073,6 +1097,16 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
  if(current_cut.find("EventFilter") != std::string::npos)
  {
   EventFilter_cut = Get_Cut(jentry,"EventFilter",current_cut);
+ }
+
+ if(current_cut.find("EventFlag_FailJetID") != std::string::npos)
+ {
+  EventFlag_FailJetID_cut = Get_Cut(jentry,"EventFlag_FailJetID",current_cut);
+ }
+
+ if(current_cut.find("EventFlag_JetInHEM") != std::string::npos)
+ {
+  EventFlag_JetInHEM_cut = Get_Cut(jentry,"EventFlag_JetInHEM",current_cut);
  }
 
  if(current_cut.find("PTCM") != std::string::npos)
@@ -1134,6 +1168,26 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
   METtrigger_cut = Get_Cut(jentry,"METtrigger",current_cut);
  }
 
+ if(current_cut.find("SingleElectrontrigger") != std::string::npos)
+ {
+  SingleElectrontrigger_cut = Get_Cut(jentry,"SingleElectrontrigger",current_cut);
+ }
+
+ if(current_cut.find("SingleMuontrigger") != std::string::npos)
+ {
+  SingleMuontrigger_cut = Get_Cut(jentry,"SingleMuontrigger",current_cut);
+ }
+
+ if(current_cut.find("DoubleMuontrigger") != std::string::npos)
+ {
+  DoubleMuontrigger_cut = Get_Cut(jentry,"DoubleMuontrigger",current_cut);
+ }
+
+ if(current_cut.find("DoubleElectrontrigger") != std::string::npos)
+ {
+  DoubleElectrontrigger_cut = Get_Cut(jentry,"DoubleElectrontrigger",current_cut);
+ }
+
  if(current_cut.find("METORtrigger") != std::string::npos)
  {
   METORtrigger_cut = Get_Cut(jentry,"METORtrigger",current_cut);
@@ -1157,7 +1211,7 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
  if(current_cut.find("PreSelection") == 0)
  {
   current_cut = "";
-  if(PTISR_cut && RISR_cut && PTCM_cut && dphiCMI_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && NmuBronze_cut && NeleBronze_cut && NlepBronze_cut && NmuSilver_cut && NeleSilver_cut && NlepSilver_cut && NmuGold_cut && NeleGold_cut && NlepGold_cut && Njet_cut && Njet_S_cut && Nbjet_ISR_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut && EventFilter_cut && HEM_cut)
+  if(PTISR_cut && RISR_cut && PTCM_cut && dphiCMI_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && NmuBronze_cut && NeleBronze_cut && NlepBronze_cut && NmuSilver_cut && NeleSilver_cut && NlepSilver_cut && NmuGold_cut && NeleGold_cut && NlepGold_cut && Njet_cut && Njet_S_cut && Nbjet_ISR_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut && EventFilter_cut && EventFlag_FailJetID_cut && EventFlag_JetInHEM_cut && HEM_cut)
   {
    return false;
   }
@@ -1168,7 +1222,7 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
   cout << "ERROR: Some cuts not applied: " << current_cut << endl;
  }
 
- if(PTISR_cut && RISR_cut && PTCM_cut && dphiCMI_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && NmuBronze_cut && NeleBronze_cut && NlepBronze_cut && NmuSilver_cut && NeleSilver_cut && NlepSilver_cut && NmuGold_cut && NeleGold_cut && NlepGold_cut && Njet_cut && Njet_S_cut && Nbjet_ISR_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut && EventFilter_cut && HEM_cut)
+ if(PTISR_cut && RISR_cut && PTCM_cut && dphiCMI_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && NmuBronze_cut && NeleBronze_cut && NlepBronze_cut && NmuSilver_cut && NeleSilver_cut && NlepSilver_cut && NmuGold_cut && NeleGold_cut && NlepGold_cut && Njet_cut && Njet_S_cut && Nbjet_ISR_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut && EventFilter_cut && EventFlag_FailJetID_cut && EventFlag_JetInHEM_cut && HEM_cut)
  {
   return false;
  }

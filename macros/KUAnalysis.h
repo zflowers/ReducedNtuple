@@ -1,8 +1,8 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Thu Aug 13 14:16:07 2020 by ROOT version 6.12/07
+// Mon Nov 30 10:25:29 2020 by ROOT version 6.12/07
 // from TTree KUAnalysis/KUAnalysis
-// found on file: /home/t3-ku/z374f439/../crogan/NTUPLES/NANO/NEW_31_05_20/Fall17_102X/WJetsToLNu_HT-800To1200_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root
+// found on file: ../../../../NTUPLES/Processing/Autumn18_102X_Data_MET/MET_Run2018B-02Apr2020-v1_2018_Autumn18_102X/MET_Run2018B-02Apr2020-v1_2018_Autumn18_102X_0_0.root
 //////////////////////////////////////////////////////////
 
 #ifndef KUAnalysis_h
@@ -40,6 +40,12 @@ public :
    Bool_t          METtrigger;
    Bool_t          METHTtrigger;
    Bool_t          METORtrigger;
+   Bool_t          SingleElectrontrigger;
+   Bool_t          SingleMuontrigger;
+   Bool_t          DoubleElectrontrigger;
+   Bool_t          DoubleMuontrigger;
+   Bool_t          EventFlag_FailJetID;
+   Bool_t          EventFlag_JetInHEM;
    Double_t        MET;
    Double_t        MET_phi;
    Double_t        HT;
@@ -61,6 +67,7 @@ public :
    vector<double>  *IP3D_lep;
    vector<double>  *SIP3D_lep;
    vector<int>     *ID_lep;
+   vector<int>     *SourceID_lep;
    vector<int>     *Index_lep;
    Int_t           Njet;
    Int_t           Nbjet;
@@ -193,40 +200,6 @@ public :
    Double_t        RISR;
    Double_t        RISRT;
    Double_t        MISR;
-   Int_t           NPU;
-   Double_t        genMET;
-   Double_t        genMET_phi;
-   Int_t           genNele;
-   Int_t           genNmu;
-   Int_t           genNlep;
-   vector<double>  *genPT_lep;
-   vector<double>  *genEta_lep;
-   vector<double>  *genPhi_lep;
-   vector<double>  *genM_lep;
-   vector<int>     *genCharge_lep;
-   vector<int>     *genPDGID_lep;
-   vector<int>     *genMomPDGID_lep;
-   vector<int>     *genIndex_lep;
-   Int_t           genNnu;
-   vector<double>  *genPT_nu;
-   vector<double>  *genEta_nu;
-   vector<double>  *genPhi_nu;
-   vector<int>     *genPDGID_nu;
-   vector<int>     *genMomPDGID_nu;
-   Int_t           genNboson;
-   vector<double>  *genPT_boson;
-   vector<double>  *genEta_boson;
-   vector<double>  *genPhi_boson;
-   vector<double>  *genM_boson;
-   vector<int>     *genPDGID_boson;
-   vector<int>     *genMomPDGID_boson;
-   Int_t           genNsusy;
-   vector<double>  *genPT_susy;
-   vector<double>  *genEta_susy;
-   vector<double>  *genPhi_susy;
-   vector<double>  *genM_susy;
-   vector<int>     *genPDGID_susy;
-   vector<int>     *genMomPDGID_susy;
 
    // List of branches
    TBranch        *b_event_skipped;   //!
@@ -245,6 +218,12 @@ public :
    TBranch        *b_METtrigger;   //!
    TBranch        *b_METHTtrigger;   //!
    TBranch        *b_METORtrigger;   //!
+   TBranch        *b_SingleElectrontrigger;   //!
+   TBranch        *b_SingleMuontrigger;   //!
+   TBranch        *b_DoubleElectrontrigger;   //!
+   TBranch        *b_DoubleMuontrigger;   //!
+   TBranch        *b_EventFlag_FailJetID;   //!
+   TBranch        *b_EventFlag_JetInHEM;   //!
    TBranch        *b_MET;   //!
    TBranch        *b_MET_phi;   //!
    TBranch        *b_HT;   //!
@@ -266,6 +245,7 @@ public :
    TBranch        *b_IP3D_lep;   //!
    TBranch        *b_SIP3D_lep;   //!
    TBranch        *b_ID_lep;   //!
+   TBranch        *b_SourceID_lep;   //!
    TBranch        *b_Index_lep;   //!
    TBranch        *b_Njet;   //!
    TBranch        *b_Nbjet;   //!
@@ -398,40 +378,6 @@ public :
    TBranch        *b_RISR;   //!
    TBranch        *b_RISRT;   //!
    TBranch        *b_MISR;   //!
-   TBranch        *b_NPU;   //!
-   TBranch        *b_genMET;   //!
-   TBranch        *b_genMET_phi;   //!
-   TBranch        *b_genNele;   //!
-   TBranch        *b_genNmu;   //!
-   TBranch        *b_genNlep;   //!
-   TBranch        *b_genPT_lep;   //!
-   TBranch        *b_genEta_lep;   //!
-   TBranch        *b_genPhi_lep;   //!
-   TBranch        *b_genM_lep;   //!
-   TBranch        *b_genCharge_lep;   //!
-   TBranch        *b_genPDGID_lep;   //!
-   TBranch        *b_genMomPDGID_lep;   //!
-   TBranch        *b_genIndex_lep;   //!
-   TBranch        *b_genNnu;   //!
-   TBranch        *b_genPT_nu;   //!
-   TBranch        *b_genEta_nu;   //!
-   TBranch        *b_genPhi_nu;   //!
-   TBranch        *b_genPDGID_nu;   //!
-   TBranch        *b_genMomPDGID_nu;   //!
-   TBranch        *b_genNboson;   //!
-   TBranch        *b_genPT_boson;   //!
-   TBranch        *b_genEta_boson;   //!
-   TBranch        *b_genPhi_boson;   //!
-   TBranch        *b_genM_boson;   //!
-   TBranch        *b_genPDGID_boson;   //!
-   TBranch        *b_genMomPDGID_boson;   //!
-   TBranch        *b_genNsusy;   //!
-   TBranch        *b_genPT_susy;   //!
-   TBranch        *b_genEta_susy;   //!
-   TBranch        *b_genPhi_susy;   //!
-   TBranch        *b_genM_susy;   //!
-   TBranch        *b_genPDGID_susy;   //!
-   TBranch        *b_genMomPDGID_susy;   //!
 
    KUAnalysis(TTree *tree=0);
    virtual ~KUAnalysis();
@@ -452,9 +398,9 @@ KUAnalysis::KUAnalysis(TTree *tree) : fChain(0)
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/home/t3-ku/z374f439/../crogan/NTUPLES/NANO/NEW_31_05_20/Fall17_102X/WJetsToLNu_HT-800To1200_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root");
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("../../../../NTUPLES/Processing/Autumn18_102X_Data_MET/MET_Run2018B-02Apr2020-v1_2018_Autumn18_102X/MET_Run2018B-02Apr2020-v1_2018_Autumn18_102X_0_0.root");
       if (!f || !f->IsOpen()) {
-         f = new TFile("/home/t3-ku/z374f439/../crogan/NTUPLES/NANO/NEW_31_05_20/Fall17_102X/WJetsToLNu_HT-800To1200_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root");
+         f = new TFile("../../../../NTUPLES/Processing/Autumn18_102X_Data_MET/MET_Run2018B-02Apr2020-v1_2018_Autumn18_102X/MET_Run2018B-02Apr2020-v1_2018_Autumn18_102X_0_0.root");
       }
       f->GetObject("KUAnalysis",tree);
 
@@ -513,6 +459,7 @@ void KUAnalysis::Init(TTree *tree)
    IP3D_lep = 0;
    SIP3D_lep = 0;
    ID_lep = 0;
+   SourceID_lep = 0;
    Index_lep = 0;
    PT_jet = 0;
    Eta_jet = 0;
@@ -548,31 +495,6 @@ void KUAnalysis::Init(TTree *tree)
    index_lep_b = 0;
    index_SV_a = 0;
    index_SV_b = 0;
-   genPT_lep = 0;
-   genEta_lep = 0;
-   genPhi_lep = 0;
-   genM_lep = 0;
-   genCharge_lep = 0;
-   genPDGID_lep = 0;
-   genMomPDGID_lep = 0;
-   genIndex_lep = 0;
-   genPT_nu = 0;
-   genEta_nu = 0;
-   genPhi_nu = 0;
-   genPDGID_nu = 0;
-   genMomPDGID_nu = 0;
-   genPT_boson = 0;
-   genEta_boson = 0;
-   genPhi_boson = 0;
-   genM_boson = 0;
-   genPDGID_boson = 0;
-   genMomPDGID_boson = 0;
-   genPT_susy = 0;
-   genEta_susy = 0;
-   genPhi_susy = 0;
-   genM_susy = 0;
-   genPDGID_susy = 0;
-   genMomPDGID_susy = 0;
    // Set branch addresses and branch pointers
    if (!tree) return;
    fChain = tree;
@@ -595,6 +517,12 @@ void KUAnalysis::Init(TTree *tree)
    fChain->SetBranchAddress("METtrigger", &METtrigger, &b_METtrigger);
    fChain->SetBranchAddress("METHTtrigger", &METHTtrigger, &b_METHTtrigger);
    fChain->SetBranchAddress("METORtrigger", &METORtrigger, &b_METORtrigger);
+   fChain->SetBranchAddress("SingleElectrontrigger", &SingleElectrontrigger, &b_SingleElectrontrigger);
+   fChain->SetBranchAddress("SingleMuontrigger", &SingleMuontrigger, &b_SingleMuontrigger);
+   fChain->SetBranchAddress("DoubleElectrontrigger", &DoubleElectrontrigger, &b_DoubleElectrontrigger);
+   fChain->SetBranchAddress("DoubleMuontrigger", &DoubleMuontrigger, &b_DoubleMuontrigger);
+   fChain->SetBranchAddress("EventFlag_FailJetID", &EventFlag_FailJetID, &b_EventFlag_FailJetID);
+   fChain->SetBranchAddress("EventFlag_JetInHEM", &EventFlag_JetInHEM, &b_EventFlag_JetInHEM);
    fChain->SetBranchAddress("MET", &MET, &b_MET);
    fChain->SetBranchAddress("MET_phi", &MET_phi, &b_MET_phi);
    fChain->SetBranchAddress("HT", &HT, &b_HT);
@@ -616,6 +544,7 @@ void KUAnalysis::Init(TTree *tree)
    fChain->SetBranchAddress("IP3D_lep", &IP3D_lep, &b_IP3D_lep);
    fChain->SetBranchAddress("SIP3D_lep", &SIP3D_lep, &b_SIP3D_lep);
    fChain->SetBranchAddress("ID_lep", &ID_lep, &b_ID_lep);
+   fChain->SetBranchAddress("SourceID_lep", &SourceID_lep, &b_SourceID_lep);
    fChain->SetBranchAddress("Index_lep", &Index_lep, &b_Index_lep);
    fChain->SetBranchAddress("Njet", &Njet, &b_Njet);
    fChain->SetBranchAddress("Nbjet", &Nbjet, &b_Nbjet);
@@ -748,41 +677,6 @@ void KUAnalysis::Init(TTree *tree)
    fChain->SetBranchAddress("RISR", &RISR, &b_RISR);
    fChain->SetBranchAddress("RISRT", &RISRT, &b_RISRT);
    fChain->SetBranchAddress("MISR", &MISR, &b_MISR);
-
-   //fChain->SetBranchAddress("NPU", &NPU, &b_NPU);
-   //fChain->SetBranchAddress("genMET", &genMET, &b_genMET);
-   //fChain->SetBranchAddress("genMET_phi", &genMET_phi, &b_genMET_phi);
-   //fChain->SetBranchAddress("genNele", &genNele, &b_genNele);
-   //fChain->SetBranchAddress("genNmu", &genNmu, &b_genNmu);
-   //fChain->SetBranchAddress("genNlep", &genNlep, &b_genNlep);
-   //fChain->SetBranchAddress("genPT_lep", &genPT_lep, &b_genPT_lep);
-   //fChain->SetBranchAddress("genEta_lep", &genEta_lep, &b_genEta_lep);
-   //fChain->SetBranchAddress("genPhi_lep", &genPhi_lep, &b_genPhi_lep);
-   //fChain->SetBranchAddress("genM_lep", &genM_lep, &b_genM_lep);
-   //fChain->SetBranchAddress("genCharge_lep", &genCharge_lep, &b_genCharge_lep);
-   //fChain->SetBranchAddress("genPDGID_lep", &genPDGID_lep, &b_genPDGID_lep);
-   //fChain->SetBranchAddress("genMomPDGID_lep", &genMomPDGID_lep, &b_genMomPDGID_lep);
-   //fChain->SetBranchAddress("genIndex_lep", &genIndex_lep, &b_genIndex_lep);
-   //fChain->SetBranchAddress("genNnu", &genNnu, &b_genNnu);
-   //fChain->SetBranchAddress("genPT_nu", &genPT_nu, &b_genPT_nu);
-   //fChain->SetBranchAddress("genEta_nu", &genEta_nu, &b_genEta_nu);
-   //fChain->SetBranchAddress("genPhi_nu", &genPhi_nu, &b_genPhi_nu);
-   //fChain->SetBranchAddress("genPDGID_nu", &genPDGID_nu, &b_genPDGID_nu);
-   //fChain->SetBranchAddress("genMomPDGID_nu", &genMomPDGID_nu, &b_genMomPDGID_nu);
-   //fChain->SetBranchAddress("genNboson", &genNboson, &b_genNboson);
-   //fChain->SetBranchAddress("genPT_boson", &genPT_boson, &b_genPT_boson);
-   //fChain->SetBranchAddress("genEta_boson", &genEta_boson, &b_genEta_boson);
-   //fChain->SetBranchAddress("genPhi_boson", &genPhi_boson, &b_genPhi_boson);
-   //fChain->SetBranchAddress("genM_boson", &genM_boson, &b_genM_boson);
-   //fChain->SetBranchAddress("genPDGID_boson", &genPDGID_boson, &b_genPDGID_boson);
-   //fChain->SetBranchAddress("genMomPDGID_boson", &genMomPDGID_boson, &b_genMomPDGID_boson);
-   //fChain->SetBranchAddress("genNsusy", &genNsusy, &b_genNsusy);
-   //fChain->SetBranchAddress("genPT_susy", &genPT_susy, &b_genPT_susy);
-   //fChain->SetBranchAddress("genEta_susy", &genEta_susy, &b_genEta_susy);
-   //fChain->SetBranchAddress("genPhi_susy", &genPhi_susy, &b_genPhi_susy);
-   //fChain->SetBranchAddress("genM_susy", &genM_susy, &b_genM_susy);
-   //fChain->SetBranchAddress("genPDGID_susy", &genPDGID_susy, &b_genPDGID_susy);
-   //fChain->SetBranchAddress("genMomPDGID_susy", &genMomPDGID_susy, &b_genMomPDGID_susy);
    Notify();
 }
 
