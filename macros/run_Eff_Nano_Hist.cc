@@ -28,58 +28,20 @@ void run_Eff_Nano_Hist()
 
  vector<string> cut;
 
- cut.push_back("PreSelection");
- //cut.push_back("PTISRG200");
- //cut.push_back("PTISRG200_EventFilterE0");
- cut.push_back("NeleBronzeG0");
- cut.push_back("NeleSilverG0");
- cut.push_back("NeleGoldG0");
- cut.push_back("NmuBronzeG0");
- cut.push_back("NmuSilverG0");
- cut.push_back("NmuGoldG0");
- //cut.push_back("PTISRG200_NlepG0");
- //cut.push_back("PTISRG200_PTCML50");
- //cut.push_back("PTISRG200_PTCML100");
- //cut.push_back("PTISRG200_PTCML50_dphiCMIG1");
- //cut.push_back("PTISRG200_NlepE0");
- //cut.push_back("PTISRG200_NlepE1");
- //cut.push_back("PTISRG200_NlepE2");
- //cut.push_back("METtriggerE0");
- //cut.push_back("PTISRG200_NlepG0_NjetG3");
-
-
-
- //cut.push_back("PTISRG200_METG300");
- //cut.push_back("PTISRG200_NjetGe4");
- //cut.push_back("PTISRG200_NjetL4");
- //cut.push_back("PTISR200_NmuE0_NJetSGe1_NeleE0");
- //cut.push_back("PTISR200_NmuGe1_NJetSE0_NeleGe1");
- //cut.push_back("PTISR200_NmuGe1_NJetSGe1_NeleGe1");
+ cut.push_back("NmuGoldE1");
 
  for(int i = 0; i < int(cut.size()); i++)
  {
   outFile += (x + "_" + cut[i] + ".root");
   Files.push_back(outFile);
-  Eff_Nano_Eff(outFile, x, cut[i]);
-  outFile = "Eff_output_";
-  //outFile += (x2 + "_" + cut[i] + ".root");
-  //Files.push_back(outFile);
-  //Eff_Nano_Eff(outFile, x2, cut[i]);
-  //outFile = "Eff_output_";
+  Eff_Nano_Hist(outFile, x, cut[i]);
  }
 
- Plotter_Eff_Nano(Files,cut);
  Files.clear();
  cut.clear();
 
-
-
- //cut.push_back("PTISRG200_NlepG0_METG300_METtriggerE0");
- //cut.push_back("PTISRG200_NlepG0_METG300_METtriggerE1");
- cut.push_back("PTISRG200_NlepG0_METG300_EventFilterE0");
- cut.push_back("PTISRG200_NlepG0_METG300_EventFilterE1");
- cut.push_back("PTISRG200_NlepG0_EventFilterE0");
- cut.push_back("PTISRG200_NlepG0_EventFilterE1");
+/*
+ cut.push_back("PreSelection");
 
  outFile = "Hist_output_";
 
@@ -87,19 +49,18 @@ void run_Eff_Nano_Hist()
  {
   outFile += (cut[i] + ".root");
   Files.push_back(outFile);
-//  Eff_Nano_Hist(outFile,cut[i]);
+  Eff_Nano_Hist(outFile,cut[i]);
   outFile = "Hist_output_";
  }
-
-// Stacker(Files,cut);
-
+*/
  Long64_t end = gSystem->Now();
  std::cout << "Time to Run: " << (end-start)/1000.0 << " seconds" << endl;
 }
 
+/*
 int main()
 {
  run_Eff_Nano_Hist();
  return 0;
 }
-
+*/

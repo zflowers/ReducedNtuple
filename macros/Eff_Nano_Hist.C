@@ -19,6 +19,7 @@ string number = "";
 string cut = "";
 bool Do_Hist = false;
 bool Do_Eff = false;
+bool local = false;
 
 std::string get_str_between_two_str_unique(const std::string &s, const std::string &start_delim, const std::string &stop_delim)
 {
@@ -33,10 +34,10 @@ void Maker(){
 
  //string path = "/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/zflowers/ReducedNtuple/output/";
  //string path = "~/../crogan/NTUPLES/NANO/NEW_31_05_20/";
- //string path = "~/../crogan/NTUPLES/NANO/NEW_21_09_20/";
+ string path = "~/../crogan/NTUPLES/NANO/NEW_21_09_20/";
  //string path = "~/Eff_NANO/ReducedNtuple/";
  //string path = "root://stash.osgconnect.net:1094//user/zflowers/NTUPLES/Processing/";
- string path = "root://xrootd.unl.edu//store/user/zflowers/";
+ //string path = "root://xrootd.unl.edu//store/user/zflowers/";
  //string path = "root://xrootd.unl.edu//store/user/zflowers/FromChris/";
 
  if(tag == "") { cout << "Need to specify tag!" << endl; return; }
@@ -56,17 +57,20 @@ void Maker(){
  {
   eraseSubStr(dir_rm, "_Data");
  }
+ if(local)
+ {
+  input = filename;
+ }
  if(dir.find("SMS") != std::string::npos)
  {
   input = path+dir+"/"+filename+".root";
-  chain->Add(input.c_str(),0);
  }
  else
  {
   //input = path+dir+"/NoHadd/"+filename+"/"+filename+number+".root";
   input = path+dir+"/"+filename+"/"+filename+number+".root";
-  chain->Add(input.c_str(),0);
  }
+ chain->Add(input.c_str(),0);
  string output = cut+"_"+dir+"_"+tag+"_"+filename+number+".root";
  if(Do_Hist)
  {
@@ -137,6 +141,10 @@ int main(int argc, char* argv[])
   else if(strncmp(argv[i],"--eff",5)==0)
   {
    Do_Eff = true;
+  }
+  else if(strncmp(argv[i],"--local",7)==0)
+  {
+   local = true;
   }
  }
 
