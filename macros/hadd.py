@@ -31,9 +31,9 @@ Tag = []
 
 with open("/stash/user/zflowers/CMSSW_10_2_20_UL/src/ReducedNtuple/macros/Setup_Hist/Hist.txt") as cut_handle:
     for cut_line in cut_handle:
-        Cut.append(cut_line.replace('\n',''))
-        if(Cut.startswith('#'):
+        if(cut_line.startswith('#')):
             continue;
+        Cut.append(cut_line.replace('\n',''))
         with open("/stash/user/zflowers/CMSSW_10_2_20_UL/src/ReducedNtuple/macros/Setup_Hist/Dir.txt") as dir_handle:
             for dir_line in dir_handle:
                 Dir.append(dir_line.replace('\n',''))

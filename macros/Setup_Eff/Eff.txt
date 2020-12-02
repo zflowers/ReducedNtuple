@@ -1,4 +1,9 @@
 PreSelection
+Clean
+Clean-NeleGoldE1
+Clean-NeleGoldE2
+Clean-NmuGoldE1
+Clean-NmuGoldE2
 NeleGoldE1
 NeleGoldE2
 NmuGoldE1

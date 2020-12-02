@@ -459,7 +459,7 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
    {
     if(abs(PDGID_lep->at(i)) == 13)
     {
-     if((ID_lep->at(2*i) > 1 && ID_lep->at(2*i) < 3) || fabs(PT_lep->at(i)*MiniIso_lep->at(i)) >= 4. || MiniIso_lep->at(i) >= 0.3)
+     if((ID_lep->at(2*i) > 1 && ID_lep->at(2*i) < 3) || fabs(PT_lep->at(i)*MiniIso_lep->at(i)) >= 4. || fabs(PT_lep->at(i)*RelIso_lep->at(i)) >= 4.)
      {
       numBronze++;
      }
@@ -513,14 +513,14 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
    {
     if(abs(PDGID_lep->at(i)) == 11)
     {
-     if(ID_lep->at(2*i) >= 4 && SIP3D_lep->at(i) >= 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4. && MiniIso_lep->at(i) < 0.3)
+     if(ID_lep->at(2*i) >= 4 && SIP3D_lep->at(i) >= 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4. && fabs(PT_lep->at(i)*RelIso_lep->at(i)) < 4.)
      {
       numSilver++;
      }
     }
     else if(abs(PDGID_lep->at(i)) == 13)
     {
-     if(ID_lep->at(2*i) >= 3 && SIP3D_lep->at(i) >= 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4. && MiniIso_lep->at(i) < 0.3)
+     if(ID_lep->at(2*i) >= 3 && SIP3D_lep->at(i) >= 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4. && fabs(PT_lep->at(i)*RelIso_lep->at(i)) < 4.)
      {
       numSilver++;
      }
@@ -568,7 +568,7 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
    {
     if(abs(PDGID_lep->at(i)) == 11)
     {
-     if(ID_lep->at(2*i) >= 4 && SIP3D_lep->at(i) >= 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4. && MiniIso_lep->at(i) < 0.3)
+     if(ID_lep->at(2*i) >= 4 && SIP3D_lep->at(i) >= 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4. && fabs(PT_lep->at(i)*RelIso_lep->at(i)) < 4.)
      {
       numSilver++;
      }
@@ -616,7 +616,7 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
    {
     if(abs(PDGID_lep->at(i)) == 13)
     {
-     if(ID_lep->at(2*i) >= 3 && SIP3D_lep->at(i) >= 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4. && MiniIso_lep->at(i) < 0.3)
+     if(ID_lep->at(2*i) >= 3 && SIP3D_lep->at(i) >= 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4. && fabs(PT_lep->at(i)*RelIso_lep->at(i)) < 4.)
      {
       numSilver++;
      }
@@ -670,14 +670,14 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
    {
     if(abs(PDGID_lep->at(i)) == 11)
     {
-     if(ID_lep->at(2*i) >= 4 && SIP3D_lep->at(i) < 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4. && MiniIso_lep->at(i) < 0.3)
+     if(ID_lep->at(2*i) >= 4 && SIP3D_lep->at(i) < 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4. && fabs(PT_lep->at(i)*RelIso_lep->at(i)) < 4.)
      {
       numGold++;
      }
     }
     else if(abs(PDGID_lep->at(i)) == 13)
     {
-     if(ID_lep->at(2*i) >= 3 && SIP3D_lep->at(i) < 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4. && MiniIso_lep->at(i) < 0.3)
+     if(ID_lep->at(2*i) >= 3 && SIP3D_lep->at(i) < 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4. && fabs(PT_lep->at(i)*RelIso_lep->at(i)) < 4.)
      {
       numGold++;
      }
@@ -723,7 +723,7 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
    b_PT_lep->GetEntry(jentry);
    for(int i = 0; i < Nele; i++)
    {
-    if(abs(PDGID_lep->at(i)) == 11 && ID_lep->at(2*i) >= 4 && SIP3D_lep->at(i) < 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4. && MiniIso_lep->at(i) < 0.3)
+    if(abs(PDGID_lep->at(i)) == 11 && ID_lep->at(2*i) >= 4 && SIP3D_lep->at(i) < 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4. && fabs(PT_lep->at(i)*RelIso_lep->at(i)) < 4.)
     {
      numGold++;
     }
@@ -768,7 +768,7 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
    b_PT_lep->GetEntry(jentry);
    for(int i = 0; i < Nmu; i++)
    {
-    if(abs(PDGID_lep->at(i)) == 13 && ID_lep->at(2*i) >= 4 && SIP3D_lep->at(i) < 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4. && MiniIso_lep->at(i) < 0.3)
+    if(abs(PDGID_lep->at(i)) == 13 && ID_lep->at(2*i) >= 4 && SIP3D_lep->at(i) < 2 && fabs(PT_lep->at(i)*MiniIso_lep->at(i)) < 4. && fabs(PT_lep->at(i)*RelIso_lep->at(i)) < 4.)
     {
      numGold++;
     }

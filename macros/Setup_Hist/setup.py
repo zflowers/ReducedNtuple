@@ -9,7 +9,8 @@ log = path+"LOG_HIST/"
 shell = path+"Shell_HIST/"
 num = path+"Num_HIST/"
 #input = "/home/t3-ku/crogan/NTUPLES/NANO/NEW_21_09_20/"
-input_path = "/stash/user/zflowers/NTUPLES/Processing/"
+#input_path = "/stash/user/zflowers/NTUPLES/Processing/"
+input_path = "/stash/user/zflowers/NTUPLES/temp/"
 
 list_f = []
 
@@ -39,7 +40,7 @@ def write_sh(Cut,Dir,File,Tag):
     fsrc.write('log = '+log+'$(CUT)/$(DIR)/$(TAG)/$(FILENAME)/log_$(FILENAME).log \n')
     fsrc.write('Requirements = (Machine != \"red-node000.unl.edu\") \n')
     fsrc.write('Arguments = \"-cut=$(CUT) -tag=$(TAG) -dir=$(DIR) -filename=$(FILENAME) -num=  --hist\" \n')
-    fsrc.write('transfer_input_files = '+path+'config.tgz \n')
+    fsrc.write('transfer_input_files = '+path+'config_hist.tgz \n')
     fsrc.write('should_transfer_files = YES \n')
     fsrc.write('when_to_transfer_output = ON_EXIT \n')
     fsrc.write('transfer_output_files = $(CUT)_$(DIR)_$(TAG)_$(FILENAME).root \n')
@@ -68,15 +69,15 @@ def write_sh(Cut,Dir,File,Tag):
     fsrc.write('use_x509userproxy = true \n')
     fsrc.write('+ProjectName=\"cms.org.ku\" \n')
     fsrc.write('+REQUIRED_OS=\"rhel7\" \n')
-    fsrc.write('+RequiresCVMFS = True \n')
-    fsrc.write('+RequiresSharedFS = True \n')
+    #fsrc.write('+RequiresCVMFS = True \n')
+    #fsrc.write('+RequiresSharedFS = True \n')
     fsrc.write('request_memory = 4000 \n')
     fsrc.write('output = '+log+'$(CUT)/$(DIR)/$(TAG)/$(FILENAME)/out_$(FILENAME)$(NUM).log \n')
     fsrc.write('error = '+log+'$(CUT)/$(DIR)/$(TAG)/$(FILENAME)/err_$(FILENAME)$(NUM).log \n')
     fsrc.write('log = '+log+'$(CUT)/$(DIR)/$(TAG)/$(FILENAME)/log_$(FILENAME)$(NUM).log \n')
     fsrc.write('Requirements = (Machine != \"red-node000.unl.edu\") \n')
     fsrc.write('Arguments = \"-cut=$(CUT) -tag=$(TAG) -dir=$(DIR) -filename=$(FILENAME) -num=$(NUM) --hist\" \n')
-    fsrc.write('transfer_input_files = '+path+'config.tgz \n')
+    fsrc.write('transfer_input_files = '+path+'config_hist.tgz \n')
     fsrc.write('should_transfer_files = YES \n')
     fsrc.write('when_to_transfer_output = ON_EXIT \n')
     fsrc.write('transfer_output_files = $(CUT)_$(DIR)_$(TAG)_$(FILENAME)$(NUM).root \n')
@@ -93,10 +94,10 @@ def write_num_file(Cut,Dir,File,Tag,Num):
     fsrc.write(Num+'\n')
     fsrc.close()
 
-os.system("mkdir -p "+path+"config")
-os.system("cp "+path+"Eff_Nano_Hist.x "+path+"config/")
-os.system("cp /stash/user/zflowers/cmssw-sandbox/cmssw_setup.sh "+path+"config/")
-os.system("tar -C "+path+"config/../ -czvf config.tgz config/")
+os.system("mkdir -p "+path+"config_hist")
+os.system("cp "+path+"Eff_Nano_Hist.x "+path+"config_hist/")
+os.system("cp /stash/user/zflowers/cmssw-sandbox/cmssw_setup.sh "+path+"config_hist/")
+os.system("tar -C "+path+"config_hist/../ -czvf config_hist.tgz config_hist/")
 os.system("source "+path+"make_sandbox.sh")
 
 print("Writing shell scripts")
@@ -104,7 +105,7 @@ print("Writing shell scripts")
 with open(path+"Setup_Hist/Hist.txt") as cut_handle:
     for cut_line in cut_handle:
         Cut = cut_line.replace('\n','')
-        if(Cut.startswith('#'):
+        if(Cut.startswith('#')):
             continue;
         with open(path+"Setup_Hist/Dir.txt") as dir_handle:
             for dir_line in dir_handle:
@@ -126,9 +127,8 @@ with open(path+"Setup_Hist/Hist.txt") as cut_handle:
                                     #list_f.append(write_sh(Cut,Num,Dir,File,Tag))
                             list_f.append(write_sh(Cut,Dir,File,Tag))
 
-print("Submitting Jobs")
 list_f = list(dict.fromkeys(list_f))
 for f in list_f:
     os.system("condor_submit "+f)
-os.system("rm -rf "+path+"config/")
+os.system("rm -rf "+path+"config_hist/")
 print("Finished Submitting Jobs")
