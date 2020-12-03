@@ -166,7 +166,8 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
  pad_gr->cd();
  can->Update();
 
- mg->Draw("AP"); 
+ //mg->Draw("AP"); 
+ mg->Draw("A4"); 
  Format_Graph(mg);
  pad_gr->Update();
  pad_gr->Modified();
@@ -224,7 +225,8 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
   delete can;
   return -1.;
  }
- mg_res->Draw("AP");
+ mg_res->Draw("A4");
+ //mg_res->Draw("AP4");
  Format_Graph_res(mg_res);
  mg_res->GetXaxis()->SetLimits(mg->GetXaxis()->GetXmin(),mg->GetXaxis()->GetXmax());
  mg_res->GetYaxis()->SetTitle("Data/Bkg");

@@ -63,7 +63,19 @@ inline void Eff_Nano::Set_x(string x)
 }
 
 bool Clean_cut_eff = false;
+bool dPhiMET_V_cut_eff = true;
+bool RISR_uppercut_eff = true;
+double lumi_eff = 1.;
+
 inline void Eff_Nano::Analyze(){
+
+  if(m_Tag.find("DY") != std::string::npos || m_Tag.find("TTV") != std::string::npos || m_Tag.find("QCD") != std::string::npos || m_Tag.find("ST") != std::string::npos || m_Tag.find("ZJets") != std::string::npos || m_Tag.find("WJets") != std::string::npos || m_Tag.find("TTJets") != std::string::npos || m_Tag.find("Boson") != std::string::npos || m_Tag.find("Bkg") != std::string::npos)
+   {
+    if(m_Tag.find("2016") != std::string::npos) { lumi_eff=35.922; }
+    if(m_Tag.find("2017") != std::string::npos) { lumi_eff=41.529; }
+    if(m_Tag.find("2018") != std::string::npos) { lumi_eff=59.74; }
+   }
+
    TBranch* weight_branch = NULL;
    Double_t weight = 0.;
    TBranch* x_branch = NULL;
@@ -110,14 +122,18 @@ inline void Eff_Nano::Analyze(){
    Long64_t nentries = m_Tree->GetEntriesFast();
    Long64_t percent = 5.0;
    Long64_t nbytes = 0, nb = 0;
+
    if(m_cut.find("Clean") != std::string::npos) Clean_cut_eff = true;
    eraseSubStr(m_cut,("Clean-"));
+
+   if(m_cut.find("dPhiMET_V") != std::string::npos) dPhiMET_V_cut_eff = true;
+   eraseSubStr(m_cut,("dPhiMET_V-"));
 
    for (Long64_t jentry=0; jentry<nentries;jentry++) {
       Long64_t ientry = m_Tree->LoadTree(jentry);
       //nb = m_Tree->GetEntry(jentry);   nbytes += nb;
       if(jentry%((std::max(nentries,percent))/percent) == 0) { cout << "Processing Event: " << jentry << " out of: " << nentries << " Entries" << endl;}
-      if(global_cuts(jentry)) continue;
+
       if(Clean_cut_eff)
       {
        TBranch* dphiCMI_branch = NULL;
@@ -128,22 +144,38 @@ inline void Eff_Nano::Analyze(){
        m_Tree->SetBranchAddress("PTCM",&PTCM,&PTCM_branch);
        dphiCMI_branch->GetEntry(jentry);
        PTCM_branch->GetEntry(jentry);
-       if(dphiCMI < 0.25)
+       if(dphiCMI < TMath::Pi()/4.)
        {
-        if((-1600.*(dphiCMI-0.25)*(dphiCMI-0.25)+100.-PTCM) < 0.) continue;
+        if(PTCM > 75.) continue;
        }
-       else if(dphiCMI > 0.25 && dphiCMI <= 2.5)
+       else if(dphiCMI > 3*TMath::Pi()/4.)
        {
         if(PTCM > 100.) continue;
-       }
-       else if(dphiCMI > 2.5)
-       {
-        if((-242.94*(dphiCMI-2.5)*(dphiCMI-2.5)+100.-PTCM) < 0.) continue;
        }
        dphiCMI_branch->ResetAddress();
        PTCM_branch->ResetAddress();
        m_Tree->ResetBranchAddresses();
       }
+
+      if(dPhiMET_V_cut_eff)
+      {
+       TBranch* dphiMET_V_branch = NULL;
+       Double_t dphiMET_V = 0.;
+       m_Tree->SetBranchAddress("dphiMET_V",&dphiMET_V,&dphiMET_V_branch);
+       dphiMET_V_branch->GetEntry(jentry);
+       if(fabs(dphiMET_V) > TMath::Pi()/2.) continue;
+      }
+
+      if(RISR_uppercut_eff)
+      {
+       TBranch* RISR_branch = NULL;
+       Double_t RISR = 0.;
+       m_Tree->SetBranchAddress("RISR",&RISR,&RISR_branch);
+       RISR_branch->GetEntry(jentry);
+       if(RISR > 1.) continue;
+      }
+
+      if(global_cuts(jentry)) continue;
 
       x_branch->GetEntry(jentry);    
       weight_branch->GetEntry(jentry);    
@@ -154,11 +186,11 @@ inline void Eff_Nano::Analyze(){
        Bool_t trig = 0;
        m_Tree->SetBranchAddress(m_Triggers.at(i).c_str(),&trig,&branch);
        branch->GetEntry(jentry);
-       vect_Eff.at(i)->FillWeighted(trig,weight,x);
+       vect_Eff.at(i)->FillWeighted(trig,weight*lumi_eff,x);
        SuperOR = (SuperOR || trig);
        branch->ResetAddress();
       }
-      vect_Eff.at(int(vect_Eff.size()-1))->FillWeighted(SuperOR,weight,x);
+      vect_Eff.at(int(vect_Eff.size()-1))->FillWeighted(SuperOR,weight*lumi_eff,x);
    }
    cout << "Finished Event Loop" << endl;
    TFile* output = new TFile(m_outFile.c_str(),"UPDATE");

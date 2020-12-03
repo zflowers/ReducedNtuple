@@ -1406,7 +1406,7 @@ void gendphiMET_mu_Hist::fill_hist(Long64_t jentry){
 
 vector<HistClass*> Setup_Hists(TTree* tree){
  vector<HistClass*> Classes;
- Classes.push_back(new met_Hist);
+ //Classes.push_back(new met_Hist);
  //Classes.push_back(new met_Phi_Hist);
  //Classes.push_back(new PTCM_Hist);
  //Classes.push_back(new dphiMET_V_Hist);
@@ -1426,17 +1426,17 @@ vector<HistClass*> Setup_Hists(TTree* tree){
  //Classes.push_back(new mu_PT_proj_METperp_Hist);
  //
  Classes.push_back(new dphiCMI_v_PTCM_Hist);
- Classes.push_back(new dphiCMI_v_Mperp_Hist);
- Classes.push_back(new dphiCMI_v_RISR_Hist);
- Classes.push_back(new Mperp_v_PTCM_Hist);
- Classes.push_back(new RISR_v_PTCM_Hist);
- Classes.push_back(new dphiCMI_v_dphiMET_V_Hist);
- Classes.push_back(new dphiMET_V_v_RISR_Hist);
- Classes.push_back(new Mperp_v_dphiMET_V_Hist);
- Classes.push_back(new dphiMET_V_v_PTCM_Hist);
- Classes.push_back(new Mperp_v_RISR_Hist);
- Classes.push_back(new PTCM_v_Njet_S_Hist);
- Classes.push_back(new dphiCMI_v_Njet_S_Hist);
+ //Classes.push_back(new dphiCMI_v_Mperp_Hist);
+ //Classes.push_back(new dphiCMI_v_RISR_Hist);
+ //Classes.push_back(new Mperp_v_PTCM_Hist);
+ //Classes.push_back(new RISR_v_PTCM_Hist);
+ //Classes.push_back(new dphiCMI_v_dphiMET_V_Hist);
+ //Classes.push_back(new dphiMET_V_v_RISR_Hist);
+ //Classes.push_back(new Mperp_v_dphiMET_V_Hist);
+ //Classes.push_back(new dphiMET_V_v_PTCM_Hist);
+ //Classes.push_back(new Mperp_v_RISR_Hist);
+ //Classes.push_back(new PTCM_v_Njet_S_Hist);
+ //Classes.push_back(new dphiCMI_v_Njet_S_Hist);
 
 //gen hists
  //Classes.push_back(new genmet_Hist);

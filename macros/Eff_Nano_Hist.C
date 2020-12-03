@@ -57,10 +57,6 @@ void Maker(){
  {
   eraseSubStr(dir_rm, "_Data");
  }
- if(local)
- {
-  input = filename;
- }
  if(dir.find("SMS") != std::string::npos)
  {
   input = path+dir+"/"+filename+".root";
@@ -70,8 +66,18 @@ void Maker(){
   //input = path+dir+"/NoHadd/"+filename+"/"+filename+number+".root";
   input = path+dir+"/"+filename+"/"+filename+number+".root";
  }
+ if(local)
+ {
+  input = dir+"/"+filename;
+ }
  chain->Add(input.c_str(),0);
  string output = cut+"_"+dir+"_"+tag+"_"+filename+number+".root";
+ if(local)
+ {
+  output = cut+"_"+tag+"_"+filename;
+ }
+ cout << "Output file: " << output << endl;
+
  if(Do_Hist)
  {
   Hist_Maker Hist(output,tag,chain);
