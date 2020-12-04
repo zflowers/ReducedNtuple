@@ -24,7 +24,7 @@ bool invert_colors = false;
 
 double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger, vector<int> colors, string outFile, string name, string option);
 TGraphErrors* Get_Bands_Ratio(double x_min, double x_max, TGraphAsymmErrors* gr, vector<double>& y_upper, vector<double>& y_lower);
-TGraphAsymmErrors* Get_Bands(double x_min, double x_max, TGraphAsymmErrors* gr, vector<double>& y_upper, vector<double>& y_lower);
+TGraphErrors* Get_Bands(double x_min, double x_max, TGraphAsymmErrors* gr, vector<double>& y_upper, vector<double>& y_lower);
 TGraphAsymmErrors* get_gr(string fname, string tag, string Trigger, int color, TLegend*& leg, TCanvas*& can);
 TGraphAsymmErrors* TGAE_Ratio(TGraphAsymmErrors* gr_bkg, TGraphAsymmErrors* gr_data);
 
@@ -284,7 +284,7 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
  pad_gr->cd();
  can->Update();
 
- TGraphAsymmErrors* gr_bands = Get_Bands(x_min,x_max,vect_gr_data[0],y_upper,y_lower);
+ TGraphErrors* gr_bands = Get_Bands(x_min,x_max,vect_gr_data[0],y_upper,y_lower);
  gr_bands->SetFillColor(kCyan-4);
  gr_bands->SetLineColor(kCyan-4);
  gr_bands->SetMarkerColor(kCyan-4);
@@ -304,7 +304,7 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
  pad_gr->Modified();
  can->Update();
  //mg_new->GetYaxis()->SetTitle("Efficiency");
- gr_bands->Draw("3");
+ gr_bands->Draw("A3");
  Format_Graph(gr_bands);
  gr_bands->GetXaxis()->SetLimits(x_min,x_max);
  gr_bands->GetYaxis()->SetTitle("Efficiency");
@@ -406,10 +406,10 @@ TGraphErrors* Get_Bands_Ratio(double x_min, double x_max, TGraphAsymmErrors* gr,
  return gr_bands_ratio; 
 }
 
-TGraphAsymmErrors* Get_Bands(double x_min, double x_max, TGraphAsymmErrors* gr, vector<double>& y_upper, vector<double>& y_lower)
+TGraphErrors* Get_Bands(double x_min, double x_max, TGraphAsymmErrors* gr, vector<double>& y_upper, vector<double>& y_lower)
 {
  int N = y_upper.size();
- TGraphAsymmErrors* gr_bands = new TGraphAsymmErrors(N);
+ TGraphErrors* gr_bands = new TGraphErrors(N);
  double x = 0.;
  double y = 0.;
  double x_err = ((x_max-x_min)/(N));
@@ -433,11 +433,13 @@ TGraphAsymmErrors* Get_Bands(double x_min, double x_max, TGraphAsymmErrors* gr, 
   y_lower_err_i = Eff_Nominal->Eval(x)*y_lower[i];
   //y_upper_err_i = (Eff_Nominal->GetParameter(0)+Eff_Nominal->GetParError(0))*ROOT::Math::normal_cdf(x,(Eff_Nominal->GetParameter(2)+Eff_Nominal->GetParError(2)),(Eff_Nominal->GetParameter(1)+Eff_Nominal->GetParError(1)));
   //y_lower_err_i = (Eff_Nominal->GetParameter(0)-Eff_Nominal->GetParError(0))*ROOT::Math::normal_cdf(x,(Eff_Nominal->GetParameter(2)-Eff_Nominal->GetParError(2)),(Eff_Nominal->GetParameter(1)-Eff_Nominal->GetParError(1)));
-  y = Eff_Nominal->Eval(x);
+  y = Eff_Nominal->Eval(x); 
+  y_err_i = (y_upper_err_i-y_lower_err_i)/2.;
   if(y > 1.) {y = 1.;}
-  if(y_upper_err_i > 1.) {y_upper_err_i = 1.;}
+  if(y_err_i > 1.) {y_err_i = 1.;}
   gr_bands->SetPoint(i,x,y);
-  gr_bands->SetPointError(i,x_err,x_err,y_lower_err_i,y_upper_err_i);
+  //gr_bands->SetPointError(i,x_err,x_err,y_lower_err_i,y_upper_err_i);
+  gr_bands->SetPointError(i,x_err,y_err_i);
  }
  return gr_bands; 
 }
