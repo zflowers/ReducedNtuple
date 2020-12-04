@@ -43,7 +43,7 @@ void ScaleFactors(vector<string> inFile, vector<string> cut){
  vector<string> data_tags_2018 = {"SingleElectron_2018","SingleMuon_2018"};
  
  //vector<int> colors = {kCyan, kMagenta, kYellow, kViolet+2, kAzure+7, kPink, kGreen, kGray};
- vector<int> colors = {kGreen+2, kBlue+2, kYellow, kViolet+2, kAzure+7, kPink, kGreen, kGray};
+ vector<int> colors = {kGreen+1, kAzure-2, kYellow, kViolet+2, kAzure+7, kPink, kGreen, kGray};
 
  for(int i = 0; i < inFile.size(); i++)
  {
@@ -63,8 +63,7 @@ void Format_Graph(TMultiGraph*& gr)
  gr->GetXaxis()->SetTitleSize(0.06);
  gr->GetXaxis()->SetTitleOffset(1.06);
  gr->GetXaxis()->SetLabelFont(132);
- gr->GetXaxis()->SetLabelSize(0.05);
- //gr->GetXaxis()->SetLabelSize(0.00000001);
+ gr->GetXaxis()->SetLabelSize(0.0);
  gr->GetYaxis()->CenterTitle(true);
  gr->GetYaxis()->SetTitleFont(132);
  gr->GetYaxis()->SetTitleSize(0.06);
@@ -90,13 +89,13 @@ void Format_Graph_res(TMultiGraph*& gr)
   gr->GetXaxis()->SetTitleSize(0.12);
   gr->GetXaxis()->SetTitleOffset(.7);
   gr->GetXaxis()->SetLabelFont(132);
-  gr->GetXaxis()->SetLabelSize(0.1);
+  gr->GetXaxis()->SetLabelSize(0.11);
   gr->GetYaxis()->CenterTitle(true);
   gr->GetYaxis()->SetTitleFont(132);
   gr->GetYaxis()->SetTitleSize(0.12);
   gr->GetYaxis()->SetTitleOffset(.35);
   gr->GetYaxis()->SetLabelFont(132);
-  gr->GetYaxis()->SetLabelSize(0.1);
+  gr->GetYaxis()->SetLabelSize(0.11);
 
   if(invert_colors)
   {
@@ -116,7 +115,7 @@ void Format_Graph(TGraphAsymmErrors*& gr)
  gr->GetXaxis()->SetTitleSize(0.06);
  gr->GetXaxis()->SetTitleOffset(1.06);
  gr->GetXaxis()->SetLabelFont(132);
- gr->GetXaxis()->SetLabelSize(0.05);
+ gr->GetXaxis()->SetLabelSize(0.0);
  //gr->GetXaxis()->SetLabelSize(0.00000001);
  gr->GetYaxis()->CenterTitle(true);
  gr->GetYaxis()->SetTitleFont(132);
@@ -173,7 +172,7 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
   gStyle->SetFrameLineColor(kWhite);
  }
 
- TLegend* leg = new TLegend(0.55,0.3,0.85,0.6); 
+ TLegend* leg = new TLegend(0.65,0.3,0.85,0.6); 
  leg->SetTextFont(132);
  leg->SetTextSize(0.045);
  
@@ -221,22 +220,24 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
  }
 
  TF1* Bkg_Nominal = new TF1("Bkg_Nominal",Gaussian_CDF_Func,150.,500.,3);
+ Bkg_Nominal->SetLineColor(kGreen+2);
  Bkg_Nominal->SetParameter(0,0.99);
  Bkg_Nominal->SetParameter(1,125.);
  Bkg_Nominal->SetParameter(2,40.);
  Bkg_Nominal->SetParName(0,"Norm_Gauss_CDF");
  Bkg_Nominal->SetParName(1,"Mean_Gauss_CDF");
  Bkg_Nominal->SetParName(2,"Sigma_Gauss_CDF");
- gr_bkg->Fit(Bkg_Nominal,"EMS+");
+ gr_bkg->Fit(Bkg_Nominal,"EMS+0");
 
  TF1* Data_Nominal = new TF1("Data_Nominal",Gaussian_CDF_Func,150.,500.,3);
+ Data_Nominal->SetLineColor(kBlue+1);
  Data_Nominal->SetParameter(0,0.99);
  Data_Nominal->SetParameter(1,125.);
  Data_Nominal->SetParameter(2,40.);
  Data_Nominal->SetParName(0,"Norm_Gauss_CDF");
  Data_Nominal->SetParName(1,"Mean_Gauss_CDF");
  Data_Nominal->SetParName(2,"Sigma_Gauss_CDF");
- vect_gr_data[0]->Fit(Data_Nominal,"EMS+");
+ vect_gr_data[0]->Fit(Data_Nominal,"EMS+0");
 
  can->Clear();
 
@@ -245,7 +246,7 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
  TPad *pad_res = new TPad("pad_res","pad_res",0,0.03,1,0.3);
  pad_res->SetGridx(); 
  pad_res->SetGridy();
- pad_res->SetTopMargin(1.3);
+ pad_res->SetTopMargin(0.);
  pad_res->SetBottomMargin(0.2);
  pad_res->Draw();
  pad_res->cd();
@@ -291,8 +292,9 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
  line->SetLineStyle(1);
  //line->Draw("SAMES");
  gr_bands_ratio->Draw("30");
- res_ratio->Draw("P");
+ Fit_Ratio->SetLineColor(kBlue+1);
  Fit_Ratio->Draw("C");
+ res_ratio->Draw("P");
  pad_res->Modified();
  pad_res->Update();
  can->Modified();
@@ -325,6 +327,8 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
  can->Update();
  //mg_new->GetYaxis()->SetTitle("Efficiency");
  gr_bands->Draw("A3");
+ Data_Nominal->Draw("SAME");
+ Bkg_Nominal->Draw("SAME");
  Format_Graph(gr_bands);
  gr_bands->SetTitle("");
  gr_bands->GetXaxis()->SetLimits(x_min,x_max);
@@ -336,7 +340,9 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
  can->Modified();
  can->Update();
 
-
+ leg->AddEntry(gr_bands,"Systematic Uncertainty","F");
+ leg->AddEntry(Data_Nominal,"SingleMuon Fit","L");
+ leg->AddEntry(Bkg_Nominal,"MC Bkg Fit","L");
  leg->Draw("SAME");
  l.SetTextFont(42);
  l.SetNDC();
