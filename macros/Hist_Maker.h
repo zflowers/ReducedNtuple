@@ -766,12 +766,12 @@ class dphiCMI_v_PTCM_Hist:public HistClass, public Hist_Maker{
 void dphiCMI_v_PTCM_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist2d = new TH2D("dphiCMI_v_PTCM_Hist","",20,0.,TMath::Pi(),16,0.,500.);
+ hist2d = new TH2D("dphiCMI_v_PTCM_Hist","",64,0.,TMath::Pi(),80,0.,500.);
  hist2d->GetXaxis()->SetTitle("dphiCMI");
  hist2d->GetYaxis()->SetTitle("PTCM");
- HEM_hist2d = new TH2D("dphiCMI_v_PTCM_Hist_HEM","",20,0.,TMath::Pi(),16,0.,500.);
- HEM_hist2d->GetXaxis()->SetTitle("dphiCMI");
- HEM_hist2d->GetYaxis()->SetTitle("PTCM");
+ HEM_hist2d = new TH2D("dphiCMI_v_PTCM_Hist_HEM","",64,0.,TMath::Pi(),80,0.,500.);
+ HEM_hist2d->GetXaxis()->SetTitle("#Delta #phi_{CM,I}");
+ HEM_hist2d->GetYaxis()->SetTitle("p_{T}^{CM} [GeV]");
 }
 void dphiCMI_v_PTCM_Hist::fill_hist(Long64_t jentry){
 //Option A: Load only the branches we need:
