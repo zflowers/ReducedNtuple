@@ -222,9 +222,9 @@ class met_Phi_Hist:public HistClass, public Hist_Maker{
 void met_Phi_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist1d = new TH1D("met_Phi_Hist","",100,-3.5,3.5);
+ hist1d = new TH1D("met_Phi_Hist","",100,-TMath::Pi(),TMath::Pi());
  hist1d->GetXaxis()->SetTitle("MET_phi");
- HEM_hist1d = new TH1D("met_Phi_Hist_HEM","",100,-3.5,3.5);
+ HEM_hist1d = new TH1D("met_Phi_Hist_HEM","",100,-TMath::Pi(),TMath::Pi());
  HEM_hist1d->GetXaxis()->SetTitle("MET_phi");
 }
 void met_Phi_Hist::fill_hist(Long64_t jentry){
@@ -361,9 +361,9 @@ class ele_Phi_Hist:public HistClass, public Hist_Maker{
 void ele_Phi_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist1d = new TH1D("ele_Phi_Hist","",100,-3.5,3.5);
+ hist1d = new TH1D("ele_Phi_Hist","",100,-TMath::Pi(),TMath::Pi());
  hist1d->GetXaxis()->SetTitle("ele_Phi");
- HEM_hist1d = new TH1D("ele_Phi_Hist_HEM","",100,-3.5,3.5);
+ HEM_hist1d = new TH1D("ele_Phi_Hist_HEM","",100,-TMath::Pi(),TMath::Pi());
  HEM_hist1d->GetXaxis()->SetTitle("ele_Phi");
 }
 void ele_Phi_Hist::fill_hist(Long64_t jentry){
@@ -397,9 +397,9 @@ class mu_Phi_Hist:public HistClass, public Hist_Maker{
 void mu_Phi_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist1d = new TH1D("mu_Phi_Hist","",100,-3.5,3.5);
+ hist1d = new TH1D("mu_Phi_Hist","",100,-TMath::Pi(),TMath::Pi());
  hist1d->GetXaxis()->SetTitle("mu_Phi");
- HEM_hist1d = new TH1D("mu_Phi_Hist_HEM","",100,-3.5,3.5);
+ HEM_hist1d = new TH1D("mu_Phi_Hist_HEM","",100,-TMath::Pi(),TMath::Pi());
  HEM_hist1d->GetXaxis()->SetTitle("mu_Phi");
 }
 void mu_Phi_Hist::fill_hist(Long64_t jentry){
@@ -431,9 +431,9 @@ class dphiMET_lep_Hist:public HistClass, public Hist_Maker{
 void dphiMET_lep_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist1d = new TH1D("dphiMET_lep_Hist","",100,-3.5,3.5);
+ hist1d = new TH1D("dphiMET_lep_Hist","",100,-TMath::Pi(),TMath::Pi());
  hist1d->GetXaxis()->SetTitle("#Delta #phi_{MET,lep}");
- HEM_hist1d = new TH1D("dphiMET_lep_Hist_HEM","",100,-3.5,3.5);
+ HEM_hist1d = new TH1D("dphiMET_lep_Hist_HEM","",100,-TMath::Pi(),TMath::Pi());
  HEM_hist1d->GetXaxis()->SetTitle("#Delta #phi_{MET,lep}");
 }
 void dphiMET_lep_Hist::fill_hist(Long64_t jentry){
@@ -477,9 +477,9 @@ class dphiMET_ele_Hist:public HistClass, public Hist_Maker{
 void dphiMET_ele_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist1d = new TH1D("dphiMET_ele_Hist","",100,-3.5,3.5);
+ hist1d = new TH1D("dphiMET_ele_Hist","",100,-TMath::Pi(),TMath::Pi());
  hist1d->GetXaxis()->SetTitle("#Delta #phi_{MET,ele}");
- HEM_hist1d = new TH1D("dphiMET_ele_Hist_HEM","",100,-3.5,3.5);
+ HEM_hist1d = new TH1D("dphiMET_ele_Hist_HEM","",100,-TMath::Pi(),TMath::Pi());
  HEM_hist1d->GetXaxis()->SetTitle("#Delta #phi_{MET,ele}");
 }
 void dphiMET_ele_Hist::fill_hist(Long64_t jentry){
@@ -527,9 +527,9 @@ class dphiMET_mu_Hist:public HistClass, public Hist_Maker{
 void dphiMET_mu_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist1d = new TH1D("dphiMET_mu_Hist","",100,-3.5,3.5);
+ hist1d = new TH1D("dphiMET_mu_Hist","",100,-TMath::Pi(),TMath::Pi());
  hist1d->GetXaxis()->SetTitle("#Delta #phi_{MET,ele}");
- HEM_hist1d = new TH1D("dphiMET_mu_Hist_HEM","",100,-3.5,3.5);
+ HEM_hist1d = new TH1D("dphiMET_mu_Hist_HEM","",100,-TMath::Pi(),TMath::Pi());
  HEM_hist1d->GetXaxis()->SetTitle("#Delta #phi_{MET,ele}");
 }
 void dphiMET_mu_Hist::fill_hist(Long64_t jentry){
@@ -577,9 +577,9 @@ class dphiCMI_Hist:public HistClass, public Hist_Maker{
 void dphiCMI_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist1d = new TH1D("dphiCMI_Hist","",100,0.,3.5);
+ hist1d = new TH1D("dphiCMI_Hist","",100,0.,TMath::Pi());
  hist1d->GetXaxis()->SetTitle("dphiCMI");
- HEM_hist1d = new TH1D("dphiCMI_Hist_HEM","",100,0.,3.5);
+ HEM_hist1d = new TH1D("dphiCMI_Hist_HEM","",100,0.,TMath::Pi());
  HEM_hist1d->GetXaxis()->SetTitle("dphiCMI");
 }
 void dphiCMI_Hist::fill_hist(Long64_t jentry){
@@ -606,10 +606,10 @@ class dphiCMI_v_Mperp_Hist:public HistClass, public Hist_Maker{
 void dphiCMI_v_Mperp_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist2d = new TH2D("dphiCMI_v_Mperp_Hist","",50,0.,3.5,50,0.,50.);
+ hist2d = new TH2D("dphiCMI_v_Mperp_Hist","",50,0.,TMath::Pi(),50,0.,50.);
  hist2d->GetXaxis()->SetTitle("dphiCMI");
  hist2d->GetYaxis()->SetTitle("Mperp");
- HEM_hist2d = new TH2D("dphiCMI_v_Mperp_Hist_HEM","",50,0.,3.5,50,0.,50.);
+ HEM_hist2d = new TH2D("dphiCMI_v_Mperp_Hist_HEM","",50,0.,TMath::Pi(),50,0.,50.);
  HEM_hist2d->GetXaxis()->SetTitle("dphiCMI");
  HEM_hist2d->GetYaxis()->SetTitle("Mperp");
 }
@@ -638,10 +638,10 @@ class dphiCMI_v_RISR_Hist:public HistClass, public Hist_Maker{
 void dphiCMI_v_RISR_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist2d = new TH2D("dphiCMI_v_RISR_Hist","",50,0.,3.5,50,0.6,1.1);
+ hist2d = new TH2D("dphiCMI_v_RISR_Hist","",50,0.,TMath::Pi(),50,0.6,1.1);
  hist2d->GetXaxis()->SetTitle("dphiCMI");
  hist2d->GetYaxis()->SetTitle("RISR");
- HEM_hist2d = new TH2D("dphiCMI_v_RISR_Hist_HEM","",50,0.,3.5,50,0.6,1.1);
+ HEM_hist2d = new TH2D("dphiCMI_v_RISR_Hist_HEM","",50,0.,TMath::Pi(),50,0.6,1.1);
  HEM_hist2d->GetXaxis()->SetTitle("dphiCMI");
  HEM_hist2d->GetYaxis()->SetTitle("RISR");
 }
@@ -766,10 +766,10 @@ class dphiCMI_v_PTCM_Hist:public HistClass, public Hist_Maker{
 void dphiCMI_v_PTCM_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist2d = new TH2D("dphiCMI_v_PTCM_Hist","",64,0.,3.5,64,0.,500.);
+ hist2d = new TH2D("dphiCMI_v_PTCM_Hist","",20,0.,TMath::Pi(),16,0.,500.);
  hist2d->GetXaxis()->SetTitle("dphiCMI");
  hist2d->GetYaxis()->SetTitle("PTCM");
- HEM_hist2d = new TH2D("dphiCMI_v_PTCM_Hist_HEM","",64,0.,3.5,64,0.,500.);
+ HEM_hist2d = new TH2D("dphiCMI_v_PTCM_Hist_HEM","",20,0.,TMath::Pi(),16,0.,500.);
  HEM_hist2d->GetXaxis()->SetTitle("dphiCMI");
  HEM_hist2d->GetYaxis()->SetTitle("PTCM");
 }
@@ -798,10 +798,10 @@ class dphiCMI_v_Njet_S_Hist:public HistClass, public Hist_Maker{
 void dphiCMI_v_Njet_S_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist2d = new TH2D("dphiCMI_v_Njet_S_Hist","",50,0.,3.5,9,0,10);
+ hist2d = new TH2D("dphiCMI_v_Njet_S_Hist","",50,0.,TMath::Pi(),9,0,10);
  hist2d->GetXaxis()->SetTitle("dphiCMI");
  hist2d->GetYaxis()->SetTitle("Njet_S");
- HEM_hist2d = new TH2D("dphiCMI_v_Njet_S_Hist_HEM","",50,0.,3.5,9,0,10);
+ HEM_hist2d = new TH2D("dphiCMI_v_Njet_S_Hist_HEM","",50,0.,TMath::Pi(),9,0,10);
  HEM_hist2d->GetXaxis()->SetTitle("dphiCMI");
  HEM_hist2d->GetYaxis()->SetTitle("Njet_S");
 }
@@ -858,10 +858,10 @@ class dphiCMI_v_dphiMET_V_Hist:public HistClass, public Hist_Maker{
 void dphiCMI_v_dphiMET_V_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist2d = new TH2D("dphiCMI_v_dphiMET_V_Hist","",50,0.,3.5,50,-3.5,3.5);
+ hist2d = new TH2D("dphiCMI_v_dphiMET_V_Hist","",50,0.,TMath::Pi(),50,-TMath::Pi(),TMath::Pi());
  hist2d->GetXaxis()->SetTitle("dphiCMI");
  hist2d->GetYaxis()->SetTitle("dphiMET_V");
- HEM_hist2d = new TH2D("dphiCMI_v_dphiMET_V_Hist_HEM","",50,0.,3.5,50,-3.5,3.5);
+ HEM_hist2d = new TH2D("dphiCMI_v_dphiMET_V_Hist_HEM","",50,0.,TMath::Pi(),50,-TMath::Pi(),TMath::Pi());
  HEM_hist2d->GetXaxis()->SetTitle("dphiCMI");
  HEM_hist2d->GetYaxis()->SetTitle("dphiMET_V");
 }
@@ -890,10 +890,10 @@ class dphiMET_V_v_RISR_Hist:public HistClass, public Hist_Maker{
 void dphiMET_V_v_RISR_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist2d = new TH2D("dphiMET_V_v_RISR_Hist","",50,-3.5,3.5,50,0.6,1.1);
+ hist2d = new TH2D("dphiMET_V_v_RISR_Hist","",50,-TMath::Pi(),TMath::Pi(),50,0.6,1.1);
  hist2d->GetXaxis()->SetTitle("dphiMET_V");
  hist2d->GetYaxis()->SetTitle("RISR");
- HEM_hist2d = new TH2D("dphiMET_V_v_RISR_Hist_HEM","",50,-3.5,3.5,50,0.6,1.1);
+ HEM_hist2d = new TH2D("dphiMET_V_v_RISR_Hist_HEM","",50,-TMath::Pi(),TMath::Pi(),50,0.6,1.1);
  HEM_hist2d->GetXaxis()->SetTitle("dphiMET_V");
  HEM_hist2d->GetYaxis()->SetTitle("RISR");
 }
@@ -922,10 +922,10 @@ class Mperp_v_dphiMET_V_Hist:public HistClass, public Hist_Maker{
 void Mperp_v_dphiMET_V_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist2d = new TH2D("Mperp_v_dphiMET_V_Hist","",50,0.,50.,50,-3.5,3.5);
+ hist2d = new TH2D("Mperp_v_dphiMET_V_Hist","",50,0.,50.,50,-TMath::Pi(),TMath::Pi());
  hist2d->GetXaxis()->SetTitle("Mperp");
  hist2d->GetYaxis()->SetTitle("dphiMET_V");
- HEM_hist2d = new TH2D("Mperp_v_dphiMET_V_Hist_HEM","",50,0.,50.,50,-3.5,3.5);
+ HEM_hist2d = new TH2D("Mperp_v_dphiMET_V_Hist_HEM","",50,0.,50.,50,-TMath::Pi(),TMath::Pi());
  HEM_hist2d->GetXaxis()->SetTitle("Mperp");
  HEM_hist2d->GetYaxis()->SetTitle("dphiMET_V");
 }
@@ -954,10 +954,10 @@ class dphiMET_V_v_PTCM_Hist:public HistClass, public Hist_Maker{
 void dphiMET_V_v_PTCM_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist2d = new TH2D("dphiMET_V_v_PTCM_Hist","",50,-3.5,3.5,50,0.,500.);
+ hist2d = new TH2D("dphiMET_V_v_PTCM_Hist","",50,-TMath::Pi(),TMath::Pi(),50,0.,500.);
  hist2d->GetXaxis()->SetTitle("dphiMET_V");
  hist2d->GetYaxis()->SetTitle("PTCM");
- HEM_hist2d = new TH2D("dphiMET_V_v_PTCM_Hist_HEM","",50,-3.5,3.5,50,0.,500.);
+ HEM_hist2d = new TH2D("dphiMET_V_v_PTCM_Hist_HEM","",50,-TMath::Pi(),TMath::Pi(),50,0.,500.);
  HEM_hist2d->GetXaxis()->SetTitle("dphiMET_V");
  HEM_hist2d->GetYaxis()->SetTitle("PTCM");
 }
@@ -986,9 +986,9 @@ class jet_Phi_Hist:public HistClass, public Hist_Maker{
 void jet_Phi_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist1d = new TH1D("jet_Phi_Hist","",100,-3.5,3.5);
+ hist1d = new TH1D("jet_Phi_Hist","",100,-TMath::Pi(),TMath::Pi());
  hist1d->GetXaxis()->SetTitle("jet_Phi");
- HEM_hist1d = new TH1D("jet_Phi_Hist_HEM","",100,-3.5,3.5);
+ HEM_hist1d = new TH1D("jet_Phi_Hist_HEM","",100,-TMath::Pi(),TMath::Pi());
  HEM_hist1d->GetXaxis()->SetTitle("jet_Phi");
 }
 void jet_Phi_Hist::fill_hist(Long64_t jentry){
@@ -1058,7 +1058,7 @@ class genmet_Phi_Hist:public HistClass, public Hist_Maker{
 void genmet_Phi_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist1d = new TH1D("genmet_Phi_Hist","",100,-3.5,3.5);
+ hist1d = new TH1D("genmet_Phi_Hist","",100,-TMath::Pi(),TMath::Pi());
  hist1d->GetXaxis()->SetTitle("genMET_phi");
 }
 void genmet_Phi_Hist::fill_hist(Long64_t jentry){
@@ -1142,7 +1142,7 @@ class genele_Phi_Hist:public HistClass, public Hist_Maker{
 void genele_Phi_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist1d = new TH1D("genele_Phi_Hist","",100,-3.5,3.5);
+ hist1d = new TH1D("genele_Phi_Hist","",100,-TMath::Pi(),TMath::Pi());
  hist1d->GetXaxis()->SetTitle("genele_Phi");
 }
 void genele_Phi_Hist::fill_hist(Long64_t jentry){
@@ -1208,7 +1208,7 @@ class genmu_Phi_Hist:public HistClass, public Hist_Maker{
 void genmu_Phi_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist1d = new TH1D("genmu_Phi_Hist","",100,-3.5,3.5);
+ hist1d = new TH1D("genmu_Phi_Hist","",100,-TMath::Pi(),TMath::Pi());
  hist1d->GetXaxis()->SetTitle("genmu_Phi");
 }
 void genmu_Phi_Hist::fill_hist(Long64_t jentry){
@@ -1270,7 +1270,7 @@ class gendphiMET_lep_Hist:public HistClass, public Hist_Maker{
 void gendphiMET_lep_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist1d = new TH1D("gendphiMET_lep_Hist","",100,-3.5,3.5);
+ hist1d = new TH1D("gendphiMET_lep_Hist","",100,-TMath::Pi(),TMath::Pi());
  hist1d->GetXaxis()->SetTitle("gen #Delta #phi_{MET,lep}");
 }
 void gendphiMET_lep_Hist::fill_hist(Long64_t jentry){
@@ -1313,7 +1313,7 @@ class gendphiMET_ele_Hist:public HistClass, public Hist_Maker{
 void gendphiMET_ele_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist1d = new TH1D("gendphiMET_ele_Hist","",100,-3.5,3.5);
+ hist1d = new TH1D("gendphiMET_ele_Hist","",100,-TMath::Pi(),TMath::Pi());
  hist1d->GetXaxis()->SetTitle("gen #Delta #phi_{MET,ele}");
 }
 void gendphiMET_ele_Hist::fill_hist(Long64_t jentry){
@@ -1362,7 +1362,7 @@ class gendphiMET_mu_Hist:public HistClass, public Hist_Maker{
 void gendphiMET_mu_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist1d = new TH1D("gendphiMET_mu_Hist","",100,-3.5,3.5);
+ hist1d = new TH1D("gendphiMET_mu_Hist","",100,-TMath::Pi(),TMath::Pi());
  hist1d->GetXaxis()->SetTitle("gen #Delta #phi_{MET,mu}");
 }
 void gendphiMET_mu_Hist::fill_hist(Long64_t jentry){
@@ -1407,7 +1407,7 @@ void gendphiMET_mu_Hist::fill_hist(Long64_t jentry){
 vector<HistClass*> Setup_Hists(TTree* tree){
  vector<HistClass*> Classes;
  //Classes.push_back(new met_Hist);
- //Classes.push_back(new met_Phi_Hist);
+ Classes.push_back(new met_Phi_Hist);
  //Classes.push_back(new PTCM_Hist);
  //Classes.push_back(new dphiMET_V_Hist);
  //Classes.push_back(new dphiMET_lep_Hist);
