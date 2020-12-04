@@ -5,6 +5,7 @@
 #include <string>
 #include <TTree.h>
 #include <TGraphAsymmErrors.h>
+#include <TGraphErrors.h>
 #include <TMultiGraph.h>
 #include <TAxis.h>
 #include <TCanvas.h>
@@ -14,22 +15,34 @@
 #include <TStyle.h>
 #include <TLine.h>
 #include <TEfficiency.h>
+#include <TMinuit.h>
+#include <Math/ProbFunc.h>
 
 using namespace std;
 
-bool invert_colors = true;
+bool invert_colors = false;
 
 double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger, vector<int> colors, string outFile, string name, string option);
+TGraphErrors* Get_Bands_Ratio(double x_min, double x_max, TGraphAsymmErrors* gr, vector<double>& y_upper, vector<double>& y_lower);
+TGraphAsymmErrors* Get_Bands(double x_min, double x_max, TGraphAsymmErrors* gr, vector<double>& y_upper, vector<double>& y_lower);
 TGraphAsymmErrors* get_gr(string fname, string tag, string Trigger, int color, TLegend*& leg, TCanvas*& can);
 TGraphAsymmErrors* TGAE_Ratio(TGraphAsymmErrors* gr_bkg, TGraphAsymmErrors* gr_data);
 
+Double_t Gaussian_CDF_Func(Double_t *x, Double_t *par)
+{
+ return par[0]*ROOT::Math::normal_cdf(x[0],par[2],par[1]);
+}
+
 void ScaleFactors(vector<string> inFile, vector<string> cut){
+
  //string inFile ="output_quick.root";
  vector<string> data_tags_2016 = {"SingleElectron_2016","SingleMuon_2016"};
- vector<string> data_tags_2017 = {"SingleElectron_2017","SingleMuon_2017","DoubleEG_2017","DoubleMuon_2017"};
+ //vector<string> data_tags_2017 = {"SingleElectron_2017","SingleMuon_2017","DoubleEG_2017","DoubleMuon_2017"};
+ vector<string> data_tags_2017 = {"SingleMuon_2017"};
  vector<string> data_tags_2018 = {"SingleElectron_2018","SingleMuon_2018"};
  
- vector<int> colors = {kCyan, kMagenta, kYellow, kViolet+2, kAzure+7, kPink, kGreen, kGray};
+ //vector<int> colors = {kCyan, kMagenta, kYellow, kViolet+2, kAzure+7, kPink, kGreen, kGray};
+ vector<int> colors = {kGreen+2, kBlue+2, kYellow, kViolet+2, kAzure+7, kPink, kGreen, kGray};
 
  for(int i = 0; i < inFile.size(); i++)
  {
@@ -99,14 +112,42 @@ void Format_Graph(TGraphAsymmErrors*& gr)
 {
  gr->GetXaxis()->CenterTitle(true);
  gr->GetXaxis()->SetTitleFont(132);
- gr->GetXaxis()->SetTitleSize(0.12);
- gr->GetXaxis()->SetTitleOffset(.7);
+ gr->GetXaxis()->SetTitleSize(0.06);
+ gr->GetXaxis()->SetTitleOffset(1.06);
  gr->GetXaxis()->SetLabelFont(132);
- gr->GetXaxis()->SetLabelSize(0.0);
+ gr->GetXaxis()->SetLabelSize(0.05);
+ //gr->GetXaxis()->SetLabelSize(0.00000001);
  gr->GetYaxis()->CenterTitle(true);
  gr->GetYaxis()->SetTitleFont(132);
- gr->GetYaxis()->SetTitleSize(0.1);
- gr->GetYaxis()->SetTitleOffset(.3);
+ gr->GetYaxis()->SetTitleSize(0.06);
+ gr->GetYaxis()->SetTitleOffset(.6);
+ gr->GetYaxis()->SetLabelFont(132);
+ gr->GetYaxis()->SetLabelSize(0.05);
+
+ if(invert_colors)
+ {
+  gr->GetXaxis()->SetAxisColor(kWhite);
+  gr->GetYaxis()->SetAxisColor(kWhite);
+  gr->GetXaxis()->SetTitleColor(kWhite);
+  gr->GetYaxis()->SetTitleColor(kWhite);
+  gr->GetXaxis()->SetLabelColor(kWhite);
+  gr->GetYaxis()->SetLabelColor(kWhite);
+ }
+}
+
+void Format_Graph(TGraphErrors*& gr)
+{
+ gr->GetXaxis()->CenterTitle(true);
+ gr->GetXaxis()->SetTitleFont(132);
+ gr->GetXaxis()->SetTitleSize(0.06);
+ gr->GetXaxis()->SetTitleOffset(1.06);
+ gr->GetXaxis()->SetLabelFont(132);
+ gr->GetXaxis()->SetLabelSize(0.05);
+ //gr->GetXaxis()->SetLabelSize(0.00000001);
+ gr->GetYaxis()->CenterTitle(true);
+ gr->GetYaxis()->SetTitleFont(132);
+ gr->GetYaxis()->SetTitleSize(0.06);
+ gr->GetYaxis()->SetTitleOffset(.6);
  gr->GetYaxis()->SetLabelFont(132);
  gr->GetYaxis()->SetLabelSize(0.05);
 
@@ -159,24 +200,18 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
  can->Clear();
  can->cd();
 
- TPad* pad_gr = new TPad("pad_gr","pad_gr",0,.3,1.,1.);
- pad_gr->SetGridx();
- pad_gr->SetGridy();
- pad_gr->Draw();
- pad_gr->cd();
- can->Update();
-
- //mg->Draw("AP"); 
- mg->Draw("A4"); 
+ mg->Draw("A"); 
  Format_Graph(mg);
- pad_gr->Update();
- pad_gr->Modified();
+ //pad_gr->Update();
+ //pad_gr->Modified();
  can->Update();
- mg->GetYaxis()->SetTitle("Efficiency");
+ 
+ double x_min = mg->GetXaxis()->GetXmin();
+ double x_max = mg->GetXaxis()->GetXmax();
 
  if(invert_colors)
  {
-  pad_gr->SetFillColor(kBlack);
+  //pad_gr->SetFillColor(kBlack);
   leg->SetTextColor(kWhite);
   leg->SetFillColor(kBlack);
   leg->SetLineColor(kBlack);
@@ -184,17 +219,8 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
   l.SetTextColor(kWhite);
  }
 
- leg->Draw("SAME");
+ can->Clear();
 
- l.SetTextFont(42);
- l.SetNDC();
- l.SetTextSize(0.04);
- l.SetTextFont(42);
- l.DrawLatex(0.65,0.93,name.c_str());
- l.DrawLatex(0.13,0.93,"#bf{#it{CMS}} Internal 13 TeV Simulation");
- pad_gr->Update();
- can->Update();
- can->cd();
 
 //This is where we evaluate scale factors (Ratio or Fit)
  TPad *pad_res = new TPad("pad_res","pad_res",0,0.03,1,0.3);
@@ -209,9 +235,11 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
  if(invert_colors) pad_res->SetFillColor(kBlack);
  bool empty_mg = true;
  TMultiGraph* mg_res = new TMultiGraph();
+ TGraphErrors* gr_bands_ratio = NULL;
+ TGraphAsymmErrors* res_ratio;
  for(int i = 0; i < data_tags.size(); i++)
  {
-  TGraphAsymmErrors* res_ratio = TGAE_Ratio(gr_bkg,vect_gr_data[i]);
+  res_ratio = TGAE_Ratio(gr_bkg,vect_gr_data[i]);
   if(res_ratio == NULL) continue;
   res_ratio->SetMarkerColor(colors[i+1]);
   res_ratio->SetLineColor(colors[i+1]);
@@ -225,22 +253,79 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
   delete can;
   return -1.;
  }
- mg_res->Draw("A4");
- //mg_res->Draw("AP4");
+ vector<double> y_upper, y_lower;
+ gr_bands_ratio = Get_Bands_Ratio(x_min,x_max,res_ratio,y_upper,y_lower);
+ gr_bands_ratio->SetFillColor(kCyan-3);
+ gr_bands_ratio->SetFillStyle(3003);
+ gr_bands_ratio->SetMarkerSize(0);
+ mg_res->Draw("AP");
  Format_Graph_res(mg_res);
- mg_res->GetXaxis()->SetLimits(mg->GetXaxis()->GetXmin(),mg->GetXaxis()->GetXmax());
- mg_res->GetYaxis()->SetTitle("Data/Bkg");
- mg_res->GetXaxis()->SetTitle("MET");
+ mg_res->GetXaxis()->SetLimits(x_min,x_max);
+ mg_res->GetYaxis()->SetTitle("Data/MC Bkg");
+ mg_res->GetXaxis()->SetTitle("MET [GeV]");
  pad_res->Modified();
  pad_res->Update();
  TLine* line = new TLine(mg_res->GetXaxis()->GetXmin(),0.0,mg_res->GetXaxis()->GetXmax(),0.0);
  line->SetLineColor(kWhite);
  line->SetLineStyle(1);
- line->Draw("SAMES");
+ //line->Draw("SAMES");
+ gr_bands_ratio->Draw("30");
+ res_ratio->Draw("P");
  pad_res->Modified();
  pad_res->Update();
  can->Modified();
  can->Update();
+
+ can->cd();
+ TPad* pad_gr = new TPad("pad_gr","pad_gr",0,.3,1.,1.);
+ pad_gr->SetGridx();
+ pad_gr->SetGridy();
+ pad_gr->Draw();
+ pad_gr->cd();
+ can->Update();
+
+ TGraphAsymmErrors* gr_bands = Get_Bands(x_min,x_max,vect_gr_data[0],y_upper,y_lower);
+ gr_bands->SetFillColor(kCyan-4);
+ gr_bands->SetLineColor(kCyan-4);
+ gr_bands->SetMarkerColor(kCyan-4);
+ gr_bands->SetFillStyle(3003);
+ gr_bands->SetMarkerSize(0);
+ //TMultiGraph* mg_new = new TMultiGraph();
+ //mg_new->Add(gr_bkg);
+ //mg_new->Add(vect_gr_data[0]);
+ //mg_new->Add(gr_bands);
+
+ pad_gr->cd();
+ pad_gr->Clear();
+ //mg_new->Draw("A"); 
+ //Format_Graph(mg_new);
+ //mg_new->GetXaxis()->SetLimits(x_min,x_max);
+ pad_gr->Update();
+ pad_gr->Modified();
+ can->Update();
+ //mg_new->GetYaxis()->SetTitle("Efficiency");
+ gr_bands->Draw("3");
+ Format_Graph(gr_bands);
+ gr_bands->GetXaxis()->SetLimits(x_min,x_max);
+ gr_bands->GetYaxis()->SetTitle("Efficiency");
+ gr_bkg->Draw("P");
+ vect_gr_data[0]->Draw("P");
+ pad_gr->Modified();
+ pad_gr->Update();
+ can->Modified();
+ can->Update();
+ 
+
+ leg->Draw("SAME");
+ l.SetTextFont(42);
+ l.SetNDC();
+ l.SetTextSize(0.04);
+ l.SetTextFont(42);
+ //l.DrawLatex(0.65,0.93,name.c_str());
+ l.DrawLatex(0.13,0.93,"#bf{#it{CMS}} Preliminary");
+ pad_gr->Update();
+ can->Update();
+ can->cd();
 
 /*
  if(option.compare("Ratio") == 0)
@@ -272,6 +357,89 @@ return scale;
 
 
 
+}
+
+TGraphErrors* Get_Bands_Ratio(double x_min, double x_max, TGraphAsymmErrors* gr, vector<double>& y_upper, vector<double>& y_lower)
+{
+ int N = 1000;
+ TGraphErrors* gr_bands_ratio = new TGraphErrors(N);
+ double x = 0.;
+ double y_upper_i = 0.;
+ double y_lower_i = 0.;
+ double y = 0.;
+ double x_err = ((x_max-x_min)/(N));
+ double y_err = 0.;
+
+ TF1* Ratio_Nominal = new TF1("Ratio_Nominal",Gaussian_CDF_Func,150.,500.,3);
+ Ratio_Nominal->SetParameter(0,0.99);
+ Ratio_Nominal->SetParameter(1,125.);
+ Ratio_Nominal->SetParameter(2,40.);
+ Ratio_Nominal->SetParName(0,"Norm_Gauss_CDF");
+ Ratio_Nominal->SetParName(1,"Mean_Gauss_CDF");
+ Ratio_Nominal->SetParName(2,"Sigma_Gauss_CDF");
+ gr->Fit(Ratio_Nominal,"EMS+0");
+
+ for(int i = 0; i < N; i++)
+ {
+  x = x_min+(((x_max-x_min)/(N))*i);
+  //y_upper_i = ((.1e-5*(x-300.)*(x-300.)+1.01)*(Ratio_Nominal->GetParameter(0))*ROOT::Math::normal_cdf(x,Ratio_Nominal->GetParameter(2),Ratio_Nominal->GetParameter(1)));
+  //y_lower_i = ((-1.e-5*(x-300.)*(x-300.)+.98)*(Ratio_Nominal->GetParameter(0))*ROOT::Math::normal_cdf(x,Ratio_Nominal->GetParameter(2),Ratio_Nominal->GetParameter(1)));
+  y_upper_i = ((.1e-5*(x-300.)*(x-300.)+1.01));
+  y_lower_i = ((-0.25e-5*(x-300.)*(x-300.)+.98)*Ratio_Nominal->Eval(x));
+  if(x > 300.)
+  {
+   y_upper_i = 1.01;
+  }
+  if(x > 300.)
+  {
+   y_lower_i = 0.98;
+  }
+  //if(y_upper_i < 1.) {y_upper_i=1.;}
+  //if(y_lower_i > .98) {y_lower_i=.98;}
+  y = (y_upper_i+y_lower_i)/2.;
+  y_err = (y_upper_i-y_lower_i)/2.;
+  gr_bands_ratio->SetPoint(i,x,y);
+  gr_bands_ratio->SetPointError(i,x_err,y_err);
+  y_upper.push_back(y_upper_i);
+  y_lower.push_back(y_lower_i);
+ }
+ return gr_bands_ratio; 
+}
+
+TGraphAsymmErrors* Get_Bands(double x_min, double x_max, TGraphAsymmErrors* gr, vector<double>& y_upper, vector<double>& y_lower)
+{
+ int N = y_upper.size();
+ TGraphAsymmErrors* gr_bands = new TGraphAsymmErrors(N);
+ double x = 0.;
+ double y = 0.;
+ double x_err = ((x_max-x_min)/(N));
+ double y_err_i = 0.;
+ double y_upper_err_i = 0.;
+ double y_lower_err_i = 0.;
+
+ TF1* Eff_Nominal = new TF1("Eff_Nominal",Gaussian_CDF_Func,150.,500.,3);
+ Eff_Nominal->SetParameter(0,0.99);
+ Eff_Nominal->SetParameter(1,125.);
+ Eff_Nominal->SetParameter(2,40.);
+ Eff_Nominal->SetParName(0,"Norm_Gauss_CDF");
+ Eff_Nominal->SetParName(1,"Mean_Gauss_CDF");
+ Eff_Nominal->SetParName(2,"Sigma_Gauss_CDF");
+ gr->Fit(Eff_Nominal,"EMS+0");
+
+ for(int i = 0; i < N; i++)
+ {
+  x = x_min+(((x_max-x_min)/(N))*i);
+  y_upper_err_i = Eff_Nominal->Eval(x)*y_upper[i];
+  y_lower_err_i = Eff_Nominal->Eval(x)*y_lower[i];
+  //y_upper_err_i = (Eff_Nominal->GetParameter(0)+Eff_Nominal->GetParError(0))*ROOT::Math::normal_cdf(x,(Eff_Nominal->GetParameter(2)+Eff_Nominal->GetParError(2)),(Eff_Nominal->GetParameter(1)+Eff_Nominal->GetParError(1)));
+  //y_lower_err_i = (Eff_Nominal->GetParameter(0)-Eff_Nominal->GetParError(0))*ROOT::Math::normal_cdf(x,(Eff_Nominal->GetParameter(2)-Eff_Nominal->GetParError(2)),(Eff_Nominal->GetParameter(1)-Eff_Nominal->GetParError(1)));
+  y = Eff_Nominal->Eval(x);
+  if(y > 1.) {y = 1.;}
+  if(y_upper_err_i > 1.) {y_upper_err_i = 1.;}
+  gr_bands->SetPoint(i,x,y);
+  gr_bands->SetPointError(i,x_err,x_err,y_lower_err_i,y_upper_err_i);
+ }
+ return gr_bands; 
 }
 
 TGraphAsymmErrors* TGAE_Ratio(TGraphAsymmErrors* gr_bkg, TGraphAsymmErrors* gr_data)
@@ -325,7 +493,9 @@ TGraphAsymmErrors* get_gr(string fname, string tag, string Trigger, int color, T
  gr = eff->GetPaintedGraph();
  string title = " ;";
  gr->SetTitle((title+gr->GetXaxis()->GetTitle()+";"+gr->GetYaxis()->GetTitle()).c_str());
- leg->AddEntry(gr,tag.c_str(),"PL");
+ if(tag.find("Bkg") != std::string::npos) { leg->AddEntry(gr,"MC Bkg","PL"); }
+ else if(tag.find("SingleMuon") != std::string::npos) { leg->AddEntry(gr,"SingleMuon","PL"); }
+ else { leg->AddEntry(gr,tag.c_str(),"PL"); }
  gr->SetMarkerStyle(20);
  gr->SetMarkerColor(color);
  gr->SetLineColor(color);
