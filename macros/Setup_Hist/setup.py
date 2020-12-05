@@ -9,8 +9,8 @@ log = path+"LOG_HIST/"
 shell = path+"Shell_HIST/"
 num = path+"Num_HIST/"
 #input = "/home/t3-ku/crogan/NTUPLES/NANO/NEW_21_09_20/"
-#input_path = "/stash/user/zflowers/NTUPLES/Processing/"
-input_path = "/stash/user/zflowers/NTUPLES/temp/"
+input_path = "/stash/user/zflowers/NTUPLES/Processing/"
+#input_path = "/stash/user/zflowers/NTUPLES/temp/"
 
 list_f = []
 
