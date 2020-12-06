@@ -1,7 +1,7 @@
 PreSelection
-#HEM
-#HEM-EventFlag_JetInHEME0
-#HEM-EventFlag_JetInHEME0_Pt20
+HEM
+HEM-EventFlag_JetInHEME0
+HEM-EventFlag_JetInHEME0_Pt20
 EventFilterE0
 RISRG0.95-EventFilterE0
 Clean

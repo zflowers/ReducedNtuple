@@ -14,7 +14,7 @@ input_path = "/stash/user/zflowers/NTUPLES/Processing/"
 
 list_f = []
 
-def write_sh(Cut,Dir,File,Tag):
+def write_sh_sms(Cut,Dir,File,Tag):
     os.system("mkdir -p "+store+Cut+"/"+Dir+"/"+Tag+"/"+File)
     os.system("mkdir -p "+log+Cut+"/"+Dir+"/"+Tag+"/"+File) 
     os.system("mkdir -p "+shell+Cut+"/"+Dir+"/"+Tag+"/"+File) 
@@ -39,7 +39,7 @@ def write_sh(Cut,Dir,File,Tag):
     fsrc.write('error = '+log+'$(CUT)/$(DIR)/$(TAG)/$(FILENAME)/err_$(FILENAME).log \n')
     fsrc.write('log = '+log+'$(CUT)/$(DIR)/$(TAG)/$(FILENAME)/log_$(FILENAME).log \n')
     fsrc.write('Requirements = (Machine != \"red-node000.unl.edu\") \n')
-    fsrc.write('Arguments = \"-cut=$(CUT) -tag=$(TAG) -dir=$(DIR) -filename=$(FILENAME) -num=  --hist\" \n')
+    fsrc.write('Arguments = \"-cut=$(CUT) -tag=$(TAG) -dir=$(DIR) -filename=$(FILENAME) -num= --hist\" \n')
     fsrc.write('transfer_input_files = '+path+'config_hist.tgz \n')
     fsrc.write('should_transfer_files = YES \n')
     fsrc.write('when_to_transfer_output = ON_EXIT \n')
@@ -117,7 +117,7 @@ with open(path+"Setup_Hist/Hist.txt") as cut_handle:
                             Tag = tag_line.replace('\n','')
                             if "SMS" in Dir:
                                 Num = ''
-                                list_f.append(write_sh(Cut,Dir,File,Tag))
+                                list_f.append(write_sh_sms(Cut,Dir,File,Tag))
                             else:
                                 #for num_line in os.listdir(input_path+Dir+"/NoHadd/"+File+"/"):
                                 for num_line in os.listdir(input_path+Dir+"/"+File+"/"):
@@ -125,8 +125,9 @@ with open(path+"Setup_Hist/Hist.txt") as cut_handle:
                                     Num = Num.replace('.root','')
                                     write_num_file(Cut,Dir,File,Tag,Num)
                                     #list_f.append(write_sh(Cut,Num,Dir,File,Tag))
-                            list_f.append(write_sh(Cut,Dir,File,Tag))
+                                list_f.append(write_sh(Cut,Dir,File,Tag))
 
+print("Finished Writing Scripts")
 list_f = list(dict.fromkeys(list_f))
 for f in list_f:
     os.system("condor_submit "+f)
