@@ -275,7 +275,7 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
  }
  vector<double> y_upper, y_lower;
  gr_bands_ratio = Get_Bands_Ratio(x_min,x_max,res_ratio,y_upper,y_lower,Bkg_Nominal,Data_Nominal);
- gr_bands_ratio->SetFillColor(kCyan+2);
+ gr_bands_ratio->SetFillColor(kCyan+1);
  gr_bands_ratio->SetFillStyle(3003);
  gr_bands_ratio->SetMarkerSize(0);
  TGraph* Fit_Ratio = Get_Fit_Ratio(x_min,x_max,Bkg_Nominal, Data_Nominal);
@@ -309,7 +309,7 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
  can->Update();
 
  TGraphErrors* gr_bands = Get_Bands(x_min,x_max,Data_Nominal,y_upper,y_lower);
- gr_bands->SetFillColor(kCyan+2);
+ gr_bands->SetFillColor(kCyan+1);
  gr_bands->SetFillStyle(3003);
  gr_bands->SetMarkerSize(0);
  //TMultiGraph* mg_new = new TMultiGraph();

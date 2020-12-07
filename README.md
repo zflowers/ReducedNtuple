@@ -35,3 +35,4 @@ Run this in a screen:
 
 Go to macros/ to make plots
 
+./Eff_Nano_Hist.x -cut=NmuGoldE1 -tag=Bkg_2017 -filename=Bkg_2017.root -dir=../ --eff --local
