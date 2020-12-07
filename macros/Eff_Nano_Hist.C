@@ -44,7 +44,7 @@ void Maker(){
  TChain* chain;
  string dir_rm = dir;
  string input = "";
- if(dir.find("SMS") != std::string::npos)
+ if(dir.find("SMS") != std::string::npos || filename.find("SMS") != std::string::npos)
  {
   chain = new TChain(("SMS_"+get_str_between_two_str_unique(tag,"_","_201")).c_str());
   eraseSubStr(dir_rm, "_SMS");

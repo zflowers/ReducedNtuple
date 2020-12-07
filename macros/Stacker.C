@@ -340,8 +340,8 @@ void Get2D_Plot(string hist_name, vector<string> directories, string outFile){
 void Get2D_Plot(string hist_name, vector<string> directories, vector<string> inFiles, vector<string> cuts, bool trigger){
  gStyle->SetOptStat(0);
  gStyle->SetOptTitle(0);
- gStyle->SetFrameFillColor(kBlack);
- gStyle->SetFrameLineColor(kWhite);
+ //gStyle->SetFrameFillColor(kBlack);
+ //gStyle->SetFrameLineColor(kWhite);
  for(int i = 0; i < int(cuts.size()); i++)
  {
   for(int j = 0; j < int(directories.size()); j++)
@@ -397,7 +397,7 @@ void Get2D_Plot(string hist_name, vector<string> directories, vector<string> inF
    can->SetGridx();
    can->SetGridy();
    can->SetLogz();
-   can->SetFillColor(kBlack);
+   //can->SetFillColor(kBlack);
    can->Draw();
    can->cd();
    hist->GetXaxis()->SetAxisColor(kWhite);
@@ -450,8 +450,8 @@ void Get2D_Plot(string hist_name, vector<string> directories, vector<string> inF
 void Get2D_Ratio(string hist_name, vector<string> directories, vector<string> cuts, string cut, string directory){
  gStyle->SetOptStat(0);
  gStyle->SetOptTitle(0);
- gStyle->SetFrameFillColor(kBlack);
- gStyle->SetFrameLineColor(kWhite);
+ //gStyle->SetFrameFillColor(kBlack);
+ //gStyle->SetFrameLineColor(kWhite);
  TH2D* hist_denom = get_hist_2D(("Hist_output_"+cut+".root"), directory, hist_name);
  hist_denom->Scale(1./hist_denom->GetEntries());
  for(int i = 0; i < int(cuts.size()); i++)
@@ -471,7 +471,7 @@ void Get2D_Ratio(string hist_name, vector<string> directories, vector<string> cu
    can->SetGridx();
    can->SetGridy();
    can->SetLogz();
-   can->SetFillColor(kBlack);
+   //can->SetFillColor(kBlack);
    can->Draw();
    can->cd();
    TH2D* hist_ratio = (TH2D*)hist->Clone();
@@ -521,8 +521,8 @@ void Get2D_Ratio(string hist_name, vector<string> directories, vector<string> cu
 void Get2D_Ratio(string hist_name, string cut1, string cut2, string directory){
  gStyle->SetOptStat(0);
  gStyle->SetOptTitle(0);
- gStyle->SetFrameFillColor(kBlack);
- gStyle->SetFrameLineColor(kWhite);
+ //gStyle->SetFrameFillColor(kBlack);
+ //gStyle->SetFrameLineColor(kWhite);
  TH2D* hist_denom = get_hist_2D(("Hist_output_"+cut1+".root"), directory, hist_name);
  hist_denom->Scale(1./hist_denom->Integral(19,36,0,6));
  TH2D* hist = get_hist_2D(("Hist_output_"+cut2+".root"), directory, hist_name);
@@ -537,7 +537,7 @@ void Get2D_Ratio(string hist_name, string cut1, string cut2, string directory){
  can->SetGridx();
  can->SetGridy();
  can->SetLogz();
- can->SetFillColor(kBlack);
+ //can->SetFillColor(kBlack);
  can->Draw();
  can->cd();
  TH2D* hist_ratio = (TH2D*)hist->Clone();
@@ -588,8 +588,8 @@ void Get2D_Ratio(string hist_name, string cut1, string cut2, string directory){
 void Get2D_Ratio(string hist_name1, string hist_name2, string cut1, string cut2, string directory, bool zoom){
  gStyle->SetOptStat(0);
  gStyle->SetOptTitle(0);
- gStyle->SetFrameFillColor(kBlack);
- gStyle->SetFrameLineColor(kWhite);
+ //gStyle->SetFrameFillColor(kBlack);
+ //gStyle->SetFrameLineColor(kWhite);
  TH2D* hist_denom = get_hist_2D(("Hist_output_"+cut1+".root"), directory, hist_name1);
  hist_denom->Scale(1./hist_denom->Integral());
  TH2D* hist = get_hist_2D(("Hist_output_"+cut2+".root"), directory, hist_name2);
@@ -603,7 +603,7 @@ void Get2D_Ratio(string hist_name1, string hist_name2, string cut1, string cut2,
  can->SetGridx();
  can->SetGridy();
  can->SetLogz();
- can->SetFillColor(kBlack);
+ //can->SetFillColor(kBlack);
  can->Draw();
  can->cd();
  TH2D* hist_ratio = (TH2D*)hist->Clone();
@@ -663,8 +663,8 @@ void Get2D_Ratio(string hist_name1, string hist_name2, string cut1, string cut2,
 void Get1D_Ratio(string hist_name, string cut1, string cut2_hist_name2, string directory, bool option){
  gStyle->SetOptStat(0);
  gStyle->SetOptTitle(0);
- gStyle->SetFrameFillColor(kBlack);
- gStyle->SetFrameLineColor(kWhite);
+ //gStyle->SetFrameFillColor(kBlack);
+ //gStyle->SetFrameLineColor(kWhite);
  TH1D* hist_denom = get_hist(("Hist_output_"+cut1+".root"), directory, hist_name);
  hist_denom->Scale(1./hist_denom->Integral());
  TH1D* hist = NULL;
@@ -684,7 +684,7 @@ void Get1D_Ratio(string hist_name, string cut1, string cut2_hist_name2, string d
  can->SetGridx();
  can->SetGridy();
  can->SetLogz();
- can->SetFillColor(kBlack);
+ //can->SetFillColor(kBlack);
  can->Draw();
  can->cd();
  TH1D* hist_ratio = (TH1D*)hist->Clone();
@@ -736,8 +736,8 @@ void Get_Overlay(vector<string> outFiles, string hist_name, vector<string> sampl
 {
  gStyle->SetOptStat(0);
  gStyle->SetOptTitle(0);
- gStyle->SetFrameFillColor(kBlack);
- gStyle->SetFrameLineColor(kWhite);
+ //gStyle->SetFrameFillColor(kBlack);
+ //gStyle->SetFrameLineColor(kWhite);
  vector<TH1D*> hists = list_histos(outFiles,samples,hist_name);
  TCanvas* can = new TCanvas(("can_"+hist_name+samples[0]+cuts[0]).c_str(),"",864.,468.);
  can->SetLeftMargin(0.15);
@@ -746,7 +746,7 @@ void Get_Overlay(vector<string> outFiles, string hist_name, vector<string> sampl
  can->SetGridx();
  can->SetGridy();
  can->SetLogz();
- can->SetFillColor(kBlack);
+ //can->SetFillColor(kBlack);
  can->Draw();
  can->cd();
  for(int i = 0; i < hists.size(); i++)
@@ -793,9 +793,9 @@ void Get_Overlay(vector<string> outFiles, string hist_name, vector<string> sampl
  leg->SetTextFont(132);
  leg->SetTextSize(0.045);
  leg->SetTextColor(kWhite);
- leg->SetFillColor(kBlack);
- leg->SetLineColor(kBlack);
- leg->SetShadowColor(kBlack);
+ //leg->SetFillColor(kBlack);
+ //leg->SetLineColor(kBlack);
+ //leg->SetShadowColor(kBlack);
  if(option.compare("Cuts") == 0)
  {
   for(int i = 0; i < int(cuts.size()); i++)
@@ -871,8 +871,8 @@ void Get_Overlay(vector<string> outFiles, string hist_name, vector<string> sampl
 void Get1D_Plot(vector<string> outFiles, string hist_name, vector<string> samples, vector<string> cuts, vector<int> colors)
 {
  gStyle->SetOptTitle(0);
- gStyle->SetFrameFillColor(kBlack);
- gStyle->SetFrameLineColor(kWhite);
+ //gStyle->SetFrameFillColor(kBlack);
+ //gStyle->SetFrameLineColor(kWhite);
  for(int j = 0; j < cuts.size(); j++)
  {
   for(int i = 0; i < samples.size(); i++)
@@ -885,7 +885,7 @@ void Get1D_Plot(vector<string> outFiles, string hist_name, vector<string> sample
    can->SetGridx();
    can->SetGridy();
    can->SetLogz();
-   can->SetFillColor(kBlack);
+   //can->SetFillColor(kBlack);
    can->Draw();
    can->cd();
    string x_title = hists->GetXaxis()->GetTitle();
@@ -919,9 +919,9 @@ void Get1D_Plot(vector<string> outFiles, string hist_name, vector<string> sample
    //hists->GetYaxis()->SetTitle(Yname.c_str());
    can->Update();
    TPaveStats* stats = (TPaveStats*)hists->FindObject("stats");
-   stats->SetFillColor(kBlack);
-   stats->SetLineColor(kWhite);
-   stats->SetTextColor(kWhite);
+   //stats->SetFillColor(kBlack);
+   //stats->SetLineColor(kWhite);
+   //stats->SetTextColor(kWhite);
    stats->SetX1NDC(.62);
    stats->SetY1NDC(.7);
    stats->SetX2NDC(.82);

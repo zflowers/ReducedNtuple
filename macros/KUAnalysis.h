@@ -46,6 +46,7 @@ public :
    Bool_t          DoubleMuontrigger;
    Bool_t          EventFlag_FailJetID;
    Bool_t          EventFlag_JetInHEM;
+   Bool_t          EventFlag_JetInHEM_Pt20;
    Double_t        MET;
    Double_t        MET_phi;
    Double_t        HT;
@@ -224,6 +225,7 @@ public :
    TBranch        *b_DoubleMuontrigger;   //!
    TBranch        *b_EventFlag_FailJetID;   //!
    TBranch        *b_EventFlag_JetInHEM;   //!
+   TBranch        *b_EventFlag_JetInHEM_Pt20;   //!
    TBranch        *b_MET;   //!
    TBranch        *b_MET_phi;   //!
    TBranch        *b_HT;   //!
@@ -517,12 +519,13 @@ void KUAnalysis::Init(TTree *tree)
    fChain->SetBranchAddress("METtrigger", &METtrigger, &b_METtrigger);
    fChain->SetBranchAddress("METHTtrigger", &METHTtrigger, &b_METHTtrigger);
    fChain->SetBranchAddress("METORtrigger", &METORtrigger, &b_METORtrigger);
-   //fChain->SetBranchAddress("SingleElectrontrigger", &SingleElectrontrigger, &b_SingleElectrontrigger);
-   //fChain->SetBranchAddress("SingleMuontrigger", &SingleMuontrigger, &b_SingleMuontrigger);
-   //fChain->SetBranchAddress("DoubleElectrontrigger", &DoubleElectrontrigger, &b_DoubleElectrontrigger);
-   //fChain->SetBranchAddress("DoubleMuontrigger", &DoubleMuontrigger, &b_DoubleMuontrigger);
-   //fChain->SetBranchAddress("EventFlag_FailJetID", &EventFlag_FailJetID, &b_EventFlag_FailJetID);
-   //fChain->SetBranchAddress("EventFlag_JetInHEM", &EventFlag_JetInHEM, &b_EventFlag_JetInHEM);
+   fChain->SetBranchAddress("SingleElectrontrigger", &SingleElectrontrigger, &b_SingleElectrontrigger);
+   fChain->SetBranchAddress("SingleMuontrigger", &SingleMuontrigger, &b_SingleMuontrigger);
+   fChain->SetBranchAddress("DoubleElectrontrigger", &DoubleElectrontrigger, &b_DoubleElectrontrigger);
+   fChain->SetBranchAddress("DoubleMuontrigger", &DoubleMuontrigger, &b_DoubleMuontrigger);
+   fChain->SetBranchAddress("EventFlag_FailJetID", &EventFlag_FailJetID, &b_EventFlag_FailJetID);
+   fChain->SetBranchAddress("EventFlag_JetInHEM", &EventFlag_JetInHEM, &b_EventFlag_JetInHEM);
+   fChain->SetBranchAddress("EventFlag_JetInHEM_Pt20", &EventFlag_JetInHEM_Pt20, &b_EventFlag_JetInHEM_Pt20);
    fChain->SetBranchAddress("MET", &MET, &b_MET);
    fChain->SetBranchAddress("MET_phi", &MET_phi, &b_MET_phi);
    fChain->SetBranchAddress("HT", &HT, &b_HT);

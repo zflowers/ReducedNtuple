@@ -104,13 +104,15 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
  {
 
   cut = true;
+  if(m_Tag.find("MET") != std::string::npos)
+  {
   TBranch* b_runnum = NULL;
   Int_t runnum = 0;
   m_Tree->SetBranchAddress("runnum",&runnum,&b_runnum);
   b_runnum->GetEntry(jentry);
   if(runnum < 319077) { eraseSubStr(current_cut,"HEM-"); b_runnum->ResetAddress(); return true; }
-
-  /*
+  }
+  
   //simplify cuts:
   TBranch* b_Nlep = NULL;
   Int_t Nlep = 0;
@@ -152,7 +154,7 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
   b_ID_lep->ResetAddress();
   b_Eta_lep->ResetAddress();
   b_Phi_lep->ResetAddress();
-  
+  /*
 
   //loop over jets
   TBranch* b_Njet = NULL;
@@ -177,7 +179,7 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
   b_Eta_jet->ResetAddress();
   b_Phi_jet->ResetAddress();
 */
-
+/*
   //veto event if any object falls into HEM region
   //loop over leptons
   TBranch* b_Nlep = NULL;
@@ -267,7 +269,8 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
   b_PT_lep->ResetAddress();
   b_Eta_lep->ResetAddress();
   b_Phi_lep->ResetAddress();
-  
+ */ 
+/*
   //loop over jets
   TBranch* b_Njet = NULL;
   Int_t Njet = 0;
@@ -290,6 +293,7 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
   b_Njet->ResetAddress();
   b_Eta_jet->ResetAddress();
   b_Phi_jet->ResetAddress();
+*/
 
 //What to do with SVs?
 /*
@@ -1097,6 +1101,7 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
 
  bool EventFlag_FailJetID_cut = true;
  bool EventFlag_JetInHEM_cut = true;
+ bool EventFlag_JetInHEM_Pt20_cut = true;
 
  bool HEM_cut = true;
 
@@ -1157,6 +1162,11 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
  if(current_cut.find("EventFlag_FailJetID") != std::string::npos)
  {
   EventFlag_FailJetID_cut = Get_Cut(jentry,"EventFlag_FailJetID",current_cut);
+ }
+
+ if(current_cut.find("EventFlag_JetInHEM_Pt20") != std::string::npos)
+ {
+  EventFlag_JetInHEM_Pt20_cut = Get_Cut(jentry,"EventFlag_JetInHEM_Pt20",current_cut);
  }
 
  if(current_cut.find("EventFlag_JetInHEM") != std::string::npos)
@@ -1266,7 +1276,7 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
  if(current_cut.find("PreSelection") == 0)
  {
   current_cut = "";
-  if(PTISR_cut && RISR_cut && PTCM_cut && dphiCMI_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && NmuBronze_cut && NeleBronze_cut && NlepBronze_cut && NmuSilver_cut && NeleSilver_cut && NlepSilver_cut && NmuGold_cut && NeleGold_cut && NlepGold_cut && Njet_cut && Njet_S_cut && Nbjet_ISR_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut && EventFilter_cut && EventFlag_FailJetID_cut && EventFlag_JetInHEM_cut && HEM_cut)
+  if(PTISR_cut && RISR_cut && PTCM_cut && dphiCMI_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && NmuBronze_cut && NeleBronze_cut && NlepBronze_cut && NmuSilver_cut && NeleSilver_cut && NlepSilver_cut && NmuGold_cut && NeleGold_cut && NlepGold_cut && Njet_cut && Njet_S_cut && Nbjet_ISR_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut && EventFilter_cut && EventFlag_FailJetID_cut && EventFlag_JetInHEM_cut && EventFlag_JetInHEM_Pt20_cut && HEM_cut)
   {
    return false;
   }
@@ -1277,7 +1287,7 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
   cout << "ERROR: Some cuts not applied: " << current_cut << endl;
  }
 
- if(PTISR_cut && RISR_cut && PTCM_cut && dphiCMI_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && NmuBronze_cut && NeleBronze_cut && NlepBronze_cut && NmuSilver_cut && NeleSilver_cut && NlepSilver_cut && NmuGold_cut && NeleGold_cut && NlepGold_cut && Njet_cut && Njet_S_cut && Nbjet_ISR_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut && EventFilter_cut && EventFlag_FailJetID_cut && EventFlag_JetInHEM_cut && HEM_cut)
+ if(PTISR_cut && RISR_cut && PTCM_cut && dphiCMI_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && NmuBronze_cut && NeleBronze_cut && NlepBronze_cut && NmuSilver_cut && NeleSilver_cut && NlepSilver_cut && NmuGold_cut && NeleGold_cut && NlepGold_cut && Njet_cut && Njet_S_cut && Nbjet_ISR_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut && EventFilter_cut && EventFlag_FailJetID_cut && EventFlag_JetInHEM_cut && EventFlag_JetInHEM_Pt20_cut && HEM_cut)
  {
   return false;
  }
