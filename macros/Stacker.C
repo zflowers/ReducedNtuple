@@ -1060,7 +1060,7 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
 
  //Get1D_Ratio("met_Hist","PreSelection","HEM","MET_2018",true);
  //Get1D_Ratio("met_Hist","PreSelection","met_Hist_HEM","MET_2018",false);
- Get2D_Plot("dphiCMI_v_PTCM_Hist",directories_2D,inFiles,cuts,trigger);
+ //Get2D_Plot("dphiCMI_v_PTCM_Hist",directories_2D,inFiles,cuts,trigger);
  //Get2D_Plot("dphiCMI_v_Mperp_Hist",directories_2D,inFiles,cuts,trigger);
  //Get2D_Plot("dphiCMI_v_RISR_Hist",directories_2D,inFiles,cuts,trigger);
  //Get2D_Plot("Mperp_v_PTCM_Hist",directories_2D,inFiles,cuts,trigger);
@@ -1092,7 +1092,7 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
  //Get2D_Ratio("dphiCMI_v_PTCM_Hist","PTISRG200-RISRG0.9-EventFilterE0","PTISRG200-RISRG0.9-EventFilterE1","MET_2017");
  //Get2D_Ratio("dphiCMI_v_PTCM_Hist","PTISRG200-RISRG0.95-EventFilterE0","PTISRG200-RISRG0.95-EventFilterE1","MET_2017");
  
- Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","PreSelection","MET_2018",true);
+ //Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","PreSelection","MET_2018",true);
  //Get2D_Ratio("dphiCMI_v_Mperp_Hist","dphiCMI_v_Mperp_Hist_HEM","PreSelection","PreSelection","MET_2018",true);
  //Get2D_Ratio("dphiCMI_v_RISR_Hist","dphiCMI_v_RISR_Hist_HEM","PreSelection","PreSelection","MET_2018",true);
  //Get2D_Ratio("Mperp_v_PTCM_Hist","Mperp_v_PTCM_Hist_HEM","PreSelection","PreSelection","MET_2018",true);
@@ -1103,7 +1103,7 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
  //Get2D_Ratio("dphiMET_V_v_PTCM_Hist","dphiMET_V_v_PTCM_Hist_HEM","PreSelection","PreSelection","MET_2018",true);
  //Get2D_Ratio("Mperp_v_RISR_Hist","Mperp_v_RISR_Hist_HEM","PreSelection","PreSelection","MET_2018",true);
 
- Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","PreSelection","MET_2018",false);
+ //Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","PreSelection","MET_2018",false);
  //Get2D_Ratio("dphiCMI_v_Mperp_Hist","dphiCMI_v_Mperp_Hist_HEM","PreSelection","PreSelection","MET_2018",false);
  //Get2D_Ratio("dphiCMI_v_RISR_Hist","dphiCMI_v_RISR_Hist_HEM","PreSelection","PreSelection","MET_2018",false);
  //Get2D_Ratio("Mperp_v_PTCM_Hist","Mperp_v_PTCM_Hist_HEM","PreSelection","PreSelection","MET_2018",false);
@@ -1114,7 +1114,7 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
  //Get2D_Ratio("dphiMET_V_v_PTCM_Hist","dphiMET_V_v_PTCM_Hist_HEM","PreSelection","PreSelection","MET_2018",false);
  //Get2D_Ratio("Mperp_v_RISR_Hist","Mperp_v_RISR_Hist_HEM","PreSelection","PreSelection","MET_2018",false);
 
- Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","HEM","MET_2018",true);
+ //Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","HEM","MET_2018",true);
  //Get2D_Ratio("dphiCMI_v_Mperp_Hist","dphiCMI_v_Mperp_Hist_HEM","PreSelection","HEM","MET_2018",true);
  //Get2D_Ratio("dphiCMI_v_RISR_Hist","dphiCMI_v_RISR_Hist_HEM","PreSelection","HEM","MET_2018",true);
  //Get2D_Ratio("Mperp_v_PTCM_Hist","Mperp_v_PTCM_Hist_HEM","PreSelection","HEM","MET_2018",true);
@@ -1125,7 +1125,7 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
  //Get2D_Ratio("dphiMET_V_v_PTCM_Hist","dphiMET_V_v_PTCM_Hist_HEM","PreSelection","HEM","MET_2018",true);
  //Get2D_Ratio("Mperp_v_RISR_Hist","Mperp_v_RISR_Hist_HEM","PreSelection","HEM","MET_2018",true);
 
- Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","HEM","MET_2018",false);
+ //Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","HEM","MET_2018",false);
  //Get2D_Ratio("dphiCMI_v_Mperp_Hist","dphiCMI_v_Mperp_Hist_HEM","PreSelection","HEM","MET_2018",false);
  //Get2D_Ratio("dphiCMI_v_RISR_Hist","dphiCMI_v_RISR_Hist_HEM","PreSelection","HEM","MET_2018",false);
  //Get2D_Ratio("Mperp_v_PTCM_Hist","Mperp_v_PTCM_Hist_HEM","PreSelection","HEM","MET_2018",false);
@@ -1136,13 +1136,21 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
  //Get2D_Ratio("dphiMET_V_v_PTCM_Hist","dphiMET_V_v_PTCM_Hist_HEM","PreSelection","HEM","MET_2018",false);
  //Get2D_Ratio("Mperp_v_RISR_Hist","Mperp_v_RISR_Hist_HEM","PreSelection","HEM","MET_2018",false);
 
- Get2D_Ratio("dphiCMI_v_PTCM_Hist_HEM","dphiCMI_v_PTCM_Hist_HEM","PreSelection","HEM","MET_2018",true);
- Get2D_Ratio("dphiCMI_v_PTCM_Hist_HEM","dphiCMI_v_PTCM_Hist_HEM","HEM-EventFlag_JetInHEME0","HEM","MET_2018",true);
  Get2D_Ratio("dphiCMI_v_PTCM_Hist_HEM","dphiCMI_v_PTCM_Hist_HEM","PreSelection","HEM-EventFlag_JetInHEME0","MET_2018",true);
  Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","HEM-EventFlag_JetInHEME0","MET_2018",true);
- Get2D_Ratio("dphiCMI_v_PTCM_Hist_HEM","dphiCMI_v_PTCM_Hist_HEM","HEM-EventFlag_JetInHEME0_Pt20","HEM","MET_2018",true);
- Get2D_Ratio("dphiCMI_v_PTCM_Hist_HEM","dphiCMI_v_PTCM_Hist_HEM","PreSelection","HEM-EventFlag_JetInHEME0_Pt20","MET_2018",true);
- Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","HEM-EventFlag_JetInHEME0_Pt20","MET_2018",true);
+ Get2D_Ratio("dphiCMI_v_PTCM_Hist_HEM","dphiCMI_v_PTCM_Hist_HEM","PreSelection","HEM-EventFlag_JetInHEM_Pt20E0","MET_2018",true);
+ Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","HEM-EventFlag_JetInHEM_Pt20E0","MET_2018",true);
+
+ Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","HEM-EventFlag_JetInHEME0","HEM-EventFlag_JetInHEM_Pt20E0","MET_2018",true);
+ 
+ cout << "Eff of 15 GeV Jets in MET: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEME0.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral()/get_hist_2D("Hist_output_PreSelection.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral() << endl;
+ cout << "Eff of 20 GeV Jets in MET: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEM_Pt20E0.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral()/get_hist_2D("Hist_output_PreSelection.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral() << endl;
+ cout << "Eff of 15 GeV Jets in WJets: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEME0.root","WJets_2018","dphiCMI_v_PTCM_Hist")->Integral()/get_hist_2D("Hist_output_PreSelection.root","WJets_2018","dphiCMI_v_PTCM_Hist")->Integral() << endl;
+ cout << "Eff of 20 GeV Jets in MET: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEM_Pt20E0.root","WJets_2018","dphiCMI_v_PTCM_Hist")->Integral()/get_hist_2D("Hist_output_PreSelection.root","WJets_2018","dphiCMI_v_PTCM_Hist")->Integral() << endl;
+ cout << "Eff of 15 GeV Jets in T2tt: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEME0.root","T2tt_500_490_2018","dphiCMI_v_PTCM_Hist")->Integral()/get_hist_2D("Hist_output_PreSelection.root","T2tt_500_490_2018","dphiCMI_v_PTCM_Hist")->Integral() << endl;
+ cout << "Eff of 20 GeV Jets in T2tt: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEM_Pt20E0.root","T2tt_500_490_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral()/get_hist_2D("Hist_output_PreSelection.root","T2tt_500_490_2018","dphiCMI_v_PTCM_Hist")->Integral() << endl;
+ cout << "Eff of 15 GeV Jets in T2ChiWZ: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEME0.root","TChiWZ_300_290_2018","dphiCMI_v_PTCM_Hist")->Integral()/get_hist_2D("Hist_output_PreSelection.root","TChiWZ_300_290_2018","dphiCMI_v_PTCM_Hist")->Integral() << endl;
+ cout << "Eff of 20 GeV Jets in TChiWZ: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEM_Pt20E0.root","TChiWZ_300_290_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral()/get_hist_2D("Hist_output_PreSelection.root","TChiWZ_300_290_2018","dphiCMI_v_PTCM_Hist")->Integral() << endl;
 
 /*
  double bkg_Entries = 0.0;

@@ -98,7 +98,7 @@ os.system("mkdir -p "+path+"config_hist")
 os.system("cp "+path+"Eff_Nano_Hist.x "+path+"config_hist/")
 os.system("cp /stash/user/zflowers/cmssw-sandbox/cmssw_setup.sh "+path+"config_hist/")
 os.system("tar -C "+path+"config_hist/../ -czvf config_hist.tgz config_hist/")
-os.system("source "+path+"make_sandbox.sh")
+#os.system("source "+path+"make_sandbox.sh")
 
 print("Writing shell scripts")
 
