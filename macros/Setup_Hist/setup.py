@@ -126,10 +126,12 @@ with open(path+"Setup_Hist/Hist.txt") as cut_handle:
                                     write_num_file(Cut,Dir,File,Tag,Num)
                                     #list_f.append(write_sh(Cut,Num,Dir,File,Tag))
                                 list_f.append(write_sh(Cut,Dir,File,Tag))
+        list_f = list(dict.fromkeys(list_f))
+        for f in list_f:
+            print("Submitting: "+f)
+            os.system("condor_submit "+f)
+        print("Clearing list")
+        list_f = []
 
-print("Finished Writing Scripts")
-list_f = list(dict.fromkeys(list_f))
-for f in list_f:
-    os.system("condor_submit "+f)
 #os.system("rm -rf "+path+"config_hist/")
 print("Finished Submitting Jobs")

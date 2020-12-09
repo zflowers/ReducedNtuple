@@ -151,7 +151,6 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
   b_ID_lep->ResetAddress();
   b_Eta_lep->ResetAddress();
   b_Phi_lep->ResetAddress();
-  /*
 
   //loop over jets
   TBranch* b_Njet = NULL;
@@ -166,16 +165,22 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
   vector<double>* Phi_jet = 0;
   m_Tree->SetBranchAddress("Phi_jet",&Phi_jet,&b_Phi_jet);
   b_Phi_jet->GetEntry(jentry);
+  TBranch* b_PT_jet = NULL;
+  vector<double>* PT_jet = 0;
+  m_Tree->SetBranchAddress("PT_jet",&PT_jet,&b_PT_jet);
+  b_PT_jet->GetEntry(jentry);
   for(int i = 0; i < Njet; i++)
   {
    if(Eta_jet->at(i) > -3.2 && Eta_jet->at(i) < -1.2 && Phi_jet->at(i) > -1.77 && Phi_jet->at(i) < -0.67) { cut = false; }
   }
   Eta_jet->clear();
   Phi_jet->clear();
+  PT_jet->clear();
   b_Njet->ResetAddress();
+  b_PT_jet->ResetAddress();
   b_Eta_jet->ResetAddress();
   b_Phi_jet->ResetAddress();
-*/
+
 /*
   //veto event if any object falls into HEM region
   //loop over leptons
@@ -1133,7 +1138,7 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
  string PTISR_str = "PTISRG200";
  PTISR_cut = Get_Cut(jentry,"PTISR",PTISR_str);
 
- string RISR_str = "RISRG0.6";
+ string RISR_str = "RISRG0.5";
  RISR_cut = Get_Cut(jentry,"RISR",RISR_str);
 
  string EventFilter_str = "EventFilterE1";
