@@ -476,13 +476,13 @@ void Get2D_Ratio(string hist_name, vector<string> directories, vector<string> cu
    can->cd();
    TH2D* hist_ratio = (TH2D*)hist->Clone();
    hist_ratio->Divide(hist_denom);
-   hist_ratio->GetXaxis()->SetAxisColor(kWhite);
-   hist_ratio->GetYaxis()->SetAxisColor(kWhite);
-   hist_ratio->GetXaxis()->SetTitleColor(kWhite);
-   hist_ratio->GetYaxis()->SetTitleColor(kWhite);
-   hist_ratio->GetXaxis()->SetLabelColor(kWhite);
-   hist_ratio->GetYaxis()->SetLabelColor(kWhite);
-   hist_ratio->GetZaxis()->SetLabelColor(kWhite);
+   //hist_ratio->GetXaxis()->SetAxisColor(kWhite);
+   //hist_ratio->GetYaxis()->SetAxisColor(kWhite);
+   //hist_ratio->GetXaxis()->SetTitleColor(kWhite);
+   //hist_ratio->GetYaxis()->SetTitleColor(kWhite);
+   //hist_ratio->GetXaxis()->SetLabelColor(kWhite);
+   //hist_ratio->GetYaxis()->SetLabelColor(kWhite);
+   //hist_ratio->GetZaxis()->SetLabelColor(kWhite);
    hist_ratio->GetXaxis()->CenterTitle();
    hist_ratio->GetXaxis()->SetTitleFont(132);
    hist_ratio->GetXaxis()->SetTitleSize(0.06);
@@ -498,7 +498,7 @@ void Get2D_Ratio(string hist_name, vector<string> directories, vector<string> cu
    hist_ratio->Draw("COLZ");
    TLatex l;
    l.SetNDC();
-   l.SetTextColor(kWhite);
+   //l.SetTextColor(kWhite);
    l.SetTextSize(0.05);
    l.SetTextFont(42);
    l.DrawLatex(0.15,0.943,"#bf{#it{CMS}} Internal 13 TeV Simulation");
@@ -541,14 +541,14 @@ void Get2D_Ratio(string hist_name, string cut1, string cut2, string directory){
  can->Draw();
  can->cd();
  TH2D* hist_ratio = (TH2D*)hist->Clone();
- hist_ratio->Divide(hist_denom);
- hist_ratio->GetXaxis()->SetAxisColor(kWhite);
- hist_ratio->GetYaxis()->SetAxisColor(kWhite);
- hist_ratio->GetXaxis()->SetTitleColor(kWhite);
- hist_ratio->GetYaxis()->SetTitleColor(kWhite);
- hist_ratio->GetXaxis()->SetLabelColor(kWhite);
- hist_ratio->GetYaxis()->SetLabelColor(kWhite);
- hist_ratio->GetZaxis()->SetLabelColor(kWhite);
+ //hist_ratio->Divide(hist_denom);
+ //hist_ratio->GetXaxis()->SetAxisColor(kWhite);
+ //hist_ratio->GetYaxis()->SetAxisColor(kWhite);
+ //hist_ratio->GetXaxis()->SetTitleColor(kWhite);
+ //hist_ratio->GetYaxis()->SetTitleColor(kWhite);
+ //hist_ratio->GetXaxis()->SetLabelColor(kWhite);
+ //hist_ratio->GetYaxis()->SetLabelColor(kWhite);
+ //hist_ratio->GetZaxis()->SetLabelColor(kWhite);
  hist_ratio->GetXaxis()->CenterTitle();
  hist_ratio->GetXaxis()->SetTitleFont(132);
  hist_ratio->GetXaxis()->SetTitleSize(0.06);
@@ -564,7 +564,7 @@ void Get2D_Ratio(string hist_name, string cut1, string cut2, string directory){
  hist_ratio->Draw("COLZ");
  TLatex l;
  l.SetNDC();
- l.SetTextColor(kWhite);
+ //l.SetTextColor(kWhite);
  l.SetTextSize(0.05);
  l.SetTextFont(42);
  l.DrawLatex(0.15,0.943,"#bf{#it{CMS}} Internal 13 TeV Simulation");
@@ -608,13 +608,13 @@ void Get2D_Ratio(string hist_name1, string hist_name2, string cut1, string cut2,
  can->cd();
  TH2D* hist_ratio = (TH2D*)hist->Clone();
  hist_ratio->Divide(hist_denom);
- hist_ratio->GetXaxis()->SetAxisColor(kWhite);
- hist_ratio->GetYaxis()->SetAxisColor(kWhite);
- hist_ratio->GetXaxis()->SetTitleColor(kWhite);
- hist_ratio->GetYaxis()->SetTitleColor(kWhite);
- hist_ratio->GetXaxis()->SetLabelColor(kWhite);
- hist_ratio->GetYaxis()->SetLabelColor(kWhite);
- hist_ratio->GetZaxis()->SetLabelColor(kWhite);
+ //hist_ratio->GetXaxis()->SetAxisColor(kWhite);
+ //hist_ratio->GetYaxis()->SetAxisColor(kWhite);
+ //hist_ratio->GetXaxis()->SetTitleColor(kWhite);
+ //hist_ratio->GetYaxis()->SetTitleColor(kWhite);
+ //hist_ratio->GetXaxis()->SetLabelColor(kWhite);
+ //hist_ratio->GetYaxis()->SetLabelColor(kWhite);
+ //hist_ratio->GetZaxis()->SetLabelColor(kWhite);
  hist_ratio->GetXaxis()->CenterTitle();
  hist_ratio->GetXaxis()->SetTitleFont(132);
  hist_ratio->GetXaxis()->SetTitleSize(0.06);
@@ -636,7 +636,7 @@ void Get2D_Ratio(string hist_name1, string hist_name2, string cut1, string cut2,
  hist_ratio->Draw("COLZ");
  TLatex l;
  l.SetNDC();
- l.SetTextColor(kWhite);
+ //l.SetTextColor(kWhite);
  l.SetTextSize(0.04);
  l.SetTextFont(42);
  l.DrawLatex(0.15,0.943,"#bf{#it{CMS}} Internal 13 TeV");
@@ -1136,19 +1136,25 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
  //Get2D_Ratio("dphiMET_V_v_PTCM_Hist","dphiMET_V_v_PTCM_Hist_HEM","PreSelection","HEM","MET_2018",false);
  //Get2D_Ratio("Mperp_v_RISR_Hist","Mperp_v_RISR_Hist_HEM","PreSelection","HEM","MET_2018",false);
 
- Get2D_Ratio("dphiCMI_v_PTCM_Hist_HEM","dphiCMI_v_PTCM_Hist_HEM","PreSelection","HEM-EventFlag_JetInHEME0","MET_2018",true);
- Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","HEM-EventFlag_JetInHEME0","MET_2018",true);
- Get2D_Ratio("dphiCMI_v_PTCM_Hist_HEM","dphiCMI_v_PTCM_Hist_HEM","PreSelection","HEM-EventFlag_JetInHEM_Pt20E0","MET_2018",true);
- Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","HEM-EventFlag_JetInHEM_Pt20E0","MET_2018",true);
+ Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","PreSelection","MET_2018",false);
+ Get2D_Ratio("dphiCMI_v_PTCM_Hist_HEM","dphiCMI_v_PTCM_Hist_HEM","PreSelection","HEM-EventFlag_JetInHEME0","MET_2018",false);
+ Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","HEM-EventFlag_JetInHEME0","MET_2018",false);
+ Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","HEM-EventFlag_JetInHEM_Pt20E0","MET_2018",false);
+ Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","EventFlag_JetInHEME0","MET_2018",false);
+ Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","EventFlag_JetInHEM_Pt20E0","MET_2018",false);
 
- Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","HEM-EventFlag_JetInHEME0","HEM-EventFlag_JetInHEM_Pt20E0","MET_2018",true);
+ Get2D_Ratio("dphiCMI_v_PTCM_Hist_HEM","dphiCMI_v_PTCM_Hist_HEM","HEM-EventFlag_JetInHEME0","HEM-EventFlag_JetInHEM_Pt20E0","MET_2018",false);
  
- cout << "Eff of 15 GeV Jets in MET: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEME0.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral()/get_hist_2D("Hist_output_PreSelection.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral() << endl;
- cout << "Eff of 20 GeV Jets in MET: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEM_Pt20E0.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral()/get_hist_2D("Hist_output_PreSelection.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral() << endl;
- cout << "Eff of 15 GeV Jets in WJets: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEME0.root","WJets_2018","dphiCMI_v_PTCM_Hist")->Integral()/get_hist_2D("Hist_output_PreSelection.root","WJets_2018","dphiCMI_v_PTCM_Hist")->Integral() << endl;
- cout << "Eff of 20 GeV Jets in WJets: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEM_Pt20E0.root","WJets_2018","dphiCMI_v_PTCM_Hist")->Integral()/get_hist_2D("Hist_output_PreSelection.root","WJets_2018","dphiCMI_v_PTCM_Hist")->Integral() << endl;
- cout << "Eff of 15 GeV Jets in T2tt: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEME0.root","T2tt_500_490_2018","dphiCMI_v_PTCM_Hist")->Integral()/get_hist_2D("Hist_output_PreSelection.root","T2tt_500_490_2018","dphiCMI_v_PTCM_Hist")->Integral() << endl;
- cout << "Eff of 20 GeV Jets in T2tt: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEM_Pt20E0.root","T2tt_500_490_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral()/get_hist_2D("Hist_output_PreSelection.root","T2tt_500_490_2018","dphiCMI_v_PTCM_Hist")->Integral() << endl;
+ //cout << "Eff of 15 GeV Jets in MET: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEME0.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral()/get_hist_2D("Hist_output_PreSelection.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral() << endl;
+ //cout << "Eff of 20 GeV Jets in MET: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEM_Pt20E0.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral()/get_hist_2D("Hist_output_PreSelection.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral() << endl;
+ //cout << "Eff of HEM-nom in MET: " << get_hist_2D("Hist_output_HEM.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral()/get_hist_2D("Hist_output_PreSelection.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral() << endl;
+ //cout << "Eff of 15 GeV Jets in WJets: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEME0.root","WJets_2018","dphiCMI_v_PTCM_Hist")->Integral()/get_hist_2D("Hist_output_PreSelection.root","WJets_2018","dphiCMI_v_PTCM_Hist")->Integral() << endl;
+ //cout << "Eff of 20 GeV Jets in WJets: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEM_Pt20E0.root","WJets_2018","dphiCMI_v_PTCM_Hist")->Integral()/get_hist_2D("Hist_output_PreSelection.root","WJets_2018","dphiCMI_v_PTCM_Hist")->Integral() << endl;
+ //cout << "Eff of HEM-nom in WJets: " << get_hist_2D("Hist_output_HEM.root","WJets_2018","dphiCMI_v_PTCM_Hist")->Integral()/get_hist_2D("Hist_output_PreSelection.root","WJets_2018","dphiCMI_v_PTCM_Hist")->Integral() << endl;
+ //cout << "Eff of 15 GeV Jets in T2tt: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEME0.root","T2tt_500_490_2018","dphiCMI_v_PTCM_Hist")->Integral()/get_hist_2D("Hist_output_PreSelection.root","T2tt_500_490_2018","dphiCMI_v_PTCM_Hist")->Integral() << endl;
+ //cout << "Eff of 20 GeV Jets in T2tt: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEM_Pt20E0.root","T2tt_500_490_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral()/get_hist_2D("Hist_output_PreSelection.root","T2tt_500_490_2018","dphiCMI_v_PTCM_Hist")->Integral() << endl;
+ //cout << "Eff of 15 GeV Jets in T2ChiWZ: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEME0.root","TChiWZ_300_290_2018","dphiCMI_v_PTCM_Hist")->Integral()/get_hist_2D("Hist_output_PreSelection.root","TChiWZ_300_290_2018","dphiCMI_v_PTCM_Hist")->Integral() << endl;
+ //cout << "Eff of 20 GeV Jets in TChiWZ: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEM_Pt20E0.root","TChiWZ_300_290_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral()/get_hist_2D("Hist_output_PreSelection.root","TChiWZ_300_290_2018","dphiCMI_v_PTCM_Hist")->Integral() << endl;
 
 /*
  double bkg_Entries = 0.0;
