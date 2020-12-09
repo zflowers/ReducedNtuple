@@ -43,7 +43,7 @@ void ScaleFactors(vector<string> inFile, vector<string> cut){
  vector<string> data_tags_2018 = {"SingleElectron_2018","SingleMuon_2018"};
  
  //vector<int> colors = {kCyan, kMagenta, kYellow, kViolet+2, kAzure+7, kPink, kGreen, kGray};
- vector<int> colors = {kGreen+1, kAzure-2, kYellow, kViolet+2, kAzure+7, kPink, kGreen, kGray};
+ vector<int> colors = {kGreen+2, kAzure-2, kYellow, kViolet+2, kAzure+7, kPink, kGreen, kGray};
 
  for(int i = 0; i < inFile.size(); i++)
  {
@@ -86,14 +86,14 @@ void Format_Graph_res(TMultiGraph*& gr)
 {
   gr->GetXaxis()->CenterTitle(true);
   gr->GetXaxis()->SetTitleFont(132);
-  gr->GetXaxis()->SetTitleSize(0.12);
-  gr->GetXaxis()->SetTitleOffset(.7);
+  gr->GetXaxis()->SetTitleSize(0.13);
+  gr->GetXaxis()->SetTitleOffset(.71);
   gr->GetXaxis()->SetLabelFont(132);
   gr->GetXaxis()->SetLabelSize(0.11);
   gr->GetYaxis()->CenterTitle(true);
   gr->GetYaxis()->SetTitleFont(132);
-  gr->GetYaxis()->SetTitleSize(0.12);
-  gr->GetYaxis()->SetTitleOffset(.35);
+  gr->GetYaxis()->SetTitleSize(0.13);
+  gr->GetYaxis()->SetTitleOffset(.29);
   gr->GetYaxis()->SetLabelFont(132);
   gr->GetYaxis()->SetLabelSize(0.11);
 
@@ -142,7 +142,7 @@ void Format_Graph(TGraphErrors*& gr)
  gr->GetXaxis()->SetTitleSize(0.06);
  gr->GetXaxis()->SetTitleOffset(1.06);
  gr->GetXaxis()->SetLabelFont(132);
- gr->GetXaxis()->SetLabelSize(0.05);
+ gr->GetXaxis()->SetLabelSize(0.0);
  //gr->GetXaxis()->SetLabelSize(0.00000001);
  gr->GetYaxis()->CenterTitle(true);
  gr->GetYaxis()->SetTitleFont(132);
@@ -220,7 +220,7 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
  }
 
  TF1* Bkg_Nominal = new TF1("Bkg_Nominal",Gaussian_CDF_Func,150.,500.,3);
- Bkg_Nominal->SetLineColor(kGreen+2);
+ Bkg_Nominal->SetLineColor(kGreen);
  Bkg_Nominal->SetParameter(0,0.99);
  Bkg_Nominal->SetParameter(1,125.);
  Bkg_Nominal->SetParameter(2,40.);
@@ -230,7 +230,7 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
  gr_bkg->Fit(Bkg_Nominal,"EMS+0");
 
  TF1* Data_Nominal = new TF1("Data_Nominal",Gaussian_CDF_Func,150.,500.,3);
- Data_Nominal->SetLineColor(kBlue+1);
+ Data_Nominal->SetLineColor(kAzure+10);
  Data_Nominal->SetParameter(0,0.99);
  Data_Nominal->SetParameter(1,125.);
  Data_Nominal->SetParameter(2,40.);
@@ -263,6 +263,7 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
   if(res_ratio == NULL) continue;
   res_ratio->SetMarkerColor(colors[i+1]);
   res_ratio->SetLineColor(colors[i+1]);
+  res_ratio->SetMarkerStyle(20);
   mg_res->Add(res_ratio);
   empty_mg = false;
  }
@@ -275,10 +276,13 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
  }
  vector<double> y_upper, y_lower;
  gr_bands_ratio = Get_Bands_Ratio(x_min,x_max,res_ratio,y_upper,y_lower,Bkg_Nominal,Data_Nominal);
- gr_bands_ratio->SetFillColor(kCyan+1);
+ gr_bands_ratio->SetFillColor(kCyan+2);
  gr_bands_ratio->SetFillStyle(3003);
  gr_bands_ratio->SetMarkerSize(0);
+ res_ratio->SetName("gr_res_ratio");
+ res_ratio->SetMarkerSize(1.1);
  TGraph* Fit_Ratio = Get_Fit_Ratio(x_min,x_max,Bkg_Nominal, Data_Nominal);
+ Fit_Ratio->SetLineColor(kAzure+10);
  mg_res->Add(Fit_Ratio);
  mg_res->Draw("AP");
  Format_Graph_res(mg_res);
@@ -292,7 +296,6 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
  line->SetLineStyle(1);
  //line->Draw("SAMES");
  gr_bands_ratio->Draw("30");
- Fit_Ratio->SetLineColor(kBlue+1);
  Fit_Ratio->Draw("C");
  res_ratio->Draw("P");
  pad_res->Modified();
@@ -309,7 +312,7 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
  can->Update();
 
  TGraphErrors* gr_bands = Get_Bands(x_min,x_max,Data_Nominal,y_upper,y_lower);
- gr_bands->SetFillColor(kCyan+1);
+ gr_bands->SetFillColor(kCyan+2);
  gr_bands->SetFillStyle(3003);
  gr_bands->SetMarkerSize(0);
  //TMultiGraph* mg_new = new TMultiGraph();
@@ -346,10 +349,10 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
  leg->Draw("SAME");
  l.SetTextFont(42);
  l.SetNDC();
- l.SetTextSize(0.04);
+ l.SetTextSize(0.06);
  l.SetTextFont(42);
  //l.DrawLatex(0.65,0.93,name.c_str());
- l.DrawLatex(0.13,0.93,"#bf{#it{CMS}} Preliminary");
+ l.DrawLatex(0.1,0.93,"#bf{#it{CMS}} Preliminary");
  pad_gr->Update();
  can->Update();
  can->cd();
