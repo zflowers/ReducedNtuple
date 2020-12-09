@@ -1,3 +1,9 @@
 PreSelection
 HEM-EventFlag_JetInHEME0
 HEM-EventFlag_JetInHEM_Pt20E0
+EventFlag_JetInHEME0
+EventFlag_JetInHEM_Pt20E0
+Clean-HEM-EventFlag_JetInHEME0
+Clean-HEM-EventFlag_JetInHEM_Pt20E0
+HEM
+Clean-HEM

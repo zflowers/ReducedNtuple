@@ -104,14 +104,11 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
  {
 
   cut = true;
-  if(m_Tag.find("MET") != std::string::npos)
-  {
   TBranch* b_runnum = NULL;
   Int_t runnum = 0;
   m_Tree->SetBranchAddress("runnum",&runnum,&b_runnum);
   b_runnum->GetEntry(jentry);
-  if(runnum < 319077) { eraseSubStr(current_cut,"HEM-"); b_runnum->ResetAddress(); return true; }
-  }
+  if(runnum > 1 && runnum < 319077) { eraseSubStr(current_cut,"HEM-"); b_runnum->ResetAddress(); return true; }
   
   //simplify cuts:
   TBranch* b_Nlep = NULL;

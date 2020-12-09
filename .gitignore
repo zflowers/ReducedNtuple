@@ -18,5 +18,5 @@ macros/LOG_EFF/
 macros/EFF/
 macros/Shell_EFF/
 macros/Num_EFF/
-macros/config/
+macros/config*
 macros/*.tgz
