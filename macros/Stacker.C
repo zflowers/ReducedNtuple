@@ -400,13 +400,13 @@ void Get2D_Plot(string hist_name, vector<string> directories, vector<string> inF
    //can->SetFillColor(kBlack);
    can->Draw();
    can->cd();
-   hist->GetXaxis()->SetAxisColor(kWhite);
-   hist->GetYaxis()->SetAxisColor(kWhite);
-   hist->GetXaxis()->SetTitleColor(kWhite);
-   hist->GetYaxis()->SetTitleColor(kWhite);
-   hist->GetXaxis()->SetLabelColor(kWhite);
-   hist->GetYaxis()->SetLabelColor(kWhite);
-   hist->GetZaxis()->SetLabelColor(kWhite);
+   //hist->GetXaxis()->SetAxisColor(kWhite);
+   //hist->GetYaxis()->SetAxisColor(kWhite);
+   //hist->GetXaxis()->SetTitleColor(kWhite);
+   //hist->GetYaxis()->SetTitleColor(kWhite);
+   //hist->GetXaxis()->SetLabelColor(kWhite);
+   //hist->GetYaxis()->SetLabelColor(kWhite);
+   //hist->GetZaxis()->SetLabelColor(kWhite);
    hist->GetXaxis()->CenterTitle();
    hist->GetXaxis()->SetTitleFont(132);
    hist->GetXaxis()->SetTitleSize(0.06);
@@ -422,7 +422,7 @@ void Get2D_Plot(string hist_name, vector<string> directories, vector<string> inF
    hist->Draw("COLZ");
    TLatex l;
    l.SetNDC();
-   l.SetTextColor(kWhite);
+   //l.SetTextColor(kWhite);
    l.SetTextSize(0.04);
    l.SetTextFont(42);
    l.DrawLatex(0.15,0.943,"#bf{#it{CMS}} Internal 13 TeV");
@@ -585,17 +585,19 @@ void Get2D_Ratio(string hist_name, string cut1, string cut2, string directory){
  delete can;
 }
 
-void Get2D_Ratio(string hist_name1, string hist_name2, string cut1, string cut2, string directory, bool zoom){
+void Get2D_Ratio(string hist_name1, string hist_name2, string cut1, string cut2, string directory1, string directory2, bool zoom){
  gStyle->SetOptStat(0);
  gStyle->SetOptTitle(0);
  //gStyle->SetFrameFillColor(kBlack);
  //gStyle->SetFrameLineColor(kWhite);
- TH2D* hist_denom = get_hist_2D(("Hist_output_"+cut1+".root"), directory, hist_name1);
+ TH2D* hist_denom = get_hist_2D(("Hist_output_"+cut1+".root"), directory1, hist_name1);
+ //hist_denom->Rebin2D(4,5);
  hist_denom->Scale(1./hist_denom->Integral());
- TH2D* hist = get_hist_2D(("Hist_output_"+cut2+".root"), directory, hist_name2);
+ TH2D* hist = get_hist_2D(("Hist_output_"+cut2+".root"), directory2, hist_name2);
+ //hist->Rebin2D(4,5);
  hist->Scale(1./hist->Integral());
- string name = "can_ratio_"+hist_name1+"_"+hist_name2+"_"+cut1+"_"+cut2+"_"+directory;
- if(zoom) { name = "can_ratio_zoom_"+hist_name1+"_"+hist_name2+"_"+cut1+"_"+cut2+"_"+directory; }
+ string name = "can_ratio_"+hist_name1+"_"+hist_name2+"_"+cut1+"_"+cut2+"_"+directory1+"_"+directory2;
+ if(zoom) { name = "can_ratio_zoom_"+hist_name1+"_"+hist_name2+"_"+cut1+"_"+cut2+"_"+directory1+"_"+directory2; }
  TCanvas* can = new TCanvas(name.c_str(),"",600.,500);
  can->SetLeftMargin(0.15);
  can->SetRightMargin(0.18);
@@ -644,12 +646,13 @@ void Get2D_Ratio(string hist_name1, string hist_name2, string cut1, string cut2,
  l.SetTextFont(42);
  //name = directories[j];
  name = "";
+ /*
  if(hist_name2.find("HEM") != std::string::npos) { name += cut2+", postHEM / "; }
   else { name += cut2+", preHEM / "; }
  if(hist_name1.find("HEM") != std::string::npos) { name += cut1+", postHEM"; }
   else { name += cut1+", preHEM"; }
- //if(hist_name1.find("HEM") != std::string::npos) { name = cut1+", postHEM/"+cut2+", preHEM"; }
- //else { name = cut2+", postHEM/"+cut1+", preHEM"; }
+ */
+ name = directory2+"/"+directory1;
  l.DrawLatex(0.42,.94,name.c_str());
  gPad->RedrawAxis();
  gPad->RedrawAxis("G");
@@ -711,7 +714,7 @@ void Get1D_Ratio(string hist_name, string cut1, string cut2_hist_name2, string d
  hist_ratio->Draw("COLZ");
  TLatex l;
  l.SetNDC();
- l.SetTextColor(kWhite);
+ //l.SetTextColor(kWhite);
  l.SetTextSize(0.05);
  l.SetTextFont(42);
  l.DrawLatex(0.15,0.943,"#bf{#it{CMS}} Internal 13 TeV Simulation");
@@ -781,7 +784,7 @@ void Get_Overlay(vector<string> outFiles, string hist_name, vector<string> sampl
   //hists[i]->GetYaxis()->SetTitle(Yname.c_str());
  }
  TLatex l;
- l.SetTextColor(kWhite);
+ //l.SetTextColor(kWhite);
  l.SetNDC();
  l.SetTextSize(0.05);
  l.SetTextFont(42);
@@ -928,7 +931,7 @@ void Get1D_Plot(vector<string> outFiles, string hist_name, vector<string> sample
    stats->SetY2NDC(.9);
    
    TLatex l;
-   l.SetTextColor(kWhite);
+   //l.SetTextColor(kWhite);
    l.SetNDC();
    l.SetTextSize(0.04);
    l.SetTextFont(42);
@@ -963,7 +966,7 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
  //vector<string> directories_2D{"TChiWW_SMS_275_235", "TTJets", "WJets", "DiBoson", "DYJetsToLL", "ST"};
  //vector<string> directories_2D{"Bkg_2016","MET_2016","Bkg_2017","MET_2017","Bkg_2018","MET_2018","QCD_2017","TTJets_2017","WJets_2017","ZJetsToNuNu_2017","T2bW_500_490_2016","T2bW_500_490_2017","T2bW_500_300_2018"};
  //vector<string> directories_2D{"Bkg_2017","Bkg_QCD_RM_2017","MET_2017","QCD_2017","TTJets_2017","WJets_2017","ZJetsToNuNu_2017","T2bW_500_490_2017","Bkg_QCD200_RM_2017","Bkg_QCD300_RM_2017","Bkg_QCD500_RM_2017","Bkg_QCD700_RM_2017","Bkg_QCD1000_RM_2017","Bkg_QCD1500_RM_2017","Bkg_QCD2000_RM_2017","QCD_100to200_2017","QCD_200to300_2017","QCD_300to500_2017","QCD_500to700_2017","QCD_700to1000_2017","QCD_1000to1500_2017","QCD_1500to2000_2017","QCD_2000toInf_2017"};
- vector<string> directories_2D{"MET_2018",};
+ vector<string> directories_2D{"MET_2017","Bkg_2017"};
  vector<int> colors = {kCyan, kMagenta, kYellow, kGreen-2, kAzure+7, kPink, kGreen, kGray};
  vector<int> colors_bkg = { kAzure+1, kGreen-9, kPink, kTeal+2, kYellow-4 };
  vector<int> colors_sig = { kMagenta, kCyan+2, };
@@ -1060,7 +1063,7 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
 
  //Get1D_Ratio("met_Hist","PreSelection","HEM","MET_2018",true);
  //Get1D_Ratio("met_Hist","PreSelection","met_Hist_HEM","MET_2018",false);
- //Get2D_Plot("dphiCMI_v_PTCM_Hist",directories_2D,inFiles,cuts,trigger);
+ Get2D_Plot("dphiCMI_v_PTCM_Hist",directories_2D,inFiles,cuts,trigger);
  //Get2D_Plot("dphiCMI_v_Mperp_Hist",directories_2D,inFiles,cuts,trigger);
  //Get2D_Plot("dphiCMI_v_RISR_Hist",directories_2D,inFiles,cuts,trigger);
  //Get2D_Plot("Mperp_v_PTCM_Hist",directories_2D,inFiles,cuts,trigger);
@@ -1092,60 +1095,62 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
  //Get2D_Ratio("dphiCMI_v_PTCM_Hist","PTISRG200-RISRG0.9-EventFilterE0","PTISRG200-RISRG0.9-EventFilterE1","MET_2017");
  //Get2D_Ratio("dphiCMI_v_PTCM_Hist","PTISRG200-RISRG0.95-EventFilterE0","PTISRG200-RISRG0.95-EventFilterE1","MET_2017");
  
- //Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","PreSelection","MET_2018",true);
- //Get2D_Ratio("dphiCMI_v_Mperp_Hist","dphiCMI_v_Mperp_Hist_HEM","PreSelection","PreSelection","MET_2018",true);
- //Get2D_Ratio("dphiCMI_v_RISR_Hist","dphiCMI_v_RISR_Hist_HEM","PreSelection","PreSelection","MET_2018",true);
- //Get2D_Ratio("Mperp_v_PTCM_Hist","Mperp_v_PTCM_Hist_HEM","PreSelection","PreSelection","MET_2018",true);
- //Get2D_Ratio("RISR_v_PTCM_Hist","RISR_v_PTCM_Hist_HEM","PreSelection","PreSelection","MET_2018",true);
- //Get2D_Ratio("dphiCMI_v_dphiMET_V_Hist","dphiCMI_v_dphiMET_V_Hist_HEM","PreSelection","PreSelection","MET_2018",true);
- //Get2D_Ratio("dphiMET_V_v_RISR_Hist","dphiMET_V_v_RISR_Hist_HEM","PreSelection","PreSelection","MET_2018",true);
- //Get2D_Ratio("Mperp_v_dphiMET_V_Hist","Mperp_v_dphiMET_V_Hist_HEM","PreSelection","PreSelection","MET_2018",true);
- //Get2D_Ratio("dphiMET_V_v_PTCM_Hist","dphiMET_V_v_PTCM_Hist_HEM","PreSelection","PreSelection","MET_2018",true);
- //Get2D_Ratio("Mperp_v_RISR_Hist","Mperp_v_RISR_Hist_HEM","PreSelection","PreSelection","MET_2018",true);
+ //Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
+ //Get2D_Ratio("dphiCMI_v_Mperp_Hist","dphiCMI_v_Mperp_Hist_HEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
+ //Get2D_Ratio("dphiCMI_v_RISR_Hist","dphiCMI_v_RISR_Hist_HEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
+ //Get2D_Ratio("Mperp_v_PTCM_Hist","Mperp_v_PTCM_Hist_HEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
+ //Get2D_Ratio("RISR_v_PTCM_Hist","RISR_v_PTCM_Hist_HEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
+ //Get2D_Ratio("dphiCMI_v_dphiMET_V_Hist","dphiCMI_v_dphiMET_V_Hist_HEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
+ //Get2D_Ratio("dphiMET_V_v_RISR_Hist","dphiMET_V_v_RISR_Hist_HEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
+ //Get2D_Ratio("Mperp_v_dphiMET_V_Hist","Mperp_v_dphiMET_V_Hist_HEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
+ //Get2D_Ratio("dphiMET_V_v_PTCM_Hist","dphiMET_V_v_PTCM_Hist_HEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
+ //Get2D_Ratio("Mperp_v_RISR_Hist","Mperp_v_RISR_Hist_HEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
 
- //Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","PreSelection","MET_2018",false);
- //Get2D_Ratio("dphiCMI_v_Mperp_Hist","dphiCMI_v_Mperp_Hist_HEM","PreSelection","PreSelection","MET_2018",false);
- //Get2D_Ratio("dphiCMI_v_RISR_Hist","dphiCMI_v_RISR_Hist_HEM","PreSelection","PreSelection","MET_2018",false);
- //Get2D_Ratio("Mperp_v_PTCM_Hist","Mperp_v_PTCM_Hist_HEM","PreSelection","PreSelection","MET_2018",false);
- //Get2D_Ratio("RISR_v_PTCM_Hist","RISR_v_PTCM_Hist_HEM","PreSelection","PreSelection","MET_2018",false);
- //Get2D_Ratio("dphiCMI_v_dphiMET_V_Hist","dphiCMI_v_dphiMET_V_Hist_HEM","PreSelection","PreSelection","MET_2018",false);
- //Get2D_Ratio("dphiMET_V_v_RISR_Hist","dphiMET_V_v_RISR_Hist_HEM","PreSelection","PreSelection","MET_2018",false);
- //Get2D_Ratio("Mperp_v_dphiMET_V_Hist","Mperp_v_dphiMET_V_Hist_HEM","PreSelection","PreSelection","MET_2018",false);
- //Get2D_Ratio("dphiMET_V_v_PTCM_Hist","dphiMET_V_v_PTCM_Hist_HEM","PreSelection","PreSelection","MET_2018",false);
- //Get2D_Ratio("Mperp_v_RISR_Hist","Mperp_v_RISR_Hist_HEM","PreSelection","PreSelection","MET_2018",false);
+ //Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","PreSelection","MET_2018","MET_2018",false);
+ //Get2D_Ratio("dphiCMI_v_Mperp_Hist","dphiCMI_v_Mperp_Hist_HEM","PreSelection","PreSelection","MET_2018","MET_2018",false);
+ //Get2D_Ratio("dphiCMI_v_RISR_Hist","dphiCMI_v_RISR_Hist_HEM","PreSelection","PreSelection","MET_2018","MET_2018",false);
+ //Get2D_Ratio("Mperp_v_PTCM_Hist","Mperp_v_PTCM_Hist_HEM","PreSelection","PreSelection","MET_2018","MET_2018",false);
+ //Get2D_Ratio("RISR_v_PTCM_Hist","RISR_v_PTCM_Hist_HEM","PreSelection","PreSelection","MET_2018","MET_2018",false);
+ //Get2D_Ratio("dphiCMI_v_dphiMET_V_Hist","dphiCMI_v_dphiMET_V_Hist_HEM","PreSelection","PreSelection","MET_2018","MET_2018",false);
+ //Get2D_Ratio("dphiMET_V_v_RISR_Hist","dphiMET_V_v_RISR_Hist_HEM","PreSelection","PreSelection","MET_2018","MET_2018",false);
+ //Get2D_Ratio("Mperp_v_dphiMET_V_Hist","Mperp_v_dphiMET_V_Hist_HEM","PreSelection","PreSelection","MET_2018","MET_2018",false);
+ //Get2D_Ratio("dphiMET_V_v_PTCM_Hist","dphiMET_V_v_PTCM_Hist_HEM","PreSelection","PreSelection","MET_2018","MET_2018",false);
+ //Get2D_Ratio("Mperp_v_RISR_Hist","Mperp_v_RISR_Hist_HEM","PreSelection","PreSelection","MET_2018","MET_2018",false);
 
- //Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","HEM","MET_2018",true);
- //Get2D_Ratio("dphiCMI_v_Mperp_Hist","dphiCMI_v_Mperp_Hist_HEM","PreSelection","HEM","MET_2018",true);
- //Get2D_Ratio("dphiCMI_v_RISR_Hist","dphiCMI_v_RISR_Hist_HEM","PreSelection","HEM","MET_2018",true);
- //Get2D_Ratio("Mperp_v_PTCM_Hist","Mperp_v_PTCM_Hist_HEM","PreSelection","HEM","MET_2018",true);
- //Get2D_Ratio("RISR_v_PTCM_Hist","RISR_v_PTCM_Hist_HEM","PreSelection","HEM","MET_2018",true);
- //Get2D_Ratio("dphiCMI_v_dphiMET_V_Hist","dphiCMI_v_dphiMET_V_Hist_HEM","PreSelection","HEM","MET_2018",true);
- //Get2D_Ratio("dphiMET_V_v_RISR_Hist","dphiMET_V_v_RISR_Hist_HEM","PreSelection","HEM","MET_2018",true);
- //Get2D_Ratio("Mperp_v_dphiMET_V_Hist","Mperp_v_dphiMET_V_Hist_HEM","PreSelection","HEM","MET_2018",true);
- //Get2D_Ratio("dphiMET_V_v_PTCM_Hist","dphiMET_V_v_PTCM_Hist_HEM","PreSelection","HEM","MET_2018",true);
- //Get2D_Ratio("Mperp_v_RISR_Hist","Mperp_v_RISR_Hist_HEM","PreSelection","HEM","MET_2018",true);
+ //Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","HEM","MET_2018","MET_2018",true);
+ //Get2D_Ratio("dphiCMI_v_Mperp_Hist","dphiCMI_v_Mperp_Hist_HEM","PreSelection","HEM","MET_2018","MET_2018",true);
+ //Get2D_Ratio("dphiCMI_v_RISR_Hist","dphiCMI_v_RISR_Hist_HEM","PreSelection","HEM","MET_2018","MET_2018",true);
+ //Get2D_Ratio("Mperp_v_PTCM_Hist","Mperp_v_PTCM_Hist_HEM","PreSelection","HEM","MET_2018","MET_2018",true);
+ //Get2D_Ratio("RISR_v_PTCM_Hist","RISR_v_PTCM_Hist_HEM","PreSelection","HEM","MET_2018","MET_2018",true);
+ //Get2D_Ratio("dphiCMI_v_dphiMET_V_Hist","dphiCMI_v_dphiMET_V_Hist_HEM","PreSelection","HEM","MET_2018","MET_2018",true);
+ //Get2D_Ratio("dphiMET_V_v_RISR_Hist","dphiMET_V_v_RISR_Hist_HEM","PreSelection","HEM","MET_2018","MET_2018",true);
+ //Get2D_Ratio("Mperp_v_dphiMET_V_Hist","Mperp_v_dphiMET_V_Hist_HEM","PreSelection","HEM","MET_2018","MET_2018",true);
+ //Get2D_Ratio("dphiMET_V_v_PTCM_Hist","dphiMET_V_v_PTCM_Hist_HEM","PreSelection","HEM","MET_2018","MET_2018",true);
+ //Get2D_Ratio("Mperp_v_RISR_Hist","Mperp_v_RISR_Hist_HEM","PreSelection","HEM","MET_2018","MET_2018",true);
 
- //Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","HEM","MET_2018",false);
- //Get2D_Ratio("dphiCMI_v_Mperp_Hist","dphiCMI_v_Mperp_Hist_HEM","PreSelection","HEM","MET_2018",false);
- //Get2D_Ratio("dphiCMI_v_RISR_Hist","dphiCMI_v_RISR_Hist_HEM","PreSelection","HEM","MET_2018",false);
- //Get2D_Ratio("Mperp_v_PTCM_Hist","Mperp_v_PTCM_Hist_HEM","PreSelection","HEM","MET_2018",false);
- //Get2D_Ratio("RISR_v_PTCM_Hist","RISR_v_PTCM_Hist_HEM","PreSelection","HEM","MET_2018",false);
- //Get2D_Ratio("dphiCMI_v_dphiMET_V_Hist","dphiCMI_v_dphiMET_V_Hist_HEM","PreSelection","HEM","MET_2018",false);
- //Get2D_Ratio("dphiMET_V_v_RISR_Hist","dphiMET_V_v_RISR_Hist_HEM","PreSelection","HEM","MET_2018",false);
- //Get2D_Ratio("Mperp_v_dphiMET_V_Hist","Mperp_v_dphiMET_V_Hist_HEM","PreSelection","HEM","MET_2018",false);
- //Get2D_Ratio("dphiMET_V_v_PTCM_Hist","dphiMET_V_v_PTCM_Hist_HEM","PreSelection","HEM","MET_2018",false);
- //Get2D_Ratio("Mperp_v_RISR_Hist","Mperp_v_RISR_Hist_HEM","PreSelection","HEM","MET_2018",false);
+ //Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","HEM","MET_2018","MET_2018",false);
+ //Get2D_Ratio("dphiCMI_v_Mperp_Hist","dphiCMI_v_Mperp_Hist_HEM","PreSelection","HEM","MET_2018","MET_2018",false);
+ //Get2D_Ratio("dphiCMI_v_RISR_Hist","dphiCMI_v_RISR_Hist_HEM","PreSelection","HEM","MET_2018","MET_2018",false);
+ //Get2D_Ratio("Mperp_v_PTCM_Hist","Mperp_v_PTCM_Hist_HEM","PreSelection","HEM","MET_2018","MET_2018",false);
+ //Get2D_Ratio("RISR_v_PTCM_Hist","RISR_v_PTCM_Hist_HEM","PreSelection","HEM","MET_2018","MET_2018",false);
+ //Get2D_Ratio("dphiCMI_v_dphiMET_V_Hist","dphiCMI_v_dphiMET_V_Hist_HEM","PreSelection","HEM","MET_2018","MET_2018",false);
+ //Get2D_Ratio("dphiMET_V_v_RISR_Hist","dphiMET_V_v_RISR_Hist_HEM","PreSelection","HEM","MET_2018","MET_2018",false);
+ //Get2D_Ratio("Mperp_v_dphiMET_V_Hist","Mperp_v_dphiMET_V_Hist_HEM","PreSelection","HEM","MET_2018","MET_2018",false);
+ //Get2D_Ratio("dphiMET_V_v_PTCM_Hist","dphiMET_V_v_PTCM_Hist_HEM","PreSelection","HEM","MET_2018","MET_2018",false);
+ //Get2D_Ratio("Mperp_v_RISR_Hist","Mperp_v_RISR_Hist_HEM","PreSelection","HEM","MET_2018","MET_2018",false);
 
- Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","PreSelection","MET_2018",false);
- Get2D_Ratio("dphiCMI_v_PTCM_Hist_HEM","dphiCMI_v_PTCM_Hist_HEM","PreSelection","HEM-EventFlag_JetInHEME0","MET_2018",false);
- Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","HEM","MET_2018",false);
- Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","HEM-EventFlag_JetInHEME0","MET_2018",false);
- Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","HEM-EventFlag_JetInHEM_Pt20E0","MET_2018",false);
- Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","EventFlag_JetInHEME0","MET_2018",false);
- Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","EventFlag_JetInHEM_Pt20E0","MET_2018",false);
-
- Get2D_Ratio("dphiCMI_v_PTCM_Hist_HEM","dphiCMI_v_PTCM_Hist_HEM","HEM-EventFlag_JetInHEME0","HEM-EventFlag_JetInHEM_Pt20E0","MET_2018",false);
- Get2D_Ratio("dphiCMI_v_PTCM_Hist_HEM","dphiCMI_v_PTCM_Hist_HEM","HEM","HEM-EventFlag_JetInHEM_Pt20E0","MET_2018",false);
+ //Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
+ //Get2D_Ratio("dphiCMI_v_PTCM_Hist_HEM","dphiCMI_v_PTCM_Hist_HEM","PreSelection","HEM-EventFlag_JetInHEME0","MET_2018","MET_2018",true);
+ //Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","HEM","MET_2018","MET_2018",true);
+ //Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","HEM-EventFlag_JetInHEME0","MET_2018","MET_2018",true);
+ //Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","HEM-EventFlag_JetInHEM_Pt20E0","MET_2018","MET_2018",true);
+ //Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","EventFlag_JetInHEME0","MET_2018","MET_2018",true);
+ //Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist_HEM","PreSelection","EventFlag_JetInHEM_Pt20E0","MET_2018","MET_2018",true);
+ //Get2D_Ratio("dphiCMI_v_PTCM_Hist_HEM","dphiCMI_v_PTCM_Hist_HEM","HEM-EventFlag_JetInHEME0","HEM-EventFlag_JetInHEM_Pt20E0","MET_2018","MET_2018",true);
+ //Get2D_Ratio("dphiCMI_v_PTCM_Hist_HEM","dphiCMI_v_PTCM_Hist_HEM","HEM","HEM-EventFlag_JetInHEM_Pt20E0","MET_2018","MET_2018",true);
+ 
+ //2D Ratio 2017 Cleaning
+ Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist","RISRG0.9","RISRG0.9","Bkg_2017","MET_2017",true);
  
  //cout << "Eff of 15 GeV Jets in MET: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEME0.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral()/get_hist_2D("Hist_output_PreSelection.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral() << endl;
  //cout << "Eff of 20 GeV Jets in MET: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEM_Pt20E0.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral()/get_hist_2D("Hist_output_PreSelection.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral() << endl;
