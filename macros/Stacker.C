@@ -47,6 +47,19 @@ void eraseSubStr(std::string & mainStr, const std::string & toErase)
  }
 }
 
+TGraph* Get_Graph_From_Func(double x_min, double x_max, TF1* Func)
+{
+ int N = 1000;
+ TGraph* gr = new TGraph(N);
+ double x = 0.;
+ for(int i = 0; i < N; i++)
+ {
+  x = x_min+(((x_max-x_min)/(N))*i);
+  gr->SetPoint(i,x,Func->Eval(x));
+ }
+ return gr;
+}
+
 vector<TH1D*> list_histos(string fname, vector<string> dir_names, string hist_name)
 {
  std::vector<TH1D*> vect_hist;
@@ -658,14 +671,28 @@ void Get2D_Ratio(string hist_name1, string hist_name2, string cut1, string cut2,
  l.DrawLatex(0.42,.94,name.c_str());
  gPad->RedrawAxis();
  gPad->RedrawAxis("G");
- TF1* left_para = new TF1("left para","700.*x*x+100.",0.,TMath::Pi());
- left_para->SetNpx(10000);
- left_para->SetLineWidth(2);
- left_para->Draw("SAMES");
- TF1* right_para = new TF1("right para","175.*(x-TMath::Pi())*(x-TMath::Pi())+75.",0.,TMath::Pi());
- right_para->SetNpx(10000);
- right_para->SetLineWidth(2);
- right_para->Draw("SAMES");
+ TF1* left_para = new TF1("left para","-500.*sqrt(-2.777*x*x+1.388*x+0.8264)+575.",0.,TMath::Pi());
+ TF1* right_para = new TF1("right para","-500.*sqrt((-1.5625*x*x+7.8125*x-8.766))+600.",0.,TMath::Pi());
+ double x_min = 0.;
+ double x_max = TMath::Pi();
+ int N = 1000;
+ TGraph* gr_left_para = new TGraph(N);
+ TGraph* gr_right_para = new TGraph(N);
+ double x = 0.;
+ for(int i = 0; i < 1000; i++)
+ {
+  x = x_min+(((x_max-x_min)/(N))*i);
+  gr_left_para->SetPoint(i,x,x < 0.25 ? 75. : left_para->Eval(x));
+  gr_right_para->SetPoint(i,x,x > 2.5 ? 100. : right_para->Eval(x));
+ }
+ gr_left_para->Draw("P");
+ gr_left_para->SetMarkerColor(kRed);
+ gr_left_para->SetMarkerSize(0.2);
+ gr_left_para->SetMarkerStyle(20.);
+ gr_right_para->SetMarkerColor(kRed);
+ gr_right_para->SetMarkerSize(0.2);
+ gr_right_para->SetMarkerStyle(20.);
+ gr_right_para->Draw("P");
  TFile* output = new TFile(("Hist_output_"+cut1+".root").c_str(),"UPDATE");
  can->Write();
  output->Close();
