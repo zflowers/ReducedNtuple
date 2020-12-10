@@ -129,6 +129,8 @@ TH2D* get_hist_2D(string fname, string dir_name, string hist_name)
  if(folder == NULL) return h;
  folder->cd();
  folder->GetObject(hist_name.c_str(),h);
+ if(strcmp(h->GetXaxis()->GetTitle(),"dphiCMI") == 0) {h->GetXaxis()->SetTitle("#Delta #phi_{CM,I}");}
+ if(strcmp(h->GetYaxis()->GetTitle(),"PTCM") == 0) {h->GetYaxis()->SetTitle("p_{T}^{CM} [GeV]");}
  return h;
 }
 
@@ -350,7 +352,7 @@ void Get2D_Plot(string hist_name, vector<string> directories, vector<string> inF
    string name = "can_";
    name+=hist->GetName();
    name+=("_"+cuts[i]);
-   //name+=directories[j];
+   name+="_"+directories[j];
    string trigger_name = "";
    if(trigger)
    {
@@ -425,14 +427,14 @@ void Get2D_Plot(string hist_name, vector<string> directories, vector<string> inF
    //l.SetTextColor(kWhite);
    l.SetTextSize(0.04);
    l.SetTextFont(42);
-   l.DrawLatex(0.15,0.943,"#bf{#it{CMS}} Internal 13 TeV");
+   l.DrawLatex(0.15,0.943,"#bf{#it{CMS}} Preliminary 13 TeV");
    l.SetTextSize(0.04);
    l.SetTextFont(42);
-   //name = directories[j];
-   name = "Cut: "+cuts[i];
+   name = "Sample: "+directories[j];
+   name+= " Cut: "+cuts[i];
    string hist_name = hist->GetName();
-   if(hist_name.find("HEM") != std::string::npos) { name +=", postHEM"; }
-   else { name +=", preHEM"; }
+   //if(hist_name.find("HEM") != std::string::npos) { name +=", postHEM"; }
+   //else { name +=", preHEM"; }
    //eraseSubStr(name,"PTISRG200-");
    //name+=trigger_name;
    l.DrawLatex(0.45,.94,name.c_str());
@@ -591,10 +593,10 @@ void Get2D_Ratio(string hist_name1, string hist_name2, string cut1, string cut2,
  //gStyle->SetFrameFillColor(kBlack);
  //gStyle->SetFrameLineColor(kWhite);
  TH2D* hist_denom = get_hist_2D(("Hist_output_"+cut1+".root"), directory1, hist_name1);
- //hist_denom->Rebin2D(4,5);
+ hist_denom->Rebin2D(4,4);
  hist_denom->Scale(1./hist_denom->Integral());
  TH2D* hist = get_hist_2D(("Hist_output_"+cut2+".root"), directory2, hist_name2);
- //hist->Rebin2D(4,5);
+ hist->Rebin2D(4,4);
  hist->Scale(1./hist->Integral());
  string name = "can_ratio_"+hist_name1+"_"+hist_name2+"_"+cut1+"_"+cut2+"_"+directory1+"_"+directory2;
  if(zoom) { name = "can_ratio_zoom_"+hist_name1+"_"+hist_name2+"_"+cut1+"_"+cut2+"_"+directory1+"_"+directory2; }
@@ -652,10 +654,18 @@ void Get2D_Ratio(string hist_name1, string hist_name2, string cut1, string cut2,
  if(hist_name1.find("HEM") != std::string::npos) { name += cut1+", postHEM"; }
   else { name += cut1+", preHEM"; }
  */
- name = directory2+"/"+directory1;
+ name = cut2+" "+directory2+"/"+cut1+" "+directory1;
  l.DrawLatex(0.42,.94,name.c_str());
  gPad->RedrawAxis();
  gPad->RedrawAxis("G");
+ TF1* left_para = new TF1("left para","700.*x*x+100.",0.,TMath::Pi());
+ left_para->SetNpx(10000);
+ left_para->SetLineWidth(2);
+ left_para->Draw("SAMES");
+ TF1* right_para = new TF1("right para","175.*(x-TMath::Pi())*(x-TMath::Pi())+75.",0.,TMath::Pi());
+ right_para->SetNpx(10000);
+ right_para->SetLineWidth(2);
+ right_para->Draw("SAMES");
  TFile* output = new TFile(("Hist_output_"+cut1+".root").c_str(),"UPDATE");
  can->Write();
  output->Close();
@@ -1063,7 +1073,8 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
 
  //Get1D_Ratio("met_Hist","PreSelection","HEM","MET_2018",true);
  //Get1D_Ratio("met_Hist","PreSelection","met_Hist_HEM","MET_2018",false);
- Get2D_Plot("dphiCMI_v_PTCM_Hist",directories_2D,inFiles,cuts,trigger);
+ 
+ //Get2D_Plot("dphiCMI_v_PTCM_Hist",directories_2D,inFiles,cuts,trigger);
  //Get2D_Plot("dphiCMI_v_Mperp_Hist",directories_2D,inFiles,cuts,trigger);
  //Get2D_Plot("dphiCMI_v_RISR_Hist",directories_2D,inFiles,cuts,trigger);
  //Get2D_Plot("Mperp_v_PTCM_Hist",directories_2D,inFiles,cuts,trigger);
@@ -1151,6 +1162,7 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
  
  //2D Ratio 2017 Cleaning
  Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist","RISRG0.9","RISRG0.9","Bkg_2017","MET_2017",true);
+ Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist","PreSelection","PreSelection","Bkg_2017","MET_2017",true);
  
  //cout << "Eff of 15 GeV Jets in MET: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEME0.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral()/get_hist_2D("Hist_output_PreSelection.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral() << endl;
  //cout << "Eff of 20 GeV Jets in MET: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEM_Pt20E0.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral()/get_hist_2D("Hist_output_PreSelection.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral() << endl;
