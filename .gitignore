@@ -10,6 +10,7 @@ $PWD
 *.pcm
 *.pdf
 *.csv
+*.swp
 macros/LOG_HIST/
 macros/HIST/
 macros/Shell_HIST/

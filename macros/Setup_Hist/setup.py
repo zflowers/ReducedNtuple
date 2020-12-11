@@ -120,10 +120,10 @@ with open(path+"Setup_Hist/Hist.txt") as cut_handle:
                                 list_f.append(write_sh_sms(Cut,Dir,File,Tag))
                             else:
                                 #for num_line in os.listdir(input_path+Dir+"/NoHadd/"+File+"/"):
-                                for num_line in os.listdir(input_path+Dir+"/"+File+"/"):
-                                    Num = num_line.replace(File,'')
-                                    Num = Num.replace('.root','')
-                                    write_num_file(Cut,Dir,File,Tag,Num)
+                                #for num_line in os.listdir(input_path+Dir+"/"+File+"/"):
+                                    #Num = num_line.replace(File,'')
+                                    #Num = Num.replace('.root','')
+                                    #write_num_file(Cut,Dir,File,Tag,Num)
                                     #list_f.append(write_sh(Cut,Num,Dir,File,Tag))
                                 list_f.append(write_sh(Cut,Dir,File,Tag))
         list_f = list(dict.fromkeys(list_f))

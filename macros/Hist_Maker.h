@@ -19,10 +19,14 @@ class HistClass{
   TH2F* hist2f;
   TH1D* hist1d;
   TH2D* hist2d;
-  TH1F* HEM_hist1f;
-  TH2F* HEM_hist2f;
-  TH1D* HEM_hist1d;
-  TH2D* HEM_hist2d;
+  TH1F* preHEM_hist1f;
+  TH2F* preHEM_hist2f;
+  TH1D* preHEM_hist1d;
+  TH2D* preHEM_hist2d;
+  TH1F* postHEM_hist1f;
+  TH2F* postHEM_hist2f;
+  TH1D* postHEM_hist1d;
+  TH2D* postHEM_hist2d;
   KUAnalysis selector;
 
 };
@@ -33,10 +37,14 @@ HistClass::HistClass(){
   hist2f = NULL;
   hist1d = NULL;
   hist2d = NULL;
-  HEM_hist1f = NULL;
-  HEM_hist2f = NULL;
-  HEM_hist1d = NULL;
-  HEM_hist2d = NULL;
+  preHEM_hist1f = NULL;
+  preHEM_hist2f = NULL;
+  preHEM_hist1d = NULL;
+  preHEM_hist2d = NULL;
+  postHEM_hist1f = NULL;
+  postHEM_hist2f = NULL;
+  postHEM_hist1d = NULL;
+  postHEM_hist2d = NULL;
 
 }
 
@@ -46,10 +54,14 @@ HistClass::~HistClass(){
   if( hist2f ) delete hist2f;
   if( hist1d ) delete hist1d;
   if( hist2d ) delete hist2d;
-  if( HEM_hist1f ) delete HEM_hist1f;
-  if( HEM_hist2f ) delete HEM_hist2f;
-  if( HEM_hist1d ) delete HEM_hist1d;
-  if( HEM_hist2d ) delete HEM_hist2d;
+  if( preHEM_hist1f ) delete postHEM_hist1f;
+  if( preHEM_hist2f ) delete postHEM_hist2f;
+  if( preHEM_hist1d ) delete postHEM_hist1d;
+  if( preHEM_hist2d ) delete postHEM_hist2d;
+  if( preHEM_hist1f ) delete postHEM_hist1f;
+  if( preHEM_hist2f ) delete postHEM_hist2f;
+  if( preHEM_hist1d ) delete postHEM_hist1d;
+  if( preHEM_hist2d ) delete postHEM_hist2d;
 
 }
 
@@ -78,10 +90,14 @@ void HistClass::write_hist( string outFile, string Tag ){
   if( hist2f ) {cout << hist2f->GetName() << endl; hist2f->SetDirectory(0); hist2f->Write();}
   if( hist1d ) {cout << hist1d->GetName() << endl; hist1d->SetDirectory(0); hist1d->Write();}
   if( hist2d ) {cout << hist2d->GetName() << endl; hist2d->SetDirectory(0); hist2d->Write();}
-  if( HEM_hist1f ) {cout << HEM_hist1f->GetName() << endl; HEM_hist1f->SetDirectory(0); HEM_hist1f->Write();}
-  if( HEM_hist2f ) {cout << HEM_hist2f->GetName() << endl; HEM_hist2f->SetDirectory(0); HEM_hist2f->Write();}
-  if( HEM_hist1d ) {cout << HEM_hist1d->GetName() << endl; HEM_hist1d->SetDirectory(0); HEM_hist1d->Write();}
-  if( HEM_hist2d ) {cout << HEM_hist2d->GetName() << endl; HEM_hist2d->SetDirectory(0); HEM_hist2d->Write();}
+  if( preHEM_hist1f ) {cout << preHEM_hist1f->GetName() << endl; preHEM_hist1f->SetDirectory(0); preHEM_hist1f->Write();}
+  if( preHEM_hist2f ) {cout << preHEM_hist2f->GetName() << endl; preHEM_hist2f->SetDirectory(0); preHEM_hist2f->Write();}
+  if( preHEM_hist1d ) {cout << preHEM_hist1d->GetName() << endl; preHEM_hist1d->SetDirectory(0); preHEM_hist1d->Write();}
+  if( preHEM_hist2d ) {cout << preHEM_hist2d->GetName() << endl; preHEM_hist2d->SetDirectory(0); preHEM_hist2d->Write();}
+  if( postHEM_hist1f ) {cout << postHEM_hist1f->GetName() << endl; postHEM_hist1f->SetDirectory(0); postHEM_hist1f->Write();}
+  if( postHEM_hist2f ) {cout << postHEM_hist2f->GetName() << endl; postHEM_hist2f->SetDirectory(0); postHEM_hist2f->Write();}
+  if( postHEM_hist1d ) {cout << postHEM_hist1d->GetName() << endl; postHEM_hist1d->SetDirectory(0); postHEM_hist1d->Write();}
+  if( postHEM_hist2d ) {cout << postHEM_hist2d->GetName() << endl; postHEM_hist2d->SetDirectory(0); postHEM_hist2d->Write();}
   output->Close();
   delete output;
 }
@@ -201,8 +217,8 @@ void met_Hist::init_hist(TTree* tree){
  selector = KUAnalysis(m_Tree);
  hist1d = new TH1D("met_Hist","",100,300.,1000.);
  hist1d->GetXaxis()->SetTitle("MET");
- HEM_hist1d = new TH1D("met_Hist_HEM","",100,300.,1000.);
- HEM_hist1d->GetXaxis()->SetTitle("MET");
+ postHEM_hist1d = new TH1D("met_Hist_postHEM","",100,300.,1000.);
+ postHEM_hist1d->GetXaxis()->SetTitle("MET");
 }
 void met_Hist::fill_hist(Long64_t jentry){
  selector.Init(m_Tree);
@@ -211,7 +227,7 @@ void met_Hist::fill_hist(Long64_t jentry){
  selector.b_weight->GetEntry(jentry);
  selector.b_runnum->GetEntry(jentry);
  if(selector.runnum < 319077){ hist1d->Fill(selector.MET, lumi*selector.weight); }
- else { HEM_hist1d->Fill(selector.MET, lumi*selector.weight); }
+ else { postHEM_hist1d->Fill(selector.MET, lumi*selector.weight); }
 }
 
 class met_Phi_Hist:public HistClass, public Hist_Maker{
@@ -224,8 +240,8 @@ void met_Phi_Hist::init_hist(TTree* tree){
  selector = KUAnalysis(m_Tree);
  hist1d = new TH1D("met_Phi_Hist","",100,-TMath::Pi(),TMath::Pi());
  hist1d->GetXaxis()->SetTitle("MET_phi");
- HEM_hist1d = new TH1D("met_Phi_Hist_HEM","",100,-TMath::Pi(),TMath::Pi());
- HEM_hist1d->GetXaxis()->SetTitle("MET_phi");
+ postHEM_hist1d = new TH1D("met_Phi_Hist_postHEM","",100,-TMath::Pi(),TMath::Pi());
+ postHEM_hist1d->GetXaxis()->SetTitle("MET_phi");
 }
 void met_Phi_Hist::fill_hist(Long64_t jentry){
  selector.Init(m_Tree);
@@ -234,7 +250,7 @@ void met_Phi_Hist::fill_hist(Long64_t jentry){
  selector.b_weight->GetEntry(jentry);
  selector.b_runnum->GetEntry(jentry);
  if(selector.runnum < 319077) { hist1d->Fill(selector.MET_phi, lumi*selector.weight); }
- else {HEM_hist1d->Fill(selector.MET_phi, lumi*selector.weight); }
+ else {postHEM_hist1d->Fill(selector.MET_phi, lumi*selector.weight); }
 }
 
 class PTCM_Hist:public HistClass, public Hist_Maker{
@@ -247,8 +263,8 @@ void PTCM_Hist::init_hist(TTree* tree){
  selector = KUAnalysis(m_Tree);
  hist1d = new TH1D("PTCM_Hist","",100,0.,500.);
  hist1d->GetXaxis()->SetTitle("PTCM");
- HEM_hist1d = new TH1D("PTCM_Hist_HEM","",100,0.,500.);
- HEM_hist1d->GetXaxis()->SetTitle("PTCM");
+ postHEM_hist1d = new TH1D("PTCM_Hist_postHEM","",100,0.,500.);
+ postHEM_hist1d->GetXaxis()->SetTitle("PTCM");
 }
 void PTCM_Hist::fill_hist(Long64_t jentry){
  selector.Init(m_Tree);
@@ -257,7 +273,7 @@ void PTCM_Hist::fill_hist(Long64_t jentry){
  selector.b_weight->GetEntry(jentry);
  selector.b_runnum->GetEntry(jentry);
  if(selector.runnum < 319077) { hist1d->Fill(selector.PTCM, lumi*selector.weight); }
- else { HEM_hist1d->Fill(selector.PTCM, lumi*selector.weight); }
+ else { postHEM_hist1d->Fill(selector.PTCM, lumi*selector.weight); }
 }
 
 class dphiMET_V_Hist:public HistClass, public Hist_Maker{
@@ -270,8 +286,8 @@ void dphiMET_V_Hist::init_hist(TTree* tree){
  selector = KUAnalysis(m_Tree);
  hist1d = new TH1D("dphiMET_V_Hist","",100.,-6.5,6.5);
  hist1d->GetXaxis()->SetTitle("dphiMET_V");
- HEM_hist1d = new TH1D("dphiMET_V_Hist_HEM","",100.,-6.5,6.5);
- HEM_hist1d->GetXaxis()->SetTitle("dphiMET_V");
+ postHEM_hist1d = new TH1D("dphiMET_V_Hist_postHEM","",100.,-6.5,6.5);
+ postHEM_hist1d->GetXaxis()->SetTitle("dphiMET_V");
 }
 void dphiMET_V_Hist::fill_hist(Long64_t jentry){
  selector.Init(m_Tree);
@@ -280,7 +296,7 @@ void dphiMET_V_Hist::fill_hist(Long64_t jentry){
  selector.b_weight->GetEntry(jentry);
  selector.b_runnum->GetEntry(jentry);
  if(selector.runnum < 319077) { hist1d->Fill(selector.dphiMET_V, lumi*selector.weight); }
- else { HEM_hist1d->Fill(selector.dphiMET_V, lumi*selector.weight); }
+ else { postHEM_hist1d->Fill(selector.dphiMET_V, lumi*selector.weight); }
 }
 
 class ele_PT_Hist:public HistClass, public Hist_Maker{
@@ -293,8 +309,8 @@ void ele_PT_Hist::init_hist(TTree* tree){
  selector = KUAnalysis(m_Tree);
  hist1d = new TH1D("ele_PT_Hist","",50,0.,20.);
  hist1d->GetXaxis()->SetTitle("Electron PT");
- HEM_hist1d = new TH1D("ele_PT_Hist_HEM","",50,0.,20.);
- HEM_hist1d->GetXaxis()->SetTitle("Electron PT");
+ postHEM_hist1d = new TH1D("ele_PT_Hist_postHEM","",50,0.,20.);
+ postHEM_hist1d->GetXaxis()->SetTitle("Electron PT");
 }
 void ele_PT_Hist::fill_hist(Long64_t jentry){
  selector.Init(m_Tree);
@@ -312,7 +328,7 @@ void ele_PT_Hist::fill_hist(Long64_t jentry){
   if(abs(selector.PDGID_lep->at(i)) == 11)
   {
    if(selector.runnum < 319077) { hist1d->Fill(selector.PT_lep->at(i), lumi*selector.weight); }
-   else { HEM_hist1d->Fill(selector.PT_lep->at(i), lumi*selector.weight); }
+   else { postHEM_hist1d->Fill(selector.PT_lep->at(i), lumi*selector.weight); }
   }
   break;
  }
@@ -328,8 +344,8 @@ void mu_PT_Hist::init_hist(TTree* tree){
  selector = KUAnalysis(m_Tree);
  hist1d = new TH1D("mu_PT_Hist","",50,0.,20.);
  hist1d->GetXaxis()->SetTitle("Muon PT");
- HEM_hist1d = new TH1D("mu_PT_Hist_HEM","",50,0.,20.);
- HEM_hist1d->GetXaxis()->SetTitle("Muon PT");
+ postHEM_hist1d = new TH1D("mu_PT_Hist_postHEM","",50,0.,20.);
+ postHEM_hist1d->GetXaxis()->SetTitle("Muon PT");
 }
 void mu_PT_Hist::fill_hist(Long64_t jentry){
  selector.Init(m_Tree);
@@ -347,7 +363,7 @@ void mu_PT_Hist::fill_hist(Long64_t jentry){
   if(abs(selector.PDGID_lep->at(i)) == 13)
   {
    if(selector.runnum < 319077) { hist1d->Fill(selector.PT_lep->at(i), lumi*selector.weight); }
-   else { HEM_hist1d->Fill(selector.PT_lep->at(i), lumi*selector.weight); }
+   else { postHEM_hist1d->Fill(selector.PT_lep->at(i), lumi*selector.weight); }
   }
   break;
  }
@@ -363,8 +379,8 @@ void ele_Phi_Hist::init_hist(TTree* tree){
  selector = KUAnalysis(m_Tree);
  hist1d = new TH1D("ele_Phi_Hist","",100,-TMath::Pi(),TMath::Pi());
  hist1d->GetXaxis()->SetTitle("ele_Phi");
- HEM_hist1d = new TH1D("ele_Phi_Hist_HEM","",100,-TMath::Pi(),TMath::Pi());
- HEM_hist1d->GetXaxis()->SetTitle("ele_Phi");
+ postHEM_hist1d = new TH1D("ele_Phi_Hist_postHEM","",100,-TMath::Pi(),TMath::Pi());
+ postHEM_hist1d->GetXaxis()->SetTitle("ele_Phi");
 }
 void ele_Phi_Hist::fill_hist(Long64_t jentry){
  selector.Init(m_Tree);
@@ -383,7 +399,7 @@ void ele_Phi_Hist::fill_hist(Long64_t jentry){
   if(abs(selector.PDGID_lep->at(i)) == 11 && selector.ID_lep->at(i) >= 4 && selector.PT_lep->at(i)*selector.MiniIso_lep->at(i) < 5. && selector.SIP3D_lep->at(i) < 4.)
   {
    if(selector.runnum < 319077) { hist1d->Fill(selector.Phi_lep->at(i), lumi*selector.weight); }
-   else { HEM_hist1d->Fill(selector.Phi_lep->at(i), lumi*selector.weight); }
+   else { postHEM_hist1d->Fill(selector.Phi_lep->at(i), lumi*selector.weight); }
   }
   break;
  }
@@ -399,8 +415,8 @@ void mu_Phi_Hist::init_hist(TTree* tree){
  selector = KUAnalysis(m_Tree);
  hist1d = new TH1D("mu_Phi_Hist","",100,-TMath::Pi(),TMath::Pi());
  hist1d->GetXaxis()->SetTitle("mu_Phi");
- HEM_hist1d = new TH1D("mu_Phi_Hist_HEM","",100,-TMath::Pi(),TMath::Pi());
- HEM_hist1d->GetXaxis()->SetTitle("mu_Phi");
+ postHEM_hist1d = new TH1D("mu_Phi_Hist_postHEM","",100,-TMath::Pi(),TMath::Pi());
+ postHEM_hist1d->GetXaxis()->SetTitle("mu_Phi");
 }
 void mu_Phi_Hist::fill_hist(Long64_t jentry){
  selector.Init(m_Tree);
@@ -418,7 +434,7 @@ void mu_Phi_Hist::fill_hist(Long64_t jentry){
  {
   if(abs(selector.PDGID_lep->at(i)) == 13 && selector.ID_lep->at(i) >= 3 && selector.PT_lep->at(i)*selector.MiniIso_lep->at(i) < 5. && selector.SIP3D_lep->at(i) < 4.)
   if(selector.runnum < 319077) { hist1d->Fill(selector.Phi_lep->at(i), lumi*selector.weight); }
-  else { HEM_hist1d->Fill(selector.Phi_lep->at(i), lumi*selector.weight); }
+  else { postHEM_hist1d->Fill(selector.Phi_lep->at(i), lumi*selector.weight); }
   break;
  }
 }
@@ -433,8 +449,8 @@ void dphiMET_lep_Hist::init_hist(TTree* tree){
  selector = KUAnalysis(m_Tree);
  hist1d = new TH1D("dphiMET_lep_Hist","",100,-TMath::Pi(),TMath::Pi());
  hist1d->GetXaxis()->SetTitle("#Delta #phi_{MET,lep}");
- HEM_hist1d = new TH1D("dphiMET_lep_Hist_HEM","",100,-TMath::Pi(),TMath::Pi());
- HEM_hist1d->GetXaxis()->SetTitle("#Delta #phi_{MET,lep}");
+ postHEM_hist1d = new TH1D("dphiMET_lep_Hist_postHEM","",100,-TMath::Pi(),TMath::Pi());
+ postHEM_hist1d->GetXaxis()->SetTitle("#Delta #phi_{MET,lep}");
 }
 void dphiMET_lep_Hist::fill_hist(Long64_t jentry){
 //Option A: Load only the branches we need:
@@ -465,7 +481,7 @@ void dphiMET_lep_Hist::fill_hist(Long64_t jentry){
   MET.SetPtEtaPhi(selector.MET,0.,selector.MET_phi);
 
   if(selector.runnum < 319077) { hist1d->Fill(MET.DeltaPhi(lep.Vect()),lumi*selector.weight); }
-  else { HEM_hist1d->Fill(MET.DeltaPhi(lep.Vect()),lumi*selector.weight); }
+  else { postHEM_hist1d->Fill(MET.DeltaPhi(lep.Vect()),lumi*selector.weight); }
  }
 }
 
@@ -479,8 +495,8 @@ void dphiMET_ele_Hist::init_hist(TTree* tree){
  selector = KUAnalysis(m_Tree);
  hist1d = new TH1D("dphiMET_ele_Hist","",100,-TMath::Pi(),TMath::Pi());
  hist1d->GetXaxis()->SetTitle("#Delta #phi_{MET,ele}");
- HEM_hist1d = new TH1D("dphiMET_ele_Hist_HEM","",100,-TMath::Pi(),TMath::Pi());
- HEM_hist1d->GetXaxis()->SetTitle("#Delta #phi_{MET,ele}");
+ postHEM_hist1d = new TH1D("dphiMET_ele_Hist_postHEM","",100,-TMath::Pi(),TMath::Pi());
+ postHEM_hist1d->GetXaxis()->SetTitle("#Delta #phi_{MET,ele}");
 }
 void dphiMET_ele_Hist::fill_hist(Long64_t jentry){
 //Option A: Load only the branches we need:
@@ -513,7 +529,7 @@ void dphiMET_ele_Hist::fill_hist(Long64_t jentry){
   {
    lep.SetPtEtaPhiM(selector.PT_lep->at(i),selector.Eta_lep->at(i),selector.Phi_lep->at(i),selector.M_lep->at(i));
    if(selector.runnum < 319077) { hist1d->Fill(MET.DeltaPhi(lep.Vect()),lumi*selector.weight); }
-   else { HEM_hist1d->Fill(MET.DeltaPhi(lep.Vect()),lumi*selector.weight); }
+   else { postHEM_hist1d->Fill(MET.DeltaPhi(lep.Vect()),lumi*selector.weight); }
   }
   break;
  }
@@ -529,8 +545,8 @@ void dphiMET_mu_Hist::init_hist(TTree* tree){
  selector = KUAnalysis(m_Tree);
  hist1d = new TH1D("dphiMET_mu_Hist","",100,-TMath::Pi(),TMath::Pi());
  hist1d->GetXaxis()->SetTitle("#Delta #phi_{MET,ele}");
- HEM_hist1d = new TH1D("dphiMET_mu_Hist_HEM","",100,-TMath::Pi(),TMath::Pi());
- HEM_hist1d->GetXaxis()->SetTitle("#Delta #phi_{MET,ele}");
+ postHEM_hist1d = new TH1D("dphiMET_mu_Hist_postHEM","",100,-TMath::Pi(),TMath::Pi());
+ postHEM_hist1d->GetXaxis()->SetTitle("#Delta #phi_{MET,ele}");
 }
 void dphiMET_mu_Hist::fill_hist(Long64_t jentry){
 //Option A: Load only the branches we need:
@@ -563,7 +579,7 @@ void dphiMET_mu_Hist::fill_hist(Long64_t jentry){
   {
    lep.SetPtEtaPhiM(selector.PT_lep->at(i),selector.Eta_lep->at(i),selector.Phi_lep->at(i),selector.M_lep->at(i));
    if(selector.runnum < 319077) { hist1d->Fill(MET.DeltaPhi(lep.Vect()),lumi*selector.weight); }
-   else { HEM_hist1d->Fill(MET.DeltaPhi(lep.Vect()),lumi*selector.weight); }
+   else { postHEM_hist1d->Fill(MET.DeltaPhi(lep.Vect()),lumi*selector.weight); }
   }
   break;
  }
@@ -579,8 +595,8 @@ void dphiCMI_Hist::init_hist(TTree* tree){
  selector = KUAnalysis(m_Tree);
  hist1d = new TH1D("dphiCMI_Hist","",100,0.,TMath::Pi());
  hist1d->GetXaxis()->SetTitle("dphiCMI");
- HEM_hist1d = new TH1D("dphiCMI_Hist_HEM","",100,0.,TMath::Pi());
- HEM_hist1d->GetXaxis()->SetTitle("dphiCMI");
+ postHEM_hist1d = new TH1D("dphiCMI_Hist_postHEM","",100,0.,TMath::Pi());
+ postHEM_hist1d->GetXaxis()->SetTitle("dphiCMI");
 }
 void dphiCMI_Hist::fill_hist(Long64_t jentry){
 //Option A: Load only the branches we need:
@@ -595,7 +611,7 @@ void dphiCMI_Hist::fill_hist(Long64_t jentry){
  m_Tree->GetEntry(jentry);
 //
  if(selector.runnum < 319077) { hist1d->Fill(selector.dphiCMI,lumi*selector.weight); }
- else { HEM_hist1d->Fill(selector.dphiCMI,lumi*selector.weight); }
+ else { postHEM_hist1d->Fill(selector.dphiCMI,lumi*selector.weight); }
 }
 
 class dphiCMI_v_Mperp_Hist:public HistClass, public Hist_Maker{
@@ -609,9 +625,9 @@ void dphiCMI_v_Mperp_Hist::init_hist(TTree* tree){
  hist2d = new TH2D("dphiCMI_v_Mperp_Hist","",50,0.,TMath::Pi(),50,0.,50.);
  hist2d->GetXaxis()->SetTitle("dphiCMI");
  hist2d->GetYaxis()->SetTitle("Mperp");
- HEM_hist2d = new TH2D("dphiCMI_v_Mperp_Hist_HEM","",50,0.,TMath::Pi(),50,0.,50.);
- HEM_hist2d->GetXaxis()->SetTitle("dphiCMI");
- HEM_hist2d->GetYaxis()->SetTitle("Mperp");
+ postHEM_hist2d = new TH2D("dphiCMI_v_Mperp_Hist_postHEM","",50,0.,TMath::Pi(),50,0.,50.);
+ postHEM_hist2d->GetXaxis()->SetTitle("dphiCMI");
+ postHEM_hist2d->GetYaxis()->SetTitle("Mperp");
 }
 void dphiCMI_v_Mperp_Hist::fill_hist(Long64_t jentry){
 //Option A: Load only the branches we need:
@@ -627,7 +643,7 @@ void dphiCMI_v_Mperp_Hist::fill_hist(Long64_t jentry){
  m_Tree->GetEntry(jentry);
 //
  if(selector.runnum < 319077) { hist2d->Fill(selector.dphiCMI,selector.Mperp,lumi*selector.weight); }
- else { HEM_hist2d->Fill(selector.dphiCMI,selector.Mperp,lumi*selector.weight); }
+ else { postHEM_hist2d->Fill(selector.dphiCMI,selector.Mperp,lumi*selector.weight); }
 }
 
 class dphiCMI_v_RISR_Hist:public HistClass, public Hist_Maker{
@@ -641,9 +657,9 @@ void dphiCMI_v_RISR_Hist::init_hist(TTree* tree){
  hist2d = new TH2D("dphiCMI_v_RISR_Hist","",50,0.,TMath::Pi(),50,0.6,1.1);
  hist2d->GetXaxis()->SetTitle("dphiCMI");
  hist2d->GetYaxis()->SetTitle("RISR");
- HEM_hist2d = new TH2D("dphiCMI_v_RISR_Hist_HEM","",50,0.,TMath::Pi(),50,0.6,1.1);
- HEM_hist2d->GetXaxis()->SetTitle("dphiCMI");
- HEM_hist2d->GetYaxis()->SetTitle("RISR");
+ postHEM_hist2d = new TH2D("dphiCMI_v_RISR_Hist_postHEM","",50,0.,TMath::Pi(),50,0.6,1.1);
+ postHEM_hist2d->GetXaxis()->SetTitle("dphiCMI");
+ postHEM_hist2d->GetYaxis()->SetTitle("RISR");
 }
 void dphiCMI_v_RISR_Hist::fill_hist(Long64_t jentry){
 //Option A: Load only the branches we need:
@@ -659,7 +675,7 @@ void dphiCMI_v_RISR_Hist::fill_hist(Long64_t jentry){
  m_Tree->GetEntry(jentry);
 //
  if(selector.runnum < 319077) { hist2d->Fill(selector.dphiCMI,selector.RISR,lumi*selector.weight); }
- else { HEM_hist2d->Fill(selector.dphiCMI,selector.RISR,lumi*selector.weight); }
+ else { postHEM_hist2d->Fill(selector.dphiCMI,selector.RISR,lumi*selector.weight); }
 }
 
 class Mperp_v_RISR_Hist:public HistClass, public Hist_Maker{
@@ -673,9 +689,9 @@ void Mperp_v_RISR_Hist::init_hist(TTree* tree){
  hist2d = new TH2D("Mperp_v_RISR_Hist","",50,0.,60,50,0.6,1.1);
  hist2d->GetXaxis()->SetTitle("M_{#perp}");
  hist2d->GetYaxis()->SetTitle("RISR");
- HEM_hist2d = new TH2D("Mperp_v_RISR_Hist_HEM","",50,0.,60,50,0.6,1.1);
- HEM_hist2d->GetXaxis()->SetTitle("M_{#perp}");
- HEM_hist2d->GetYaxis()->SetTitle("RISR");
+ postHEM_hist2d = new TH2D("Mperp_v_RISR_Hist_postHEM","",50,0.,60,50,0.6,1.1);
+ postHEM_hist2d->GetXaxis()->SetTitle("M_{#perp}");
+ postHEM_hist2d->GetYaxis()->SetTitle("RISR");
 }
 void Mperp_v_RISR_Hist::fill_hist(Long64_t jentry){
 //Option A: Load only the branches we need:
@@ -691,7 +707,7 @@ void Mperp_v_RISR_Hist::fill_hist(Long64_t jentry){
  m_Tree->GetEntry(jentry);
 //
  if(selector.runnum < 319077) { hist2d->Fill(selector.Mperp,selector.RISR,lumi*selector.weight); }
- else { HEM_hist2d->Fill(selector.Mperp,selector.RISR,lumi*selector.weight); }
+ else { postHEM_hist2d->Fill(selector.Mperp,selector.RISR,lumi*selector.weight); }
 }
 
 class Mperp_v_PTCM_Hist:public HistClass, public Hist_Maker{
@@ -705,9 +721,9 @@ void Mperp_v_PTCM_Hist::init_hist(TTree* tree){
  hist2d = new TH2D("Mperp_v_PTCM_Hist","",50,0.,50.,50,0.,500.);
  hist2d->GetXaxis()->SetTitle("Mperp");
  hist2d->GetYaxis()->SetTitle("PTCM");
- HEM_hist2d = new TH2D("Mperp_v_PTCM_Hist_HEM","",50,0.,50.,50,0.,500.);
- HEM_hist2d->GetXaxis()->SetTitle("Mperp");
- HEM_hist2d->GetYaxis()->SetTitle("PTCM");
+ postHEM_hist2d = new TH2D("Mperp_v_PTCM_Hist_postHEM","",50,0.,50.,50,0.,500.);
+ postHEM_hist2d->GetXaxis()->SetTitle("Mperp");
+ postHEM_hist2d->GetYaxis()->SetTitle("PTCM");
 }
 void Mperp_v_PTCM_Hist::fill_hist(Long64_t jentry){
 //Option A: Load only the branches we need:
@@ -723,7 +739,7 @@ void Mperp_v_PTCM_Hist::fill_hist(Long64_t jentry){
  m_Tree->GetEntry(jentry);
 //
  if(selector.runnum < 319077) { hist2d->Fill(selector.Mperp,selector.PTCM,lumi*selector.weight); }
- else { HEM_hist2d->Fill(selector.Mperp,selector.PTCM,lumi*selector.weight); }
+ else { postHEM_hist2d->Fill(selector.Mperp,selector.PTCM,lumi*selector.weight); }
 }
 
 class RISR_v_PTCM_Hist:public HistClass, public Hist_Maker{
@@ -737,9 +753,9 @@ void RISR_v_PTCM_Hist::init_hist(TTree* tree){
  hist2d = new TH2D("RISR_v_PTCM_Hist","",50,0.6,1.1,50,0.,500.);
  hist2d->GetXaxis()->SetTitle("RISR");
  hist2d->GetYaxis()->SetTitle("PTCM");
- HEM_hist2d = new TH2D("RISR_v_PTCM_Hist_HEM","",50,0.6,1.1,50,0.,500.);
- HEM_hist2d->GetXaxis()->SetTitle("RISR");
- HEM_hist2d->GetYaxis()->SetTitle("PTCM");
+ postHEM_hist2d = new TH2D("RISR_v_PTCM_Hist_postHEM","",50,0.6,1.1,50,0.,500.);
+ postHEM_hist2d->GetXaxis()->SetTitle("RISR");
+ postHEM_hist2d->GetYaxis()->SetTitle("PTCM");
 }
 void RISR_v_PTCM_Hist::fill_hist(Long64_t jentry){
 //Option A: Load only the branches we need:
@@ -755,7 +771,7 @@ void RISR_v_PTCM_Hist::fill_hist(Long64_t jentry){
  m_Tree->GetEntry(jentry);
 //
  if(selector.runnum < 319077) { hist2d->Fill(selector.RISR,selector.PTCM,lumi*selector.weight); }
- else { HEM_hist2d->Fill(selector.RISR,selector.PTCM,lumi*selector.weight); }
+ else { postHEM_hist2d->Fill(selector.RISR,selector.PTCM,lumi*selector.weight); }
 }
 
 class dphiCMI_v_PTCM_Hist:public HistClass, public Hist_Maker{
@@ -769,9 +785,12 @@ void dphiCMI_v_PTCM_Hist::init_hist(TTree* tree){
  hist2d = new TH2D("dphiCMI_v_PTCM_Hist","",64,0.,TMath::Pi(),80,0.,500.);
  hist2d->GetXaxis()->SetTitle("#Delta #phi_{CM,I}");
  hist2d->GetYaxis()->SetTitle("p_{T}^{CM} [GeV]");
- HEM_hist2d = new TH2D("dphiCMI_v_PTCM_Hist_HEM","",64,0.,TMath::Pi(),80,0.,500.);
- HEM_hist2d->GetXaxis()->SetTitle("#Delta #phi_{CM,I}");
- HEM_hist2d->GetYaxis()->SetTitle("p_{T}^{CM} [GeV]");
+ preHEM_hist2d = new TH2D("dphiCMI_v_PTCM_Hist_preHEM","",64,0.,TMath::Pi(),80,0.,500.);
+ preHEM_hist2d->GetXaxis()->SetTitle("#Delta #phi_{CM,I}");
+ preHEM_hist2d->GetYaxis()->SetTitle("p_{T}^{CM} [GeV]");
+ postHEM_hist2d = new TH2D("dphiCMI_v_PTCM_Hist_postHEM","",64,0.,TMath::Pi(),80,0.,500.);
+ postHEM_hist2d->GetXaxis()->SetTitle("#Delta #phi_{CM,I}");
+ postHEM_hist2d->GetYaxis()->SetTitle("p_{T}^{CM} [GeV]");
 }
 void dphiCMI_v_PTCM_Hist::fill_hist(Long64_t jentry){
 //Option A: Load only the branches we need:
@@ -786,8 +805,9 @@ void dphiCMI_v_PTCM_Hist::fill_hist(Long64_t jentry){
 //
  m_Tree->GetEntry(jentry);
 //
- if(selector.runnum < 319077) { hist2d->Fill(selector.dphiCMI,selector.PTCM,lumi*selector.weight); }
- else { HEM_hist2d->Fill(selector.dphiCMI,selector.PTCM,lumi*selector.weight); }
+ hist2d->Fill(selector.dphiCMI,selector.PTCM,lumi*selector.weight);
+ if(selector.runnum < 319077) { preHEM_hist2d->Fill(selector.dphiCMI,selector.PTCM,lumi*selector.weight); }
+ else { postHEM_hist2d->Fill(selector.dphiCMI,selector.PTCM,lumi*selector.weight); }
 }
 
 class dphiCMI_v_Njet_S_Hist:public HistClass, public Hist_Maker{
@@ -801,9 +821,9 @@ void dphiCMI_v_Njet_S_Hist::init_hist(TTree* tree){
  hist2d = new TH2D("dphiCMI_v_Njet_S_Hist","",50,0.,TMath::Pi(),9,0,10);
  hist2d->GetXaxis()->SetTitle("dphiCMI");
  hist2d->GetYaxis()->SetTitle("Njet_S");
- HEM_hist2d = new TH2D("dphiCMI_v_Njet_S_Hist_HEM","",50,0.,TMath::Pi(),9,0,10);
- HEM_hist2d->GetXaxis()->SetTitle("dphiCMI");
- HEM_hist2d->GetYaxis()->SetTitle("Njet_S");
+ postHEM_hist2d = new TH2D("dphiCMI_v_Njet_S_Hist_postHEM","",50,0.,TMath::Pi(),9,0,10);
+ postHEM_hist2d->GetXaxis()->SetTitle("dphiCMI");
+ postHEM_hist2d->GetYaxis()->SetTitle("Njet_S");
 }
 void dphiCMI_v_Njet_S_Hist::fill_hist(Long64_t jentry){
 //Option A: Load only the branches we need:
@@ -819,7 +839,7 @@ void dphiCMI_v_Njet_S_Hist::fill_hist(Long64_t jentry){
  m_Tree->GetEntry(jentry);
 //
  if(selector.runnum < 319077) { hist2d->Fill(selector.dphiCMI,selector.Njet_S,lumi*selector.weight); }
- else { HEM_hist2d->Fill(selector.dphiCMI,selector.Njet_S,lumi*selector.weight); }
+ else { postHEM_hist2d->Fill(selector.dphiCMI,selector.Njet_S,lumi*selector.weight); }
 }
 
 class PTCM_v_Njet_S_Hist:public HistClass, public Hist_Maker{
@@ -861,9 +881,9 @@ void dphiCMI_v_dphiMET_V_Hist::init_hist(TTree* tree){
  hist2d = new TH2D("dphiCMI_v_dphiMET_V_Hist","",50,0.,TMath::Pi(),50,-TMath::Pi(),TMath::Pi());
  hist2d->GetXaxis()->SetTitle("dphiCMI");
  hist2d->GetYaxis()->SetTitle("dphiMET_V");
- HEM_hist2d = new TH2D("dphiCMI_v_dphiMET_V_Hist_HEM","",50,0.,TMath::Pi(),50,-TMath::Pi(),TMath::Pi());
- HEM_hist2d->GetXaxis()->SetTitle("dphiCMI");
- HEM_hist2d->GetYaxis()->SetTitle("dphiMET_V");
+ postHEM_hist2d = new TH2D("dphiCMI_v_dphiMET_V_Hist_postHEM","",50,0.,TMath::Pi(),50,-TMath::Pi(),TMath::Pi());
+ postHEM_hist2d->GetXaxis()->SetTitle("dphiCMI");
+ postHEM_hist2d->GetYaxis()->SetTitle("dphiMET_V");
 }
 void dphiCMI_v_dphiMET_V_Hist::fill_hist(Long64_t jentry){
 //Option A: Load only the branches we need:
@@ -879,7 +899,7 @@ void dphiCMI_v_dphiMET_V_Hist::fill_hist(Long64_t jentry){
  m_Tree->GetEntry(jentry);
 //
  if(selector.runnum < 319077) { hist2d->Fill(selector.dphiCMI,selector.dphiMET_V,lumi*selector.weight); }
- else { HEM_hist2d->Fill(selector.dphiCMI,selector.dphiMET_V,lumi*selector.weight); }
+ else { postHEM_hist2d->Fill(selector.dphiCMI,selector.dphiMET_V,lumi*selector.weight); }
 }
 
 class dphiMET_V_v_RISR_Hist:public HistClass, public Hist_Maker{
@@ -893,9 +913,9 @@ void dphiMET_V_v_RISR_Hist::init_hist(TTree* tree){
  hist2d = new TH2D("dphiMET_V_v_RISR_Hist","",50,-TMath::Pi(),TMath::Pi(),50,0.6,1.1);
  hist2d->GetXaxis()->SetTitle("dphiMET_V");
  hist2d->GetYaxis()->SetTitle("RISR");
- HEM_hist2d = new TH2D("dphiMET_V_v_RISR_Hist_HEM","",50,-TMath::Pi(),TMath::Pi(),50,0.6,1.1);
- HEM_hist2d->GetXaxis()->SetTitle("dphiMET_V");
- HEM_hist2d->GetYaxis()->SetTitle("RISR");
+ postHEM_hist2d = new TH2D("dphiMET_V_v_RISR_Hist_postHEM","",50,-TMath::Pi(),TMath::Pi(),50,0.6,1.1);
+ postHEM_hist2d->GetXaxis()->SetTitle("dphiMET_V");
+ postHEM_hist2d->GetYaxis()->SetTitle("RISR");
 }
 void dphiMET_V_v_RISR_Hist::fill_hist(Long64_t jentry){
 //Option A: Load only the branches we need:
@@ -911,7 +931,7 @@ void dphiMET_V_v_RISR_Hist::fill_hist(Long64_t jentry){
  m_Tree->GetEntry(jentry);
 //
  if(selector.runnum < 319077) { hist2d->Fill(selector.dphiMET_V,selector.RISR,lumi*selector.weight); }
- else { HEM_hist2d->Fill(selector.dphiMET_V,selector.RISR,lumi*selector.weight); }
+ else { postHEM_hist2d->Fill(selector.dphiMET_V,selector.RISR,lumi*selector.weight); }
 }
 
 class Mperp_v_dphiMET_V_Hist:public HistClass, public Hist_Maker{
@@ -925,9 +945,9 @@ void Mperp_v_dphiMET_V_Hist::init_hist(TTree* tree){
  hist2d = new TH2D("Mperp_v_dphiMET_V_Hist","",50,0.,50.,50,-TMath::Pi(),TMath::Pi());
  hist2d->GetXaxis()->SetTitle("Mperp");
  hist2d->GetYaxis()->SetTitle("dphiMET_V");
- HEM_hist2d = new TH2D("Mperp_v_dphiMET_V_Hist_HEM","",50,0.,50.,50,-TMath::Pi(),TMath::Pi());
- HEM_hist2d->GetXaxis()->SetTitle("Mperp");
- HEM_hist2d->GetYaxis()->SetTitle("dphiMET_V");
+ postHEM_hist2d = new TH2D("Mperp_v_dphiMET_V_Hist_postHEM","",50,0.,50.,50,-TMath::Pi(),TMath::Pi());
+ postHEM_hist2d->GetXaxis()->SetTitle("Mperp");
+ postHEM_hist2d->GetYaxis()->SetTitle("dphiMET_V");
 }
 void Mperp_v_dphiMET_V_Hist::fill_hist(Long64_t jentry){
 //Option A: Load only the branches we need:
@@ -943,7 +963,7 @@ void Mperp_v_dphiMET_V_Hist::fill_hist(Long64_t jentry){
  m_Tree->GetEntry(jentry);
 //
  if(selector.runnum < 319077) { hist2d->Fill(selector.Mperp,selector.dphiMET_V,lumi*selector.weight); }
- else { HEM_hist2d->Fill(selector.Mperp,selector.dphiMET_V,lumi*selector.weight); }
+ else { postHEM_hist2d->Fill(selector.Mperp,selector.dphiMET_V,lumi*selector.weight); }
 }
 
 class dphiMET_V_v_PTCM_Hist:public HistClass, public Hist_Maker{
@@ -957,9 +977,9 @@ void dphiMET_V_v_PTCM_Hist::init_hist(TTree* tree){
  hist2d = new TH2D("dphiMET_V_v_PTCM_Hist","",50,-TMath::Pi(),TMath::Pi(),50,0.,500.);
  hist2d->GetXaxis()->SetTitle("dphiMET_V");
  hist2d->GetYaxis()->SetTitle("PTCM");
- HEM_hist2d = new TH2D("dphiMET_V_v_PTCM_Hist_HEM","",50,-TMath::Pi(),TMath::Pi(),50,0.,500.);
- HEM_hist2d->GetXaxis()->SetTitle("dphiMET_V");
- HEM_hist2d->GetYaxis()->SetTitle("PTCM");
+ postHEM_hist2d = new TH2D("dphiMET_V_v_PTCM_Hist_postHEM","",50,-TMath::Pi(),TMath::Pi(),50,0.,500.);
+ postHEM_hist2d->GetXaxis()->SetTitle("dphiMET_V");
+ postHEM_hist2d->GetYaxis()->SetTitle("PTCM");
 }
 void dphiMET_V_v_PTCM_Hist::fill_hist(Long64_t jentry){
 //Option A: Load only the branches we need:
@@ -975,7 +995,7 @@ void dphiMET_V_v_PTCM_Hist::fill_hist(Long64_t jentry){
  m_Tree->GetEntry(jentry);
 //
  if(selector.runnum < 319077) { hist2d->Fill(selector.dphiMET_V,selector.PTCM,lumi*selector.weight); }
- else { HEM_hist2d->Fill(selector.dphiMET_V,selector.PTCM,lumi*selector.weight); }
+ else { postHEM_hist2d->Fill(selector.dphiMET_V,selector.PTCM,lumi*selector.weight); }
 }
 
 class jet_Phi_Hist:public HistClass, public Hist_Maker{
@@ -988,8 +1008,8 @@ void jet_Phi_Hist::init_hist(TTree* tree){
  selector = KUAnalysis(m_Tree);
  hist1d = new TH1D("jet_Phi_Hist","",100,-TMath::Pi(),TMath::Pi());
  hist1d->GetXaxis()->SetTitle("jet_Phi");
- HEM_hist1d = new TH1D("jet_Phi_Hist_HEM","",100,-TMath::Pi(),TMath::Pi());
- HEM_hist1d->GetXaxis()->SetTitle("jet_Phi");
+ postHEM_hist1d = new TH1D("jet_Phi_Hist_postHEM","",100,-TMath::Pi(),TMath::Pi());
+ postHEM_hist1d->GetXaxis()->SetTitle("jet_Phi");
 }
 void jet_Phi_Hist::fill_hist(Long64_t jentry){
  selector.Init(m_Tree);
@@ -1001,7 +1021,7 @@ void jet_Phi_Hist::fill_hist(Long64_t jentry){
  for(int i = 0; i < selector.Njet; i++)
  {
   if(selector.runnum < 319077) { hist1d->Fill(selector.Phi_jet->at(i), lumi*selector.weight); }
-  else { HEM_hist1d->Fill(selector.Phi_jet->at(i), lumi*selector.weight); }
+  else { postHEM_hist1d->Fill(selector.Phi_jet->at(i), lumi*selector.weight); }
  }
 }
 

@@ -61,17 +61,26 @@ TGraph* Get_Graph_From_Func(double x_min, double x_max, TF1* Func)
  return gr;
 }
 
-TH2F* get_hist_TreeDraw_2D(string fname, string x, string y, string cut, int BinsX, double xmin, double xmax, int BinsY, double ymin, double ymax, string tree_name)
+TH2F* get_hist_TreeDraw_2D(string fname, string x, string y, string cut, string tag, int BinsX, double xmin, double xmax, int BinsY, double ymin, double ymax, string tree_name)
 {
- TH2F* hist = new TH2F((x+"_"+y+"_Hist").c_str(),"",BinsX,xmin,xmax,BinsY,ymin,ymax);
+ //TH2F* hist = new TH2F((x+"_"+y+tag+"_Hist").c_str(),"",BinsX,xmin,xmax,BinsY,ymin,ymax);
+ TH2F* hist = NULL;
  TFile *f = TFile::Open(fname.c_str(), "READ");
  if(!f || f->IsZombie())
  {
      cout << "Unable to open " << fname << " for reading..." << endl;
      return hist;
  }
+ TCanvas* can = new TCanvas(tag.c_str(),"",750,600);
+ can->cd();
  TTree* tree=(TTree*)f->Get(tree_name.c_str());
- tree.Draw((x+":"+y>>(x+"_"+y+"_Hist")).c_str(),cut,"goff");
+ //tree->Draw((x+":"+y+">>"+x+"_"+y+tag+"_Hist("+std::to_string(BinsX)+","+std::to_string(xmin)+","+std::to_string(xmax)+","+std::to_string(BinsY)+","+std::to_string(ymin)+","+std::to_string(ymax)+")").c_str(),cut.c_str(),"");
+ tree->Draw("PTCM:dphiCMI>>h(64,0.,3.14,80,0.,500.)","weight*(PTISR>200. && RISR>0.5 && EventFilter==1 && METtrigger==1 && MET>175. && TMath::Abs(dphiMET_V)<(3.14/2.) && RISR<1.)","COLZ"); 
+ //hist = (TH2F*)gDirectory->Get((x+"_"+y+tag+"_Hist").c_str());
+ hist = (TH2F*)gDirectory->Get("h");
+ //hist->Draw("COLZ");
+ can->SaveAs((tag+".pdf").c_str()); 
+ delete can;
  return hist;
 }
 
@@ -157,6 +166,22 @@ TH2D* get_hist_2D(string fname, string dir_name, string hist_name)
  if(folder == NULL) return h;
  folder->cd();
  folder->GetObject(hist_name.c_str(),h);
+ if(strcmp(h->GetXaxis()->GetTitle(),"dphiCMI") == 0) {h->GetXaxis()->SetTitle("#Delta #phi_{CM,I}");}
+ if(strcmp(h->GetYaxis()->GetTitle(),"PTCM") == 0) {h->GetYaxis()->SetTitle("p_{T}^{CM} [GeV]");}
+ return h;
+}
+
+TH2D* get_hist_2D(string fname, string hist_name)
+{
+ TH2D* h = nullptr;
+ TKey *key;
+ TFile *f = TFile::Open(fname.c_str(), "READ");
+ if(!f || f->IsZombie())
+ {
+  cout << "Unable to open " << fname << " for reading..." << endl;
+  return h;
+ }
+ h = (TH2D*)f->Get(hist_name.c_str());
  if(strcmp(h->GetXaxis()->GetTitle(),"dphiCMI") == 0) {h->GetXaxis()->SetTitle("#Delta #phi_{CM,I}");}
  if(strcmp(h->GetYaxis()->GetTitle(),"PTCM") == 0) {h->GetYaxis()->SetTitle("p_{T}^{CM} [GeV]");}
  return h;
@@ -615,7 +640,7 @@ void Get2D_Ratio(string hist_name, string cut1, string cut2, string directory){
  delete can;
 }
 
-void Get2D_Ratio(TH2F* hist_denom, TH2F* hist, string cut1, string cut2, string directory1, string directory2, bool zoom){
+void Get2D_Ratio(TH2D* hist_denom, TH2D* hist, string cut1, string cut2, string directory1, string directory2, bool zoom){
  gStyle->SetOptStat(0);
  gStyle->SetOptTitle(0);
  //gStyle->SetFrameFillColor(kBlack);
@@ -708,8 +733,30 @@ void Get2D_Ratio(TH2F* hist_denom, TH2F* hist, string cut1, string cut2, string 
  gr_right_para->SetMarkerSize(0.4);
  gr_right_para->SetMarkerStyle(20.);
  gr_right_para->Draw("P");
- TFile* output = new TFile(("Hist_output_"+cut1+".root").c_str(),"UPDATE");
+ TFile* output = new TFile("Ratios.root","UPDATE");
  can->Write();
+/*
+ if(!(output->cd(directory1.c_str())))
+ {  
+  output->mkdir(directory1.c_str());
+  output->cd(directory1.c_str());
+ }
+ else
+ {
+  output->cd(directory1.c_str());
+ }
+ hist_denom->Write();
+ if(!(output->cd(directory2.c_str())))
+ {  
+  output->mkdir(directory2.c_str());
+  output->cd(directory2.c_str());
+ }
+ else
+ {
+  output->cd(directory2.c_str());
+ }
+ hist->Write();
+*/
  output->Close();
  delete output;
  delete can;
@@ -1310,10 +1357,24 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
  //cout << "Eff of 20 GeV Jets in MET: " << get_hist_2D("Hist_output_Clean-HEM-EventFlag_JetInHEM_Pt20E0.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral()/get_hist_2D("Hist_output_Clean.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral() << endl;
  //cout << "Eff of 20 GeV Jets in Bkg: " << get_hist_2D("Hist_output_Clean-HEM-EventFlag_JetInHEM_Pt20E0.root","Bkg_2018","dphiCMI_v_PTCM_Hist")->Integral()/get_hist_2D("Hist_output_Clean.root","Bkg_2018","dphiCMI_v_PTCM_Hist")->Integral() << endl;
 
- TCut PreSelection = "weight*(PTISR>200. && RISR>0.5 && EventFilter==1 && METtrigger==1 && MET>175. && fabs(dphiMET_V)<TMath::Pi()/2. && RISR<1.)";
- TH2F* dphiCMI_v_PTCM_MET_2017 = get_hist_TreeDraw_2D("MET_2017.root",dphiCMI,PTCM,PreSelection,64,0.,TMath::Pi(),80,0.,500.,"KUAnalysis");
- TH2F* dphiCMI_v_PTCM_Bkg_2017 = get_hist_TreeDraw_2D("Bkg_2017.root",dphiCMI,PTCM,PreSelection,64,0.,TMath::Pi(),80,0.,500.,"KUAnalysis");
- Get2D_Ratio(dphiCMI_v_PTCM_Bkg_2017,dphiCMI_v_PTCM_MET_2017,"PreSelection","PreSelection","Bkg_2017","MET_2017",true);
+ //string PreSelection = "weight*(PTISR>200. && RISR>0.5 && EventFilter==1 && METtrigger==1 && TMath::Abs(dphiMET_V)<3.14/2. && MET>175. && RISR<1.)";
+ //TH2F* dphiCMI_v_PTCM_MET_2016 = get_hist_TreeDraw_2D("/stash/user/zflowers/NTUPLES/Processing/Summer16_102X_Data_MET/MET_2016.root","dphiCMI","PTCM",PreSelection,"MET_2016",64,0.,TMath::Pi(),80,0.,500.,"KUAnalysis");
+ //TH2F* dphiCMI_v_PTCM_Bkg_2016 = get_hist_TreeDraw_2D("/stash/user/zflowers/NTUPLES/Processing/Summer16_102X/Bkg_2016.root","dphiCMI","PTCM",PreSelection,"Bkg_2016",64,0.,TMath::Pi(),80,0.,500.,"KUAnalysis");
+ //Get2D_Ratio(dphiCMI_v_PTCM_Bkg_2016,dphiCMI_v_PTCM_MET_2016,"PreSelection","PreSelection","Bkg_2016","MET_2016",true);
+ //TH2F* dphiCMI_v_PTCM_MET_2017 = get_hist_TreeDraw_2D("/stash/user/zflowers/NTUPLES/Processing/Fall17_102X_Data_MET/MET_2017.root","dphiCMI","PTCM",PreSelection,"MET_2017",64,0.,3.14,80,0.,500.,"KUAnalysis");
+ //TH2F* dphiCMI_v_PTCM_Bkg_2017 = get_hist_TreeDraw_2D("/stash/user/zflowers/NTUPLES/Processing/Fall17_102X/Bkg_2017.root","dphiCMI","PTCM",PreSelection,"Bkg_2017",64,0.,3.14,80,0.,500.,"KUAnalysis");
+ //Get2D_Ratio(dphiCMI_v_PTCM_Bkg_2017,dphiCMI_v_PTCM_MET_2017,"PreSelection","PreSelection","Bkg_2017","MET_2017",true);
+ //TH2F* dphiCMI_v_PTCM_MET_2018 = get_hist_TreeDraw_2D("/stash/user/zflowers/NTUPLES/Processing/Autumn18_102X_Data/MET_2018.root","dphiCMI","PTCM",PreSelection,"MET_2018",64,0.,TMath::Pi(),80,0.,500.,"KUAnalysis");
+ //TH2F* dphiCMI_v_PTCM_Bkg_2018 = get_hist_TreeDraw_2D("/stash/user/zflowers/NTUPLES/Processing/Autumn18_102X/Bkg_2018.root","dphiCMI","PTCM",PreSelection,"Bkg_2018",64,0.,TMath::Pi(),80,0.,500.,"KUAnalysis");
+ //Get2D_Ratio(dphiCMI_v_PTCM_Bkg_2018,dphiCMI_v_PTCM_MET_2018,"PreSelection","PreSelection","Bkg_2018","MET_2018",true);
+ //
+ 
+ Get2D_Ratio(get_hist_2D("Save.root","Bkg_2016_PreSelection"),get_hist_2D("Save.root","MET_2016_PreSelection"),"PreSelection","PreSelection","Bkg_2016","MET_2016",true);
+ Get2D_Ratio(get_hist_2D("Save.root","Bkg_2016_RISRG09"),get_hist_2D("Save.root","MET_2016_RISRG09"),"RISRG0.9","RISRG0.9","Bkg_2016","MET_2016",true);
+ Get2D_Ratio(get_hist_2D("Save.root","Bkg_2017_PreSelection"),get_hist_2D("Save.root","MET_2017_PreSelection"),"PreSelection","PreSelection","Bkg_2017","MET_2017",true);
+ Get2D_Ratio(get_hist_2D("Save.root","Bkg_2017_RISRG09"),get_hist_2D("Save.root","MET_2017_RISRG09"),"RISRG0.9","RISRG0.9","Bkg_2017","MET_2017",true);
+ Get2D_Ratio(get_hist_2D("Save.root","Bkg_2018_PreSelection"),get_hist_2D("Save.root","MET_2018_PreSelection"),"PreSelection","PreSelection","Bkg_2018","MET_2018",true);
+ Get2D_Ratio(get_hist_2D("Save.root","Bkg_2018_RISRG09"),get_hist_2D("Save.root","MET_2018_RISRG09"),"RISRG0.9","RISRG0.9","Bkg_2018","MET_2018",true);
 
  //cout << "Eff of 15 GeV Jets in MET: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEME0.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral()/get_hist_2D("Hist_output_PreSelection.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral() << endl;
  //cout << "Eff of 20 GeV Jets in MET: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEM_Pt20E0.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral()/get_hist_2D("Hist_output_PreSelection.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral() << endl;
