@@ -18,6 +18,7 @@
 #include <TH2D.h>
 #include <TStyle.h>
 #include <TPaveStats.h>
+#include <TCut.h>
 
 using namespace std;
 
@@ -58,6 +59,20 @@ TGraph* Get_Graph_From_Func(double x_min, double x_max, TF1* Func)
   gr->SetPoint(i,x,Func->Eval(x));
  }
  return gr;
+}
+
+TH2F* get_hist_TreeDraw_2D(string fname, string x, string y, string cut, int BinsX, double xmin, double xmax, int BinsY, double ymin, double ymax, string tree_name)
+{
+ TH2F* hist = new TH2F((x+"_"+y+"_Hist").c_str(),"",BinsX,xmin,xmax,BinsY,ymin,ymax);
+ TFile *f = TFile::Open(fname.c_str(), "READ");
+ if(!f || f->IsZombie())
+ {
+     cout << "Unable to open " << fname << " for reading..." << endl;
+     return hist;
+ }
+ TTree* tree=(TTree*)f->Get(tree_name.c_str());
+ tree.Draw((x+":"+y>>(x+"_"+y+"_Hist")).c_str(),cut,"goff");
+ return hist;
 }
 
 vector<TH1D*> list_histos(string fname, vector<string> dir_names, string hist_name)
@@ -600,6 +615,106 @@ void Get2D_Ratio(string hist_name, string cut1, string cut2, string directory){
  delete can;
 }
 
+void Get2D_Ratio(TH2F* hist_denom, TH2F* hist, string cut1, string cut2, string directory1, string directory2, bool zoom){
+ gStyle->SetOptStat(0);
+ gStyle->SetOptTitle(0);
+ //gStyle->SetFrameFillColor(kBlack);
+ //gStyle->SetFrameLineColor(kWhite);
+ string hist_name1 = hist_denom->GetName();
+ string hist_name2 = hist->GetName();
+ hist_denom->Rebin2D(4,4);
+ hist_denom->Scale(1./hist_denom->Integral());
+ hist->Rebin2D(4,4);
+ hist->Scale(1./hist->Integral());
+ string name = "can_ratio_"+hist_name1+"_"+hist_name2+"_"+cut1+"_"+cut2+"_"+directory1+"_"+directory2;
+ if(zoom) { name = "can_ratio_zoom_"+hist_name1+"_"+hist_name2+"_"+cut1+"_"+cut2+"_"+directory1+"_"+directory2; }
+ TCanvas* can = new TCanvas(name.c_str(),"",600.,500);
+ can->SetLeftMargin(0.15);
+ can->SetRightMargin(0.18);
+ can->SetBottomMargin(0.15);
+ can->SetGridx();
+ can->SetGridy();
+ can->SetLogz();
+ //can->SetFillColor(kBlack);
+ can->Draw();
+ can->cd();
+ TH2D* hist_ratio = (TH2D*)hist->Clone();
+ hist_ratio->Divide(hist_denom);
+ //hist_ratio->GetXaxis()->SetAxisColor(kWhite);
+ //hist_ratio->GetYaxis()->SetAxisColor(kWhite);
+ //hist_ratio->GetXaxis()->SetTitleColor(kWhite);
+ //hist_ratio->GetYaxis()->SetTitleColor(kWhite);
+ //hist_ratio->GetXaxis()->SetLabelColor(kWhite);
+ //hist_ratio->GetYaxis()->SetLabelColor(kWhite);
+ //hist_ratio->GetZaxis()->SetLabelColor(kWhite);
+ hist_ratio->GetXaxis()->CenterTitle();
+ hist_ratio->GetXaxis()->SetTitleFont(132);
+ hist_ratio->GetXaxis()->SetTitleSize(0.06);
+ hist_ratio->GetXaxis()->SetTitleOffset(1.06);
+ hist_ratio->GetXaxis()->SetLabelFont(132);
+ hist_ratio->GetXaxis()->SetLabelSize(0.05);
+ hist_ratio->GetYaxis()->CenterTitle();
+ hist_ratio->GetYaxis()->SetTitleFont(132);
+ hist_ratio->GetYaxis()->SetTitleSize(0.06);
+ hist_ratio->GetYaxis()->SetTitleOffset(1.);
+ hist_ratio->GetYaxis()->SetLabelFont(132);
+ hist_ratio->GetYaxis()->SetLabelSize(0.05);
+ if(zoom)
+ {
+  hist_ratio->GetZaxis()->SetRangeUser(.0,2.);
+  hist_ratio->SetContour(20);
+  can->SetLogz(0);
+ }
+ hist_ratio->Draw("COLZ");
+ TLatex l;
+ l.SetNDC();
+ //l.SetTextColor(kWhite);
+ l.SetTextSize(0.04);
+ l.SetTextFont(42);
+ l.DrawLatex(0.15,0.943,"#bf{#it{CMS}} Internal 13 TeV");
+ l.SetTextSize(0.04);
+ l.SetTextFont(42);
+ //name = directories[j];
+ name = "";
+ /*
+ if(hist_name2.find("HEM") != std::string::npos) { name += cut2+", postHEM / "; }
+  else { name += cut2+", preHEM / "; }
+ if(hist_name1.find("HEM") != std::string::npos) { name += cut1+", postHEM"; }
+  else { name += cut1+", preHEM"; }
+ */
+ name = cut2+" "+directory2+"/"+cut1+" "+directory1;
+ l.DrawLatex(0.42,.94,name.c_str());
+ gPad->RedrawAxis();
+ gPad->RedrawAxis("G");
+ TF1* left_para = new TF1("left para","-500.*sqrt(-2.777*x*x+1.388*x+0.8264)+575.",0.,TMath::Pi());
+ TF1* right_para = new TF1("right para","-500.*sqrt((-1.5625*x*x+7.8125*x-8.766))+600.",0.,TMath::Pi());
+ double x_min = 0.;
+ double x_max = TMath::Pi();
+ int N = 1000;
+ TGraph* gr_left_para = new TGraph(N);
+ TGraph* gr_right_para = new TGraph(N);
+ double x = 0.;
+ for(int i = 0; i < N; i++)
+ {
+  x = x_min+(((x_max-x_min)/(N))*i);
+  gr_left_para->SetPoint(i,x,x < 0.25 ? 75. : left_para->Eval(x));
+  gr_right_para->SetPoint(i,x,x > 2.5 ? 100. : right_para->Eval(x));
+ }
+ gr_left_para->Draw("P");
+ gr_left_para->SetMarkerColor(kRed);
+ gr_left_para->SetMarkerSize(0.4);
+ gr_left_para->SetMarkerStyle(20.);
+ gr_right_para->SetMarkerColor(kRed);
+ gr_right_para->SetMarkerSize(0.4);
+ gr_right_para->SetMarkerStyle(20.);
+ gr_right_para->Draw("P");
+ TFile* output = new TFile(("Hist_output_"+cut1+".root").c_str(),"UPDATE");
+ can->Write();
+ output->Close();
+ delete output;
+ delete can;
+}
+
 void Get2D_Ratio(string hist_name1, string hist_name2, string cut1, string cut2, string directory1, string directory2, bool zoom){
  gStyle->SetOptStat(0);
  gStyle->SetOptTitle(0);
@@ -679,7 +794,7 @@ void Get2D_Ratio(string hist_name1, string hist_name2, string cut1, string cut2,
  TGraph* gr_left_para = new TGraph(N);
  TGraph* gr_right_para = new TGraph(N);
  double x = 0.;
- for(int i = 0; i < 1000; i++)
+ for(int i = 0; i < N; i++)
  {
   x = x_min+(((x_max-x_min)/(N))*i);
   gr_left_para->SetPoint(i,x,x < 0.25 ? 75. : left_para->Eval(x));
@@ -687,10 +802,10 @@ void Get2D_Ratio(string hist_name1, string hist_name2, string cut1, string cut2,
  }
  gr_left_para->Draw("P");
  gr_left_para->SetMarkerColor(kRed);
- gr_left_para->SetMarkerSize(0.2);
+ gr_left_para->SetMarkerSize(0.4);
  gr_left_para->SetMarkerStyle(20.);
  gr_right_para->SetMarkerColor(kRed);
- gr_right_para->SetMarkerSize(0.2);
+ gr_right_para->SetMarkerSize(0.4);
  gr_right_para->SetMarkerStyle(20.);
  gr_right_para->Draw("P");
  TFile* output = new TFile(("Hist_output_"+cut1+".root").c_str(),"UPDATE");
@@ -1188,9 +1303,18 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
  //Get2D_Ratio("dphiCMI_v_PTCM_Hist_HEM","dphiCMI_v_PTCM_Hist_HEM","HEM","HEM-EventFlag_JetInHEM_Pt20E0","MET_2018","MET_2018",true);
  
  //2D Ratio 2017 Cleaning
- Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist","RISRG0.9","RISRG0.9","Bkg_2017","MET_2017",true);
- Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist","PreSelection","PreSelection","Bkg_2017","MET_2017",true);
+ //Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist","RISRG0.9","RISRG0.9","Bkg_2017","MET_2017",true);
+ //Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist","PreSelection","PreSelection","Bkg_2017","MET_2017",true);
  
+
+ //cout << "Eff of 20 GeV Jets in MET: " << get_hist_2D("Hist_output_Clean-HEM-EventFlag_JetInHEM_Pt20E0.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral()/get_hist_2D("Hist_output_Clean.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral() << endl;
+ //cout << "Eff of 20 GeV Jets in Bkg: " << get_hist_2D("Hist_output_Clean-HEM-EventFlag_JetInHEM_Pt20E0.root","Bkg_2018","dphiCMI_v_PTCM_Hist")->Integral()/get_hist_2D("Hist_output_Clean.root","Bkg_2018","dphiCMI_v_PTCM_Hist")->Integral() << endl;
+
+ TCut PreSelection = "weight*(PTISR>200. && RISR>0.5 && EventFilter==1 && METtrigger==1 && MET>175. && fabs(dphiMET_V)<TMath::Pi()/2. && RISR<1.)";
+ TH2F* dphiCMI_v_PTCM_MET_2017 = get_hist_TreeDraw_2D("MET_2017.root",dphiCMI,PTCM,PreSelection,64,0.,TMath::Pi(),80,0.,500.,"KUAnalysis");
+ TH2F* dphiCMI_v_PTCM_Bkg_2017 = get_hist_TreeDraw_2D("Bkg_2017.root",dphiCMI,PTCM,PreSelection,64,0.,TMath::Pi(),80,0.,500.,"KUAnalysis");
+ Get2D_Ratio(dphiCMI_v_PTCM_Bkg_2017,dphiCMI_v_PTCM_MET_2017,"PreSelection","PreSelection","Bkg_2017","MET_2017",true);
+
  //cout << "Eff of 15 GeV Jets in MET: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEME0.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral()/get_hist_2D("Hist_output_PreSelection.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral() << endl;
  //cout << "Eff of 20 GeV Jets in MET: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEM_Pt20E0.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral()/get_hist_2D("Hist_output_PreSelection.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral() << endl;
  //cout << "Eff of HEM-nom in MET: " << get_hist_2D("Hist_output_HEM.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral()/get_hist_2D("Hist_output_PreSelection.root","MET_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral() << endl;
