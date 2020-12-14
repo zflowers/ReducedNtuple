@@ -125,6 +125,8 @@ inline void Eff_Nano::Analyze(){
 
    if(m_cut.find("Clean") != std::string::npos) Clean_cut_eff = true;
    eraseSubStr(m_cut,("Clean-"));
+   TF1* left_para = new TF1("left para","-500.*sqrt(-2.777*x*x+1.388*x+0.8264)+575.",0.,TMath::Pi());
+   TF1* right_para = new TF1("right para","-500.*sqrt((-1.5625*x*x+7.8125*x-8.766))+600.",0.,TMath::Pi());
 
    if(m_cut.find("dPhiMET_V") != std::string::npos) dPhiMET_V_cut_eff = true;
    eraseSubStr(m_cut,("dPhiMET_V-"));
@@ -144,14 +146,10 @@ inline void Eff_Nano::Analyze(){
        m_Tree->SetBranchAddress("PTCM",&PTCM,&PTCM_branch);
        dphiCMI_branch->GetEntry(jentry);
        PTCM_branch->GetEntry(jentry);
-       if(dphiCMI < TMath::Pi()/4.)
-       {
-        if(PTCM > 75.) continue;
-       }
-       else if(dphiCMI > 3*TMath::Pi()/4.)
-       {
-        if(PTCM > 100.) continue;
-       }
+       if(dphiCMI < 0.25 && PTCM > 75.) continue;
+       if(PTCM > left_para->Eval(dphiCMI)) continue;
+       if(dphiCMI > 2.5 && PTCM > 100.) continue;
+       if(PTCM > right_para->Eval(dphiCMI)) continue;
        dphiCMI_branch->ResetAddress();
        PTCM_branch->ResetAddress();
        m_Tree->ResetBranchAddresses();

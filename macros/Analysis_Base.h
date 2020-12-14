@@ -6,6 +6,7 @@
 #include <TLeaf.h>
 #include <TLorentzVector.h>
 #include <vector>
+#include <TF1.h>
 
 #ifndef ANALYSIS_BASE_H
 #define ANALYSIS_BASE_H
@@ -1107,7 +1108,6 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
 
  bool HEM_cut = true;
 
-/*
  if(m_Tag.find("SingleElectron") != std::string::npos)
  {
   string SingleElectrontrigger_str = "SingleElectrontriggerE1";
@@ -1131,7 +1131,6 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
   string DoubleMuontrigger_str = "DoubleMuontriggerE1";
   DoubleMuontrigger_cut = Get_Cut(jentry,"DoubleMuontrigger",DoubleMuontrigger_str);
  }
-*/
 
 //PreSelection Cuts
 //

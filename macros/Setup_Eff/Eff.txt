@@ -1,1 +1,4 @@
-NmuGoldE1
+SingleElectrontriggerE1
+SingleMuontriggerE1
+DoubleElectrontriggerE1
+DoubleMuontriggerE1

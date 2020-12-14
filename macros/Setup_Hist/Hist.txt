@@ -1,2 +1,10 @@
 Clean-HEM-EventFlag_JetInHEM_Pt20E0
 Clean
+EventFilterE0
+EventFilterE0-RISRG0.9
+HEM-EventFlag_JetInHEM_Pt20E0
+PreSelection
+RISRG0.6
+RISRG0.8
+RISRG0.9
+RISRG0.95

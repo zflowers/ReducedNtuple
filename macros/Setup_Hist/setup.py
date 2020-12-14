@@ -83,13 +83,13 @@ def write_sh(Cut,Dir,File,Tag):
     fsrc.write('transfer_output_files = $(CUT)_$(DIR)_$(TAG)_$(FILENAME)$(NUM).root \n')
     fsrc.write('transfer_output_remaps = \"$(CUT)_$(DIR)_$(TAG)_$(FILENAME)$(NUM).root = '+store+'$(CUT)/$(DIR)/$(TAG)/$(FILENAME)/$(FILENAME)$(NUM).root\" \n')
     #fsrc.write('queue \n')
-    fsrc.write('queue from '+(num+Cut+"/"+Dir+"/"+Tag+"/"+File+"/"+File+".txt").replace('\n',''))
+    fsrc.write('queue from '+(num+Dir+"/"+Tag+"/"+File+"/"+File+".txt").replace('\n',''))
     fsrc.close()
     return f
 
-def write_num_file(Cut,Dir,File,Tag,Num):
-    os.system("mkdir -p "+num+Cut+"/"+Dir+"/"+Tag+"/"+File)
-    f = (num+Cut+"/"+Dir+"/"+Tag+"/"+File+"/"+File+".txt").replace('\n','')
+def write_num_file(Dir,File,Tag,Num):
+    os.system("mkdir -p "+num+"/"+Dir+"/"+Tag+"/"+File)
+    f = (num+"/"+Dir+"/"+Tag+"/"+File+"/"+File+".txt").replace('\n','')
     fsrc = open(f,'a+')
     fsrc.write(Num+'\n')
     fsrc.close()
@@ -100,7 +100,11 @@ os.system("cp /stash/user/zflowers/cmssw-sandbox/cmssw_setup.sh "+path+"config_h
 os.system("tar -C "+path+"config_hist/../ -czvf config_hist.tgz config_hist/")
 #os.system("source "+path+"make_sandbox.sh")
 
+
+
 print("Writing shell scripts")
+
+write_num = True
 
 with open(path+"Setup_Hist/Hist.txt") as cut_handle:
     for cut_line in cut_handle:
@@ -119,12 +123,12 @@ with open(path+"Setup_Hist/Hist.txt") as cut_handle:
                                 Num = ''
                                 list_f.append(write_sh_sms(Cut,Dir,File,Tag))
                             else:
-                                #for num_line in os.listdir(input_path+Dir+"/NoHadd/"+File+"/"):
-                                #for num_line in os.listdir(input_path+Dir+"/"+File+"/"):
-                                    #Num = num_line.replace(File,'')
-                                    #Num = Num.replace('.root','')
-                                    #write_num_file(Cut,Dir,File,Tag,Num)
-                                    #list_f.append(write_sh(Cut,Num,Dir,File,Tag))
+                                if(write_num):
+                                    for num_line in os.listdir(input_path+Dir+"/"+File+"/"):
+                                        Num = num_line.replace(File,'')
+                                        Num = Num.replace('.root','')
+                                        write_num_file(Dir,File,Tag,Num)
+                                    write_num = False
                                 list_f.append(write_sh(Cut,Dir,File,Tag))
         list_f = list(dict.fromkeys(list_f))
         for f in list_f:
