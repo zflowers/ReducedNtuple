@@ -1107,7 +1107,7 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
  bool EventFlag_JetInHEM_Pt20_cut = true;
 
  bool HEM_cut = true;
-
+/*
  if(m_Tag.find("SingleElectron") != std::string::npos)
  {
   string SingleElectrontrigger_str = "SingleElectrontriggerE1";
@@ -1131,7 +1131,7 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
   string DoubleMuontrigger_str = "DoubleMuontriggerE1";
   DoubleMuontrigger_cut = Get_Cut(jentry,"DoubleMuontrigger",DoubleMuontrigger_str);
  }
-
+*/
 //PreSelection Cuts
 //
  string PTISR_str = "PTISRG200";
