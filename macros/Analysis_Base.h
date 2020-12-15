@@ -1105,6 +1105,7 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
  bool EventFlag_FailJetID_cut = true;
  bool EventFlag_JetInHEM_cut = true;
  bool EventFlag_JetInHEM_Pt20_cut = true;
+ bool EventFlag_JetInHEM_Pt20_JetID_cut = true;
 
  bool HEM_cut = true;
 /*
@@ -1171,6 +1172,11 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
  if(current_cut.find("EventFlag_JetInHEM_Pt20") != std::string::npos)
  {
   EventFlag_JetInHEM_Pt20_cut = Get_Cut(jentry,"EventFlag_JetInHEM_Pt20",current_cut);
+ }
+
+ if(current_cut.find("EventFlag_JetInHEM_Pt20_JetID") != std::string::npos)
+ {
+  EventFlag_JetInHEM_Pt20_JetID_cut = Get_Cut(jentry,"EventFlag_JetInHEM_Pt20_JetID",current_cut);
  }
 
  if(current_cut.find("EventFlag_JetInHEM") != std::string::npos)
@@ -1280,7 +1286,7 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
  if(current_cut.find("PreSelection") == 0)
  {
   current_cut = "";
-  if(PTISR_cut && RISR_cut && PTCM_cut && dphiCMI_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && NmuBronze_cut && NeleBronze_cut && NlepBronze_cut && NmuSilver_cut && NeleSilver_cut && NlepSilver_cut && NmuGold_cut && NeleGold_cut && NlepGold_cut && Njet_cut && Njet_S_cut && Nbjet_ISR_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut && EventFilter_cut && EventFlag_FailJetID_cut && EventFlag_JetInHEM_cut && EventFlag_JetInHEM_Pt20_cut && HEM_cut)
+  if(PTISR_cut && RISR_cut && PTCM_cut && dphiCMI_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && NmuBronze_cut && NeleBronze_cut && NlepBronze_cut && NmuSilver_cut && NeleSilver_cut && NlepSilver_cut && NmuGold_cut && NeleGold_cut && NlepGold_cut && Njet_cut && Njet_S_cut && Nbjet_ISR_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut && EventFilter_cut && EventFlag_FailJetID_cut && EventFlag_JetInHEM_cut && EventFlag_JetInHEM_Pt20_cut && EventFlag_JetInHEM_Pt20_JetID_cut && HEM_cut)
   {
    return false;
   }
@@ -1291,7 +1297,7 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
   cout << "ERROR: Some cuts not applied: " << current_cut << endl;
  }
 
- if(PTISR_cut && RISR_cut && PTCM_cut && dphiCMI_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && NmuBronze_cut && NeleBronze_cut && NlepBronze_cut && NmuSilver_cut && NeleSilver_cut && NlepSilver_cut && NmuGold_cut && NeleGold_cut && NlepGold_cut && Njet_cut && Njet_S_cut && Nbjet_ISR_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut && EventFilter_cut && EventFlag_FailJetID_cut && EventFlag_JetInHEM_cut && EventFlag_JetInHEM_Pt20_cut && HEM_cut)
+ if(PTISR_cut && RISR_cut && PTCM_cut && dphiCMI_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && NmuBronze_cut && NeleBronze_cut && NlepBronze_cut && NmuSilver_cut && NeleSilver_cut && NlepSilver_cut && NmuGold_cut && NeleGold_cut && NlepGold_cut && Njet_cut && Njet_S_cut && Nbjet_ISR_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut && EventFilter_cut && EventFlag_FailJetID_cut && EventFlag_JetInHEM_cut && EventFlag_JetInHEM_Pt20_cut && EventFlag_JetInHEM_Pt20_JetID_cut && HEM_cut)
  {
   return false;
  }

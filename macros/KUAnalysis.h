@@ -1,8 +1,8 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Mon Nov 30 10:25:29 2020 by ROOT version 6.12/07
+// Mon Dec 14 19:31:22 2020 by ROOT version 6.12/07
 // from TTree KUAnalysis/KUAnalysis
-// found on file: ../../../../NTUPLES/Processing/Autumn18_102X_Data_MET/MET_Run2018B-02Apr2020-v1_2018_Autumn18_102X/MET_Run2018B-02Apr2020-v1_2018_Autumn18_102X_0_0.root
+// found on file: ../../../../NTUPLES/Processing/Autumn18_102X_Data/MET_Run2018B-02Apr2020-v1_2018_Autumn18_102X/MET_Run2018B-02Apr2020-v1_2018_Autumn18_102X_0_0.root
 //////////////////////////////////////////////////////////
 
 #ifndef KUAnalysis_h
@@ -47,6 +47,7 @@ public :
    Bool_t          EventFlag_FailJetID;
    Bool_t          EventFlag_JetInHEM;
    Bool_t          EventFlag_JetInHEM_Pt20;
+   Bool_t          EventFlag_JetInHEM_Pt20_JetID;
    Double_t        MET;
    Double_t        MET_phi;
    Double_t        HT;
@@ -226,6 +227,7 @@ public :
    TBranch        *b_EventFlag_FailJetID;   //!
    TBranch        *b_EventFlag_JetInHEM;   //!
    TBranch        *b_EventFlag_JetInHEM_Pt20;   //!
+   TBranch        *b_EventFlag_JetInHEM_Pt20_JetID;   //!
    TBranch        *b_MET;   //!
    TBranch        *b_MET_phi;   //!
    TBranch        *b_HT;   //!
@@ -400,9 +402,9 @@ KUAnalysis::KUAnalysis(TTree *tree) : fChain(0)
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("../../../../NTUPLES/Processing/Autumn18_102X_Data_MET/MET_Run2018B-02Apr2020-v1_2018_Autumn18_102X/MET_Run2018B-02Apr2020-v1_2018_Autumn18_102X_0_0.root");
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("../../../../NTUPLES/Processing/Autumn18_102X_Data/MET_Run2018B-02Apr2020-v1_2018_Autumn18_102X/MET_Run2018B-02Apr2020-v1_2018_Autumn18_102X_0_0.root");
       if (!f || !f->IsOpen()) {
-         f = new TFile("../../../../NTUPLES/Processing/Autumn18_102X_Data_MET/MET_Run2018B-02Apr2020-v1_2018_Autumn18_102X/MET_Run2018B-02Apr2020-v1_2018_Autumn18_102X_0_0.root");
+         f = new TFile("../../../../NTUPLES/Processing/Autumn18_102X_Data/MET_Run2018B-02Apr2020-v1_2018_Autumn18_102X/MET_Run2018B-02Apr2020-v1_2018_Autumn18_102X_0_0.root");
       }
       f->GetObject("KUAnalysis",tree);
 
@@ -526,6 +528,7 @@ void KUAnalysis::Init(TTree *tree)
    fChain->SetBranchAddress("EventFlag_FailJetID", &EventFlag_FailJetID, &b_EventFlag_FailJetID);
    fChain->SetBranchAddress("EventFlag_JetInHEM", &EventFlag_JetInHEM, &b_EventFlag_JetInHEM);
    fChain->SetBranchAddress("EventFlag_JetInHEM_Pt20", &EventFlag_JetInHEM_Pt20, &b_EventFlag_JetInHEM_Pt20);
+   fChain->SetBranchAddress("EventFlag_JetInHEM_Pt20_JetID", &EventFlag_JetInHEM_Pt20_JetID, &b_EventFlag_JetInHEM_Pt20_JetID);
    fChain->SetBranchAddress("MET", &MET, &b_MET);
    fChain->SetBranchAddress("MET_phi", &MET_phi, &b_MET_phi);
    fChain->SetBranchAddress("HT", &HT, &b_HT);
