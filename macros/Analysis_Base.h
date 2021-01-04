@@ -428,7 +428,7 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
    {
     if(abs(PDGID_lep->at(i)) == 11)
     {
-     if((ID_lep->at(2*i) > 1 && ID_lep->at(2*i) < 4) || fabs(PT_lep->at(i)*MiniIso_lep->at(i)) >= 4. || MiniIso_lep->at(i) >= 0.3)
+     if((ID_lep->at(2*i) > 1 && ID_lep->at(2*i) < 4) || fabs(PT_lep->at(i)*MiniIso_lep->at(i)) >= 4. || fabs(PT_lep->at(i)*RelIso_lep->at(i)) >= 4.)
      {
       numBronze++;
      }
@@ -1286,7 +1286,7 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
  if(current_cut.find("PreSelection") == 0)
  {
   current_cut = "";
-  if(PTISR_cut && RISR_cut && PTCM_cut && dphiCMI_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && NmuBronze_cut && NeleBronze_cut && NlepBronze_cut && NmuSilver_cut && NeleSilver_cut && NlepSilver_cut && NmuGold_cut && NeleGold_cut && NlepGold_cut && Njet_cut && Njet_S_cut && Nbjet_ISR_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut && EventFilter_cut && EventFlag_FailJetID_cut && EventFlag_JetInHEM_cut && EventFlag_JetInHEM_Pt20_cut && EventFlag_JetInHEM_Pt20_JetID_cut && HEM_cut)
+  if(PTISR_cut && RISR_cut && PTCM_cut && dphiCMI_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && NmuBronze_cut && NeleBronze_cut && NlepBronze_cut && NmuSilver_cut && NeleSilver_cut && NlepSilver_cut && NmuGold_cut && NeleGold_cut && NlepGold_cut && Njet_cut && Njet_S_cut && Nbjet_ISR_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut && SingleElectrontrigger_cut && SingleMuontrigger_cut && DoubleElectrontrigger_cut && DoubleMuontrigger_cut && EventFilter_cut && EventFlag_FailJetID_cut && EventFlag_JetInHEM_cut && EventFlag_JetInHEM_Pt20_cut && EventFlag_JetInHEM_Pt20_JetID_cut && HEM_cut)
   {
    return false;
   }
@@ -1297,7 +1297,7 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
   cout << "ERROR: Some cuts not applied: " << current_cut << endl;
  }
 
- if(PTISR_cut && RISR_cut && PTCM_cut && dphiCMI_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && NmuBronze_cut && NeleBronze_cut && NlepBronze_cut && NmuSilver_cut && NeleSilver_cut && NlepSilver_cut && NmuGold_cut && NeleGold_cut && NlepGold_cut && Njet_cut && Njet_S_cut && Nbjet_ISR_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut && EventFilter_cut && EventFlag_FailJetID_cut && EventFlag_JetInHEM_cut && EventFlag_JetInHEM_Pt20_cut && EventFlag_JetInHEM_Pt20_JetID_cut && HEM_cut)
+ if(PTISR_cut && RISR_cut && PTCM_cut && dphiCMI_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && NmuBronze_cut && NeleBronze_cut && NlepBronze_cut && NmuSilver_cut && NeleSilver_cut && NlepSilver_cut && NmuGold_cut && NeleGold_cut && NlepGold_cut && Njet_cut && Njet_S_cut && Nbjet_ISR_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut && SingleElectrontrigger_cut && SingleMuontrigger_cut && DoubleElectrontrigger_cut && DoubleMuontrigger_cut && EventFilter_cut && EventFlag_FailJetID_cut && EventFlag_JetInHEM_cut && EventFlag_JetInHEM_Pt20_cut && EventFlag_JetInHEM_Pt20_JetID_cut && HEM_cut)
  {
   return false;
  }

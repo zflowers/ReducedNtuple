@@ -392,6 +392,7 @@ int main(int argc, char* argv[])
  std::ifstream fs(cutsFile);
  while(std::getline(fs,cut))
  {
+  if(cut.rfind("#", 0) == 0) continue;
   cuts.push_back(cut);
   files.push_back("Eff_output_MET_"+cut+".root");
  }
