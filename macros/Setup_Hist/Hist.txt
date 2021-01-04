@@ -1,5 +1,5 @@
-Clean-HEM-EventFlag_JetInHEM_Pt20E0
 Clean-HEM-EventFlag_JetInHEM_Pt20_JetIDE0
-HEM-EventFlag_JetInHEM_Pt20E0
-HEM-EventFlag_JetInHEM_Pt20_JetID
+HEM-EventFlag_JetInHEM_Pt20_JetIDE0
 PreSelection
+HEM-EventFlag_JetInHEM_Pt20E0
+Clean-HEM-EventFlag_JetInHEM_Pt20E0

@@ -88,8 +88,8 @@ def write_sh(Cut,Dir,File,Tag):
     return f
 
 def write_num_file(Dir,File,Tag,Num):
-    os.system("mkdir -p "+num+"/"+Dir+"/"+Tag+"/"+File)
-    f = (num+"/"+Dir+"/"+Tag+"/"+File+"/"+File+".txt").replace('\n','')
+    os.system("mkdir -p "+num+Dir+"/"+Tag+"/"+File)
+    f = (num+Dir+"/"+Tag+"/"+File+"/"+File+".txt").replace('\n','')
     fsrc = open(f,'a+')
     fsrc.write(Num+'\n')
     fsrc.close()
@@ -128,8 +128,8 @@ with open(path+"Setup_Hist/Hist.txt") as cut_handle:
                                         Num = num_line.replace(File,'')
                                         Num = Num.replace('.root','')
                                         write_num_file(Dir,File,Tag,Num)
-                                    write_num = False
                                 list_f.append(write_sh(Cut,Dir,File,Tag))
+        write_num = False
         list_f = list(dict.fromkeys(list_f))
         for f in list_f:
             print("Submitting: "+f)

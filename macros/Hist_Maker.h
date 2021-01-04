@@ -58,10 +58,10 @@ HistClass::~HistClass(){
   if( preHEM_hist2f ) delete postHEM_hist2f;
   if( preHEM_hist1d ) delete postHEM_hist1d;
   if( preHEM_hist2d ) delete postHEM_hist2d;
-  if( preHEM_hist1f ) delete postHEM_hist1f;
-  if( preHEM_hist2f ) delete postHEM_hist2f;
-  if( preHEM_hist1d ) delete postHEM_hist1d;
-  if( preHEM_hist2d ) delete postHEM_hist2d;
+  if( postHEM_hist1f ) delete postHEM_hist1f;
+  if( postHEM_hist2f ) delete postHEM_hist2f;
+  if( postHEM_hist1d ) delete postHEM_hist1d;
+  if( postHEM_hist2d ) delete postHEM_hist2d;
 
 }
 
@@ -1425,7 +1425,7 @@ void gendphiMET_mu_Hist::fill_hist(Long64_t jentry){
 vector<HistClass*> Setup_Hists(TTree* tree){
  vector<HistClass*> Classes;
  //Classes.push_back(new met_Hist);
- Classes.push_back(new met_Phi_Hist);
+ //Classes.push_back(new met_Phi_Hist);
  //Classes.push_back(new PTCM_Hist);
  //Classes.push_back(new dphiMET_V_Hist);
  //Classes.push_back(new dphiMET_lep_Hist);
