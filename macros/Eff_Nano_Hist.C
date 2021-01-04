@@ -74,7 +74,7 @@ void Maker(){
  string output = cut+"_"+dir+"_"+tag+"_"+filename+number+".root";
  if(local)
  {
-  output = cut+"_"+tag+"_"+filename;
+  output = "Eff_output_"+cut+".root";
  }
  cout << "Output file: " << output << endl;
 
