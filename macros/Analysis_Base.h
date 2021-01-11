@@ -1144,14 +1144,14 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
  string EventFilter_str = "EventFilterE1";
  EventFilter_cut = Get_Cut(jentry,"EventFilter",EventFilter_str);
 
- //if((m_Tree->GetName(),"KUAnalysis") == 0)
- //{
- // string METtrigger_str = "METtriggerE1";
- // METtrigger_cut = Get_Cut(jentry,"METtrigger",METtrigger_str);
- //}
+ if((m_Tree->GetName(),"KUAnalysis") == 0)
+ {
+  string METtrigger_str = "METtriggerE1";
+  METtrigger_cut = Get_Cut(jentry,"METtrigger",METtrigger_str);
+ }
 
- //string MET_str = "METG175";
- //MET_cut = Get_Cut(jentry,"MET",MET_str);
+ string MET_str = "METG175";
+ MET_cut = Get_Cut(jentry,"MET",MET_str);
 
 
  if(current_cut.find("PTISR") != std::string::npos)
