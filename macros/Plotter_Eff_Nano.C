@@ -33,7 +33,6 @@ void Plotter_Eff_Nano(vector<string> inFile, vector<string> cut){
  vector<string> tags_data_2016 = {"SingleElectron_2016", "SingleMuon_2016"};
  vector<string> tags_data_2017 = {"SingleElectron_2017", "SingleMuon_2017"};
  vector<string> tags_data_2018 = {"SingleElectron_2018", "SingleMuon_2018"};
- vector<string> tags_bkg_2016 = {"Bkg_2016","Bkg_2017","Bkg_2018"};
  vector<string> tags_MET_2016 = {"MET_2016","MET_2017","MET_2018"};
  vector<string> tags_SingleElectron_2016 = {"SingleElectron_2016"};
  vector<string> tags_SingleElectron_2017 = {"SingleElectron_2017"};

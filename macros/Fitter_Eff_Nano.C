@@ -38,7 +38,7 @@ Double_t Double_Gaussian_CDF_Func_Multi(Double_t *x, Double_t *par)
  return par[0]*((TMath::Cos(par[4])*TMath::Cos(par[4]))*ROOT::Math::normal_cdf(x[0],par[2],par[1])+(TMath::Sin(par[4])*TMath::Sin(par[4]))*ROOT::Math::normal_cdf(x[0],par[2]*par[3],par[1]));
 }
 
-bool invert_colors = true;
+bool invert_colors = false;
 
 bool fileExists(const std::string& filename)
 {
