@@ -395,7 +395,7 @@ int main(int argc, char* argv[])
  {
   if(cut.rfind("#", 0) == 0) continue;
   cuts.push_back(cut);
-  files.push_back("Eff_output_MET_"+cut+".root");
+  files.push_back("Eff_output_"+cut+".root");
  }
 
  Plotter_Eff_Nano(files,cuts);
