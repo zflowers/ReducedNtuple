@@ -82,9 +82,9 @@ void Plotter_Eff_Nano(vector<string> inFile, vector<string> cut){
  
  for(int i = 0; i < inFile.size(); i++)
  {
-  Get_Plot(tags_2016,METtrigger,colors,inFile[i],METtrigger[0]+"_"+cut[i]+"_2016","Trigger");
-  Get_Plot(tags_2017,METtrigger,colors,inFile[i],METtrigger[0]+"_"+cut[i]+"_2017","Trigger");
-  Get_Plot(tags_2018,METtrigger,colors,inFile[i],METtrigger[0]+"_"+cut[i]+"_2018","Trigger");
+ // Get_Plot(tags_2016,METtrigger,colors,inFile[i],METtrigger[0]+"_"+cut[i]+"_2016","Trigger");
+ // Get_Plot(tags_2017,METtrigger,colors,inFile[i],METtrigger[0]+"_"+cut[i]+"_2017","Trigger");
+ // Get_Plot(tags_2018,METtrigger,colors,inFile[i],METtrigger[0]+"_"+cut[i]+"_2018","Trigger");
 
 //  Get_Plot(SingleMuon,METtrigger,colors,inFile[i],METtrigger[0]+"SingleMuon"+cut[i]+"_","Trigger");
 //  Get_Plot(SingleElectron,METtrigger,colors,inFile[i],METtrigger[0]+"SingleElectron"+"_"+cut[i],"Trigger");
@@ -95,19 +95,21 @@ void Plotter_Eff_Nano(vector<string> inFile, vector<string> cut){
 
  }
  
- Get_Plot(tags_TTJets_2016,METtrigger,colors,inFile,cut,"METtrigger_2016_TTJets","FinalState");
- Get_Plot(tags_ZJets_2016,METtrigger,colors,inFile,cut,"METtrigger_2016_ZJets","FinalState");
- Get_Plot(tags_WJets_2016,METtrigger,colors,inFile,cut,"METtrigger_2016_WJets","FinalState");
- Get_Plot(tags_QCD_2016,METtrigger,colors,inFile,cut,"METtrigger_2016_QCD","FinalState");
- Get_Plot(tags_TTJets_2017,METtrigger,colors,inFile,cut,"METtrigger_2017_TTJets","FinalState");
- Get_Plot(tags_ZJets_2017,METtrigger,colors,inFile,cut,"METtrigger_2017_ZJets","FinalState");
- Get_Plot(tags_WJets_2017,METtrigger,colors,inFile,cut,"METtrigger_2017_WJets","FinalState");
- Get_Plot(tags_QCD_2017,METtrigger,colors,inFile,cut,"METtrigger_2017_QCD","FinalState");
- Get_Plot(tags_TTJets_2018,METtrigger,colors,inFile,cut,"METtrigger_2018_TTJets","FinalState");
- Get_Plot(tags_ZJets_2018,METtrigger,colors,inFile,cut,"METtrigger_2018_ZJets","FinalState");
- Get_Plot(tags_WJets_2018,METtrigger,colors,inFile,cut,"METtrigger_2018_WJets","FinalState");
- Get_Plot(tags_QCD_2018,METtrigger,colors,inFile,cut,"METtrigger_2018_QCD","FinalState");
+ //Get_Plot(tags_TTJets_2016,METtrigger,colors,inFile,cut,"METtrigger_2016_TTJets","FinalState");
+ //Get_Plot(tags_ZJets_2016,METtrigger,colors,inFile,cut,"METtrigger_2016_ZJets","FinalState");
+ //Get_Plot(tags_WJets_2016,METtrigger,colors,inFile,cut,"METtrigger_2016_WJets","FinalState");
+ //Get_Plot(tags_QCD_2016,METtrigger,colors,inFile,cut,"METtrigger_2016_QCD","FinalState");
+ //Get_Plot(tags_TTJets_2017,METtrigger,colors,inFile,cut,"METtrigger_2017_TTJets","FinalState");
+ //Get_Plot(tags_ZJets_2017,METtrigger,colors,inFile,cut,"METtrigger_2017_ZJets","FinalState");
+ //Get_Plot(tags_WJets_2017,METtrigger,colors,inFile,cut,"METtrigger_2017_WJets","FinalState");
+ //Get_Plot(tags_QCD_2017,METtrigger,colors,inFile,cut,"METtrigger_2017_QCD","FinalState");
+ //Get_Plot(tags_TTJets_2018,METtrigger,colors,inFile,cut,"METtrigger_2018_TTJets","FinalState");
+ //Get_Plot(tags_ZJets_2018,METtrigger,colors,inFile,cut,"METtrigger_2018_ZJets","FinalState");
+ //Get_Plot(tags_WJets_2018,METtrigger,colors,inFile,cut,"METtrigger_2018_WJets","FinalState");
+ //Get_Plot(tags_QCD_2018,METtrigger,colors,inFile,cut,"METtrigger_2018_QCD","FinalState");
  
+ vector<string> tags_allbkg_2017 = {"Bkg_2017"};
+ Get_Plot(tags_allbkg_2017,METtrigger,colors,inFile,cut,"METtrigger_2017_Bkg","FinalState");
 
 }
 
@@ -393,7 +395,7 @@ int main(int argc, char* argv[])
  {
   if(cut.rfind("#", 0) == 0) continue;
   cuts.push_back(cut);
-  files.push_back("Eff_output_MET_"+cut+".root");
+  files.push_back("Eff_output_"+cut+".root");
  }
 
  Plotter_Eff_Nano(files,cuts);
