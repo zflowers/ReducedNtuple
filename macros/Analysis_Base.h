@@ -38,6 +38,8 @@ class Analysis_Base{
    //bool preHEM = false;
    virtual bool Get_Cut(const Long64_t& jentry, string name, string& current_cut);
    virtual bool global_cuts(const Long64_t& jentry);
+   int m_ichunk;
+   int m_nchunk;
   public:
    Analysis_Base();
    Analysis_Base(string outFile, string Tag, TTree*& Tree);

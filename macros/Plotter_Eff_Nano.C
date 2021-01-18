@@ -17,10 +17,107 @@
 
 using namespace std;
 
+string states = "";
 void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, string outFile, string name, string option);
 void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, vector<string> inFile, vector<string> cut, string name, string option);
 TMultiGraph* get_mg(string fname, vector<string> tags, vector<string> Triggers, vector<int> colors, TLegend*& leg, TCanvas*& can, string option);
 TMultiGraph* get_mg(vector<string> cut, vector<string> tags, vector<string> Triggers, vector<string> fname, vector<int> colors, TLegend*& leg, TCanvas*& can, string option);
+
+string RewriteCut(std::string cut)
+{
+ string new_cut = "";
+ if(cut.find("SingleElectrontriggerE1") != std::string::npos)
+ {
+  new_cut+= " Passed Single Electron Trigger &";
+ }
+ if(cut.find("DoubleElectrontriggerE1") != std::string::npos)
+ {
+  new_cut+= " Passed Double Electron Trigger &";
+ }
+ if(cut.find("SingleMuontriggerE1") != std::string::npos)
+ {
+  new_cut+= " Passed Single Muon Trigger &";
+ }
+ if(cut.find("DoubleMuontriggerE1") != std::string::npos)
+ {
+  new_cut+= " Passed Double Muon Trigger &";
+ }
+ if(cut.find("NmuE1") != std::string::npos)
+ {
+  new_cut+= " One Muon &";
+ }
+ if(cut.find("NmuE2") != std::string::npos)
+ {
+  new_cut+= " Two Muons &";
+ }
+ if(cut.find("NeleE1") != std::string::npos)
+ {
+  new_cut+= " One Electron &";
+ }
+ if(cut.find("NeleE2") != std::string::npos)
+ {
+  new_cut+= " Two Electrons &";
+ }
+ if(cut.find("NmuBronzeE1") != std::string::npos)
+ {
+  new_cut+= " One Bronze Muon &";
+ }
+ if(cut.find("NmuBronzeE2") != std::string::npos)
+ {
+  new_cut+= " Two Bronze Muons &";
+ }
+ if(cut.find("NeleBronzeE1") != std::string::npos)
+ {
+  new_cut+= " One Bronze Electron &";
+ }
+ if(cut.find("NeleBronzeE2") != std::string::npos)
+ {
+  new_cut+= " Two Bronze Electrons &";
+ }
+ if(cut.find("NmuSilverE1") != std::string::npos)
+ {
+  new_cut+= " One Silver Muon &";
+ }
+ if(cut.find("NmuSilverE2") != std::string::npos)
+ {
+  new_cut+= " Two Silver Muons &";
+ }
+ if(cut.find("NeleSilverE1") != std::string::npos)
+ {
+  new_cut+= " One Silver Electron &";
+ }
+ if(cut.find("NeleSilverE2") != std::string::npos)
+ {
+  new_cut+= " Two Silver Electrons &";
+ }
+ if(cut.find("NmuGoldE1") != std::string::npos)
+ {
+  new_cut+= " One Gold Muon &";
+ }
+ if(cut.find("NmuGoldE2") != std::string::npos)
+ {
+  new_cut+= " Two Gold Muons &";
+ }
+ if(cut.find("NeleGoldE1") != std::string::npos)
+ {
+  new_cut+= " One Gold Electron &";
+ }
+ if(cut.find("NeleGoldE2") != std::string::npos)
+ {
+  new_cut+= " Two Gold Electrons &";
+ }
+ if(new_cut.back() == '&') new_cut.pop_back();
+ return new_cut;
+}
+
+void eraseSubStr(std::string & mainStr, const std::string & toErase)
+{
+ size_t pos = mainStr.find(toErase);
+ if (pos != std::string::npos)
+ {
+  mainStr.erase(pos, toErase.length());
+ }
+}
 
 void Plotter_Eff_Nano(vector<string> inFile, vector<string> cut){
  //string inFile ="output_quick.root";
@@ -59,7 +156,7 @@ void Plotter_Eff_Nano(vector<string> inFile, vector<string> cut){
  vector<string> WWTo2L2Nu_years = {"WWTo2L2Nu_2016","WWTo2L2Nu_2017","WWTo2L2Nu_2018"};
  vector<string> ZJets_years = {"ZJetsToNuNu_2016","ZJetsToNuNu_2017","ZJetsToNuNu_2018"};
 
- vector<int> colors = {kCyan, kMagenta, kYellow, kViolet+2, kAzure+7, kPink, kGreen, kGray};
+ vector<int> colors = {kBlue+1, kRed+2, kGreen+1, kMagenta, kCyan, kYellow, kViolet+2, kAzure+7, kPink, kGreen, kGray};
 
  vector<string> METtrigger{ "METtrigger" };
  vector<string> METHTtrigger{ "METHTtrigger" };
@@ -109,7 +206,12 @@ void Plotter_Eff_Nano(vector<string> inFile, vector<string> cut){
  //Get_Plot(tags_QCD_2018,METtrigger,colors,inFile,cut,"METtrigger_2018_QCD","FinalState");
  
  vector<string> tags_allbkg_2017 = {"Bkg_2017"};
- Get_Plot(tags_allbkg_2017,METtrigger,colors,inFile,cut,"METtrigger_2017_Bkg","FinalState");
+ for(int i = 0; i < int(cut.size()); i++)
+ {
+  states += ("_"+cut[i]);
+ } 
+
+ Get_Plot(tags_allbkg_2017,METtrigger,colors,inFile,cut,"METtrigger_2017"+states,"FinalState");
 
 }
 
@@ -244,9 +346,9 @@ void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, 
   gStyle->SetFrameLineColor(kWhite);
  }
 
- TLegend* leg = new TLegend(0.5,0.2,0.95,0.5); 
+ TLegend* leg = new TLegend(0.3,0.2,0.95,0.5); 
  leg->SetTextFont(132);
- leg->SetTextSize(0.045);
+ leg->SetTextSize(0.033);
  
  TLatex l;
  TCanvas* can = new TCanvas((name).c_str(),"",600.,500);
@@ -297,6 +399,7 @@ void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, 
  l.SetNDC();
  l.SetTextSize(0.04);
  l.SetTextFont(42);
+ eraseSubStr(name,states);
  l.DrawLatex(0.62,0.93,name.c_str());
  l.DrawLatex(0.13,0.93,"#bf{#it{CMS}} Internal 13 TeV Simulation");
  can->Modified();
@@ -337,7 +440,7 @@ TMultiGraph* get_mg(vector<string> cut, vector<string> tags, vector<string> Trig
     can->Update();
     TGraphAsymmErrors* gr = eff->GetPaintedGraph();
     //call Fitter
-    Fitter_Eff_Nano(gr,colors,Triggers[j]+"_"+tags[i]+"_"+cut[k]);
+    //Fitter_Eff_Nano(gr,colors,Triggers[j]+"_"+tags[i]+"_"+cut[k]);
     if((i+j) == 0)
     {
      string title = " ;";
@@ -353,7 +456,8 @@ TMultiGraph* get_mg(vector<string> cut, vector<string> tags, vector<string> Trig
     }
     else if(option.compare("FinalState") == 0)
     {
-     leg->AddEntry(gr,cut.at(k).c_str(),"PL");
+     string new_cut = RewriteCut(cut.at(k));
+     leg->AddEntry(gr,new_cut.c_str(),"PL");
     }
     gr->SetMarkerStyle(20);
     gr->SetMarkerColor(colors[i+j+k]);

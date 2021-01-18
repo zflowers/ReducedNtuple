@@ -110,7 +110,7 @@ vector<HistClass*> Setup_Hists(TTree* tree);
 class Hist_Maker:public Analysis_Base{
   public:
    Hist_Maker();
-   Hist_Maker(string outFile, string Tag, TTree* Tree);
+   Hist_Maker(string outFile, string Tag, TTree* Tree, int ichunk, int nchunk);
    void Analyze();
 };
 
@@ -121,11 +121,13 @@ inline Hist_Maker::Hist_Maker()
  m_cut = "";
 }
 
-inline Hist_Maker::Hist_Maker(string outFile, string Tag, TTree* Tree)
+inline Hist_Maker::Hist_Maker(string outFile, string Tag, TTree* Tree, int ichunk, int nchunk)
 {
  m_outFile = outFile;
  m_Tag = Tag;
  m_Tree = Tree;
+ m_ichunk = ichunk;
+ m_nchunk = nchunk;
 }
 
 bool Clean_cut = false;
@@ -154,8 +156,32 @@ inline void Hist_Maker::Analyze(){
    if(m_cut.find("dPhiMET_V") != std::string::npos) dPhiMET_V_cut = true;
    eraseSubStr(m_cut,("dPhiMET_V-"));
 
-   for (Long64_t jentry=0; jentry<nentries;jentry++) {      
-      if(jentry%((std::max(nentries,percent))/percent) == 0) { cout << "Processing Event: " << jentry << " out of: " << nentries << " Entries" << endl; }
+ //new splitting 
+
+ if(m_nchunk < 1 || m_ichunk < 1 || m_ichunk > m_nchunk){
+    m_ichunk = 1;
+    m_nchunk = 1;
+  }
+
+  Long64_t NTOT = m_Tree->GetEntries();
+  cout << NTOT << endl;
+  Long64_t N1, N0;
+  if(m_nchunk >= NTOT){
+    N1 = m_ichunk;
+    N0 = m_ichunk-1;
+  } else {
+    N1 = NTOT/m_nchunk;
+    if(NTOT%m_nchunk > 0)
+      N1++;
+    N0 = (m_ichunk-1)*N1;
+    N1 = N0 + N1;
+  }
+
+   //for (Long64_t jentry=0; jentry<nentries;jentry++) {
+  for(Long64_t i = N0; i < N1 && i < NTOT; i++){
+      Long64_t jentry = i;
+
+      //if(jentry%((std::max(nentries,percent))/percent) == 0) { cout << "Processing Event: " << jentry << " out of: " << nentries << " Entries" << endl; }
 
       Long64_t ientry = m_Tree->LoadTree(jentry);
 

@@ -20,6 +20,8 @@ string cut = "";
 bool Do_Hist = false;
 bool Do_Eff = false;
 bool local = false;
+int ICHUNK = 1;
+int NCHUNK = 1;
 
 std::string get_str_between_two_str_unique(const std::string &s, const std::string &start_delim, const std::string &stop_delim)
 {
@@ -80,7 +82,7 @@ void Maker(){
 
  if(Do_Hist)
  {
-  Hist_Maker Hist(output,tag,chain);
+  Hist_Maker Hist(output,tag,chain,ICHUNK,NCHUNK);
   Hist.Set_Cut(cut);
   Hist.Analyze();
  }
@@ -91,7 +93,7 @@ void Maker(){
   if(tag.find("2016") != std::string::npos) { Triggers = Get_2016_Triggers(); }
   if(tag.find("2017") != std::string::npos) { Triggers = Get_2017_Triggers(); }
   if(tag.find("2018") != std::string::npos) { Triggers = Get_2018_Triggers(); }
-  Eff_Nano Eff(output,Triggers,tag,x,chain);
+  Eff_Nano Eff(output,Triggers,tag,x,chain,ICHUNK,NCHUNK);
   Eff.Set_Cut(cut);
   Eff.Analyze();
  }
@@ -147,6 +149,10 @@ int main(int argc, char* argv[])
   else if(strncmp(argv[i],"--eff",5)==0)
   {
    Do_Eff = true;
+  }
+  else if(strncmp(argv[i],"-split",6)==0)
+  {
+   sscanf(argv[i],"-split=%d,%d", &ICHUNK, &NCHUNK);
   }
   else if(strncmp(argv[i],"--local",7)==0)
   {

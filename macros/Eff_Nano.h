@@ -15,7 +15,7 @@ class Eff_Nano:public Analysis_Base{
    string m_x;
   public:
    Eff_Nano();
-   Eff_Nano(string outFile, vector<string> Triggers, string Tag, string x, TTree* Tree);
+   Eff_Nano(string outFile, vector<string> Triggers, string Tag, string x, TTree* Tree, int ichunk, int nchunk);
    void Analyze();
    void Set_Triggers_2016();
    void Set_Triggers_2017();
@@ -33,13 +33,15 @@ inline Eff_Nano::Eff_Nano()
  cout << "Probably Going To Crash Now... " << endl;
 }
 
-inline Eff_Nano::Eff_Nano(string outFile, vector<string> Triggers, string Tag, string x, TTree* Tree)
+inline Eff_Nano::Eff_Nano(string outFile, vector<string> Triggers, string Tag, string x, TTree* Tree, int ichunk, int nchunk)
 {
  m_outFile = outFile;
  m_Triggers = Triggers;
  m_Tag = Tag;
  m_x = x;
  m_Tree = Tree;
+ m_ichunk = ichunk;
+ m_nchunk = nchunk;
 }
 
 inline void Eff_Nano::Set_Triggers_2016()
@@ -131,10 +133,33 @@ inline void Eff_Nano::Analyze(){
    if(m_cut.find("dPhiMET_V") != std::string::npos) dPhiMET_V_cut_eff = true;
    eraseSubStr(m_cut,("dPhiMET_V-"));
 
-   for (Long64_t jentry=0; jentry<nentries;jentry++) {
+ //new splitting 
+
+ if(m_nchunk < 1 || m_ichunk < 1 || m_ichunk > m_nchunk){
+    m_ichunk = 1;
+    m_nchunk = 1;
+  }
+
+  Long64_t NTOT = m_Tree->GetEntries();
+  cout << NTOT << endl;
+  Long64_t N1, N0;
+  if(m_nchunk >= NTOT){
+    N1 = m_ichunk;
+    N0 = m_ichunk-1;
+  } else {
+    N1 = NTOT/m_nchunk;
+    if(NTOT%m_nchunk > 0)
+      N1++;
+    N0 = (m_ichunk-1)*N1;
+    N1 = N0 + N1;
+  }
+
+   //for (Long64_t jentry=0; jentry<nentries;jentry++) {
+  for(Long64_t i = N0; i < N1 && i < NTOT; i++){
+      Long64_t jentry = i;
       Long64_t ientry = m_Tree->LoadTree(jentry);
       //nb = m_Tree->GetEntry(jentry);   nbytes += nb;
-      if(jentry%((std::max(nentries,percent))/percent) == 0) { cout << "Processing Event: " << jentry << " out of: " << nentries << " Entries" << endl;}
+      //if(jentry%((std::max(nentries,percent))/percent) == 0) { cout << "Processing Event: " << jentry << " out of: " << nentries << " Entries" << endl;}
 
       if(Clean_cut_eff)
       {

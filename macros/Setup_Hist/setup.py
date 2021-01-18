@@ -88,8 +88,8 @@ def write_sh(Cut,Dir,File,Tag):
     return f
 
 def write_num_file(Dir,File,Tag,Num):
-    os.system("mkdir -p "+num+Dir+"/"+Tag+"/"+File)
-    f = (num+Dir+"/"+Tag+"/"+File+"/"+File+".txt").replace('\n','')
+    os.system("mkdir -p "+num+"/"+Dir+"/"+Tag+"/"+File)
+    f = (num+"/"+Dir+"/"+Tag+"/"+File+"/"+File+".txt").replace('\n','')
     fsrc = open(f,'a+')
     fsrc.write(Num+'\n')
     fsrc.close()
