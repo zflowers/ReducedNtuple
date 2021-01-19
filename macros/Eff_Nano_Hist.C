@@ -17,8 +17,12 @@ string filename = "";
 string dir = "";
 string number = "";
 string cut = "";
+string tree = "KUAnalysis";
+string input = "";
+bool Do_Input = false;
 bool Do_Hist = false;
 bool Do_Eff = false;
+bool Do_SMS = false;
 bool local = false;
 int ICHUNK = 1;
 int NCHUNK = 1;
@@ -45,7 +49,6 @@ void Maker(){
  if(tag == "") { cout << "Need to specify tag!" << endl; return; }
  TChain* chain;
  string dir_rm = dir;
- string input = "";
  if(dir.find("SMS") != std::string::npos || filename.find("SMS") != std::string::npos)
  {
   chain = new TChain(("SMS_"+get_str_between_two_str_unique(tag,"_","_201")).c_str());
@@ -53,7 +56,7 @@ void Maker(){
  }
  else
  {
-  chain = new TChain("KUAnalysis");
+  chain = new TChain(tree.c_str());
  }
  if(dir.find("Data") != std::string::npos)
  {
@@ -63,7 +66,7 @@ void Maker(){
  {
   input = path+dir+"/"+filename+".root";
  }
- else
+ else if(!Do_Input)
  {
   //input = path+dir+"/NoHadd/"+filename+"/"+filename+number+".root";
   input = path+dir+"/"+filename+"/"+filename+number+".root";
@@ -149,6 +152,21 @@ int main(int argc, char* argv[])
   else if(strncmp(argv[i],"--eff",5)==0)
   {
    Do_Eff = true;
+  }
+  else if(strncmp(argv[i],"--sms",5)==0)
+  {
+   Do_SMS = true;
+  }
+  else if(strncmp(argv[i],"-tree",5)==0)
+  {
+   tree = argv[i];
+   tree.erase(0,6);
+  }
+  else if(strncmp(argv[i],"-input",6)==0)
+  {
+   Do_Input = true;
+   input = argv[i];
+   input.erase(0,7);
   }
   else if(strncmp(argv[i],"-split",6)==0)
   {

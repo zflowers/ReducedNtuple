@@ -21,3 +21,5 @@ macros/Shell_EFF/
 macros/Num_EFF/
 macros/config*
 macros/*.tgz
+macros/Shell/
+macros/samples/
