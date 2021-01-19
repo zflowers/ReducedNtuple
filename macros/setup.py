@@ -156,6 +156,10 @@ if __name__ == "__main__":
         p = sys.argv.index('-tag')
         TAG = sys.argv[p+1]
         argv_pos += 2
+    if '-output' in sys.argv:
+        p = sys.argv.index('-output')
+        OUT = sys.argv[p+1]
+        argv_pos += 2
         
     
     if SPLIT <= 1:
@@ -218,7 +222,7 @@ if __name__ == "__main__":
     #os.system("tar -czf "+TARGET+"/config.tgz "+config)
 
     # output root files
-    ROOT = OUT+"/"+NAME+"/"
+    ROOT = OUT+"/"+CUT+"/"+TAG+"/"+NAME+"/"
     if ROOT == TARGET:
         ROOT = ROOT+"root/"
 
@@ -288,6 +292,7 @@ if __name__ == "__main__":
         os.system("mkdir -p "+os.path.join(errdir, dataset+'_'+filetag))
 
         file_name = os.path.join(ROOT, dataset+'_'+filetag, overlist_name.split('/')[-1].replace('_list.list', '_$(ItemIndex)_$(Step)'))
+        print(file_name)
 
         logfile = os.path.join(logdir, dataset+'_'+filetag, file_name.split('/')[-1])
         outfile= os.path.join(outdir, dataset+'_'+filetag, file_name.split('/')[-1])
@@ -308,9 +313,4 @@ if __name__ == "__main__":
 
     for f in submit_list:
         print "submitting: ", f
-        #os.system('condor_submit ' + f)
-   
-
-
-
- 
+        os.system('condor_submit ' + f)

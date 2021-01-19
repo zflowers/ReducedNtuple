@@ -9,8 +9,8 @@
 
 #condor_q -totals z374f439 
 #condor_q -batch -total zflowers
-condor_q -batch zflowers
-condor_release zflowers
+condor_q -batch z374f439
+condor_release z374f439
 #condor_q z374f439 
 
 #JOB_ID=$1

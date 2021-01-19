@@ -1,0 +1,16 @@
+samples/NANO/Fall17_102X/TTJets_DiLept_TuneCP5_13TeV-madgraphMLM-pythia8.txt
+samples/NANO/Fall17_102X/TTJets_SingleLeptFromT_TuneCP5_13TeV-madgraphMLM-pythia8.txt
+samples/NANO/Fall17_102X/TTJets_SingleLeptFromTbar_TuneCP5_13TeV-madgraphMLM-pythia8.txt
+samples/NANO/Fall17_102X/WJetsToLNu_HT-1200To2500_TuneCP5_13TeV-madgraphMLM-pythia8.txt
+samples/NANO/Fall17_102X/WJetsToLNu_HT-200To400_TuneCP5_13TeV-madgraphMLM-pythia8.txt
+samples/NANO/Fall17_102X/WJetsToLNu_HT-2500ToInf_TuneCP5_13TeV-madgraphMLM-pythia8.txt
+samples/NANO/Fall17_102X/WJetsToLNu_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8.txt
+samples/NANO/Fall17_102X/WJetsToLNu_HT-600To800_TuneCP5_13TeV-madgraphMLM-pythia8.txt
+samples/NANO/Fall17_102X/WJetsToLNu_HT-70To100_TuneCP5_13TeV-madgraphMLM-pythia8.txt
+samples/NANO/Fall17_102X/WJetsToLNu_HT-800To1200_TuneCP5_13TeV-madgraphMLM-pythia8.txt
+samples/NANO/Fall17_102X/ZJetsToNuNu_HT-1200To2500_13TeV-madgraph.txt
+samples/NANO/Fall17_102X/ZJetsToNuNu_HT-200To400_13TeV-madgraph.txt
+samples/NANO/Fall17_102X/ZJetsToNuNu_HT-2500ToInf_13TeV-madgraph.txt
+samples/NANO/Fall17_102X/ZJetsToNuNu_HT-400To600_13TeV-madgraph.txt
+samples/NANO/Fall17_102X/ZJetsToNuNu_HT-600To800_13TeV-madgraph.txt
+samples/NANO/Fall17_102X/ZJetsToNuNu_HT-800To1200_13TeV-madgraph.txt
