@@ -1,1 +1,1 @@
-/home/t3-ku/z374f439/storage/Summer16_102X/ST_t-channel_antitop_4f_inclusiveDecays_13TeV-powhegV2-madspin-pythia8_TuneCUETP8M1_Summer16_102X.root 
+root://xrootd.unl.edu//store/user/zflowers/Summer16_102X/ST_t-channel_antitop_4f_inclusiveDecays_13TeV-powhegV2-madspin-pythia8_TuneCUETP8M1_Summer16_102X.root 

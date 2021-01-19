@@ -1,1 +1,1 @@
-/home/t3-ku/z374f439/storage/Fall17_102X/ST_s-channel_4f_leptonDecays_TuneCP5_PSweights_13TeV-amcatnlo-pythia8_Fall17_102X.root 
+root://xrootd.unl.edu//store/user/zflowers/Fall17_102X/ST_s-channel_4f_leptonDecays_TuneCP5_PSweights_13TeV-amcatnlo-pythia8_Fall17_102X.root 

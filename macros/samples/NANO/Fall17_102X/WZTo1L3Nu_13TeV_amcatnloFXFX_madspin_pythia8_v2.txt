@@ -1,1 +1,1 @@
-/home/t3-ku/z374f439/storage/Fall17_102X/WZTo1L3Nu_13TeV_amcatnloFXFX_madspin_pythia8_v2_Fall17_102X.root 
+root://xrootd.unl.edu//store/user/zflowers/Fall17_102X/WZTo1L3Nu_13TeV_amcatnloFXFX_madspin_pythia8_v2_Fall17_102X.root 

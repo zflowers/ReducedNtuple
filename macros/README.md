@@ -14,3 +14,7 @@ After jobs finish do
 For local tests:
 
 ./run_Eff_Nano_Eff.x -x=MET -cut=PreSelection -oFile=Test
+
+With New Splitting Example:
+
+python run_setup.py -split 10 --eff --hadd -safety 100 -o $PWD/

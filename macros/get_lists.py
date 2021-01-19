@@ -1,12 +1,19 @@
 #script to get lists from location of input files
 import os
 
-#path to input lists
-input_path = "/home/t3-ku/crogan/CMSSW_10_6_5/src/KUEWKinoAnalysis/samples/NANO/"
-#path to store new lists
-output_path = "/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/samples/NANO/"
-#file_path = "root://xrootd.unl.edu//store/user/zflowers/" #xrootd option
-file_path = "/home/t3-ku/z374f439/storage/" #local option
+#path to lists
+
+#unl
+#input_path = "/home/t3-ku/crogan/CMSSW_10_6_5/src/KUEWKinoAnalysis/samples/NANO/"
+#output_path = "/home/t3-ku/z374f439/ReducedNtuple/macros/samples/NANO/"
+
+#lxplus
+input_path = "/afs/cern.ch/user/z/zflowers/storage/private/KUEWKinoAnalysis/samples/NANO/"
+output_path = "/afs/cern.ch/user/z/zflowers/storage/private/ReducedNtuple/macros/samples/NANO/"
+
+file_path = "root://xrootd.unl.edu//store/user/zflowers/" #xrootd option
+#file_path = "/home/t3-ku/z374f439/storage/" #local option unl
+
 subdirs = os.listdir(input_path)
 subdirs.remove('Lists')
 subdirs[:] = [x for x in subdirs if "Data" not in x]
@@ -34,4 +41,4 @@ for subdir in subdirs:
             fsrc = open(new_file,'w')
             fsrc.write(file_path+subdir.replace('_Data.txt','')+"/"+filename.replace('.txt','')+'_'+subdir.replace('_Data','')+'.root \n')
             fsrc.close()
-os.system('cp -r '+input_path+'Lists/ '+output_path)
+#os.system('cp -r '+input_path+'Lists/ '+output_path)

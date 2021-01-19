@@ -1,1 +1,1 @@
-/home/t3-ku/z374f439/storage/Fall17_102X_Data/MET_Run2017D-02Apr2020-v1_2017_Fall17_102X.root 
+root://xrootd.unl.edu//store/user/zflowers/Fall17_102X_Data/MET_Run2017D-02Apr2020-v1_2017_Fall17_102X.root 

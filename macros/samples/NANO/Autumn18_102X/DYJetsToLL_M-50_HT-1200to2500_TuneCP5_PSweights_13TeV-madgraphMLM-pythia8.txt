@@ -1,1 +1,1 @@
-/home/t3-ku/z374f439/storage/Autumn18_102X/DYJetsToLL_M-50_HT-1200to2500_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8_Autumn18_102X.root 
+root://xrootd.unl.edu//store/user/zflowers/Autumn18_102X/DYJetsToLL_M-50_HT-1200to2500_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8_Autumn18_102X.root 

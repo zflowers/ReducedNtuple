@@ -1,1 +1,1 @@
-/home/t3-ku/z374f439/storage/Autumn18_102X/ZJetsToNuNu_HT-200To400_13TeV-madgraph_Autumn18_102X.root 
+root://xrootd.unl.edu//store/user/zflowers/Autumn18_102X/ZJetsToNuNu_HT-200To400_13TeV-madgraph_Autumn18_102X.root 

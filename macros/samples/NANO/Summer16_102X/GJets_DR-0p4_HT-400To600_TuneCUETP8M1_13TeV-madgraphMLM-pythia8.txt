@@ -1,1 +1,1 @@
-/home/t3-ku/z374f439/storage/Summer16_102X/GJets_DR-0p4_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Summer16_102X.root 
+root://xrootd.unl.edu//store/user/zflowers/Summer16_102X/GJets_DR-0p4_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_Summer16_102X.root 

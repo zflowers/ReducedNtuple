@@ -115,7 +115,7 @@ if __name__ == "__main__":
     DO_EFF = 0
     DO_HADD = 0
     SPLIT = 1
-    safety_jobs = 0
+    safety_jobs = 100
     output_dir = "/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/"
   
     if '-split' in sys.argv:
@@ -137,7 +137,7 @@ if __name__ == "__main__":
         argv_pos += 2
     if '-o' in sys.argv:
         p = sys.argv.index('-o')
-        output_dir = int(sys.argv[p+1])
+        output_dir = sys.argv[p+1]
         argv_pos += 2
 
 
@@ -173,7 +173,6 @@ print("Submitted a Total of: "+str(TOT_NJOBS)+" Jobs")
 
 
 if get_jobs() == 0 and DO_HADD:
-    print("HERE")
     if(DO_EFF):
         run_hadd(output_dir+"EFF/")
     if(DO_HIST):

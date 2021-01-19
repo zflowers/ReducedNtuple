@@ -1,1 +1,1 @@
-/home/t3-ku/z374f439/storage/Autumn18_102X_Data/DoubleMuon_Run2018B-02Apr2020-v1_2018_Autumn18_102X.root 
+root://xrootd.unl.edu//store/user/zflowers/Autumn18_102X_Data/DoubleMuon_Run2018B-02Apr2020-v1_2018_Autumn18_102X.root 

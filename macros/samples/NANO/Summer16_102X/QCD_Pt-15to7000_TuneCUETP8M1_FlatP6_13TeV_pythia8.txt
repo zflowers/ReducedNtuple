@@ -1,1 +1,1 @@
-/home/t3-ku/z374f439/storage/Summer16_102X/QCD_Pt-15to7000_TuneCUETP8M1_FlatP6_13TeV_pythia8_Summer16_102X.root 
+root://xrootd.unl.edu//store/user/zflowers/Summer16_102X/QCD_Pt-15to7000_TuneCUETP8M1_FlatP6_13TeV_pythia8_Summer16_102X.root 

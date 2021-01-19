@@ -1,1 +1,1 @@
-/home/t3-ku/z374f439/storage/Summer16_102X_Data/SingleElectron_Run2016B-02Apr2020_ver2-v1_2016_Summer16_102X.root 
+root://xrootd.unl.edu//store/user/zflowers/Summer16_102X_Data/SingleElectron_Run2016B-02Apr2020_ver2-v1_2016_Summer16_102X.root 

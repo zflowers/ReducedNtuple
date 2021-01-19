@@ -11,8 +11,8 @@ RUN_DIR = pwd
 TEMP = pwd
 jobEXE  = "execute_script.sh"
 EXE  = "Eff_Nano_Hist.x"
-CMSSW_SETUP = '/home/t3-ku/z374f439/cmssw-sandbox/cmssw_setup.sh'
-SANDBOX = '/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/sandbox-CMSSW_10_2_20_UL-9d39de6.tar.bz2'
+CMSSW_SETUP = 'cmssw_setup.sh'
+SANDBOX = 'sandbox-CMSSW_10_2_20_UL-9d39de6.tar.bz2'
 TREE = "KUAnalysis"
 OUT  = pwd
 #OUT = "/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/eschmitz/EWKino/Processing"
@@ -313,4 +313,4 @@ if __name__ == "__main__":
 
     for f in submit_list:
         print "submitting: ", f
-        os.system('condor_submit ' + f)
+        #os.system('condor_submit ' + f)

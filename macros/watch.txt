@@ -1,8 +1,8 @@
 
 
--- Schedd: t3.unl.edu : <129.93.239.166:9618?... @ 01/19/21 11:18:43
+-- Schedd: bigbird19.cern.ch : <188.185.114.121:9618?... @ 01/19/21 18:58:49
 OWNER BATCH_NAME      SUBMITTED   DONE   RUN    IDLE   HOLD  TOTAL JOB_IDS
 
 Total for query: 0 jobs; 0 completed, 0 removed, 0 idle, 0 running, 0 held, 0 suspended 
-Total for all users: 2287 jobs; 9 completed, 0 removed, 2078 idle, 200 running, 0 held, 0 suspended
+Total for all users: 48159 jobs; 459 completed, 0 removed, 46155 idle, 1502 running, 43 held, 0 suspended
 
