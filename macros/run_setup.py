@@ -82,9 +82,13 @@ def run_hadd(head_dir):
             for subsubdir in os.listdir(cut_dir+"/"+subdir):
                 for subsubsubdir in os.listdir(cut_dir+"/"+subdir+"/"+subsubdir):
                     os.system("hadd -k "+cut_dir+subdir+"/"+subsubdir+"/"+subsubsubdir+".root "+cut_dir+"/"+subdir+"/"+subsubdir+"/"+subsubsubdir+"/*.root")
+                    os.system("rm -rf "+cut_dir+subdir+"/"+subsubdir+"/"+subsubsubdir+"/")
                 os.system("hadd -k "+cut_dir+subdir+"/"+subsubdir+".root "+cut_dir+"/"+subdir+"/"+subsubdir+"/*.root")
+                os.system("rm -rf "+cut_dir+subdir+"/"+subsubdir+"/")
             os.system("hadd -k "+cut_dir+subdir+".root "+cut_dir+"/"+subdir+"/*.root")
+            os.system("rm -rf "+cut_dir+subdir+"/")
         os.system("hadd -k "+head_dir+"Eff_output_"+cut+".root "+cut_dir+"*.root")
+        os.system("rm -rf "+cut_dir)
       
 
 def get_jobs():
@@ -144,6 +148,7 @@ if SPLIT > safety_jobs:
     print("No jobs will be submitted!")
     sys.exit(1)
 
+
 #run python
 current_tag = ''
 for cut in list_cuts:
@@ -166,6 +171,11 @@ for cut in list_cuts:
 print("Finished Submitting Jobs")
 print("Submitted a Total of: "+str(TOT_NJOBS)+" Jobs")
 
+
 if get_jobs() == 0 and DO_HADD:
-    run_hadd(output_dir)
+    print("HERE")
+    if(DO_EFF):
+        run_hadd(output_dir+"EFF/")
+    if(DO_HIST):
+        run_hadd(output_dir+"HIST/")
 
