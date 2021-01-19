@@ -182,6 +182,11 @@ inline void Hist_Maker::Analyze(){
       Long64_t jentry = i;
 
       //if(jentry%((std::max(nentries,percent))/percent) == 0) { cout << "Processing Event: " << jentry << " out of: " << nentries << " Entries" << endl; }
+      int mymod = (N1-N0)/10;
+      if(mymod < 1)
+      mymod = 1;
+      if(i%mymod == 0)
+      cout << " event = " << i << " : [" << N0 << " , " << N1 << "]" << endl;
 
       Long64_t ientry = m_Tree->LoadTree(jentry);
 

@@ -141,7 +141,6 @@ inline void Eff_Nano::Analyze(){
   }
 
   Long64_t NTOT = m_Tree->GetEntries();
-  cout << NTOT << endl;
   Long64_t N1, N0;
   if(m_nchunk >= NTOT){
     N1 = m_ichunk;
@@ -160,6 +159,11 @@ inline void Eff_Nano::Analyze(){
       Long64_t ientry = m_Tree->LoadTree(jentry);
       //nb = m_Tree->GetEntry(jentry);   nbytes += nb;
       //if(jentry%((std::max(nentries,percent))/percent) == 0) { cout << "Processing Event: " << jentry << " out of: " << nentries << " Entries" << endl;}
+      int mymod = (N1-N0)/10;
+      if(mymod < 1)
+      mymod = 1;
+      if(i%mymod == 0)
+      cout << " event = " << i << " : [" << N0 << " , " << N1 << "]" << endl;
 
       if(Clean_cut_eff)
       {

@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <fstream>
 #include "MET_2016_Triggers.h"
 #include "MET_2017_Triggers.h"
 #include "MET_2018_Triggers.h"
@@ -19,10 +20,13 @@ string number = "";
 string cut = "";
 string tree = "KUAnalysis";
 string input = "";
+string output = "";
+char inputListName[400];
 bool Do_Input = false;
 bool Do_Hist = false;
 bool Do_Eff = false;
 bool Do_SMS = false;
+bool Do_List = false;
 bool local = false;
 int ICHUNK = 1;
 int NCHUNK = 1;
@@ -75,12 +79,39 @@ void Maker(){
  {
   input = dir+"/"+filename;
  }
- chain->Add(input.c_str(),0);
- string output = cut+"_"+dir+"_"+tag+"_"+filename+number+".root";
+ if(Do_List)
+ {
+  char Buffer[500];
+  char MyRootFile[2000];
+  vector<string> filenames;
+  ifstream *inputFile = new ifstream(inputListName);
+  while( !(inputFile->eof()) ){
+   inputFile->getline(Buffer,500);
+   if (!strstr(Buffer,"#") && !(strspn(Buffer," ") == strlen(Buffer))){
+     sscanf(Buffer,"%s",MyRootFile);
+     filenames.push_back(MyRootFile);
+   }
+  }
+  inputFile->close();
+  delete inputFile; 
+  for(int i = 0; i < int(filenames.size()); i++){
+cout << filenames[i] << endl;
+    chain->Add(filenames[i].c_str(),0);
+  }
+ }
+ else
+ {
+  chain->Add(input.c_str(),0);
+ }
+ if(output.length() == 0)
+ {
+  output = cut+"_"+dir+"_"+tag+"_"+filename+number+".root";
+ }
  if(local)
  {
   output = "Eff_output_"+cut+".root";
  }
+ cout << "Input file: " << input << endl;
  cout << "Output file: " << output << endl;
 
  if(Do_Hist)
@@ -167,6 +198,16 @@ int main(int argc, char* argv[])
    Do_Input = true;
    input = argv[i];
    input.erase(0,7);
+  }
+  else if(strncmp(argv[i],"-output",7)==0)
+  {
+   output = argv[i];
+   output.erase(0,8);
+  }
+  else if(strncmp(argv[i],"-ilist",6)==0)
+  {
+   Do_List = true;
+   sscanf(argv[i],"-ilist=%s",  inputListName);
   }
   else if(strncmp(argv[i],"-split",6)==0)
   {

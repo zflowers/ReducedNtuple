@@ -12,6 +12,7 @@ TEMP = pwd
 jobEXE  = "execute_script.sh"
 EXE  = "Eff_Nano_Hist.x"
 CMSSW_SETUP = '/home/t3-ku/z374f439/cmssw-sandbox/cmssw_setup.sh'
+SANDBOX = '/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/sandbox-CMSSW_10_2_20_UL-9d39de6.tar.bz2'
 TREE = "KUAnalysis"
 OUT  = pwd
 #OUT = "/mnt/hadoop/user/uscms01/pnfs/unl.edu/data4/cms/store/user/eschmitz/EWKino/Processing"
@@ -57,7 +58,7 @@ def write_sh(srcfile,ifile,ofile,logfile,outfile,errfile,dataset,filetag,n,CUT,T
     fsrc.write('use_x509userproxy = true \n')
     fsrc.write('Arguments = ');
     fsrc.write('-ilist=$(Item) ')
-    fsrc.write('-ofile='+ofile.split('/')[-1]+" ")
+    fsrc.write('-output='+ofile.split('/')[-1]+" ")
     if DO_SMS == 1:
         fsrc.write('--sms ')
     #if DO_DATA == 1:
@@ -172,10 +173,10 @@ if __name__ == "__main__":
         print "Processing as SMS"
 
     if DO_EFF:
-        OUT+="EFF/"
+        OUT+="/EFF/"
 
     if DO_HIST:
-        OUT+="HIST/"
+        OUT+="/HIST/"
 
     # input sample list
     listfile = LIST
@@ -211,6 +212,7 @@ if __name__ == "__main__":
     
     os.system("cp "+EXE+" "+config+".")
     os.system("cp "+CMSSW_SETUP+" "+config+".")
+    os.system("cp "+SANDBOX+" "+config+".")
 
     print TARGET
     #os.system("tar -czf "+TARGET+"/config.tgz "+config)
