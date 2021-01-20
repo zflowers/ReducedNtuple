@@ -101,6 +101,7 @@ def write_sh(srcfile,ifile,ofile,logfile,outfile,errfile,dataset,filetag,n,CUT,T
     fsrc.write('+ProjectName="cms.org.ku"\n')
     fsrc.write('+REQUIRED_OS="rhel7"\n')
     fsrc.write('+RequiresCVMFS=True\n')
+    #fsrc.write('+JobFlavour="espresso"\n')
     fsrc.write('queue '+str(n)+' from '+ifile+'\n')
     fsrc.close()
 
@@ -313,4 +314,4 @@ if __name__ == "__main__":
 
     for f in submit_list:
         print "submitting: ", f
-        #os.system('condor_submit ' + f)
+        os.system('condor_submit ' + f)

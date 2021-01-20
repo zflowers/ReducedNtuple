@@ -59,6 +59,10 @@ list_tags_DoubleElectron_2017 = [
     list_path+"Fall17_102X_Data_DoubleEG.list",
 ]
 
+list_tags_TTJets_2017 = [
+    list_path+"Fall17_102X_TTJets.list",
+]
+
 list_tags_Bkg_2017 = [
     list_path+"Fall17_102X_SubBkg.list",
 ]
@@ -70,7 +74,7 @@ list_list = [
     'SingleElectron_2017',list_tags_SingleElectron_2017,
     'DoubleMuon_2017',list_tags_DoubleMuon_2017,
     'DoubleElectron_2017',list_tags_DoubleElectron_2017,
-    'Bkg_2017',list_tags_Bkg_2017,
+    'TTJets_2017',list_tags_TTJets_2017,
 ]
 
 
@@ -88,12 +92,12 @@ def run_hadd(head_dir):
             os.system("hadd -k "+cut_dir+subdir+".root "+cut_dir+"/"+subdir+"/*.root")
             os.system("rm -rf "+cut_dir+subdir+"/")
         os.system("hadd -k "+head_dir+"Eff_output_"+cut+".root "+cut_dir+"*.root")
-        os.system("rm -rf "+cut_dir)
+        #os.system("rm -rf "+cut_dir)
       
 
 def get_jobs():
     os.system("source ../scripts/Plot_watch.sh > watch.txt")
-    os.system("sleep 3")
+    os.system("sleep 5")
     watch_file = open("watch.txt","r")
     for line in watch_file:
         watch_jobs = line.split(',')
@@ -155,7 +159,7 @@ for cut in list_cuts:
     for tag in list_list:
         if isinstance(tag,list):
             for list_tag in tag:
-                NJOBS = get_jobs()+SPLIT
+                NJOBS = get_jobs()+(SPLIT*sum(1 for line in open(list_tag)))
                 while NJOBS > safety_jobs:
                     print("Hit safety limit")
                     print("Waiting for jobs to finish...")
