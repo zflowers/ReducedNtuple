@@ -22,7 +22,7 @@ using namespace std;
 
 bool invert_colors = false;
 
-double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger, vector<int> colors, string outFile, string name, string option);
+double Get_ScaleFactor(string bkg_tag, string data_tag, string Trigger, vector<int> colors, string outFile, string cut, string option);
 TGraphErrors* Get_Bands_Ratio(double x_min, double x_max, TGraphAsymmErrors* gr, vector<double>& y_upper, vector<double>& y_lower, TF1* Bkg_Nominal, TF1* Data_Nominal);
 TGraphErrors* Get_Bands(double x_min, double x_max, TF1* Data_Nominal, vector<double>& y_upper, vector<double>& y_lower);
 TGraph* Get_Fit_Ratio(double x_min, double x_max, TF1* Bkg_Nominal, TF1* Data_Nominal);
@@ -38,8 +38,7 @@ void ScaleFactors(vector<string> inFile, vector<string> cut){
 
  //string inFile ="output_quick.root";
  vector<string> data_tags_2016 = {"SingleElectron_2016","SingleMuon_2016"};
- //vector<string> data_tags_2017 = {"SingleElectron_2017","SingleMuon_2017","DoubleEG_2017","DoubleMuon_2017"};
- vector<string> data_tags_2017 = {"SingleMuon_2017"};
+ vector<string> data_tags_2017 = {"SingleElectron_2017","SingleMuon_2017","DoubleElectron_2017","DoubleMuon_2017"};
  vector<string> data_tags_2018 = {"SingleElectron_2018","SingleMuon_2018"};
  
  //vector<int> colors = {kCyan, kMagenta, kYellow, kViolet+2, kAzure+7, kPink, kGreen, kGray};
@@ -47,12 +46,16 @@ void ScaleFactors(vector<string> inFile, vector<string> cut){
 
  for(int i = 0; i < inFile.size(); i++)
  {
-  //double scale_Ratio_2016 = Get_ScaleFactor("Bkg_2016", data_tags_2016, "METtrigger", colors, inFile[i], "METtrigger"+cut[i]+"_2016", "Ratio");
-  //double scale_Fit_2016 = Get_ScaleFactor("Bkg_2016", data_tags_2016, "METtrigger", colors, inFile[i], "METtrigger"+cut[i]+"_2016", "Fit");
-  double scale_Ratio_2017 = Get_ScaleFactor("Bkg_2017", data_tags_2017, "METtrigger", colors, inFile[i], "METtrigger"+cut[i]+"_2017", "Ratio");
-  //double scale_Fit_2017 = Get_ScaleFactor("Bkg_2017", data_tags_2017, "METtrigger", colors, inFile[i], "METtrigger"+cut[i]+"_2017", "Fit");
-  //double scale_Ratio_2018 = Get_ScaleFactor("Bkg_2018", data_tags_2018, "METtrigger", colors, inFile[i], "METtrigger"+cut[i]+"_2018", "Ratio");
-  //double scale_Fit_2018 = Get_ScaleFactor("Bkg_2018", data_tags_2018, "METtrigger", colors, inFile[i], "METtrigger"+cut[i]+"_2018", "Fit");
+  for(int j = 0; j < int(data_tags_2017.size()); j++)
+  {
+   //double scale_Ratio_2016 = Get_ScaleFactor("Bkg_2016", data_tags_2016, "METtrigger", colors, inFile[i], "METtrigger"+cut[i]+"_2016", "Ratio");
+   //double scale_Fit_2016 = Get_ScaleFactor("Bkg_2016", data_tags_2016, "METtrigger", colors, inFile[i], "METtrigger"+cut[i]+"_2016", "Fit");
+   double scale_Ratio_2017 = Get_ScaleFactor("Bkg_2017", data_tags_2017[j], "METtrigger", colors, inFile[i], cut[i], "Ratio");
+   if(scale_Ratio_2017 == -1) cout << "Failed to get SF for: " << data_tags_2017[j] << " " << cut[i] << endl;
+   //double scale_Fit_2017 = Get_ScaleFactor("Bkg_2017", data_tags_2017, "METtrigger", colors, inFile[i], "METtrigger"+cut[i]+"_2017", "Fit");
+   //double scale_Ratio_2018 = Get_ScaleFactor("Bkg_2018", data_tags_2018, "METtrigger", colors, inFile[i], "METtrigger"+cut[i]+"_2018", "Ratio");
+   //double scale_Fit_2018 = Get_ScaleFactor("Bkg_2018", data_tags_2018, "METtrigger", colors, inFile[i], "METtrigger"+cut[i]+"_2018", "Fit");
+  }
  }
 }
 
@@ -163,7 +166,7 @@ void Format_Graph(TGraphErrors*& gr)
 }
 
 //get all Eff on one plot
-double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger, vector<int> colors, string outFile, string name, string option)
+double Get_ScaleFactor(string bkg_tag, string data_tag, string Trigger, vector<int> colors, string outFile, string cut, string option)
 {
  double scale = 0;
  if(invert_colors)
@@ -172,10 +175,11 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
   gStyle->SetFrameLineColor(kWhite);
  }
 
- TLegend* leg = new TLegend(0.65,0.3,0.85,0.6); 
+ TLegend* leg = new TLegend(0.6,0.3,0.85,0.6); 
  leg->SetTextFont(132);
  leg->SetTextSize(0.045);
  
+ string name = "METtrigger_"+cut+"_"+data_tag;
  TLatex l;
  TCanvas* can = new TCanvas((name).c_str(),"",864.,468.);
  can->SetGridx();
@@ -189,14 +193,9 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
  TGraphAsymmErrors* gr_bkg = get_gr(outFile,bkg_tag,Trigger,colors[0],leg,can);
  Format_Graph(gr_bkg);
  mg->Add(gr_bkg);
- vector<TGraphAsymmErrors*> vect_gr_data;
- for(int i = 0; i < data_tags.size(); i++)
- {
-  TGraphAsymmErrors* gr_data = get_gr(outFile,data_tags[i],Trigger,colors[i+1],leg,can);
-  Format_Graph(gr_data);
-  vect_gr_data.push_back(gr_data);
-  mg->Add(gr_data);
- }
+ TGraphAsymmErrors* gr_data = get_gr(outFile,data_tag,Trigger,colors[1],leg,can);
+ Format_Graph(gr_data);
+ mg->Add(gr_data);
  can->Clear();
  can->cd();
 
@@ -227,7 +226,7 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
  Bkg_Nominal->SetParName(0,"Norm_Gauss_CDF");
  Bkg_Nominal->SetParName(1,"Mean_Gauss_CDF");
  Bkg_Nominal->SetParName(2,"Sigma_Gauss_CDF");
- gr_bkg->Fit(Bkg_Nominal,"EMS+0");
+ gr_bkg->Fit(Bkg_Nominal,"QEMS+0");
 
  TF1* Data_Nominal = new TF1("Data_Nominal",Gaussian_CDF_Func,150.,500.,3);
  Data_Nominal->SetLineColor(kAzure+10);
@@ -237,13 +236,12 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
  Data_Nominal->SetParName(0,"Norm_Gauss_CDF");
  Data_Nominal->SetParName(1,"Mean_Gauss_CDF");
  Data_Nominal->SetParName(2,"Sigma_Gauss_CDF");
- vect_gr_data[0]->Fit(Data_Nominal,"EMS+0");
+ gr_data->Fit(Data_Nominal,"QEMS+0");
 
  can->Clear();
 
-
 //This is where we evaluate scale factors (Ratio or Fit)
- TPad *pad_res = new TPad("pad_res","pad_res",0,0.03,1,0.3);
+ TPad *pad_res = new TPad("pad_res","pad_res",0,0.03,1,0.35-0.04);
  pad_res->SetGridx(); 
  pad_res->SetGridy();
  pad_res->SetTopMargin(0.);
@@ -257,23 +255,13 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
  TMultiGraph* mg_res = new TMultiGraph();
  TGraphErrors* gr_bands_ratio = NULL;
  TGraphAsymmErrors* res_ratio;
- for(int i = 0; i < data_tags.size(); i++)
- {
-  res_ratio = TGAE_Ratio(gr_bkg,vect_gr_data[i]);
-  if(res_ratio == NULL) continue;
-  res_ratio->SetMarkerColor(colors[i+1]);
-  res_ratio->SetLineColor(colors[i+1]);
-  res_ratio->SetMarkerStyle(20);
-  mg_res->Add(res_ratio);
-  empty_mg = false;
- }
- if(empty_mg)
- {
-  delete leg;
-  delete mg;
-  delete can;
-  return -1.;
- }
+ res_ratio = TGAE_Ratio(gr_bkg,gr_data);
+ if(res_ratio == NULL) return -1;
+ res_ratio->SetMarkerColor(colors[1]);
+ res_ratio->SetLineColor(colors[1]);
+ res_ratio->SetMarkerStyle(20);
+ mg_res->Add(res_ratio);
+
  vector<double> y_upper, y_lower;
  gr_bands_ratio = Get_Bands_Ratio(x_min,x_max,res_ratio,y_upper,y_lower,Bkg_Nominal,Data_Nominal);
  gr_bands_ratio->SetFillColor(kCyan+2);
@@ -304,9 +292,10 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
  can->Update();
 
  can->cd();
- TPad* pad_gr = new TPad("pad_gr","pad_gr",0,.3,1.,1.);
+ TPad* pad_gr = new TPad("pad_gr","pad_gr",0,0.35,1.,1.);
  pad_gr->SetGridx();
  pad_gr->SetGridy();
+ pad_gr->SetBottomMargin(0.02);
  pad_gr->Draw();
  pad_gr->cd();
  can->Update();
@@ -317,7 +306,7 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
  gr_bands->SetMarkerSize(0);
  //TMultiGraph* mg_new = new TMultiGraph();
  //mg_new->Add(gr_bkg);
- //mg_new->Add(vect_gr_data[0]);
+ //mg_new->Add(gr_data);
  //mg_new->Add(gr_bands);
 
  pad_gr->cd();
@@ -337,22 +326,29 @@ double Get_ScaleFactor(string bkg_tag, vector<string> data_tags, string Trigger,
  gr_bands->GetXaxis()->SetLimits(x_min,x_max);
  gr_bands->GetYaxis()->SetTitle("Efficiency");
  gr_bkg->Draw("P");
- vect_gr_data[0]->Draw("P");
+ gr_data->Draw("P");
  pad_gr->Modified();
  pad_gr->Update();
  can->Modified();
  can->Update();
 
  leg->AddEntry(gr_bands,"Systematic Uncertainty","F");
- leg->AddEntry(Data_Nominal,"SingleMuon Fit","L");
- leg->AddEntry(Bkg_Nominal,"MC Bkg Fit","L");
+ leg->AddEntry(Data_Nominal,(data_tag+" Fit").c_str(),"L");
+ leg->AddEntry(Bkg_Nominal,(bkg_tag+" Fit").c_str(),"L");
  leg->Draw("SAME");
  l.SetTextFont(42);
  l.SetNDC();
  l.SetTextSize(0.06);
  l.SetTextFont(42);
- //l.DrawLatex(0.65,0.93,name.c_str());
- l.DrawLatex(0.1,0.93,"#bf{#it{CMS}} Preliminary");
+ double eps = 0.0015;
+ double hhi = 0.1;
+ UInt_t w, h;
+ TText t;
+ t.SetNDC();
+ t.GetTextExtent(w,h,cut.c_str());
+ double x_latex = 1.-.1-w*eps;
+ l.DrawLatex(x_latex,0.93,cut.c_str());
+ l.DrawLatex(.1,0.93,"#bf{#it{CMS}} Preliminary");
  pad_gr->Update();
  can->Update();
  can->cd();

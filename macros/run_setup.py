@@ -2,46 +2,91 @@
 import os
 import sys
 
-list_cuts = [
-    "SingleElectrontriggerE1-NeleBronzeE1",
-#    "SingleElectrontriggerE1-NeleSilverE1",
-#    "SingleElectrontriggerE1-NeleGoldE1",
-#    "SingleElectrontriggerE1-NeleE1",
-#    "SingleMuontriggerE1-NmuBronzeE1",
-#    "SingleMuontriggerE1-NmuSilverE1",
-#    "SingleMuontriggerE1-NmuGoldE1",
-#    "SingleMuontriggerE1-NmuE1",
-#    "DoubleElectrontriggerE1-NeleBronzeE2",
-#    "DoubleElectrontriggerE1-NeleSilverE2",
-#    "DoubleElectrontriggerE1-NeleGoldE2",
-#    "DoubleElectrontriggerE1-NeleE2",
-#    "DoubleMuontriggerE1-NmuBronzeE2",
-#    "DoubleMuontriggerE1-NmuSilverE2",
-#    "DoubleMuontriggerE1-NmuGoldE2",
-#    "DoubleMuontriggerE1-NmuE2",
-#    "NeleBronzeE1",
-#    "NeleSilverE1",
-#    "NeleGoldE1",
-#    "NeleE1",
-#    "NmuBronzeE1",
-#    "NmuSilverE1",
-#    "NmuGoldE1",
-#    "NmuE1",
-#    "NeleBronzeE2",
-#    "NeleSilverE2",
-#    "NeleGoldE2",
-#    "NeleE2",
-#    "NmuBronzeE2",
-#    "NmuSilverE2",
-#    "NmuGoldE2",
-#    "NmuE2",
-]
+argv_pos = 1
+DO_HIST = 0
+DO_EFF = 0
+DO_HADD = 0
+HADD_ONLY = 0
+SPLIT = 1
+safety_jobs = 100
+HOLD = 50 #Number of times to check jobs before temp holding
+NHOLD = 0
+output_dir = "/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/"
 
 print("Writing shell scripts")
+
+list_cuts_hist = [
+    "PreSelection",
+]
+
+list_cuts_eff = [
+    "PreSelection"
+    "HTlow-PreSelection",
+    "HTmed-PreSelection",
+    "HThigh-PreSelection",
+    "eleHTlow-PreSelection",
+    "eleHThigh-PreSelection",
+##    "SingleElectrontriggerE1-NeleBronzeE1",
+##    "SingleElectrontriggerE1-NeleSilverE1",
+##    "SingleElectrontriggerE1-NeleGoldE1",
+##    "SingleElectrontriggerE1-NeleE1",
+##    "SingleMuontriggerE1-NmuBronzeE1",
+##    "SingleMuontriggerE1-NmuSilverE1",
+##    "SingleMuontriggerE1-NmuGoldE1",
+##    "SingleMuontriggerE1-NmuE1",
+##    "DoubleElectrontriggerE1-NeleBronzeE2",
+##    "DoubleElectrontriggerE1-NeleSilverE2",
+##    "DoubleElectrontriggerE1-NeleGoldE2",
+##    "DoubleElectrontriggerE1-NeleE2",
+##    "DoubleMuontriggerE1-NmuBronzeE2",
+##    "DoubleMuontriggerE1-NmuSilverE2",
+##    "DoubleMuontriggerE1-NmuGoldE2",
+##    "DoubleMuontriggerE1-NmuE2",
+##    "NeleBronzeE1",
+##    "NeleSilverE1",
+##    "NeleGoldE1",
+##    "NeleE1",
+##    "NmuBronzeE1",
+##    "NmuSilverE1",
+##    "NmuGoldE1",
+##    "NmuE1",
+##    "NeleBronzeE2",
+##    "NeleSilverE2",
+##    "NeleGoldE2",
+##    "NeleE2",
+##    "NmuBronzeE2",
+##    "NmuSilverE2",
+##    "NmuGoldE2",
+##    "NmuE2",
+]
 
 #path where lists are stored
 #can be gotten by running get_lists.py
 list_path = "samples/NANO/Lists/"
+
+list_tags_SingleMuon_2016 = [
+    list_path+"Summer16_102X_Data_SingleMuon.list",
+]
+
+list_tags_SingleElectron_2016 = [
+    list_path+"Summer16_102X_Data_SingleElectron.list",
+]
+
+list_tags_DoubleMuon_2016 = [
+    list_path+"Summer16_102X_Data_DoubleMuon.list",
+]
+
+list_tags_DoubleElectron_2016 = [
+    list_path+"Summer16_102X_Data_DoubleEG.list",
+]
+
+list_tags_TTJets_2016 = [
+    list_path+"Summer16_102X_TTJets.list",
+]
+
+list_tags_Bkg_2016 = [
+    list_path+"Summer16_102X_NoQCD.list",
+]
 
 list_tags_SingleMuon_2017 = [
     list_path+"Fall17_102X_Data_SingleMuon.list",
@@ -63,24 +108,65 @@ list_tags_TTJets_2017 = [
     list_path+"Fall17_102X_TTJets.list",
 ]
 
+list_tags_Test_2017 = [
+    list_path+"Fall17_102X_Test.list",
+]
+
 list_tags_Bkg_2017 = [
-    list_path+"Fall17_102X_SubBkg.list",
+    list_path+"Fall17_102X_NoQCD.list",
+]
+
+list_tags_SingleMuon_2018 = [
+    list_path+"Autumn18_102X_Data_SingleMuon.list",
+]
+
+list_tags_SingleElectron_2018 = [
+    list_path+"Autumn18_102X_Data_EGamma.list",
+]
+
+list_tags_DoubleMuon_2018 = [
+    list_path+"Autumn18_102X_Data_DoubleMuon.list",
+]
+
+list_tags_DoubleElectron_2018 = [
+    list_path+"Autumn18_102X_Data_EGamma.list",
+]
+
+list_tags_TTJets_2018 = [
+    list_path+"Autumn18_102X_TTJets.list",
+]
+
+list_tags_Bkg_2018 = [
+    list_path+"Autumn18_102X_NoQCD.list",
 ]
 
 
 #master list of samples to run over
-list_list = [
+list_list_eff = [
+    'SingleMuon_2016',list_tags_SingleMuon_2016,
+    'SingleElectron_2016',list_tags_SingleElectron_2016,
+    'DoubleMuon_2016',list_tags_DoubleMuon_2016,
+    'DoubleElectron_2016',list_tags_DoubleElectron_2016,
+    'Bkg_2016',list_tags_Bkg_2016,
     'SingleMuon_2017',list_tags_SingleMuon_2017,
     'SingleElectron_2017',list_tags_SingleElectron_2017,
     'DoubleMuon_2017',list_tags_DoubleMuon_2017,
     'DoubleElectron_2017',list_tags_DoubleElectron_2017,
-    'TTJets_2017',list_tags_TTJets_2017,
+    'Bkg_2017',list_tags_Bkg_2017,
+    'SingleMuon_2018',list_tags_SingleMuon_2018,
+    'SingleElectron_2018',list_tags_SingleElectron_2018,
+    'DoubleMuon_2018',list_tags_DoubleMuon_2018,
+    'DoubleElectron_2018',list_tags_DoubleElectron_2018,
+    'Bkg_2018',list_tags_Bkg_2018,
 ]
 
+list_list_hist = [
+    'Bkg_2017',list_tags_Bkg_2017,
+]
 
-def run_hadd(head_dir):
+def run_hadd(head_dir,list_dir):
     print("Running HADD")
-    for cut in list_cuts:
+    for cut in list_dir:
         cut_dir = head_dir+cut+"/"
         for subdir in os.listdir(cut_dir):
             for subsubdir in os.listdir(cut_dir+"/"+subdir):
@@ -91,8 +177,12 @@ def run_hadd(head_dir):
                 os.system("rm -rf "+cut_dir+subdir+"/"+subsubdir+"/")
             os.system("hadd -k "+cut_dir+subdir+".root "+cut_dir+"/"+subdir+"/*.root")
             os.system("rm -rf "+cut_dir+subdir+"/")
-        os.system("hadd -k "+head_dir+"Eff_output_"+cut+".root "+cut_dir+"*.root")
+        if DO_EFF:
+            os.system("hadd -k "+head_dir+"Eff_output_"+cut+".root "+cut_dir+"*.root")
+        if DO_HIST:
+            os.system("hadd -k "+head_dir+"Hist_output_"+cut+".root "+cut_dir+"*.root")
         #os.system("rm -rf "+cut_dir)
+
       
 
 def get_jobs():
@@ -114,13 +204,6 @@ if __name__ == "__main__":
         print
         sys.exit(1)
 
-    argv_pos = 1
-    DO_HIST = 0
-    DO_EFF = 0
-    DO_HADD = 0
-    SPLIT = 1
-    safety_jobs = 100
-    output_dir = "/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/"
   
     if '-split' in sys.argv:
         p = sys.argv.index('-split')
@@ -143,7 +226,25 @@ if __name__ == "__main__":
         p = sys.argv.index('-o')
         output_dir = sys.argv[p+1]
         argv_pos += 2
+    if '--only-hadd' in sys.argv:
+        HADD_ONLY = 1
+        argv_pos += 1
+    
 
+if(DO_EFF):
+    list_cuts = list_cuts_eff
+    list_list = list_list_eff
+if(DO_HIST):
+    list_cuts = list_cuts_hist
+    list_list = list_list_hist
+
+if(HADD_ONLY):
+    if(DO_EFF):
+        run_hadd(output_dir+"EFF/",list_cuts_eff)
+        sys.exit(1)
+    if(DO_HIST):
+        run_hadd(output_dir+"HIST/",list_cuts_hist)
+        sys.exit(1)
 
 TOT_NJOBS = 0
 NJOBS = 0
@@ -153,7 +254,6 @@ if SPLIT > safety_jobs:
     sys.exit(1)
 
 
-#run python
 current_tag = ''
 for cut in list_cuts:
     for tag in list_list:
@@ -163,22 +263,50 @@ for cut in list_cuts:
                 while NJOBS > safety_jobs:
                     print("Hit safety limit")
                     print("Waiting for jobs to finish...")
-                    NJOBS = get_jobs()+SPLIT
+                    NJOBS = get_jobs()+(SPLIT*sum(1 for line in open(list_tag)))
+                    print("Trying to submit: "+str((SPLIT*sum(1 for line in open(list_tag))))+" jobs...")
+                    os.system("sleep 60")
+                    NHOLD+=1
+                    if NHOLD == HOLD:
+                        os.system("condor_hold $USER")
+                        NHOLD = 0
+                    if (SPLIT*sum(1 for line in open(list_tag))) > safety_jobs:
+                        break
                 TOT_NJOBS+=(SPLIT*sum(1 for line in open(list_tag)))
                 if(DO_EFF):
                     os.system("python setup.py "+"-list "+list_tag+" -cut "+cut+" -tag "+current_tag+" -output "+output_dir+" -split "+str(SPLIT)+" --eff ")
                 if(DO_HIST):
                     os.system("python setup.py "+"-list "+list_tag+" -cut "+cut+" -tag "+current_tag+" -output "+output_dir+" -split "+str(SPLIT)+" --hist ")
+                NJOBS = get_jobs()+(SPLIT*sum(1 for line in open(list_tag)))
+                while NJOBS > safety_jobs:
+                    print("Hit safety limit")
+                    print("Waiting for jobs to finish...")
+                    NJOBS = get_jobs()
+                    os.system("sleep 60")
+                    NHOLD+=1
+                    if NHOLD == HOLD:
+                        os.system("condor_hold $USER")
+                        NHOLD = 0
+                    
         else:
             current_tag = tag
 
 print("Finished Submitting Jobs")
 print("Submitted a Total of: "+str(TOT_NJOBS)+" Jobs")
 
-
-if get_jobs() == 0 and DO_HADD:
+if DO_HADD:
+    print("Waiting for jobs to finish to run hadd")
+    NJOBS = get_jobs()
+    while NJOBS is not 0:
+        NJOBS = get_jobs()
+        os.system("sleep 60")
+        NHOLD+=1
+        if NHOLD == HOLD:
+            os.system("condor_hold $USER")
+            NHOLD = 0
     if(DO_EFF):
-        run_hadd(output_dir+"EFF/")
+        run_hadd(output_dir+"EFF/",list_cuts_eff)
     if(DO_HIST):
-        run_hadd(output_dir+"HIST/")
+        run_hadd(output_dir+"HIST/",list_cuts_hist)
 
+print("Submitted a Total of: "+str(TOT_NJOBS)+" Jobs")

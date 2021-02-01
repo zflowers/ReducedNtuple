@@ -95,7 +95,7 @@ void Maker(){
   inputFile->close();
   delete inputFile; 
   for(int i = 0; i < int(filenames.size()); i++){
-cout << filenames[i] << endl;
+    cout << filenames[i] << endl;
     chain->Add(filenames[i].c_str(),0);
   }
  }
@@ -111,7 +111,6 @@ cout << filenames[i] << endl;
  {
   output = "Eff_output_"+cut+".root";
  }
- cout << "Input file: " << input << endl;
  cout << "Output file: " << output << endl;
 
  if(Do_Hist)
