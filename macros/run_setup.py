@@ -20,12 +20,12 @@ list_cuts_hist = [
 ]
 
 list_cuts_eff = [
-    "PreSelection"
-    "HTlow-PreSelection",
-    "HTmed-PreSelection",
-    "HThigh-PreSelection",
-    "eleHTlow-PreSelection",
-    "eleHThigh-PreSelection",
+    "PreSelection",
+#    "HTlow",
+#    "HTmed",
+#    "HThigh",
+#    "eleHTlow",
+#    "eleHThigh",
 ##    "SingleElectrontriggerE1-NeleBronzeE1",
 ##    "SingleElectrontriggerE1-NeleSilverE1",
 ##    "SingleElectrontriggerE1-NeleGoldE1",
@@ -143,21 +143,22 @@ list_tags_Bkg_2018 = [
 
 #master list of samples to run over
 list_list_eff = [
-    'SingleMuon_2016',list_tags_SingleMuon_2016,
-    'SingleElectron_2016',list_tags_SingleElectron_2016,
-    'DoubleMuon_2016',list_tags_DoubleMuon_2016,
-    'DoubleElectron_2016',list_tags_DoubleElectron_2016,
-    'Bkg_2016',list_tags_Bkg_2016,
-    'SingleMuon_2017',list_tags_SingleMuon_2017,
-    'SingleElectron_2017',list_tags_SingleElectron_2017,
-    'DoubleMuon_2017',list_tags_DoubleMuon_2017,
-    'DoubleElectron_2017',list_tags_DoubleElectron_2017,
-    'Bkg_2017',list_tags_Bkg_2017,
-    'SingleMuon_2018',list_tags_SingleMuon_2018,
-    'SingleElectron_2018',list_tags_SingleElectron_2018,
-    'DoubleMuon_2018',list_tags_DoubleMuon_2018,
-    'DoubleElectron_2018',list_tags_DoubleElectron_2018,
-    'Bkg_2018',list_tags_Bkg_2018,
+#    'SingleMuon_2016',list_tags_SingleMuon_2016,
+#    'SingleElectron_2016',list_tags_SingleElectron_2016,
+#    'DoubleMuon_2016',list_tags_DoubleMuon_2016,
+#    'DoubleElectron_2016',list_tags_DoubleElectron_2016,
+#    'Bkg_2016',list_tags_Bkg_2016,
+#    'SingleMuon_2017',list_tags_SingleMuon_2017,
+#    'SingleElectron_2017',list_tags_SingleElectron_2017,
+#    'DoubleMuon_2017',list_tags_DoubleMuon_2017,
+#    'DoubleElectron_2017',list_tags_DoubleElectron_2017,
+#    'Bkg_2017',list_tags_Bkg_2017,
+#    'SingleMuon_2018',list_tags_SingleMuon_2018,
+#    'SingleElectron_2018',list_tags_SingleElectron_2018,
+#    'DoubleMuon_2018',list_tags_DoubleMuon_2018,
+#    'DoubleElectron_2018',list_tags_DoubleElectron_2018,
+#    'Bkg_2018',list_tags_Bkg_2018,
+    'Test_2017',list_tags_Test_2017,
 ]
 
 list_list_hist = [

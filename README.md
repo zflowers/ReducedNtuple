@@ -4,6 +4,10 @@ voms-proxy-init --voms cms -valid 192:00
 
 eval `scramv1 runtime -sh`
 
+If on lxplus:
+
+source /cvmfs/sft.cern.ch/lcg/views/LCG_83/x86_64-slc6-gcc48-opt/setup.sh
+
 To make Ntuples
 
 Single File:
