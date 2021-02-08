@@ -18,3 +18,7 @@ For local tests:
 Example With New Splitting:
 
 python run_setup.py -split 10 --eff --hadd -safety 100 -o $PWD/
+
+Standalone hadd:
+
+python run_setup.py --eff --only-hadd -o $PWD/

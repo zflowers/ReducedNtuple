@@ -1,9 +1,8 @@
 
 
--- Schedd: bigbird19.cern.ch : <188.185.114.121:9618?... @ 02/02/21 02:16:07
-OWNER    BATCH_NAME     SUBMITTED   DONE   RUN    IDLE  TOTAL JOB_IDS
-zflowers ID: 2295149   2/2  02:16      _      _     20     20 2295149.0-19
+-- Schedd: login-el7.uscms.org : <192.170.227.182:9618?... @ 02/05/21 03:17:42
+OWNER BATCH_NAME      SUBMITTED   DONE   RUN    IDLE   HOLD  TOTAL JOB_IDS
 
-Total for query: 20 jobs; 0 completed, 0 removed, 20 idle, 0 running, 0 held, 0 suspended 
-Total for all users: 9715 jobs; 1036 completed, 0 removed, 7880 idle, 742 running, 57 held, 0 suspended
+Total for query: 0 jobs; 0 completed, 0 removed, 0 idle, 0 running, 0 held, 0 suspended 
+Total for all users: 61619 jobs; 0 completed, 0 removed, 48499 idle, 11963 running, 1157 held, 0 suspended
 
