@@ -237,6 +237,7 @@ inline void Eff_Nano::Analyze(){
 
       if(eleHTlow_cut_eff)
       {
+       bool skip = false;
        double HT = 0.;
        TBranch* PT_jet_branch = NULL;
        vector<double>* PT_jet=0;
@@ -266,7 +267,7 @@ inline void Eff_Nano::Analyze(){
        {
         if(abs(PDGID_lep->at(k)) == 11)
         {
-         if(PT_lep->at(k)/HT > 0.15) continue;
+         if(PT_lep->at(k)/HT > 0.15) {skip = true;}
         }
         break;
        }
@@ -276,10 +277,12 @@ inline void Eff_Nano::Analyze(){
        Nlep_branch->ResetAddress();
        PDGID_lep_branch->ResetAddress();
        m_Tree->ResetBranchAddresses();
+       if(skip) continue;
       }
 
       if(eleHThigh_cut_eff)
       {
+       bool skip = false;
        double HT = 0.;
        TBranch* PT_jet_branch = NULL;
        vector<double>* PT_jet=0;
@@ -309,7 +312,7 @@ inline void Eff_Nano::Analyze(){
        {
         if(abs(PDGID_lep->at(k)) == 11)
         {
-         if(PT_lep->at(k)/HT < 0.15) continue;
+         if(PT_lep->at(k)/HT < 0.15) {skip = true;}
         }
         break;
        }
@@ -319,6 +322,7 @@ inline void Eff_Nano::Analyze(){
        Nlep_branch->ResetAddress();
        PDGID_lep_branch->ResetAddress();
        m_Tree->ResetBranchAddresses();
+       if(skip) continue;
       }
 
       if(HTlow_cut_eff)

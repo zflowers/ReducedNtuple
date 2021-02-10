@@ -106,6 +106,30 @@ string RewriteCut(std::string cut)
  {
   new_cut+= " Two Gold Electrons &";
  }
+ if(cut.find("HTlow") != std::string::npos)
+ {
+  new_cut+= " HT < 300 &";
+ }
+ if(cut.find("HTmed") != std::string::npos)
+ {
+  new_cut+= " 300 < HT < 500 &";
+ }
+ if(cut.find("HThigh") != std::string::npos)
+ {
+  new_cut+= " HT > 500 &";
+ }
+ if(cut.find("eleHTlow") != std::string::npos)
+ {
+  new_cut+= " #frac{e^{-}_{pT}}{HT} < 0.15 &";
+ }
+ if(cut.find("eleHThigh") != std::string::npos)
+ {
+  new_cut+= " #frac{e^{-}_{pT}}{HT} > 0.15 &";
+ }
+ if(cut.find("PreSelection") != std::string::npos)
+ {
+  new_cut+= "PreSelection";
+ }
  if(new_cut.back() == '&') new_cut.pop_back();
  return new_cut;
 }
@@ -121,40 +145,40 @@ void eraseSubStr(std::string & mainStr, const std::string & toErase)
 
 void Plotter_Eff_Nano(vector<string> inFile, vector<string> cut){
  //string inFile ="output_quick.root";
- vector<string> tags_2016 = {"QCD_2016", "WJets_2016", "TTJets_2016", "ZJetsToNuNu_2016", "SingleElectron_2016", "SingleMuon_2016"};
- vector<string> tags_2017 = {"QCD_2017", "WJets_2017", "TTJets_2017", "ZJetsToNuNu_2017", "SingleElectron_2017", "SingleMuon_2017"};
- vector<string> tags_2018 = {"QCD_2018", "WJets_2018", "TTJets_2018", "ZJetsToNuNu_2018", "SingleElectron_2018", "SingleMuon_2018"};
- vector<string> tags_bkg_2016 = {"QCD_2016", "WJets_2016", "TTJets_2016", "ZJetsToNuNu_2016"};
- vector<string> tags_bkg_2017 = {"QCD_2017", "WJets_2017", "TTJets_2017", "ZJetsToNuNu_2017"};
- vector<string> tags_bkg_2018 = {"QCD_2018", "WJets_2018", "TTJets_2018", "ZJetsToNuNu_2018"};
- vector<string> tags_data_2016 = {"SingleElectron_2016", "SingleMuon_2016"};
- vector<string> tags_data_2017 = {"SingleElectron_2017", "SingleMuon_2017"};
- vector<string> tags_data_2018 = {"SingleElectron_2018", "SingleMuon_2018"};
- vector<string> tags_MET_2016 = {"MET_2016","MET_2017","MET_2018"};
- vector<string> tags_SingleElectron_2016 = {"SingleElectron_2016"};
- vector<string> tags_SingleElectron_2017 = {"SingleElectron_2017"};
- vector<string> tags_SingleElectron_2018 = {"SingleElectron_2018"};
- vector<string> tags_SingleMuon_2016 = {"SingleMuon_2016"};
- vector<string> tags_SingleMuon_2017 = {"SingleMuon_2017"};
- vector<string> tags_SingleMuon_2018 = {"SingleMuon_2018"};
- vector<string> tags_TTJets_2016 = {"TTJets_2016"};
- vector<string> tags_ZJets_2016 = {"ZJetsToNuNu_2016"};
- vector<string> tags_WJets_2016 = {"WJets_2016"};
- vector<string> tags_QCD_2016 = {"WJets_2016"};
- vector<string> tags_TTJets_2017 = {"TTJets_2017"};
- vector<string> tags_ZJets_2017 = {"ZJetsToNuNu_2017"};
- vector<string> tags_WJets_2017 = {"WJets_2017"};
- vector<string> tags_QCD_2017 = {"WJets_2017"};
- vector<string> tags_TTJets_2018 = {"TTJets_2018"};
- vector<string> tags_ZJets_2018 = {"ZJetsToNuNu_2018"};
- vector<string> tags_WJets_2018 = {"WJets_2018"};
- vector<string> tags_QCD_2018 = {"WJets_2018"};
- vector<string> SingleMuon = {"SingleMuon_2016","SingleMuon_2017","SingleMuon_2018"};
- vector<string> SingleElectron = {"SingleElectron_2016","SingleElectron_2017","SingleElectron_2018"};
- vector<string> WJets_years = {"WJets_2016","WJets_2017","WJets_2018"};
- vector<string> TTJets_years = {"TTJets_2016","TTJets_2017","TTJets_2018"};
- vector<string> WWTo2L2Nu_years = {"WWTo2L2Nu_2016","WWTo2L2Nu_2017","WWTo2L2Nu_2018"};
- vector<string> ZJets_years = {"ZJetsToNuNu_2016","ZJetsToNuNu_2017","ZJetsToNuNu_2018"};
+ //vector<string> tags_2016 = {"QCD_2016", "WJets_2016", "TTJets_2016", "ZJetsToNuNu_2016", "SingleElectron_2016", "SingleMuon_2016"};
+ //vector<string> tags_2017 = {"QCD_2017", "WJets_2017", "TTJets_2017", "ZJetsToNuNu_2017", "SingleElectron_2017", "SingleMuon_2017"};
+ //vector<string> tags_2018 = {"QCD_2018", "WJets_2018", "TTJets_2018", "ZJetsToNuNu_2018", "SingleElectron_2018", "SingleMuon_2018"};
+ //vector<string> tags_bkg_2016 = {"QCD_2016", "WJets_2016", "TTJets_2016", "ZJetsToNuNu_2016"};
+ //vector<string> tags_bkg_2017 = {"QCD_2017", "WJets_2017", "TTJets_2017", "ZJetsToNuNu_2017"};
+ //vector<string> tags_bkg_2018 = {"QCD_2018", "WJets_2018", "TTJets_2018", "ZJetsToNuNu_2018"};
+ //vector<string> tags_data_2016 = {"SingleElectron_2016", "SingleMuon_2016"};
+ //vector<string> tags_data_2017 = {"SingleElectron_2017", "SingleMuon_2017"};
+ //vector<string> tags_data_2018 = {"SingleElectron_2018", "SingleMuon_2018"};
+ //vector<string> tags_MET_2016 = {"MET_2016","MET_2017","MET_2018"};
+ //vector<string> tags_SingleElectron_2016 = {"SingleElectron_2016"};
+ //vector<string> tags_SingleElectron_2017 = {"SingleElectron_2017"};
+ //vector<string> tags_SingleElectron_2018 = {"SingleElectron_2018"};
+ //vector<string> tags_SingleMuon_2016 = {"SingleMuon_2016"};
+ //vector<string> tags_SingleMuon_2017 = {"SingleMuon_2017"};
+ //vector<string> tags_SingleMuon_2018 = {"SingleMuon_2018"};
+ //vector<string> tags_TTJets_2016 = {"TTJets_2016"};
+ //vector<string> tags_ZJets_2016 = {"ZJetsToNuNu_2016"};
+ //vector<string> tags_WJets_2016 = {"WJets_2016"};
+ //vector<string> tags_QCD_2016 = {"WJets_2016"};
+ //vector<string> tags_TTJets_2017 = {"TTJets_2017"};
+ //vector<string> tags_ZJets_2017 = {"ZJetsToNuNu_2017"};
+ //vector<string> tags_WJets_2017 = {"WJets_2017"};
+ //vector<string> tags_QCD_2017 = {"WJets_2017"};
+ //vector<string> tags_TTJets_2018 = {"TTJets_2018"};
+ //vector<string> tags_ZJets_2018 = {"ZJetsToNuNu_2018"};
+ //vector<string> tags_WJets_2018 = {"WJets_2018"};
+ //vector<string> tags_QCD_2018 = {"WJets_2018"};
+ //vector<string> SingleMuon = {"SingleMuon_2016","SingleMuon_2017","SingleMuon_2018"};
+ //vector<string> SingleElectron = {"SingleElectron_2016","SingleElectron_2017","SingleElectron_2018"};
+ //vector<string> WJets_years = {"WJets_2016","WJets_2017","WJets_2018"};
+ //vector<string> TTJets_years = {"TTJets_2016","TTJets_2017","TTJets_2018"};
+ //vector<string> WWTo2L2Nu_years = {"WWTo2L2Nu_2016","WWTo2L2Nu_2017","WWTo2L2Nu_2018"};
+ //vector<string> ZJets_years = {"ZJetsToNuNu_2016","ZJetsToNuNu_2017","ZJetsToNuNu_2018"};
 
  vector<int> colors = {kBlue+1, kRed+2, kGreen+1, kMagenta, kCyan, kYellow, kViolet+2, kAzure+7, kPink, kGreen, kGray};
 
@@ -177,8 +201,8 @@ void Plotter_Eff_Nano(vector<string> inFile, vector<string> cut){
  //Get_Plot(tags_2017,METHTtrigger,colors,inFile,"METHTtrigger_2017","Trigger");
  //Get_Plot(tags_2017,METORtrigger,colors,inFile,"METORtrigger_2017","Trigger");
  
- for(int i = 0; i < inFile.size(); i++)
- {
+// for(int i = 0; i < inFile.size(); i++)
+// {
  // Get_Plot(tags_2016,METtrigger,colors,inFile[i],METtrigger[0]+"_"+cut[i]+"_2016","Trigger");
  // Get_Plot(tags_2017,METtrigger,colors,inFile[i],METtrigger[0]+"_"+cut[i]+"_2017","Trigger");
  // Get_Plot(tags_2018,METtrigger,colors,inFile[i],METtrigger[0]+"_"+cut[i]+"_2018","Trigger");
@@ -190,7 +214,7 @@ void Plotter_Eff_Nano(vector<string> inFile, vector<string> cut){
 //  Get_Plot(WWTo2L2Nu_years,METtrigger,colors,inFile[i],METtrigger[0]+"WWTo2L2Nu"+"_"+cut[i],"Trigger");
 //  Get_Plot(ZJetsToNuNu_years,METtrigger,colors,inFile[i],METtrigger[0]+"ZJetsToNuNu"+"_"+cut[i],"Trigger");
 
- }
+// }
  
  //Get_Plot(tags_TTJets_2016,METtrigger,colors,inFile,cut,"METtrigger_2016_TTJets","FinalState");
  //Get_Plot(tags_ZJets_2016,METtrigger,colors,inFile,cut,"METtrigger_2016_ZJets","FinalState");
@@ -205,14 +229,26 @@ void Plotter_Eff_Nano(vector<string> inFile, vector<string> cut){
  //Get_Plot(tags_WJets_2018,METtrigger,colors,inFile,cut,"METtrigger_2018_WJets","FinalState");
  //Get_Plot(tags_QCD_2018,METtrigger,colors,inFile,cut,"METtrigger_2018_QCD","FinalState");
  
- vector<string> tags_allbkg_2017 = {"Bkg_2017"};
+ vector<string> tags_bkg_2017 = {"Bkg_2017"};
+ vector<string> tags_SingleElectron_2017 = {"SingleElectron_2017"};
+ vector<string> tags_SingleMuon_2017 = {"SingleMuon_2017"};
+ vector<string> tags_bkg_years = {"Bkg_2016","Bkg_2017","Bkg_2018"};
+ vector<string> tags_SingleElectron_years = {"SingleElectron_2016","SingleElectron_2017","SingleElectron_2018"};
+ vector<string> tags_SingleMuon_years = {"SingleMuon_2016","SingleMuon_2017","SingleMuon_2018"};
  for(int i = 0; i < int(cut.size()); i++)
  {
   states += ("_"+cut[i]);
  } 
 
- Get_Plot(tags_allbkg_2017,METtrigger,colors,inFile,cut,"METtrigger_2017"+states,"FinalState");
-
+ Get_Plot(tags_bkg_2017,METtrigger,colors,inFile,cut,"Bkg_2017","FinalState");
+ Get_Plot(tags_SingleElectron_2017,METtrigger,colors,inFile,cut,"SingleElectron_2017","FinalState");
+ Get_Plot(tags_SingleMuon_2017,METtrigger,colors,inFile,cut,"SingleMuon_2017","FinalState");
+ for(int i = 0; i < inFile.size(); i++)
+ {
+ // Get_Plot(tags_bkg_years,METtrigger,colors,inFile[i],cut[i],"Trigger");
+ // Get_Plot(tags_SingleElectron_years,METtrigger,colors,inFile[i],cut[i],"Trigger");
+ // Get_Plot(tags_SingleMuon_years,METtrigger,colors,inFile[i],cut[i],"Trigger");
+ }
 }
 
 //get all Eff on one plot
@@ -273,12 +309,11 @@ void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, 
 
  leg->Draw("SAME");
 
- l.SetTextFont(42);
  l.SetNDC();
  l.SetTextSize(0.04);
  l.SetTextFont(42);
- l.DrawLatex(0.65,0.93,name.c_str());
- l.DrawLatex(0.13,0.93,"#bf{#it{CMS}} Internal 13 TeV Simulation");
+ l.DrawLatex(0.4,0.93,RewriteCut(name).c_str());
+ l.DrawLatex(0.13,0.93,"#bf{#it{CMS}} Preliminary 13 TeV");
  can->Modified();
  can->Update();
 
@@ -446,6 +481,7 @@ TMultiGraph* get_mg(vector<string> cut, vector<string> tags, vector<string> Trig
      string title = " ;";
      mg->SetTitle((title+gr->GetXaxis()->GetTitle()+";"+gr->GetYaxis()->GetTitle()).c_str());
     }
+    string new_cut = RewriteCut(cut.at(k));
     if(option.compare("Tag") == 0)
     {
      leg->AddEntry(gr,Triggers.at(j).c_str(),"PL");
@@ -453,10 +489,10 @@ TMultiGraph* get_mg(vector<string> cut, vector<string> tags, vector<string> Trig
     else if(option.compare("Trigger") == 0)
     {
      leg->AddEntry(gr,tags.at(i).c_str(),"PL");
+     can->SetName((new_cut+"_"+tags.at(i)).c_str());
     }
     else if(option.compare("FinalState") == 0)
     {
-     string new_cut = RewriteCut(cut.at(k));
      leg->AddEntry(gr,new_cut.c_str(),"PL");
     }
     gr->SetMarkerStyle(20);

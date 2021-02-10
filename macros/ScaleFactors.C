@@ -37,9 +37,9 @@ Double_t Gaussian_CDF_Func(Double_t *x, Double_t *par)
 void ScaleFactors(vector<string> inFile, vector<string> cut){
 
  //string inFile ="output_quick.root";
- vector<string> data_tags_2016 = {"SingleElectron_2016","SingleMuon_2016"};
+ vector<string> data_tags_2016 = {"SingleElectron_2016","SingleMuon_2016","DoubleElectron_2016","DoubleMuon_2016"};
  vector<string> data_tags_2017 = {"SingleElectron_2017","SingleMuon_2017","DoubleElectron_2017","DoubleMuon_2017"};
- vector<string> data_tags_2018 = {"SingleElectron_2018","SingleMuon_2018"};
+ vector<string> data_tags_2018 = {"SingleElectron_2018","SingleMuon_2018","DoubleElectron_2018","DoubleMuon_2018"};
  
  //vector<int> colors = {kCyan, kMagenta, kYellow, kViolet+2, kAzure+7, kPink, kGreen, kGray};
  vector<int> colors = {kGreen+2, kAzure-2, kYellow, kViolet+2, kAzure+7, kPink, kGreen, kGray};
@@ -48,13 +48,12 @@ void ScaleFactors(vector<string> inFile, vector<string> cut){
  {
   for(int j = 0; j < int(data_tags_2017.size()); j++)
   {
-   //double scale_Ratio_2016 = Get_ScaleFactor("Bkg_2016", data_tags_2016, "METtrigger", colors, inFile[i], "METtrigger"+cut[i]+"_2016", "Ratio");
-   //double scale_Fit_2016 = Get_ScaleFactor("Bkg_2016", data_tags_2016, "METtrigger", colors, inFile[i], "METtrigger"+cut[i]+"_2016", "Fit");
+   double scale_Ratio_2016 = Get_ScaleFactor("Bkg_2016", data_tags_2016[j], "METtrigger", colors, inFile[i], cut[i], "Ratio");
+   if(scale_Ratio_2016 == -1) cout << "Failed to get SF for: " << data_tags_2016[j] << " " << cut[i] << endl;
    double scale_Ratio_2017 = Get_ScaleFactor("Bkg_2017", data_tags_2017[j], "METtrigger", colors, inFile[i], cut[i], "Ratio");
    if(scale_Ratio_2017 == -1) cout << "Failed to get SF for: " << data_tags_2017[j] << " " << cut[i] << endl;
-   //double scale_Fit_2017 = Get_ScaleFactor("Bkg_2017", data_tags_2017, "METtrigger", colors, inFile[i], "METtrigger"+cut[i]+"_2017", "Fit");
-   //double scale_Ratio_2018 = Get_ScaleFactor("Bkg_2018", data_tags_2018, "METtrigger", colors, inFile[i], "METtrigger"+cut[i]+"_2018", "Ratio");
-   //double scale_Fit_2018 = Get_ScaleFactor("Bkg_2018", data_tags_2018, "METtrigger", colors, inFile[i], "METtrigger"+cut[i]+"_2018", "Fit");
+   double scale_Ratio_2018 = Get_ScaleFactor("Bkg_2018", data_tags_2018[j], "METtrigger", colors, inFile[i], cut[i], "Ratio");
+   if(scale_Ratio_2018 == -1) cout << "Failed to get SF for: " << data_tags_2018[j] << " " << cut[i] << endl;
   }
  }
 }
@@ -369,7 +368,8 @@ double Get_ScaleFactor(string bkg_tag, string data_tag, string Trigger, vector<i
 
 
 //Save stuff
- TFile* output = TFile::Open(outFile.c_str(),"UPDATE");
+ //TFile* output = TFile::Open(outFile.c_str(),"UPDATE");
+ TFile* output = TFile::Open("output_Scale.root","UPDATE");
  can->Write();
  output->Close();
  delete leg;
@@ -567,6 +567,7 @@ int main(int argc, char* argv[])
  std::ifstream fs(cutsFile);
  while(std::getline(fs,cut))
  {
+  if(cut.rfind("#", 0) == 0) continue;
   cuts.push_back(cut);
   files.push_back("Eff_output_"+cut+".root");
   //files.push_back("NoLowHTScale_MET_PreSelection.root");
