@@ -390,7 +390,6 @@ inline void Eff_Nano::Analyze(){
 
       if(global_cuts(jentry)) continue;
 
-
       TBranch* weight_branch = NULL;
       Double_t weight = 0.;
       TBranch* x_branch = NULL;
@@ -405,6 +404,7 @@ inline void Eff_Nano::Analyze(){
       trig_branch->GetEntry(jentry);
       eff->FillWeighted(trig,weight*lumi_eff,x);
 
+/*
       double HT = 0.;
       TBranch* PT_jet_branch = NULL;
       vector<double>* PT_jet=0;
@@ -422,7 +422,7 @@ inline void Eff_Nano::Analyze(){
       PT_jet_branch->ResetAddress();
       Njet_branch->ResetAddress();
       m_Tree->ResetBranchAddresses();
-
+*/
 
       trig_branch->ResetAddress();
       weight_branch->ResetAddress();
