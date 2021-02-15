@@ -22,3 +22,8 @@ python run_setup.py -split 10 --eff --hadd -safety 100 -o $PWD/
 Standalone hadd:
 
 python run_setup.py --eff --only-hadd -o $PWD/
+
+Add time to beginning to get time to complete, examples:
+
+time python run_setup.py -split 10 --eff --hadd -safety 100 -o $PWD/
+time python run_setup.py --eff --only-hadd -o $PWD/

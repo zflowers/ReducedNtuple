@@ -340,7 +340,7 @@ inline void Eff_Nano::Analyze(){
        {
         HT+=PT_jet->at(k);
        }
-       if(HT > 300.) continue;
+       if(HT > 400.) continue;
        PT_jet_branch->ResetAddress();
        Njet_branch->ResetAddress();
        m_Tree->ResetBranchAddresses();
@@ -361,7 +361,7 @@ inline void Eff_Nano::Analyze(){
        {
         HT+=PT_jet->at(k);
        }
-       if(HT < 300. || HT > 500.) continue;
+       if(HT < 400. || HT > 500.) continue;
        PT_jet_branch->ResetAddress();
        Njet_branch->ResetAddress();
        m_Tree->ResetBranchAddresses();
