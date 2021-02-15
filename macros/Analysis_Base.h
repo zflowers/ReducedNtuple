@@ -1069,6 +1069,10 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
  string current_cut = m_cut;
 
  bool PTISR_cut = true;
+ bool HTVeryLoose_cut = true;
+ bool HTLoose_cut = true;
+ bool HTMedium_cut = true;
+ bool HT_cut = true;
  bool PTCM_cut = true;
  bool RISR_cut = true;
  bool dphiCMI_cut = true;
@@ -1108,6 +1112,7 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
  bool EventFlag_JetInHEM_cut = true;
  bool EventFlag_JetInHEM_Pt20_cut = true;
  bool EventFlag_JetInHEM_Pt20_JetID_cut = true;
+ bool HEM_Veto_cut = true;
 
  bool HEM_cut = true;
 /*
@@ -1155,6 +1160,25 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
  //string MET_str = "METG175";
  //MET_cut = Get_Cut(jentry,"MET",MET_str);
 
+ if(current_cut.find("HTVeryLoose") != std::string::npos)
+ {
+  HTVeryLoose_cut = Get_Cut(jentry,"HTVeryLoose",current_cut);
+ }
+
+ if(current_cut.find("HTLoose") != std::string::npos)
+ {
+  HTLoose_cut = Get_Cut(jentry,"HTLoose",current_cut);
+ }
+
+ if(current_cut.find("HTMedium") != std::string::npos)
+ {
+  HTMedium_cut = Get_Cut(jentry,"HTMedium",current_cut);
+ }
+
+ if(current_cut.find("HT") != std::string::npos)
+ {
+  HT_cut = Get_Cut(jentry,"HT",current_cut);
+ }
 
  if(current_cut.find("PTISR") != std::string::npos)
  {
@@ -1184,6 +1208,11 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
  if(current_cut.find("EventFlag_JetInHEM") != std::string::npos)
  {
   EventFlag_JetInHEM_cut = Get_Cut(jentry,"EventFlag_JetInHEM",current_cut);
+ }
+
+ if(current_cut.find("HEM_Veto") != std::string::npos)
+ {
+  HEM_Veto_cut = Get_Cut(jentry,"HEM_Veto",current_cut);
  }
 
  if(current_cut.find("PTCM") != std::string::npos)
@@ -1288,7 +1317,7 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
  if(current_cut.find("PreSelection") == 0)
  {
   current_cut = "";
-  if(PTISR_cut && RISR_cut && PTCM_cut && dphiCMI_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && NmuBronze_cut && NeleBronze_cut && NlepBronze_cut && NmuSilver_cut && NeleSilver_cut && NlepSilver_cut && NmuGold_cut && NeleGold_cut && NlepGold_cut && Njet_cut && Njet_S_cut && Nbjet_ISR_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut && SingleElectrontrigger_cut && SingleMuontrigger_cut && DoubleElectrontrigger_cut && DoubleMuontrigger_cut && EventFilter_cut && EventFlag_FailJetID_cut && EventFlag_JetInHEM_cut && EventFlag_JetInHEM_Pt20_cut && EventFlag_JetInHEM_Pt20_JetID_cut && HEM_cut)
+  if(PTISR_cut && RISR_cut && PTCM_cut && dphiCMI_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && NmuBronze_cut && NeleBronze_cut && NlepBronze_cut && NmuSilver_cut && NeleSilver_cut && NlepSilver_cut && NmuGold_cut && NeleGold_cut && NlepGold_cut && Njet_cut && Njet_S_cut && Nbjet_ISR_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut && SingleElectrontrigger_cut && SingleMuontrigger_cut && DoubleElectrontrigger_cut && DoubleMuontrigger_cut && EventFilter_cut && EventFlag_FailJetID_cut && EventFlag_JetInHEM_cut && EventFlag_JetInHEM_Pt20_cut && EventFlag_JetInHEM_Pt20_JetID_cut && HEM_cut && HEM_Veto_cut && HTVeryLoose_cut && HTLoose_cut && HTMedium_cut)
   {
    return false;
   }
@@ -1299,7 +1328,7 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
   cout << "ERROR: Some cuts not applied: " << current_cut << endl;
  }
 
- if(PTISR_cut && RISR_cut && PTCM_cut && dphiCMI_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && NmuBronze_cut && NeleBronze_cut && NlepBronze_cut && NmuSilver_cut && NeleSilver_cut && NlepSilver_cut && NmuGold_cut && NeleGold_cut && NlepGold_cut && Njet_cut && Njet_S_cut && Nbjet_ISR_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut && SingleElectrontrigger_cut && SingleMuontrigger_cut && DoubleElectrontrigger_cut && DoubleMuontrigger_cut && EventFilter_cut && EventFlag_FailJetID_cut && EventFlag_JetInHEM_cut && EventFlag_JetInHEM_Pt20_cut && EventFlag_JetInHEM_Pt20_JetID_cut && HEM_cut)
+ if(PTISR_cut && RISR_cut && PTCM_cut && dphiCMI_cut && MET_cut && Nmu_cut && Nele_cut && Nlep_cut && NmuBronze_cut && NeleBronze_cut && NlepBronze_cut && NmuSilver_cut && NeleSilver_cut && NlepSilver_cut && NmuGold_cut && NeleGold_cut && NlepGold_cut && Njet_cut && Njet_S_cut && Nbjet_ISR_cut && METtrigger_cut && METORtrigger_cut && METHTtrigger_cut && SingleElectrontrigger_cut && SingleMuontrigger_cut && DoubleElectrontrigger_cut && DoubleMuontrigger_cut && EventFilter_cut && EventFlag_FailJetID_cut && EventFlag_JetInHEM_cut && EventFlag_JetInHEM_Pt20_cut && EventFlag_JetInHEM_Pt20_JetID_cut && HEM_cut && HEM_Veto_cut && HTVeryLoose_cut && HTLoose_cut && HTMedium_cut)
  {
   return false;
  }

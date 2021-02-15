@@ -67,11 +67,6 @@ inline void Eff_Nano::Set_x(string x)
 bool Clean_cut_eff = true;
 bool dPhiMET_V_cut_eff = true;
 bool RISR_uppercut_eff = true;
-bool HTlow_cut_eff = false;
-bool HTmed_cut_eff = false;
-bool HThigh_cut_eff = false;
-bool eleHTlow_cut_eff = false;
-bool eleHThigh_cut_eff = false;
 double lumi_eff = 1.;
 
 inline void Eff_Nano::Analyze(){
@@ -106,16 +101,10 @@ inline void Eff_Nano::Analyze(){
     bin_edges_ptr = bin_edges;
    }
    else { cout << "Couldn't find x = " << m_x << " for binning " << endl; }
-   int HTbins = 17;
-   double HTbin_edges[18] = {0.,200.,225.,250.,275.,300.,325.,350.,375.,400.,450.,500.,550.,600.,700.,800.,900.,1000.};
-   double* HTbin_edges_ptr = HTbin_edges;
 
    TEfficiency* eff = new TEfficiency("METtrigger",("METtrigger;"+m_x+";Efficiency").c_str(),bins,bin_edges_ptr);
    eff->SetUseWeightedEvents();
    eff->SetStatisticOption(TEfficiency::kBUniform);
-   TEfficiency* eff2D = new TEfficiency("METtrigger2D",("METtrigger;"+m_x+";HT;Efficiency").c_str(),bins,bin_edges_ptr,HTbins,HTbin_edges_ptr);
-   eff2D->SetUseWeightedEvents();
-   eff2D->SetStatisticOption(TEfficiency::kBUniform);
 
    Long64_t nentries = m_Tree->GetEntriesFast();
    Long64_t percent = 5.0;
@@ -133,31 +122,6 @@ inline void Eff_Nano::Analyze(){
     eraseSubStr(m_cut,("dPhiMET_V-"));
    }
    
-   if(m_cut.find("eleHTlow") != std::string::npos) {
-    eleHTlow_cut_eff = true;
-    eraseSubStr(m_cut,("eleHTlow-"));
-   }
-
-   else if(m_cut.find("eleHThigh") != std::string::npos) {
-    eleHThigh_cut_eff = true;
-    eraseSubStr(m_cut,("eleHThigh-"));
-   }
-
-   else if(m_cut.find("HTlow") != std::string::npos) {
-    HTlow_cut_eff = true;
-    eraseSubStr(m_cut,("HTlow-"));
-   }
-
-   else if(m_cut.find("HTmed") != std::string::npos) {
-    HTmed_cut_eff = true;
-    eraseSubStr(m_cut,("HTmed-"));
-   }
-
-   else if(m_cut.find("HThigh") != std::string::npos) {
-    HThigh_cut_eff = true;
-    eraseSubStr(m_cut,("HThigh-"));
-   }
-
  //new splitting 
 
  if(m_nchunk < 1 || m_ichunk < 1 || m_ichunk > m_nchunk){
@@ -235,159 +199,6 @@ inline void Eff_Nano::Analyze(){
        m_Tree->ResetBranchAddresses();
       }
 
-      if(eleHTlow_cut_eff)
-      {
-       bool skip = false;
-       double HT = 0.;
-       TBranch* PT_jet_branch = NULL;
-       vector<double>* PT_jet=0;
-       m_Tree->SetBranchAddress("PT_jet",&PT_jet,&PT_jet_branch);
-       PT_jet_branch->GetEntry(jentry);
-       TBranch* Njet_branch = NULL;
-       Int_t Njet=0;
-       m_Tree->SetBranchAddress("Njet",&Njet,&Njet_branch);
-       Njet_branch->GetEntry(jentry);
-       TBranch* Nlep_branch = NULL;
-       Int_t Nlep=0;
-       m_Tree->SetBranchAddress("Nlep",&Nlep,&Nlep_branch);
-       Nlep_branch->GetEntry(jentry);
-       TBranch* PT_lep_branch = NULL;
-       vector<double>* PT_lep=0;
-       m_Tree->SetBranchAddress("PT_lep",&PT_lep,&PT_lep_branch);
-       PT_lep_branch->GetEntry(jentry);
-       TBranch* PDGID_lep_branch = NULL;
-       vector<int>* PDGID_lep=0;
-       m_Tree->SetBranchAddress("PDGID_lep",&PDGID_lep,&PDGID_lep_branch);
-       PDGID_lep_branch->GetEntry(jentry);
-       for(int k = 0; k < Njet; k++)
-       {
-        HT+=PT_jet->at(k);
-       }
-       for(int k = 0; k < Nlep; k++)
-       {
-        if(abs(PDGID_lep->at(k)) == 11)
-        {
-         if(PT_lep->at(k)/HT > 0.15) {skip = true;}
-        }
-        break;
-       }
-       PT_jet_branch->ResetAddress();
-       Njet_branch->ResetAddress();
-       PT_lep_branch->ResetAddress();
-       Nlep_branch->ResetAddress();
-       PDGID_lep_branch->ResetAddress();
-       m_Tree->ResetBranchAddresses();
-       if(skip) continue;
-      }
-
-      if(eleHThigh_cut_eff)
-      {
-       bool skip = false;
-       double HT = 0.;
-       TBranch* PT_jet_branch = NULL;
-       vector<double>* PT_jet=0;
-       m_Tree->SetBranchAddress("PT_jet",&PT_jet,&PT_jet_branch);
-       PT_jet_branch->GetEntry(jentry);
-       TBranch* Njet_branch = NULL;
-       Int_t Njet=0;
-       m_Tree->SetBranchAddress("Njet",&Njet,&Njet_branch);
-       Njet_branch->GetEntry(jentry);
-       TBranch* Nlep_branch = NULL;
-       Int_t Nlep=0;
-       m_Tree->SetBranchAddress("Nlep",&Nlep,&Nlep_branch);
-       Nlep_branch->GetEntry(jentry);
-       TBranch* PT_lep_branch = NULL;
-       vector<double>* PT_lep=0;
-       m_Tree->SetBranchAddress("PT_lep",&PT_lep,&PT_lep_branch);
-       PT_lep_branch->GetEntry(jentry);
-       TBranch* PDGID_lep_branch = NULL;
-       vector<int>* PDGID_lep=0;
-       m_Tree->SetBranchAddress("PDGID_lep",&PDGID_lep,&PDGID_lep_branch);
-       PDGID_lep_branch->GetEntry(jentry);
-       for(int k = 0; k < Njet; k++)
-       {
-        HT+=PT_jet->at(k);
-       }
-       for(int k = 0; k < Nlep; k++)
-       {
-        if(abs(PDGID_lep->at(k)) == 11)
-        {
-         if(PT_lep->at(k)/HT < 0.15) {skip = true;}
-        }
-        break;
-       }
-       PT_jet_branch->ResetAddress();
-       Njet_branch->ResetAddress();
-       PT_lep_branch->ResetAddress();
-       Nlep_branch->ResetAddress();
-       PDGID_lep_branch->ResetAddress();
-       m_Tree->ResetBranchAddresses();
-       if(skip) continue;
-      }
-
-      if(HTlow_cut_eff)
-      {
-       double HT = 0.;
-       TBranch* PT_jet_branch = NULL;
-       vector<double>* PT_jet=0;
-       m_Tree->SetBranchAddress("PT_jet",&PT_jet,&PT_jet_branch);
-       PT_jet_branch->GetEntry(jentry);
-       TBranch* Njet_branch = NULL;
-       Int_t Njet=0;
-       m_Tree->SetBranchAddress("Njet",&Njet,&Njet_branch);
-       Njet_branch->GetEntry(jentry);
-       for(int k = 0; k < Njet; k++)
-       {
-        HT+=PT_jet->at(k);
-       }
-       if(HT > 400.) continue;
-       PT_jet_branch->ResetAddress();
-       Njet_branch->ResetAddress();
-       m_Tree->ResetBranchAddresses();
-      }
-
-      if(HTmed_cut_eff)
-      {
-       double HT = 0.;
-       TBranch* PT_jet_branch = NULL;
-       vector<double>* PT_jet=0;
-       m_Tree->SetBranchAddress("PT_jet",&PT_jet,&PT_jet_branch);
-       PT_jet_branch->GetEntry(jentry);
-       TBranch* Njet_branch = NULL;
-       Int_t Njet=0;
-       m_Tree->SetBranchAddress("Njet",&Njet,&Njet_branch);
-       Njet_branch->GetEntry(jentry);
-       for(int k = 0; k < Njet; k++)
-       {
-        HT+=PT_jet->at(k);
-       }
-       if(HT < 400. || HT > 500.) continue;
-       PT_jet_branch->ResetAddress();
-       Njet_branch->ResetAddress();
-       m_Tree->ResetBranchAddresses();
-      }
-
-      if(HThigh_cut_eff)
-      {
-       double HT = 0.;
-       TBranch* PT_jet_branch = NULL;
-       vector<double>* PT_jet=0;
-       m_Tree->SetBranchAddress("PT_jet",&PT_jet,&PT_jet_branch);
-       PT_jet_branch->GetEntry(jentry);
-       TBranch* Njet_branch = NULL;
-       Int_t Njet=0;
-       m_Tree->SetBranchAddress("Njet",&Njet,&Njet_branch);
-       Njet_branch->GetEntry(jentry);
-       for(int k = 0; k < Njet; k++)
-       {
-        HT+=PT_jet->at(k);
-       }
-       if(HT < 500.) continue;
-       PT_jet_branch->ResetAddress();
-       Njet_branch->ResetAddress();
-       m_Tree->ResetBranchAddresses();
-      }
-
       if(global_cuts(jentry)) continue;
 
       TBranch* weight_branch = NULL;
@@ -403,27 +214,6 @@ inline void Eff_Nano::Analyze(){
       weight_branch->GetEntry(jentry); 
       trig_branch->GetEntry(jentry);
       eff->FillWeighted(trig,weight*lumi_eff,x);
-
-/*
-      double HT = 0.;
-      TBranch* PT_jet_branch = NULL;
-      vector<double>* PT_jet=0;
-      m_Tree->SetBranchAddress("PT_jet",&PT_jet,&PT_jet_branch);
-      PT_jet_branch->GetEntry(jentry);
-      TBranch* Njet_branch = NULL;
-      Int_t Njet=0;
-      m_Tree->SetBranchAddress("Njet",&Njet,&Njet_branch);
-      Njet_branch->GetEntry(jentry);
-      for(int k = 0; k < Njet; k++)
-      {
-       HT+=PT_jet->at(k);
-      }
-      eff2D->FillWeighted(trig,weight*lumi_eff,x,HT);
-      PT_jet_branch->ResetAddress();
-      Njet_branch->ResetAddress();
-      m_Tree->ResetBranchAddresses();
-*/
-
       trig_branch->ResetAddress();
       weight_branch->ResetAddress();
       x_branch->ResetAddress();
@@ -458,8 +248,6 @@ inline void Eff_Nano::Analyze(){
    output->cd(m_Tag.c_str());
    eff->Write();
    delete eff;
-   eff2D->Write();
-   delete eff2D;
 //old
 /*
    for(int i=0; i < int(vect_Eff.size()); i++)
