@@ -66,7 +66,6 @@ inline void Eff_Nano::Set_x(string x)
 
 bool Clean_cut_eff = true;
 bool dPhiMET_V_cut_eff = true;
-bool RISR_uppercut_eff = true;
 double lumi_eff = 1.;
 
 inline void Eff_Nano::Analyze(){
@@ -187,19 +186,6 @@ inline void Eff_Nano::Analyze(){
        dphiMET_V_branch->ResetAddress();
        m_Tree->ResetBranchAddresses();
       }
-
-      if(RISR_uppercut_eff)
-      {
-       TBranch* RISR_branch = NULL;
-       Double_t RISR = 0.;
-       m_Tree->SetBranchAddress("RISR",&RISR,&RISR_branch);
-       RISR_branch->GetEntry(jentry);
-       if(RISR > 1.) continue;
-       RISR_branch->ResetAddress();
-       m_Tree->ResetBranchAddresses();
-      }
-
-      if(global_cuts(jentry)) continue;
 
       TBranch* weight_branch = NULL;
       Double_t weight = 0.;

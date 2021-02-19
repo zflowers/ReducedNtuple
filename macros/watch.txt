@@ -1,8 +1,8 @@
 
 
--- Schedd: login-el7.uscms.org : <192.170.227.182:9618?... @ 02/12/21 18:52:51
+-- Schedd: login-el7.uscms.org : <192.170.227.182:9618?... @ 02/19/21 08:13:58
 OWNER BATCH_NAME      SUBMITTED   DONE   RUN    IDLE   HOLD  TOTAL JOB_IDS
 
 Total for query: 0 jobs; 0 completed, 0 removed, 0 idle, 0 running, 0 held, 0 suspended 
-Total for all users: 17027 jobs; 0 completed, 0 removed, 4418 idle, 11314 running, 1295 held, 0 suspended
+Total for all users: 14958 jobs; 0 completed, 0 removed, 3268 idle, 10099 running, 1591 held, 0 suspended
 

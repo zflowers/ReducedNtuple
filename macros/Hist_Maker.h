@@ -100,7 +100,6 @@ inline Hist_Maker::Hist_Maker(string outFile, string Tag, TTree* Tree, int ichun
 
 bool Clean_cut = true;
 bool dPhiMET_V_cut = true;
-bool RISR_uppercut = true;
 double lumi = 1.; //store lumi for given year
 
 inline void Hist_Maker::Analyze(){
@@ -190,15 +189,6 @@ inline void Hist_Maker::Analyze(){
        if(fabs(dphiMET_V) > TMath::Pi()/2.) continue;
       }
 
-      if(RISR_uppercut)
-      {
-       TBranch* RISR_branch = NULL;
-       Double_t RISR = 0.;
-       m_Tree->SetBranchAddress("RISR",&RISR,&RISR_branch);
-       RISR_branch->GetEntry(jentry);
-       if(RISR > 1.) continue;
-      }
- 
       if(global_cuts(jentry)) continue;
       for( auto histclass : Classes ){ histclass->fill_hist(jentry); }
    }
