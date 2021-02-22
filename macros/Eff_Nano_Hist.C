@@ -108,7 +108,9 @@ void Maker(){
  }
  if(local)
  {
-  output = "Eff_output_"+cut+".root";
+  if(Do_Eff) { output = "Eff_output_"+cut+".root"; }
+  else if(Do_Hist) { output = "Hist_output_"+cut+".root"; }
+  else { cout << "Specify --eff or --hist in options!" << endl; }
  }
  cout << "Output file: " << output << endl;
 

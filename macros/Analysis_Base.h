@@ -35,6 +35,7 @@ class Analysis_Base{
    string m_Tag;
    TTree* m_Tree;
    string m_cut = "";
+   vector<string> found_cuts;
    virtual bool Get_Cut(const Long64_t& jentry, string name, string& current_cut);
    virtual bool global_cuts(const Long64_t& jentry);
    int m_ichunk;
@@ -92,12 +93,10 @@ inline void Analysis_Base::Set_Cut(const string& cut)
  {
   m_cut = "";
  }
-
  //PreSelection Cuts
 
  //if((m_Tree->GetName(),"KUAnalysis") == 0)
  //{
- // string METtrigger_str = "METtriggerE1";
  // m_cut += "--METtrigger-E1";
  //}
 
@@ -108,6 +107,66 @@ inline void Analysis_Base::Set_Cut(const string& cut)
  //m_cut += "--MET-G175";
 
  m_cut += "--";
+
+ vector<string> known_cuts;
+
+ known_cuts.push_back("PTISR");
+ known_cuts.push_back("HTVeryLoose");
+ known_cuts.push_back("HTLoose");
+ known_cuts.push_back("HTMedium");
+ known_cuts.push_back("HT");
+ known_cuts.push_back("PTCM");
+ known_cuts.push_back("RISR");
+ known_cuts.push_back("dphiCMI");
+ known_cuts.push_back("MET");
+ known_cuts.push_back("Nmu");
+ known_cuts.push_back("Nele");
+ known_cuts.push_back("Nlep");
+ known_cuts.push_back("Njet_S");
+ known_cuts.push_back("Nbjet_ISR");
+
+ known_cuts.push_back("NmuBronze");
+ known_cuts.push_back("NeleBronze");
+ known_cuts.push_back("NlepBronze");
+
+ known_cuts.push_back("NmuSilver");
+ known_cuts.push_back("NeleSilver");
+ known_cuts.push_back("NlepSilver");
+
+ known_cuts.push_back("NmuGold");
+ known_cuts.push_back("NeleGold");
+ known_cuts.push_back("NlepGold");
+
+ known_cuts.push_back("Njet");
+
+ known_cuts.push_back("METtrigger");
+ known_cuts.push_back("METORtrigger");
+ known_cuts.push_back("METHTtrigger");
+
+ known_cuts.push_back("SingleElectrontrigger");
+ known_cuts.push_back("SingleMuontrigger");
+ known_cuts.push_back("DoubleElectrontrigger");
+ known_cuts.push_back("DoubleMuontrigger");
+
+ known_cuts.push_back("EventFilter");
+
+ known_cuts.push_back("EventFlag_FailJetID");
+ known_cuts.push_back("EventFlag_JetInHEM");
+ known_cuts.push_back("EventFlag_JetInHEM_Pt20");
+ known_cuts.push_back("EventFlag_JetInHEM_Pt20_JetID");
+ known_cuts.push_back("HEM_Veto");
+
+ string current_cut = m_cut;
+
+ for(int i = 0; i < int(known_cuts.size()); i++)
+ {
+  int nPos = m_cut.find(known_cuts[i]+"-", 0); 
+  while (nPos != string::npos)
+  {
+   nPos = m_cut.find(known_cuts[i]+"-", nPos+(known_cuts[i]+"-").size());
+   found_cuts.push_back(known_cuts[i]);
+  }
+ }
 }
 
 inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& current_cut)
@@ -642,8 +701,8 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
 
  if(current_cut.find(name) != std::string::npos)
  {
-  string cut_value = get_str_between_two_str(current_cut,"-","--");
-  string cut_type = get_str_between_two_str(current_cut,"-","--");
+  string cut_value = get_str_between_two_str(current_cut,name+"-","--");
+  string cut_type = get_str_between_two_str(current_cut,name+"-","--");
 
   string type = m_Tree->GetBranch(name.c_str())->GetLeaf(name.c_str())->GetTypeName();
 
@@ -843,7 +902,7 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
     cut = true;
    }
   }
-  eraseSubStr(current_cut,(name+cut_type+cut_value+"--"));
+  eraseSubStr(current_cut,(name+"-"+cut_type+cut_value+"--"));
  }
  else
  {
@@ -857,101 +916,17 @@ inline bool Analysis_Base::global_cuts(const Long64_t& jentry)
 {
  //return false to keep the event
  
- vector<string> known_cuts;
-
- known_cuts.push_back("PTISR");
- known_cuts.push_back("HTVeryLoose");
- known_cuts.push_back("HTLoose");
- known_cuts.push_back("HTMedium");
- known_cuts.push_back("HT");
- known_cuts.push_back("PTCM");
- known_cuts.push_back("RISR");
- known_cuts.push_back("dphiCMI");
- known_cuts.push_back("MET");
- known_cuts.push_back("Nmu");
- known_cuts.push_back("Nele");
- known_cuts.push_back("Nlep");
- known_cuts.push_back("Njet_S");
- known_cuts.push_back("Nbjet_ISR");
-
- known_cuts.push_back("NmuBronze");
- known_cuts.push_back("NeleBronze");
- known_cuts.push_back("NlepBronze");
-
- known_cuts.push_back("NmuSilver");
- known_cuts.push_back("NeleSilver");
- known_cuts.push_back("NlepSilver");
-
- known_cuts.push_back("NmuGold");
- known_cuts.push_back("NeleGold");
- known_cuts.push_back("NlepGold");
-
- known_cuts.push_back("Njet");
-
- known_cuts.push_back("METtrigger");
- known_cuts.push_back("METORtrigger");
- known_cuts.push_back("METHTtrigger");
-
- known_cuts.push_back("SingleElectrontrigger");
- known_cuts.push_back("SingleMuontrigger");
- known_cuts.push_back("DoubleElectrontrigger");
- known_cuts.push_back("DoubleMuontrigger");
-
- known_cuts.push_back("EventFilter");
-
- known_cuts.push_back("EventFlag_FailJetID");
- known_cuts.push_back("EventFlag_JetInHEM");
- known_cuts.push_back("EventFlag_JetInHEM_Pt20");
- known_cuts.push_back("EventFlag_JetInHEM_Pt20_JetID");
- known_cuts.push_back("HEM_Veto");
-
  string current_cut = m_cut;
-
- vector<string> found_cuts;
- for(int i = 0; i < int(known_cuts.size()); i++)
- {
-  if(current_cut.find(known_cuts[i]) != std::string::npos)
-  {
-   found_cuts.push_back(known_cuts[i]);
-   current_cut = current_cut.substr(current_cut.find("--")); 
-  }
- }
- current_cut = m_cut;
  for(int i = 0; i < int(found_cuts.size()); i++)
  {
   if(Get_Cut(jentry,found_cuts[i],current_cut) == false) return true;
  }
- if(current_cut.compare("") != 0)
+ if(current_cut.compare("--") != 0 && current_cut.compare("") != 0)
  {
   cout << "ERROR: Some cuts not applied: " << current_cut << endl;
  }
  return false;
  
-/*
- if(m_Tag.find("SingleElectron") != std::string::npos)
- {
-  string SingleElectrontrigger_str = "SingleElectrontriggerE1";
-  SingleElectrontrigger_cut = Get_Cut(jentry,"SingleElectrontrigger",SingleElectrontrigger_str);
- }
-
- if(m_Tag.find("SingleMuon") != std::string::npos)
- {
-  string SingleMuontrigger_str = "SingleMuontriggerE1";
-  SingleMuontrigger_cut = Get_Cut(jentry,"SingleMuontrigger",SingleMuontrigger_str);
- }
-
- if(m_Tag.find("DoubleElectron") != std::string::npos)
- {
-  string DoubleElectrontrigger_str = "DoubleElectrontriggerE1";
-  DoubleElectrontrigger_cut = Get_Cut(jentry,"DoubleElectrontrigger",DoubleElectrontrigger_str);
- }
-
- if(m_Tag.find("DoubleMuon") != std::string::npos)
- {
-  string DoubleMuontrigger_str = "DoubleMuontriggerE1";
-  DoubleMuontrigger_cut = Get_Cut(jentry,"DoubleMuontrigger",DoubleMuontrigger_str);
- }
-*/
 }
 
 inline void Analysis_Base::Analyze(){

@@ -48,12 +48,12 @@ void ScaleFactors(vector<string> inFile, vector<string> cut){
  {
   for(int j = 0; j < int(data_tags_2017.size()); j++)
   {
-   double scale_Ratio_2016 = Get_ScaleFactor("Bkg_2016", data_tags_2016[j], "METtrigger", colors, inFile[i], cut[i], "Ratio");
-   if(scale_Ratio_2016 == -1) cout << "Failed to get SF for: " << data_tags_2016[j] << " " << cut[i] << endl;
+   //double scale_Ratio_2016 = Get_ScaleFactor("Bkg_2016", data_tags_2016[j], "METtrigger", colors, inFile[i], cut[i], "Ratio");
+   //if(scale_Ratio_2016 == -1) cout << "Failed to get SF for: " << data_tags_2016[j] << " " << cut[i] << endl;
    double scale_Ratio_2017 = Get_ScaleFactor("Bkg_2017", data_tags_2017[j], "METtrigger", colors, inFile[i], cut[i], "Ratio");
    if(scale_Ratio_2017 == -1) cout << "Failed to get SF for: " << data_tags_2017[j] << " " << cut[i] << endl;
-   double scale_Ratio_2018 = Get_ScaleFactor("Bkg_2018", data_tags_2018[j], "METtrigger", colors, inFile[i], cut[i], "Ratio");
-   if(scale_Ratio_2018 == -1) cout << "Failed to get SF for: " << data_tags_2018[j] << " " << cut[i] << endl;
+   //double scale_Ratio_2018 = Get_ScaleFactor("Bkg_2018", data_tags_2018[j], "METtrigger", colors, inFile[i], cut[i], "Ratio");
+   //if(scale_Ratio_2018 == -1) cout << "Failed to get SF for: " << data_tags_2018[j] << " " << cut[i] << endl;
   }
  }
 }

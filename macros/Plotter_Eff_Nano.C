@@ -22,117 +22,7 @@ void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, 
 void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, vector<string> inFile, vector<string> cut, string name, string option);
 TMultiGraph* get_mg(string fname, vector<string> tags, vector<string> Triggers, vector<int> colors, TLegend*& leg, TCanvas*& can, string option);
 TMultiGraph* get_mg(vector<string> cut, vector<string> tags, vector<string> Triggers, vector<string> fname, vector<int> colors, TLegend*& leg, TCanvas*& can, string option);
-
-string RewriteCut(std::string cut)
-{
- string new_cut = "";
- if(cut.find("SingleElectrontriggerE1") != std::string::npos)
- {
-  new_cut+= " Passed Single Electron Trigger &";
- }
- if(cut.find("DoubleElectrontriggerE1") != std::string::npos)
- {
-  new_cut+= " Passed Double Electron Trigger &";
- }
- if(cut.find("SingleMuontriggerE1") != std::string::npos)
- {
-  new_cut+= " Passed Single Muon Trigger &";
- }
- if(cut.find("DoubleMuontriggerE1") != std::string::npos)
- {
-  new_cut+= " Passed Double Muon Trigger &";
- }
- if(cut.find("NmuE1") != std::string::npos)
- {
-  new_cut+= " One Muon &";
- }
- if(cut.find("NmuE2") != std::string::npos)
- {
-  new_cut+= " Two Muons &";
- }
- if(cut.find("NeleE1") != std::string::npos)
- {
-  new_cut+= " One Electron &";
- }
- if(cut.find("NeleE2") != std::string::npos)
- {
-  new_cut+= " Two Electrons &";
- }
- if(cut.find("NmuBronzeE1") != std::string::npos)
- {
-  new_cut+= " One Bronze Muon &";
- }
- if(cut.find("NmuBronzeE2") != std::string::npos)
- {
-  new_cut+= " Two Bronze Muons &";
- }
- if(cut.find("NeleBronzeE1") != std::string::npos)
- {
-  new_cut+= " One Bronze Electron &";
- }
- if(cut.find("NeleBronzeE2") != std::string::npos)
- {
-  new_cut+= " Two Bronze Electrons &";
- }
- if(cut.find("NmuSilverE1") != std::string::npos)
- {
-  new_cut+= " One Silver Muon &";
- }
- if(cut.find("NmuSilverE2") != std::string::npos)
- {
-  new_cut+= " Two Silver Muons &";
- }
- if(cut.find("NeleSilverE1") != std::string::npos)
- {
-  new_cut+= " One Silver Electron &";
- }
- if(cut.find("NeleSilverE2") != std::string::npos)
- {
-  new_cut+= " Two Silver Electrons &";
- }
- if(cut.find("NmuGoldE1") != std::string::npos)
- {
-  new_cut+= " One Gold Muon &";
- }
- if(cut.find("NmuGoldE2") != std::string::npos)
- {
-  new_cut+= " Two Gold Muons &";
- }
- if(cut.find("NeleGoldE1") != std::string::npos)
- {
-  new_cut+= " One Gold Electron &";
- }
- if(cut.find("NeleGoldE2") != std::string::npos)
- {
-  new_cut+= " Two Gold Electrons &";
- }
- if(cut.find("HTlow") != std::string::npos)
- {
-  new_cut+= " HT < 300 &";
- }
- if(cut.find("HTmed") != std::string::npos)
- {
-  new_cut+= " 300 < HT < 500 &";
- }
- if(cut.find("HThigh") != std::string::npos)
- {
-  new_cut+= " HT > 500 &";
- }
- if(cut.find("eleHTlow") != std::string::npos)
- {
-  new_cut+= " #frac{e^{-}_{pT}}{HT} < 0.15 &";
- }
- if(cut.find("eleHThigh") != std::string::npos)
- {
-  new_cut+= " #frac{e^{-}_{pT}}{HT} > 0.15 &";
- }
- if(cut.find("PreSelection") != std::string::npos)
- {
-  new_cut+= "PreSelection";
- }
- if(new_cut.back() == '&') new_cut.pop_back();
- return new_cut;
-}
+string RewriteCut(std::string cut);
 
 void eraseSubStr(std::string & mainStr, const std::string & toErase)
 {
@@ -180,7 +70,7 @@ void Plotter_Eff_Nano(vector<string> inFile, vector<string> cut){
  //vector<string> WWTo2L2Nu_years = {"WWTo2L2Nu_2016","WWTo2L2Nu_2017","WWTo2L2Nu_2018"};
  //vector<string> ZJets_years = {"ZJetsToNuNu_2016","ZJetsToNuNu_2017","ZJetsToNuNu_2018"};
 
- vector<int> colors = {kBlue+1, kRed+2, kGreen+1, kMagenta, kCyan, kYellow, kViolet+2, kAzure+7, kPink, kGreen, kGray};
+ vector<int> colors = {kBlue+1, kRed+2, kGreen+1, kMagenta, kCyan, kOrange, kViolet+2, kAzure+7, kPink, kGreen, kGray};
 
  vector<string> METtrigger{ "METtrigger" };
  vector<string> METHTtrigger{ "METHTtrigger" };
@@ -229,9 +119,15 @@ void Plotter_Eff_Nano(vector<string> inFile, vector<string> cut){
  //Get_Plot(tags_WJets_2018,METtrigger,colors,inFile,cut,"METtrigger_2018_WJets","FinalState");
  //Get_Plot(tags_QCD_2018,METtrigger,colors,inFile,cut,"METtrigger_2018_QCD","FinalState");
  
+ vector<string> tags_bkg_2016 = {"Bkg_2016"};
+ vector<string> tags_SingleElectron_2016 = {"SingleElectron_2016"};
+ vector<string> tags_SingleMuon_2016 = {"SingleMuon_2016"};
  vector<string> tags_bkg_2017 = {"Bkg_2017"};
  vector<string> tags_SingleElectron_2017 = {"SingleElectron_2017"};
  vector<string> tags_SingleMuon_2017 = {"SingleMuon_2017"};
+ vector<string> tags_bkg_2018 = {"Bkg_2018"};
+ vector<string> tags_SingleElectron_2018 = {"SingleElectron_2018"};
+ vector<string> tags_SingleMuon_2018 = {"SingleMuon_2018"};
  vector<string> tags_bkg_years = {"Bkg_2016","Bkg_2017","Bkg_2018"};
  vector<string> tags_SingleElectron_years = {"SingleElectron_2016","SingleElectron_2017","SingleElectron_2018"};
  vector<string> tags_SingleMuon_years = {"SingleMuon_2016","SingleMuon_2017","SingleMuon_2018"};
@@ -240,9 +136,15 @@ void Plotter_Eff_Nano(vector<string> inFile, vector<string> cut){
   states += ("_"+cut[i]);
  } 
 
+ //Get_Plot(tags_bkg_2016,METtrigger,colors,inFile,cut,"Bkg_2016","FinalState");
+ //Get_Plot(tags_SingleElectron_2016,METtrigger,colors,inFile,cut,"SingleElectron_2016","FinalState");
+ //Get_Plot(tags_SingleMuon_2016,METtrigger,colors,inFile,cut,"SingleMuon_2016","FinalState");
  Get_Plot(tags_bkg_2017,METtrigger,colors,inFile,cut,"Bkg_2017","FinalState");
  Get_Plot(tags_SingleElectron_2017,METtrigger,colors,inFile,cut,"SingleElectron_2017","FinalState");
  Get_Plot(tags_SingleMuon_2017,METtrigger,colors,inFile,cut,"SingleMuon_2017","FinalState");
+ //Get_Plot(tags_bkg_2018,METtrigger,colors,inFile,cut,"Bkg_2018","FinalState");
+ //Get_Plot(tags_SingleElectron_2018,METtrigger,colors,inFile,cut,"SingleElectron_2018","FinalState");
+ //Get_Plot(tags_SingleMuon_2018,METtrigger,colors,inFile,cut,"SingleMuon_2018","FinalState");
  for(int i = 0; i < inFile.size(); i++)
  {
  // Get_Plot(tags_bkg_years,METtrigger,colors,inFile[i],cut[i],"Trigger");
@@ -481,7 +383,8 @@ TMultiGraph* get_mg(vector<string> cut, vector<string> tags, vector<string> Trig
      string title = " ;";
      mg->SetTitle((title+gr->GetXaxis()->GetTitle()+";"+gr->GetYaxis()->GetTitle()).c_str());
     }
-    string new_cut = RewriteCut(cut.at(k));
+    //string new_cut = RewriteCut(cut.at(k));
+    string new_cut = cut.at(k);
     if(option.compare("Tag") == 0)
     {
      leg->AddEntry(gr,Triggers.at(j).c_str(),"PL");
@@ -505,6 +408,129 @@ TMultiGraph* get_mg(vector<string> cut, vector<string> tags, vector<string> Trig
   delete f;
  }
  return mg;
+}
+
+string RewriteCut(std::string cut)
+{
+ string new_cut = "";
+ if(cut.find("SingleElectrontriggerE1") != std::string::npos)
+ {
+  new_cut+= " Passed Single Electron Trigger &";
+ }
+ if(cut.find("DoubleElectrontriggerE1") != std::string::npos)
+ {
+  new_cut+= " Passed Double Electron Trigger &";
+ }
+ if(cut.find("SingleMuontriggerE1") != std::string::npos)
+ {
+  new_cut+= " Passed Single Muon Trigger &";
+ }
+ if(cut.find("DoubleMuontriggerE1") != std::string::npos)
+ {
+  new_cut+= " Passed Double Muon Trigger &";
+ }
+ if(cut.find("NmuE1") != std::string::npos)
+ {
+  new_cut+= " One Muon &";
+ }
+ if(cut.find("NmuE2") != std::string::npos)
+ {
+  new_cut+= " Two Muons &";
+ }
+ if(cut.find("NeleE1") != std::string::npos)
+ {
+  new_cut+= " One Electron &";
+ }
+ if(cut.find("NeleE2") != std::string::npos)
+ {
+  new_cut+= " Two Electrons &";
+ }
+ if(cut.find("NmuBronzeE1") != std::string::npos)
+ {
+  new_cut+= " One Bronze Muon &";
+ }
+ if(cut.find("NmuBronzeE2") != std::string::npos)
+ {
+  new_cut+= " Two Bronze Muons &";
+ }
+ if(cut.find("NeleBronzeE1") != std::string::npos)
+ {
+  new_cut+= " One Bronze Electron &";
+ }
+ if(cut.find("NeleBronzeE2") != std::string::npos)
+ {
+  new_cut+= " Two Bronze Electrons &";
+ }
+ if(cut.find("NmuSilverE1") != std::string::npos)
+ {
+  new_cut+= " One Silver Muon &";
+ }
+ if(cut.find("NmuSilverE2") != std::string::npos)
+ {
+  new_cut+= " Two Silver Muons &";
+ }
+ if(cut.find("NeleSilverE1") != std::string::npos)
+ {
+  new_cut+= " One Silver Electron &";
+ }
+ if(cut.find("NeleSilverE2") != std::string::npos)
+ {
+  new_cut+= " Two Silver Electrons &";
+ }
+ if(cut.find("NmuGoldE1") != std::string::npos)
+ {
+  new_cut+= " One Gold Muon &";
+ }
+ if(cut.find("NmuGoldE2") != std::string::npos)
+ {
+  new_cut+= " Two Gold Muons &";
+ }
+ if(cut.find("NeleGoldE1") != std::string::npos)
+ {
+  new_cut+= " One Gold Electron &";
+ }
+ if(cut.find("NeleGoldE2") != std::string::npos)
+ {
+  new_cut+= " Two Gold Electrons &";
+ }
+ if(cut.find("Njet_SE0") != std::string::npos)
+ {
+  new_cut+= " No S Jets ";
+ }
+ if(cut.find("Njet_SE1") != std::string::npos)
+ {
+  new_cut+= " One S Jets ";
+ }
+ if(cut.find("Njet_SGe2") != std::string::npos)
+ {
+  new_cut+= " At Least 2 S Jets ";
+ }
+ if(cut.find("eleHTlow") != std::string::npos)
+ {
+  new_cut+= " #frac{e^{-}_{pT}}{HT} < 0.15 &";
+ }
+ else if(cut.find("eleHThigh") != std::string::npos)
+ {
+  new_cut+= " #frac{e^{-}_{pT}}{HT} > 0.15 &";
+ }
+ else if(cut.find("HTlow") != std::string::npos)
+ {
+  new_cut+= " HT < 400 &";
+ }
+ else if(cut.find("HTmed") != std::string::npos)
+ {
+  new_cut+= " 400 < HT < 500 &";
+ }
+ else if(cut.find("HThigh") != std::string::npos)
+ {
+  new_cut+= " HT > 500 &";
+ }
+ if(cut.find("PreSelection") != std::string::npos)
+ {
+  new_cut+= "PreSelection";
+ }
+ if(new_cut.back() == '&') new_cut.pop_back();
+ return new_cut;
 }
 
 int main(int argc, char* argv[])
