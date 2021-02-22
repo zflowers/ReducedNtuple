@@ -220,6 +220,82 @@ void met_Hist::fill_hist(Long64_t jentry){
  hist1d->Fill(selector.MET, lumi*selector.weight);
 }
 
+class HT_Hist:public HistClass, public Hist_Maker{
+ public:
+ void init_hist(TTree* tree);
+ void fill_hist(Long64_t jentry);
+};
+void HT_Hist::init_hist(TTree* tree){
+ m_Tree = tree;
+ selector = KUAnalysis(m_Tree);
+ hist1d = new TH1D("HT_Hist","",100,300.,1000.);
+ hist1d->GetXaxis()->SetTitle("HT");
+}
+void HT_Hist::fill_hist(Long64_t jentry){
+ selector.Init(m_Tree);
+ //m_Tree->GetEntry(jentry);
+ selector.b_HT->GetEntry(jentry);
+ selector.b_weight->GetEntry(jentry);
+ hist1d->Fill(selector.HT, lumi*selector.weight);
+}
+
+class HTVeryLoose_Hist:public HistClass, public Hist_Maker{
+ public:
+ void init_hist(TTree* tree);
+ void fill_hist(Long64_t jentry);
+};
+void HTVeryLoose_Hist::init_hist(TTree* tree){
+ m_Tree = tree;
+ selector = KUAnalysis(m_Tree);
+ hist1d = new TH1D("HTVeryLoose_Hist","",100,300.,1000.);
+ hist1d->GetXaxis()->SetTitle("HTVeryLoose");
+}
+void HTVeryLoose_Hist::fill_hist(Long64_t jentry){
+ selector.Init(m_Tree);
+ //m_Tree->GetEntry(jentry);
+ selector.b_HTVeryLoose->GetEntry(jentry);
+ selector.b_weight->GetEntry(jentry);
+ hist1d->Fill(selector.HTVeryLoose, lumi*selector.weight);
+}
+
+class HTLoose_Hist:public HistClass, public Hist_Maker{
+ public:
+ void init_hist(TTree* tree);
+ void fill_hist(Long64_t jentry);
+};
+void HTLoose_Hist::init_hist(TTree* tree){
+ m_Tree = tree;
+ selector = KUAnalysis(m_Tree);
+ hist1d = new TH1D("HTLoose_Hist","",100,300.,1000.);
+ hist1d->GetXaxis()->SetTitle("HTLoose");
+}
+void HTLoose_Hist::fill_hist(Long64_t jentry){
+ selector.Init(m_Tree);
+ //m_Tree->GetEntry(jentry);
+ selector.b_HTLoose->GetEntry(jentry);
+ selector.b_weight->GetEntry(jentry);
+ hist1d->Fill(selector.HTLoose, lumi*selector.weight);
+}
+
+class HTMedium_Hist:public HistClass, public Hist_Maker{
+ public:
+ void init_hist(TTree* tree);
+ void fill_hist(Long64_t jentry);
+};
+void HTMedium_Hist::init_hist(TTree* tree){
+ m_Tree = tree;
+ selector = KUAnalysis(m_Tree);
+ hist1d = new TH1D("HTMedium_Hist","",100,300.,1000.);
+ hist1d->GetXaxis()->SetTitle("HTMedium");
+}
+void HTMedium_Hist::fill_hist(Long64_t jentry){
+ selector.Init(m_Tree);
+ //m_Tree->GetEntry(jentry);
+ selector.b_HTMedium->GetEntry(jentry);
+ selector.b_weight->GetEntry(jentry);
+ hist1d->Fill(selector.HTMedium, lumi*selector.weight);
+}
+
 class met_Phi_Hist:public HistClass, public Hist_Maker{
  public:
  void init_hist(TTree* tree);
@@ -1324,6 +1400,10 @@ void gendphiMET_mu_Hist::fill_hist(Long64_t jentry){
 vector<HistClass*> Setup_Hists(TTree* tree){
  vector<HistClass*> Classes;
  //Classes.push_back(new met_Hist);
+ Classes.push_back(new HT_Hist);
+ Classes.push_back(new HTMedium_Hist);
+ Classes.push_back(new HTLoose_Hist);
+ Classes.push_back(new HTVeryLoose_Hist);
  //Classes.push_back(new met_Phi_Hist);
  //Classes.push_back(new PTCM_Hist);
  //Classes.push_back(new dphiMET_V_Hist);
