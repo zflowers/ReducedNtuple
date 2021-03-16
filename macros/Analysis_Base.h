@@ -147,6 +147,7 @@ inline void Analysis_Base::Set_Cut(const string& cut)
  known_cuts.push_back("SingleMuontrigger");
  known_cuts.push_back("DoubleElectrontrigger");
  known_cuts.push_back("DoubleMuontrigger");
+ known_cuts.push_back("EMutrigger");
 
  known_cuts.push_back("EventFilter");
 

@@ -187,6 +187,8 @@ inline void Eff_Nano::Analyze(){
        m_Tree->ResetBranchAddresses();
       }
 
+      if(global_cuts(jentry)) continue;
+
       TBranch* weight_branch = NULL;
       Double_t weight = 0.;
       TBranch* x_branch = NULL;

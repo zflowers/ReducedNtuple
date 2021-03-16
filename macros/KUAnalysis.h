@@ -1,8 +1,8 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Mon Feb 22 16:17:36 2021 by ROOT version 6.12/07
+// Wed Mar 10 09:03:02 2021 by ROOT version 6.12/07
 // from TTree KUAnalysis/KUAnalysis
-// found on file: /home/t3-ku/z374f439/storage/Fall17_102X/TTJets_SingleLeptFromT_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root
+// found on file: /home/t3-ku/z374f439/storage/Fall17_102X/WJetsToLNu_HT-600To800_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root
 //////////////////////////////////////////////////////////
 
 #ifndef KUAnalysis_h
@@ -44,6 +44,7 @@ public :
    Bool_t          SingleMuontrigger;
    Bool_t          DoubleElectrontrigger;
    Bool_t          DoubleMuontrigger;
+   Bool_t          EMutrigger;
    Bool_t          EventFlag_FailJetID;
    Bool_t          EventFlag_JetInHEM;
    Bool_t          EventFlag_JetInHEM_Pt20;
@@ -51,10 +52,10 @@ public :
    Bool_t          HEM_Veto;
    Double_t        MET;
    Double_t        MET_phi;
-   Double_t        HTVeryLoose;
-   Double_t        HTLoose;
-   Double_t        HTMedium;
    Double_t        HT;
+   Double_t        HTMedium;
+   Double_t        HTLoose;
+   Double_t        HTVeryLoose;
    Int_t           Nele;
    Int_t           Nmu;
    Int_t           Nlep;
@@ -263,6 +264,7 @@ public :
    TBranch        *b_SingleMuontrigger;   //!
    TBranch        *b_DoubleElectrontrigger;   //!
    TBranch        *b_DoubleMuontrigger;   //!
+   TBranch        *b_EMutrigger;   //!
    TBranch        *b_EventFlag_FailJetID;   //!
    TBranch        *b_EventFlag_JetInHEM;   //!
    TBranch        *b_EventFlag_JetInHEM_Pt20;   //!
@@ -270,10 +272,10 @@ public :
    TBranch        *b_HEM_Veto;   //!
    TBranch        *b_MET;   //!
    TBranch        *b_MET_phi;   //!
-   TBranch        *b_HTVeryLoose;   //!
-   TBranch        *b_HTLoose;   //!
-   TBranch        *b_HTMedium;   //!
    TBranch        *b_HT;   //!
+   TBranch        *b_HTMedium;   //!
+   TBranch        *b_HTLoose;   //!
+   TBranch        *b_HTVeryLoose;   //!
    TBranch        *b_Nele;   //!
    TBranch        *b_Nmu;   //!
    TBranch        *b_Nlep;   //!
@@ -480,9 +482,9 @@ KUAnalysis::KUAnalysis(TTree *tree) : fChain(0)
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/home/t3-ku/z374f439/storage/Fall17_102X/TTJets_SingleLeptFromT_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root");
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/home/t3-ku/z374f439/storage/Fall17_102X/WJetsToLNu_HT-600To800_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root");
       if (!f || !f->IsOpen()) {
-         f = new TFile("/home/t3-ku/z374f439/storage/Fall17_102X/TTJets_SingleLeptFromT_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root");
+         f = new TFile("/home/t3-ku/z374f439/storage/Fall17_102X/WJetsToLNu_HT-600To800_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X.root");
       }
       f->GetObject("KUAnalysis",tree);
 
@@ -629,6 +631,7 @@ void KUAnalysis::Init(TTree *tree)
    fChain->SetBranchAddress("SingleMuontrigger", &SingleMuontrigger, &b_SingleMuontrigger);
    fChain->SetBranchAddress("DoubleElectrontrigger", &DoubleElectrontrigger, &b_DoubleElectrontrigger);
    fChain->SetBranchAddress("DoubleMuontrigger", &DoubleMuontrigger, &b_DoubleMuontrigger);
+   fChain->SetBranchAddress("EMutrigger", &EMutrigger, &b_EMutrigger);
    fChain->SetBranchAddress("EventFlag_FailJetID", &EventFlag_FailJetID, &b_EventFlag_FailJetID);
    fChain->SetBranchAddress("EventFlag_JetInHEM", &EventFlag_JetInHEM, &b_EventFlag_JetInHEM);
    fChain->SetBranchAddress("EventFlag_JetInHEM_Pt20", &EventFlag_JetInHEM_Pt20, &b_EventFlag_JetInHEM_Pt20);
@@ -636,10 +639,10 @@ void KUAnalysis::Init(TTree *tree)
    fChain->SetBranchAddress("HEM_Veto", &HEM_Veto, &b_HEM_Veto);
    fChain->SetBranchAddress("MET", &MET, &b_MET);
    fChain->SetBranchAddress("MET_phi", &MET_phi, &b_MET_phi);
-   fChain->SetBranchAddress("HTVeryLoose", &HTVeryLoose, &b_HTVeryLoose);
-   fChain->SetBranchAddress("HTLoose", &HTLoose, &b_HTLoose);
-   fChain->SetBranchAddress("HTMedium", &HTMedium, &b_HTMedium);
    fChain->SetBranchAddress("HT", &HT, &b_HT);
+   fChain->SetBranchAddress("HTMedium", &HTMedium, &b_HTMedium);
+   fChain->SetBranchAddress("HTLoose", &HTLoose, &b_HTLoose);
+   fChain->SetBranchAddress("HTVeryLoose", &HTVeryLoose, &b_HTVeryLoose);
    fChain->SetBranchAddress("Nele", &Nele, &b_Nele);
    fChain->SetBranchAddress("Nmu", &Nmu, &b_Nmu);
    fChain->SetBranchAddress("Nlep", &Nlep, &b_Nlep);

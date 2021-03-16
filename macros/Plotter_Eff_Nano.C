@@ -23,6 +23,9 @@ void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, 
 TMultiGraph* get_mg(string fname, vector<string> tags, vector<string> Triggers, vector<int> colors, TLegend*& leg, TCanvas*& can, string option);
 TMultiGraph* get_mg(vector<string> cut, vector<string> tags, vector<string> Triggers, vector<string> fname, vector<int> colors, TLegend*& leg, TCanvas*& can, string option);
 string RewriteCut(std::string cut);
+string GetCut(string found_cut, string current_cut);
+std::string get_str_between_two_str(const std::string &s, const std::string &start_delim, const std::string &stop_delim);
+string get_cut_type(string& cut);
 
 void eraseSubStr(std::string & mainStr, const std::string & toErase)
 {
@@ -70,7 +73,7 @@ void Plotter_Eff_Nano(vector<string> inFile, vector<string> cut){
  //vector<string> WWTo2L2Nu_years = {"WWTo2L2Nu_2016","WWTo2L2Nu_2017","WWTo2L2Nu_2018"};
  //vector<string> ZJets_years = {"ZJetsToNuNu_2016","ZJetsToNuNu_2017","ZJetsToNuNu_2018"};
 
- vector<int> colors = {kBlue+1, kRed+2, kGreen+1, kMagenta, kCyan, kOrange, kViolet+2, kAzure+7, kPink, kGreen, kGray};
+ vector<int> colors = {kBlue+1, kRed+1, kGreen+1, kMagenta, kCyan, kOrange, kViolet+2, kAzure+7, kPink, kGreen, kGray};
 
  vector<string> METtrigger{ "METtrigger" };
  vector<string> METHTtrigger{ "METHTtrigger" };
@@ -337,7 +340,29 @@ void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, 
  l.SetTextSize(0.04);
  l.SetTextFont(42);
  eraseSubStr(name,states);
- l.DrawLatex(0.62,0.93,name.c_str());
+ 
+ name+=": ";
+ vector<string> known_cuts;
+ known_cuts.push_back("HT");
+ string current_cut = cut[0]+"--";
+ vector<string> found_cuts;
+ for(int i = 0; i < int(known_cuts.size()); i++)
+ {
+  int nPos = current_cut.find(known_cuts[i]+"-", 0); 
+  while (nPos != string::npos)
+  {
+   nPos = current_cut.find(known_cuts[i]+"-", nPos+(known_cuts[i]+"-").size());
+   found_cuts.push_back(known_cuts[i]);
+  }
+ }
+
+ for(int i = 0; i < int(found_cuts.size()); i++)
+ {
+  name += GetCut(found_cuts[i]+"-"+get_str_between_two_str(current_cut,found_cuts[i]+"-","--")+"--",current_cut);
+  eraseSubStr(current_cut,(found_cuts[i]+"-"+get_str_between_two_str(current_cut,found_cuts[i]+"-","--")+"--"));
+ }
+ if(name.back() == '&') name.pop_back();
+ l.DrawLatex(0.41,0.93,name.c_str());
  l.DrawLatex(0.13,0.93,"#bf{#it{CMS}} Internal 13 TeV Simulation");
  can->Modified();
  can->Update();
@@ -383,8 +408,8 @@ TMultiGraph* get_mg(vector<string> cut, vector<string> tags, vector<string> Trig
      string title = " ;";
      mg->SetTitle((title+gr->GetXaxis()->GetTitle()+";"+gr->GetYaxis()->GetTitle()).c_str());
     }
-    //string new_cut = RewriteCut(cut.at(k));
-    string new_cut = cut.at(k);
+    string new_cut = RewriteCut(cut.at(k));
+    //string new_cut = cut.at(k);
     if(option.compare("Tag") == 0)
     {
      leg->AddEntry(gr,Triggers.at(j).c_str(),"PL");
@@ -410,127 +435,241 @@ TMultiGraph* get_mg(vector<string> cut, vector<string> tags, vector<string> Trig
  return mg;
 }
 
+string GetCut(string found_cut, string current_cut)
+{
+ string cut = found_cut;
+
+ if(found_cut.find("SingleElectrontrigger-E1") != std::string::npos)
+ {
+  cut =  " Passed Single Electron Trigger &";
+ }
+ if(found_cut.find("DoubleElectrontrigger-E1") != std::string::npos)
+ {
+  cut =  " Passed Double Electron Trigger &";
+ }
+ if(found_cut.find("SingleMuontrigger-E1") != std::string::npos)
+ {
+  cut =  " Passed Single Muon Trigger &";
+ }
+ if(found_cut.find("DoubleMuontrigger-E1") != std::string::npos)
+ {
+  cut =  " Passed Double Muon Trigger &";
+ }
+ if(found_cut.find("Nlep-E0") != std::string::npos)
+ {
+  cut =  " No Leptons &";
+ }
+ if(found_cut.find("Nele-E0") != std::string::npos)
+ {
+  cut =  " No Electrons &";
+ }
+ if(found_cut.find("Nmu-E0") != std::string::npos)
+ {
+  cut =  " No Muons &";
+ }
+ if(found_cut.find("Nmu-E1") != std::string::npos)
+ {
+  cut =  " One Muon &";
+ }
+ if(found_cut.find("Nmu-E2") != std::string::npos)
+ {
+  cut =  " Two Muons &";
+ }
+ if(found_cut.find("Nele-E1") != std::string::npos)
+ {
+  cut =  " One Electron &";
+ }
+ if(found_cut.find("Nele-E2") != std::string::npos)
+ {
+  cut =  " Two Electrons &";
+ }
+ if(found_cut.find("NmuBronze-E1") != std::string::npos)
+ {
+  cut =  " One Bronze Muon &";
+ }
+ if(found_cut.find("NmuBronze-E2") != std::string::npos)
+ {
+  cut =  " Two Bronze Muons &";
+ }
+ if(found_cut.find("NeleBronze-E1") != std::string::npos)
+ {
+  cut =  " One Bronze Electron &";
+ }
+ if(found_cut.find("NeleBronze-E2") != std::string::npos)
+ {
+  cut =  " Two Bronze Electrons &";
+ }
+ if(found_cut.find("NmuSilver-E1") != std::string::npos)
+ {
+  cut =  " One Silver Muon &";
+ }
+ if(found_cut.find("NmuSilver-E2") != std::string::npos)
+ {
+  cut =  " Two Silver Muons &";
+ }
+ if(found_cut.find("NeleSilver-E1") != std::string::npos)
+ {
+  cut =  " One Silver Electron &";
+ }
+ if(found_cut.find("NeleSilver-E2") != std::string::npos)
+ {
+  cut =  " Two Silver Electrons &";
+ }
+ if(found_cut.find("NmuGold-E1") != std::string::npos)
+ {
+  cut =  " One Gold Muon &";
+ }
+ if(found_cut.find("NmuGold-E2") != std::string::npos)
+ {
+  cut =  " Two Gold Muons &";
+ }
+ if(found_cut.find("NeleGold-E1") != std::string::npos)
+ {
+  cut =  " One Gold Electron &";
+ }
+ if(found_cut.find("NeleGold-E2") != std::string::npos)
+ {
+  cut =  " Two Gold Electrons &";
+ }
+ if(found_cut.find("Njet_S-E0") != std::string::npos)
+ {
+  cut =  " No S Jets &";
+ }
+ if(found_cut.find("Njet_S-E1") != std::string::npos)
+ {
+  cut =  " One S Jets &";
+ }
+ if(found_cut.find("Njet_S-Ge2") != std::string::npos)
+ {
+  cut =  " At Least 2 S Jets &";
+ }
+ if(found_cut.find("HT-") != std::string::npos)
+ {
+  string current_cut = get_str_between_two_str(found_cut,"HT-","--");
+  string cut_type = get_cut_type(current_cut);
+  string cut_value = current_cut;
+  cut = " HT "+cut_type+" "+cut_value+" &";
+ }
+ if(found_cut.find("HTMedium-") != std::string::npos)
+ {
+  string current_cut = get_str_between_two_str(found_cut,"HTMedium-","--");
+  string cut_type = get_cut_type(current_cut);
+  string cut_value = current_cut;
+  cut = " HTMedium "+cut_type+" "+cut_value+" &";
+ }
+ if(found_cut.find("HTLoose-") != std::string::npos)
+ {
+  string current_cut = get_str_between_two_str(found_cut,"HTLoose-","--");
+  string cut_type = get_cut_type(current_cut);
+  string cut_value = current_cut;
+  cut = " HTLoose "+cut_type+" "+cut_value+" &";
+ }
+ if(found_cut.find("HTVeryLoose-") != std::string::npos)
+ {
+  string current_cut = get_str_between_two_str(found_cut,"HTVeryLoose-","--");
+  string cut_type = get_cut_type(current_cut);
+  string cut_value = current_cut;
+  cut = " HTVeryLoose "+cut_type+" "+cut_value+" &";
+ }
+ return cut;
+}
+
 string RewriteCut(std::string cut)
 {
- string new_cut = "";
- if(cut.find("SingleElectrontriggerE1") != std::string::npos)
- {
-  new_cut+= " Passed Single Electron Trigger &";
- }
- if(cut.find("DoubleElectrontriggerE1") != std::string::npos)
- {
-  new_cut+= " Passed Double Electron Trigger &";
- }
- if(cut.find("SingleMuontriggerE1") != std::string::npos)
- {
-  new_cut+= " Passed Single Muon Trigger &";
- }
- if(cut.find("DoubleMuontriggerE1") != std::string::npos)
- {
-  new_cut+= " Passed Double Muon Trigger &";
- }
- if(cut.find("NmuE1") != std::string::npos)
- {
-  new_cut+= " One Muon &";
- }
- if(cut.find("NmuE2") != std::string::npos)
- {
-  new_cut+= " Two Muons &";
- }
- if(cut.find("NeleE1") != std::string::npos)
- {
-  new_cut+= " One Electron &";
- }
- if(cut.find("NeleE2") != std::string::npos)
- {
-  new_cut+= " Two Electrons &";
- }
- if(cut.find("NmuBronzeE1") != std::string::npos)
- {
-  new_cut+= " One Bronze Muon &";
- }
- if(cut.find("NmuBronzeE2") != std::string::npos)
- {
-  new_cut+= " Two Bronze Muons &";
- }
- if(cut.find("NeleBronzeE1") != std::string::npos)
- {
-  new_cut+= " One Bronze Electron &";
- }
- if(cut.find("NeleBronzeE2") != std::string::npos)
- {
-  new_cut+= " Two Bronze Electrons &";
- }
- if(cut.find("NmuSilverE1") != std::string::npos)
- {
-  new_cut+= " One Silver Muon &";
- }
- if(cut.find("NmuSilverE2") != std::string::npos)
- {
-  new_cut+= " Two Silver Muons &";
- }
- if(cut.find("NeleSilverE1") != std::string::npos)
- {
-  new_cut+= " One Silver Electron &";
- }
- if(cut.find("NeleSilverE2") != std::string::npos)
- {
-  new_cut+= " Two Silver Electrons &";
- }
- if(cut.find("NmuGoldE1") != std::string::npos)
- {
-  new_cut+= " One Gold Muon &";
- }
- if(cut.find("NmuGoldE2") != std::string::npos)
- {
-  new_cut+= " Two Gold Muons &";
- }
- if(cut.find("NeleGoldE1") != std::string::npos)
- {
-  new_cut+= " One Gold Electron &";
- }
- if(cut.find("NeleGoldE2") != std::string::npos)
- {
-  new_cut+= " Two Gold Electrons &";
- }
- if(cut.find("Njet_SE0") != std::string::npos)
- {
-  new_cut+= " No S Jets ";
- }
- if(cut.find("Njet_SE1") != std::string::npos)
- {
-  new_cut+= " One S Jets ";
- }
- if(cut.find("Njet_SGe2") != std::string::npos)
- {
-  new_cut+= " At Least 2 S Jets ";
- }
- if(cut.find("eleHTlow") != std::string::npos)
- {
-  new_cut+= " #frac{e^{-}_{pT}}{HT} < 0.15 &";
- }
- else if(cut.find("eleHThigh") != std::string::npos)
- {
-  new_cut+= " #frac{e^{-}_{pT}}{HT} > 0.15 &";
- }
- else if(cut.find("HTlow") != std::string::npos)
- {
-  new_cut+= " HT < 400 &";
- }
- else if(cut.find("HTmed") != std::string::npos)
- {
-  new_cut+= " 400 < HT < 500 &";
- }
- else if(cut.find("HThigh") != std::string::npos)
- {
-  new_cut+= " HT > 500 &";
- }
  if(cut.find("PreSelection") != std::string::npos)
  {
-  new_cut+= "PreSelection";
+  return "PreSelection";
  }
+
+ vector<string> known_cuts;
+
+ known_cuts.push_back("PTISR");
+ //known_cuts.push_back("HTVeryLoose");
+ //known_cuts.push_back("HTLoose");
+ //known_cuts.push_back("HTMedium");
+ //known_cuts.push_back("HT");
+ known_cuts.push_back("PTCM");
+ known_cuts.push_back("RISR");
+ known_cuts.push_back("dphiCMI");
+ known_cuts.push_back("MET");
+ known_cuts.push_back("Nmu");
+ known_cuts.push_back("Nele");
+ known_cuts.push_back("Nlep");
+ known_cuts.push_back("Njet_S");
+ known_cuts.push_back("Nbjet_ISR");
+
+ known_cuts.push_back("NmuBronze");
+ known_cuts.push_back("NeleBronze");
+ known_cuts.push_back("NlepBronze");
+
+ known_cuts.push_back("NmuSilver");
+ known_cuts.push_back("NeleSilver");
+ known_cuts.push_back("NlepSilver");
+
+ known_cuts.push_back("NmuGold");
+ known_cuts.push_back("NeleGold");
+ known_cuts.push_back("NlepGold");
+
+ known_cuts.push_back("Njet");
+
+ known_cuts.push_back("METtrigger");
+ known_cuts.push_back("METORtrigger");
+ known_cuts.push_back("METHTtrigger");
+
+ known_cuts.push_back("SingleElectrontrigger");
+ known_cuts.push_back("SingleMuontrigger");
+ known_cuts.push_back("DoubleElectrontrigger");
+ known_cuts.push_back("DoubleMuontrigger");
+
+ known_cuts.push_back("EventFilter");
+
+ known_cuts.push_back("EventFlag_FailJetID");
+ known_cuts.push_back("EventFlag_JetInHEM");
+ known_cuts.push_back("EventFlag_JetInHEM_Pt20");
+ known_cuts.push_back("EventFlag_JetInHEM_Pt20_JetID");
+ known_cuts.push_back("HEM_Veto");
+
+ string current_cut = cut+"--";
+
+ vector<string> found_cuts;
+ for(int i = 0; i < int(known_cuts.size()); i++)
+ {
+  int nPos = cut.find(known_cuts[i]+"-", 0); 
+  while (nPos != string::npos)
+  {
+   nPos = cut.find(known_cuts[i]+"-", nPos+(known_cuts[i]+"-").size());
+   found_cuts.push_back(known_cuts[i]);
+  }
+ }
+
+ string new_cut = "";
+ for(int i = 0; i < int(found_cuts.size()); i++)
+ {
+  new_cut += GetCut(found_cuts[i]+"-"+get_str_between_two_str(current_cut,found_cuts[i]+"-","--")+"--",current_cut);
+ }
+
  if(new_cut.back() == '&') new_cut.pop_back();
+
  return new_cut;
+}
+
+std::string get_str_between_two_str(const std::string &s, const std::string &start_delim, const std::string &stop_delim)
+{
+ unsigned first_delim_pos = s.find(start_delim);
+ unsigned end_pos_of_first_delim = first_delim_pos + start_delim.length();
+ unsigned last_delim_pos = s.find_first_of(stop_delim, end_pos_of_first_delim);
+ return s.substr(end_pos_of_first_delim,last_delim_pos - end_pos_of_first_delim);
+}
+
+string get_cut_type(string& cut)
+{
+ string type = "";
+ if(cut.find("E") != std::string::npos) { cut.erase(0,1); type = "=="; }
+ else if(cut.find("Ge") != std::string::npos) { cut.erase(0,1); cut.erase(0,1); type = ">="; }
+ else if(cut.find("G") != std::string::npos) { cut.erase(0,1); type = ">"; }
+ else if(cut.find("Le") != std::string::npos) { cut.erase(0,1); cut.erase(0,1); type = "<="; }
+ else if(cut.find("L") != std::string::npos) { cut.erase(0,1); type = "<"; }
+ return type;
 }
 
 int main(int argc, char* argv[])

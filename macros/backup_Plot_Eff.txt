@@ -1,0 +1,96 @@
+##Plot 1
+#HTVeryLoose-Le600--Njet_S-E0
+#HTVeryLoose-Le600--Njet_S-E1
+#HTVeryLoose-Le600--Njet_S-Ge2
+#HTVeryLoose-Le600--Njet_S-E0--SingleElectrontrigger-E1--Nele-E1
+#HTVeryLoose-Le600--Njet_S-E1--SingleElectrontrigger-E1--Nele-E1
+#HTVeryLoose-Le600--Njet_S-Ge2--SingleElectrontrigger-E1--Nele-E1
+#HTVeryLoose-Le600--SingleElectrontrigger-E1--Nele-E1
+##Plot 2
+#HTVeryLoose-Le600--Nlep-E0
+#HTVeryLoose-Le600--SingleMuontrigger-E1--Nmu-E1--SingleElectrontrigger-E1--Nele-E1
+#HTVeryLoose-Le600--SingleElectrontrigger-E1--Nele-E1
+#HTVeryLoose-Le600--SingleElectrontrigger-E1--NeleBronze-E1
+#HTVeryLoose-Le600--SingleElectrontrigger-E1--NeleSilver-E1
+#HTVeryLoose-Le600--SingleElectrontrigger-E1--NeleGold-E1
+#HTVeryLoose-Le600--DoubleElectrontrigger-E1--NeleE2
+##Plot 3
+#HTVeryLoose-Le600--Njet_S-E0
+#HTVeryLoose-Le600--Njet_S-E1
+#HTVeryLoose-Le600--Njet_S-Ge2
+#HTVeryLoose-Le600--Njet_S-E0--SingleMuontrigger-E1--Nmu-E1
+#HTVeryLoose-Le600--Njet_S-E1--SingleMuontrigger-E1--Nmu-E1
+#HTVeryLoose-Le600--Njet_S-Ge2--SingleMuontrigger-E1--Nmu-E1
+#HTVeryLoose-Le600--SingleMuontrigger-E1--Nmu-E1
+##Plot 4
+#HTVeryLoose-Le600--Nlep-E0
+#HTVeryLoose-Le600--SingleMuontrigger-E1--Nmu-E1--SingleElectrontrigger-E1--Nele-E1
+#HTVeryLoose-Le600--SingleMuontrigger-E1--Nmu-E1
+#HTVeryLoose-Le600--SingleMuontrigger-E1--NmuBronze-E1
+#HTVeryLoose-Le600--SingleMuontrigger-E1--NmuSilver-E1
+#HTVeryLoose-Le600--SingleMuontrigger-E1--NmuGold-E1
+#HTVeryLoose-Le600--DoubleMuontrigger-E1--NmuE2
+##Plot 5
+#HTVeryLoose-G600--HTVeryLoose-L750--Njet_S-E0
+#HTVeryLoose-G600--HTVeryLoose-L750--Njet_S-E1
+#HTVeryLoose-G600--HTVeryLoose-L750--Njet_S-Ge2
+#HTVeryLoose-G600--HTVeryLoose-L750--Njet_S-E0--SingleElectrontrigger-E1--Nele-E1
+#HTVeryLoose-G600--HTVeryLoose-L750--Njet_S-E1--SingleElectrontrigger-E1--Nele-E1
+#HTVeryLoose-G600--HTVeryLoose-L750--Njet_S-Ge2--SingleElectrontrigger-E1--Nele-E1
+#HTVeryLoose-G600--HTVeryLoose-L750--SingleElectrontrigger-E1--Nele-E1
+##Plot 6
+#HTVeryLoose-G600--HTVeryLoose-L750--Nlep-E0
+#HTVeryLoose-G600--HTVeryLoose-L750--SingleMuontrigger-E1--Nmu-E1--SingleElectrontrigger-E1--Nele-E1
+#HTVeryLoose-G600--HTVeryLoose-L750--SingleElectrontrigger-E1--Nele-E1
+#HTVeryLoose-G600--HTVeryLoose-L750--SingleElectrontrigger-E1--NeleBronze-E1
+#HTVeryLoose-G600--HTVeryLoose-L750--SingleElectrontrigger-E1--NeleSilver-E1
+#HTVeryLoose-G600--HTVeryLoose-L750--SingleElectrontrigger-E1--NeleGold-E1
+#HTVeryLoose-G600--HTVeryLoose-L750--DoubleElectrontrigger-E1--NeleE2
+##Plot 7
+#HTVeryLoose-G600--HTVeryLoose-L750--Njet_S-E0
+#HTVeryLoose-G600--HTVeryLoose-L750--Njet_S-E1
+#HTVeryLoose-G600--HTVeryLoose-L750--Njet_S-Ge2
+#HTVeryLoose-G600--HTVeryLoose-L750--Njet_S-E0--SingleMuontrigger-E1--Nmu-E1
+#HTVeryLoose-G600--HTVeryLoose-L750--Njet_S-E1--SingleMuontrigger-E1--Nmu-E1
+#HTVeryLoose-G600--HTVeryLoose-L750--Njet_S-Ge2--SingleMuontrigger-E1--Nmu-E1
+#HTVeryLoose-G600--HTVeryLoose-L750--SingleMuontrigger-E1--Nmu-E1
+##Plot 8
+#HTVeryLoose-G600--HTVeryLoose-L750--Nlep-E0
+#HTVeryLoose-G600--HTVeryLoose-L750--SingleMuontrigger-E1--Nmu-E1--SingleElectrontrigger-E1--Nele-E1
+#HTVeryLoose-G600--HTVeryLoose-L750--SingleMuontrigger-E1--Nmu-E1
+#HTVeryLoose-G600--HTVeryLoose-L750--SingleMuontrigger-E1--NmuBronze-E1
+#HTVeryLoose-G600--HTVeryLoose-L750--SingleMuontrigger-E1--NmuSilver-E1
+#HTVeryLoose-G600--HTVeryLoose-L750--SingleMuontrigger-E1--NmuGold-E1
+#HTVeryLoose-G600--HTVeryLoose-L750--DoubleMuontrigger-E1--NmuE2
+##Plot 9
+#HTVeryLoose-Ge750--Njet_S-E0
+#HTVeryLoose-Ge750--Njet_S-E1
+#HTVeryLoose-Ge750--Njet_S-Ge2
+#HTVeryLoose-Ge750--Njet_S-E0--SingleElectrontrigger-E1--Nele-E1
+#HTVeryLoose-Ge750--Njet_S-E1--SingleElectrontrigger-E1--Nele-E1
+#HTVeryLoose-Ge750--Njet_S-Ge2--SingleElectrontrigger-E1--Nele-E1
+#HTVeryLoose-Ge750--SingleElectrontrigger-E1--Nele-E1
+##Plot 10
+#HTVeryLoose-Ge750--Nlep-E0
+#HTVeryLoose-Ge750--SingleMuontrigger-E1--Nmu-E1--SingleElectrontrigger-E1--Nele-E1
+#HTVeryLoose-Ge750--SingleElectrontrigger-E1--Nele-E1
+#HTVeryLoose-Ge750--SingleElectrontrigger-E1--NeleBronze-E1
+#HTVeryLoose-Ge750--SingleElectrontrigger-E1--NeleSilver-E1
+#HTVeryLoose-Ge750--SingleElectrontrigger-E1--NeleGold-E1
+#HTVeryLoose-Ge750--DoubleElectrontrigger-E1--NeleE2
+##Plot 11
+#HTVeryLoose-Ge750--Njet_S-E0
+#HTVeryLoose-Ge750--Njet_S-E1
+#HTVeryLoose-Ge750--Njet_S-Ge2
+#HTVeryLoose-Ge750--Njet_S-E0--SingleMuontrigger-E1--Nmu-E1
+#HTVeryLoose-Ge750--Njet_S-E1--SingleMuontrigger-E1--Nmu-E1
+#HTVeryLoose-Ge750--Njet_S-Ge2--SingleMuontrigger-E1--Nmu-E1
+#HTVeryLoose-Ge750--SingleMuontrigger-E1--Nmu-E1
+##Plot 12
+#HTVeryLoose-Ge750--Nlep-E0
+#HTVeryLoose-Ge750--SingleMuontrigger-E1--Nmu-E1--SingleElectrontrigger-E1--Nele-E1
+#HTVeryLoose-Ge750--SingleMuontrigger-E1--Nmu-E1
+#HTVeryLoose-Ge750--SingleMuontrigger-E1--NmuBronze-E1
+#HTVeryLoose-Ge750--SingleMuontrigger-E1--NmuSilver-E1
+#HTVeryLoose-Ge750--SingleMuontrigger-E1--NmuGold-E1
+#HTVeryLoose-Ge750--DoubleMuontrigger-E1--NmuE2

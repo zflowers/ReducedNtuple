@@ -1,8 +1,16 @@
 
 
--- Schedd: t3.unl.edu : <129.93.239.166:9618?... @ 02/22/21 15:21:03
-OWNER BATCH_NAME      SUBMITTED   DONE   RUN    IDLE   HOLD  TOTAL JOB_IDS
+-- Schedd: t3.unl.edu : <129.93.239.166:9618?... @ 03/16/21 16:48:39
+OWNER    BATCH_NAME      SUBMITTED   DONE   RUN    IDLE  TOTAL JOB_IDS
+z374f439 ID: 16468113   3/16 16:47      _      _     20     20 16468113.0-19
+z374f439 ID: 16468114   3/16 16:47      _      _     20     20 16468114.0-19
+z374f439 ID: 16468115   3/16 16:47      _      _     20     20 16468115.0-19
+z374f439 ID: 16468116   3/16 16:47      _      _     20     20 16468116.0-19
+z374f439 ID: 16468117   3/16 16:47      _      _     20     20 16468117.0-19
+z374f439 ID: 16468118   3/16 16:47      _      _     20     20 16468118.0-19
+z374f439 ID: 16468119   3/16 16:47      _      _     20     20 16468119.0-19
+z374f439 ID: 16468120   3/16 16:47      _      _     20     20 16468120.0-19
 
-Total for query: 0 jobs; 0 completed, 0 removed, 0 idle, 0 running, 0 held, 0 suspended 
-Total for all users: 276 jobs; 148 completed, 0 removed, 1 idle, 127 running, 0 held, 0 suspended
+Total for query: 160 jobs; 0 completed, 0 removed, 160 idle, 0 running, 0 held, 0 suspended 
+Total for all users: 205 jobs; 43 completed, 0 removed, 161 idle, 1 running, 0 held, 0 suspended
 

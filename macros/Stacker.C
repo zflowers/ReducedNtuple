@@ -348,7 +348,7 @@ void Get_Stack(string hists_name, vector<string> labels_bkg, vector<string> labe
   //l.DrawLatex(0.72,0.94,s_lumi.c_str());
   l.DrawLatex(0.72,0.94,cut.c_str());
   
-  TFile* output = new TFile(outFile.c_str(),"UPDATE");
+  TFile* output = new TFile("output_Stack.root","UPDATE");
   can->Write();
   output->Close();
   delete leg;
@@ -490,10 +490,10 @@ void Get2D_Plot(string hist_name, vector<string> directories, vector<string> inF
    //else { name +=", preHEM"; }
    //eraseSubStr(name,"PTISRG200-");
    //name+=trigger_name;
-   l.DrawLatex(0.45,.94,name.c_str());
+   l.DrawLatex(0.4,.94,name.c_str());
    gPad->RedrawAxis();
    gPad->RedrawAxis("G");
-   TFile* output = new TFile(inFiles[i].c_str(),"UPDATE");
+   TFile* output = new TFile("output_Stack.root","UPDATE");
    can->Write();
    output->Close();
    delete output;
@@ -564,7 +564,7 @@ void Get2D_Ratio(string hist_name, vector<string> directories, vector<string> cu
    l.DrawLatex(0.65,.94,name.c_str());
    gPad->RedrawAxis();
    gPad->RedrawAxis("G");
-   TFile* output = new TFile(("Hist_output_"+cuts[i]+".root").c_str(),"UPDATE");
+   TFile* output = new TFile("output_Stack.root","UPDATE");
    can->Write();
    output->Close();
    delete output;
@@ -633,7 +633,7 @@ void Get2D_Ratio(string hist_name, string cut1, string cut2, string directory){
  l.DrawLatex(0.65,.94,name.c_str());
  gPad->RedrawAxis();
  gPad->RedrawAxis("G");
- TFile* output = new TFile(("Hist_output_"+cut1+".root").c_str(),"UPDATE");
+ TFile* output = new TFile("output_Stack.root","UPDATE");
  can->Write();
  output->Close();
  delete output;
@@ -853,7 +853,7 @@ void Get2D_Ratio(string hist_name1, string hist_name2, string cut1, string cut2,
  gr_right_para->SetMarkerSize(0.4);
  gr_right_para->SetMarkerStyle(20.);
  gr_right_para->Draw("P");
- TFile* output = new TFile(("Hist_output_"+cut1+".root").c_str(),"UPDATE");
+ TFile* output = new TFile("output_Stack.root","UPDATE");
  can->Write();
  output->Close();
  delete output;
@@ -925,21 +925,35 @@ void Get1D_Ratio(string hist_name, string cut1, string cut2_hist_name2, string d
  l.DrawLatex(0.65,.94,name.c_str());
  gPad->RedrawAxis();
  gPad->RedrawAxis("G");
- TFile* output = new TFile(("Hist_output_"+cut1+".root").c_str(),"UPDATE");
+ TFile* output = new TFile("output_Stack.root","UPDATE");
  can->Write();
  output->Close();
  delete output;
  delete can;
 }
 
-void Get_Overlay(vector<string> outFiles, string hist_name, vector<string> samples, vector<string> cuts, vector<int> colors, string option, bool trigger)
+void Get_Overlay(vector<string> outFiles, vector<string> hist_names, vector<string> samples, vector<string> cuts, vector<int> colors, string option, bool trigger)
 {
  gStyle->SetOptStat(0);
  gStyle->SetOptTitle(0);
  //gStyle->SetFrameFillColor(kBlack);
  //gStyle->SetFrameLineColor(kWhite);
- vector<TH1D*> hists = list_histos(outFiles,samples,hist_name);
- TCanvas* can = new TCanvas(("can_"+hist_name+samples[0]+cuts[0]).c_str(),"",864.,468.);
+ string name = "can";
+ vector<TH1D*> hists;
+ for(int j = 0; j < cuts.size(); j++)
+ {
+  name += "_"+cuts[j];
+  for(int i = 0; i < samples.size(); i++)
+  {
+   name += "_"+samples[i];
+   for(int k = 0; k < hist_names.size(); k++)
+   {
+    name += "_"+hist_names[k];
+    hists.push_back(get_hist(outFiles[j],samples[i],hist_names[k]));
+   }
+  }
+ }
+ TCanvas* can = new TCanvas(("can_"+hist_names[0]+samples[0]+cuts[0]).c_str(),"",864.,468.);
  can->SetLeftMargin(0.15);
  can->SetRightMargin(0.18);
  can->SetBottomMargin(0.15);
@@ -1055,8 +1069,7 @@ void Get_Overlay(vector<string> outFiles, string hist_name, vector<string> sampl
  else cout << "Couldn't find option: " << option << endl;
  leg->Draw("SAMES");
 
- cout << "Saving Plots to: " << outFiles[0] << endl;
- TFile* output = new TFile(outFiles[0].c_str(),"UPDATE");
+ TFile* output = new TFile("output_Stack.root","UPDATE");
  can->Update();
  can->Write();
  output->Close();
@@ -1137,7 +1150,7 @@ void Get1D_Plot(vector<string> outFiles, string hist_name, vector<string> sample
    l.SetTextFont(42);
    l.DrawLatex(.50,.94,(samples[i]+"   "+cuts[j]).c_str());
 
-   TFile* output = new TFile(outFiles[j].c_str(),"UPDATE");
+   TFile* output = new TFile("output_Stack.root","UPDATE");
    can->Update();
    can->Write();
    output->Close();
@@ -1163,8 +1176,8 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
  //vector<string> directories_2D{"TChiWW_SMS_275_235", "TTJets", "WJets", "DiBoson", "DYJetsToLL", "ST"};
  //vector<string> directories_2D{"Bkg_2016","MET_2016","Bkg_2017","MET_2017","Bkg_2018","MET_2018","QCD_2017","TTJets_2017","WJets_2017","ZJetsToNuNu_2017","T2bW_500_490_2016","T2bW_500_490_2017","T2bW_500_300_2018"};
  //vector<string> directories_2D{"Bkg_2017","Bkg_QCD_RM_2017","MET_2017","QCD_2017","TTJets_2017","WJets_2017","ZJetsToNuNu_2017","T2bW_500_490_2017","Bkg_QCD200_RM_2017","Bkg_QCD300_RM_2017","Bkg_QCD500_RM_2017","Bkg_QCD700_RM_2017","Bkg_QCD1000_RM_2017","Bkg_QCD1500_RM_2017","Bkg_QCD2000_RM_2017","QCD_100to200_2017","QCD_200to300_2017","QCD_300to500_2017","QCD_500to700_2017","QCD_700to1000_2017","QCD_1000to1500_2017","QCD_1500to2000_2017","QCD_2000toInf_2017"};
- vector<string> directories_2D{"MET_2017","Bkg_2017"};
- vector<int> colors = {kCyan, kMagenta, kYellow, kGreen-2, kAzure+7, kPink, kGreen, kGray};
+ vector<string> directories_2D{"SingleElectron_2017","SingleMuon_2017","Bkg_2017"};
+ vector<int> colors = {kBlue+1, kRed+1, kGreen+1, kMagenta, kCyan, kOrange, kViolet+2, kAzure+7, kPink, kGreen, kGray};
  vector<int> colors_bkg = { kAzure+1, kGreen-9, kPink, kTeal+2, kYellow-4 };
  vector<int> colors_sig = { kMagenta, kCyan+2, };
 
@@ -1261,6 +1274,11 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
  //Get1D_Ratio("met_Hist","PreSelection","HEM","MET_2018",true);
  //Get1D_Ratio("met_Hist","PreSelection","met_Hist_HEM","MET_2018",false);
  
+ Get2D_Plot("HT_v_MET_Hist",directories_2D,inFiles,cuts,trigger);
+ Get2D_Plot("HTMedium_v_MET_Hist",directories_2D,inFiles,cuts,trigger);
+ Get2D_Plot("HTLoose_v_MET_Hist",directories_2D,inFiles,cuts,trigger);
+ Get2D_Plot("HTVeryLoose_v_MET_Hist",directories_2D,inFiles,cuts,trigger);
+ 
  //Get2D_Plot("dphiCMI_v_PTCM_Hist",directories_2D,inFiles,cuts,trigger);
  //Get2D_Plot("dphiCMI_v_Mperp_Hist",directories_2D,inFiles,cuts,trigger);
  //Get2D_Plot("dphiCMI_v_RISR_Hist",directories_2D,inFiles,cuts,trigger);
@@ -1338,13 +1356,13 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
  //Get2D_Ratio("Mperp_v_RISR_Hist","Mperp_v_RISR_Hist_HEM","PreSelection","HEM","MET_2018","MET_2018",false);
 
  //HEM $$$
- Get2D_Ratio("dphiCMI_v_PTCM_Hist_preHEM","dphiCMI_v_PTCM_Hist_postHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
- Get2D_Ratio("dphiCMI_v_PTCM_Hist_preHEM","dphiCMI_v_PTCM_Hist_postHEM","PreSelection","HEM-EventFlag_JetInHEM_Pt20E0","MET_2018","MET_2018",true);
- Get2D_Ratio("dphiCMI_v_PTCM_Hist_preHEM","dphiCMI_v_PTCM_Hist_postHEM","PreSelection","HEM-EventFlag_JetInHEM_Pt20_JetIDE0","MET_2018","MET_2018",true);
- Get2D_Ratio("dphiCMI_v_PTCM_Hist_preHEM","dphiCMI_v_PTCM_Hist_postHEM","PreSelection","EventFlag_JetInHEM_Pt20E0","MET_2018","MET_2018",true);
- Get2D_Ratio("dphiCMI_v_PTCM_Hist_preHEM","dphiCMI_v_PTCM_Hist_postHEM","PreSelection","EventFlag_JetInHEM_Pt20_JetIDE0","MET_2018","MET_2018",true);
- Get2D_Ratio("dphiCMI_v_PTCM_Hist_postHEM","dphiCMI_v_PTCM_Hist_postHEM","HEM-EventFlag_JetInHEM_Pt20E0","HEM-EventFlag_JetInHEM_Pt20_JetIDE0","MET_2018","MET_2018",true);
- Get2D_Ratio("dphiCMI_v_PTCM_Hist_postHEM","dphiCMI_v_PTCM_Hist_postHEM","EventFlag_JetInHEM_Pt20E0","HEM-EventFlag_JetInHEM_Pt20E0","MET_2018","MET_2018",true);
+ //Get2D_Ratio("dphiCMI_v_PTCM_Hist_preHEM","dphiCMI_v_PTCM_Hist_postHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
+ //Get2D_Ratio("dphiCMI_v_PTCM_Hist_preHEM","dphiCMI_v_PTCM_Hist_postHEM","PreSelection","HEM-EventFlag_JetInHEM_Pt20E0","MET_2018","MET_2018",true);
+ //Get2D_Ratio("dphiCMI_v_PTCM_Hist_preHEM","dphiCMI_v_PTCM_Hist_postHEM","PreSelection","HEM-EventFlag_JetInHEM_Pt20_JetIDE0","MET_2018","MET_2018",true);
+ //Get2D_Ratio("dphiCMI_v_PTCM_Hist_preHEM","dphiCMI_v_PTCM_Hist_postHEM","PreSelection","EventFlag_JetInHEM_Pt20E0","MET_2018","MET_2018",true);
+ //Get2D_Ratio("dphiCMI_v_PTCM_Hist_preHEM","dphiCMI_v_PTCM_Hist_postHEM","PreSelection","EventFlag_JetInHEM_Pt20_JetIDE0","MET_2018","MET_2018",true);
+ //Get2D_Ratio("dphiCMI_v_PTCM_Hist_postHEM","dphiCMI_v_PTCM_Hist_postHEM","HEM-EventFlag_JetInHEM_Pt20E0","HEM-EventFlag_JetInHEM_Pt20_JetIDE0","MET_2018","MET_2018",true);
+ //Get2D_Ratio("dphiCMI_v_PTCM_Hist_postHEM","dphiCMI_v_PTCM_Hist_postHEM","EventFlag_JetInHEM_Pt20E0","HEM-EventFlag_JetInHEM_Pt20E0","MET_2018","MET_2018",true);
  
  //2D Ratio 2017 Cleaning
  //Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist","RISRG0.9","RISRG0.9","Bkg_2017","MET_2017",true);
@@ -1382,7 +1400,7 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
  //cout << "Eff of 15 GeV Jets in T2tt: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEME0.root","T2tt_500_490_2018","dphiCMI_v_PTCM_Hist")->Integral()/get_hist_2D("Hist_output_PreSelection.root","T2tt_500_490_2018","dphiCMI_v_PTCM_Hist")->Integral() << endl;
  //cout << "Eff of 20 GeV Jets in T2tt: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEM_Pt20E0.root","T2tt_500_490_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral()/get_hist_2D("Hist_output_PreSelection.root","T2tt_500_490_2018","dphiCMI_v_PTCM_Hist")->Integral() << endl;
  //cout << "Eff of 15 GeV Jets in T2ChiWZ: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEME0.root","TChiWZ_300_290_2018","dphiCMI_v_PTCM_Hist")->Integral()/get_hist_2D("Hist_output_PreSelection.root","TChiWZ_300_290_2018","dphiCMI_v_PTCM_Hist")->Integral() << endl;
- //cout << "Eff of 20 GeV Jets in TChiWZ: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEM_Pt20E0.root","TChiWZ_300_290_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral()/get_hist_2D("Hist_output_PreSelection.root","TChiWZ_300_290_2018","dphiCMI_v_PTCM_Hist")->Integral() << endl;
+ //cout << "Eff of 20 GeV Jets in TChiWZ: " << get_hist_2D("Hist_output_HEM-EventFlag_JetInHEM_Pt20E0.root","TChiWZ_300_290_2018","dphiCMI_v_PTCM_Hist_HEM")->Integral()/get_hist_2D("Hist_output_PreSelection.root","TChiWZ_300_290_2018","dphiCMI_v_PTCM_Hist")->Integral() << endl; 
 
 /*
  double bkg_Entries = 0.0;
