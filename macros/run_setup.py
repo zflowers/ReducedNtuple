@@ -43,8 +43,8 @@ list_cuts_eff = [
     "SingleMuontrigger-E1--NmuBronze-E1",
     "SingleMuontrigger-E1--NmuSilver-E1",
     "SingleMuontrigger-E1--NmuGold-E1",
-    "DoubleElectrontrigger-E1--NeleE2",
-    "DoubleMuontrigger-E1--NmuE2",
+    "DoubleElectrontrigger-E1--Nele-E2",
+    "DoubleMuontrigger-E1--Nmu-E2",
 #HT Lowest Bin
     "HT-Le600--Nlep-E0",
     "HT-Le600--Njet_S-E0",
@@ -65,8 +65,8 @@ list_cuts_eff = [
     "HT-Le600--SingleMuontrigger-E1--NmuBronze-E1",
     "HT-Le600--SingleMuontrigger-E1--NmuSilver-E1",
     "HT-Le600--SingleMuontrigger-E1--NmuGold-E1",
-    "HT-Le600--DoubleElectrontrigger-E1--NeleE2",
-    "HT-Le600--DoubleMuontrigger-E1--NmuE2",
+    "HT-Le600--DoubleElectrontrigger-E1--Nele-E2",
+    "HT-Le600--DoubleMuontrigger-E1--Nmu-E2",
 #HT Middle Bin
     "HT-G600--HT-L750--Nlep-E0",
     "HT-G600--HT-L750--Njet_S-E0",
@@ -87,8 +87,8 @@ list_cuts_eff = [
     "HT-G600--HT-L750--SingleMuontrigger-E1--NmuBronze-E1",
     "HT-G600--HT-L750--SingleMuontrigger-E1--NmuSilver-E1",
     "HT-G600--HT-L750--SingleMuontrigger-E1--NmuGold-E1",
-    "HT-G600--HT-L750--DoubleElectrontrigger-E1--NeleE2",
-    "HT-G600--HT-L750--DoubleMuontrigger-E1--NmuE2",
+    "HT-G600--HT-L750--DoubleElectrontrigger-E1--Nele-E2",
+    "HT-G600--HT-L750--DoubleMuontrigger-E1--Nmu-E2",
 #HT High Bin
     "HT-Ge750--Nlep-E0",
     "HT-Ge750--Njet_S-E0",
@@ -109,8 +109,8 @@ list_cuts_eff = [
     "HT-Ge750--SingleMuontrigger-E1--NmuBronze-E1",
     "HT-Ge750--SingleMuontrigger-E1--NmuSilver-E1",
     "HT-Ge750--SingleMuontrigger-E1--NmuGold-E1",
-    "HT-Ge750--DoubleElectrontrigger-E1--NeleE2",
-    "HT-Ge750--DoubleMuontrigger-E1--NmuE2",
+    "HT-Ge750--DoubleElectrontrigger-E1--Nele-E2",
+    "HT-Ge750--DoubleMuontrigger-E1--Nmu-E2",
 ]
 
 #path where lists are stored

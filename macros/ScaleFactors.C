@@ -5,7 +5,6 @@
 #include <string>
 #include <TTree.h>
 #include <TGraphAsymmErrors.h>
-#include <TGraphErrors.h>
 #include <TMultiGraph.h>
 #include <TAxis.h>
 #include <TCanvas.h>
@@ -17,22 +16,12 @@
 #include <TEfficiency.h>
 #include <TMinuit.h>
 #include <Math/ProbFunc.h>
+#include "Fitter_Eff_Nano.C"
 
 using namespace std;
 
-bool invert_colors = false;
-
 double Get_ScaleFactor(string bkg_tag, string data_tag, string Trigger, vector<int> colors, string outFile, string cut, string option);
-TGraphErrors* Get_Bands_Ratio(double x_min, double x_max, TGraphAsymmErrors* gr, vector<double>& y_upper, vector<double>& y_lower, TF1* Bkg_Nominal, TF1* Data_Nominal);
-TGraphErrors* Get_Bands(double x_min, double x_max, TF1* Data_Nominal, vector<double>& y_upper, vector<double>& y_lower);
-TGraph* Get_Fit_Ratio(double x_min, double x_max, TF1* Bkg_Nominal, TF1* Data_Nominal);
 TGraphAsymmErrors* get_gr(string fname, string tag, string Trigger, int color, TLegend*& leg, TCanvas*& can);
-TGraphAsymmErrors* TGAE_Ratio(TGraphAsymmErrors* gr_bkg, TGraphAsymmErrors* gr_data);
-
-Double_t Gaussian_CDF_Func(Double_t *x, Double_t *par)
-{
- return par[0]*ROOT::Math::normal_cdf(x[0],par[2],par[1]);
-}
 
 void ScaleFactors(vector<string> inFile, vector<string> cut){
 
@@ -55,112 +44,6 @@ void ScaleFactors(vector<string> inFile, vector<string> cut){
    //double scale_Ratio_2018 = Get_ScaleFactor("Bkg_2018", data_tags_2018[j], "METtrigger", colors, inFile[i], cut[i], "Ratio");
    //if(scale_Ratio_2018 == -1) cout << "Failed to get SF for: " << data_tags_2018[j] << " " << cut[i] << endl;
   }
- }
-}
-
-void Format_Graph(TMultiGraph*& gr)
-{
- gr->GetXaxis()->CenterTitle(true);
- gr->GetXaxis()->SetTitleFont(132);
- gr->GetXaxis()->SetTitleSize(0.06);
- gr->GetXaxis()->SetTitleOffset(1.06);
- gr->GetXaxis()->SetLabelFont(132);
- gr->GetXaxis()->SetLabelSize(0.0);
- gr->GetYaxis()->CenterTitle(true);
- gr->GetYaxis()->SetTitleFont(132);
- gr->GetYaxis()->SetTitleSize(0.06);
- gr->GetYaxis()->SetTitleOffset(.6);
- gr->GetYaxis()->SetLabelFont(132);
- gr->GetYaxis()->SetLabelSize(0.05);
-
- if(invert_colors)
- {
-  gr->GetXaxis()->SetAxisColor(kWhite);
-  gr->GetYaxis()->SetAxisColor(kWhite);
-  gr->GetXaxis()->SetTitleColor(kWhite);
-  gr->GetYaxis()->SetTitleColor(kWhite);
-  gr->GetXaxis()->SetLabelColor(kWhite);
-  gr->GetYaxis()->SetLabelColor(kWhite);
- }
-}
-
-void Format_Graph_res(TMultiGraph*& gr)
-{
-  gr->GetXaxis()->CenterTitle(true);
-  gr->GetXaxis()->SetTitleFont(132);
-  gr->GetXaxis()->SetTitleSize(0.13);
-  gr->GetXaxis()->SetTitleOffset(.71);
-  gr->GetXaxis()->SetLabelFont(132);
-  gr->GetXaxis()->SetLabelSize(0.11);
-  gr->GetYaxis()->CenterTitle(true);
-  gr->GetYaxis()->SetTitleFont(132);
-  gr->GetYaxis()->SetTitleSize(0.13);
-  gr->GetYaxis()->SetTitleOffset(.29);
-  gr->GetYaxis()->SetLabelFont(132);
-  gr->GetYaxis()->SetLabelSize(0.11);
-
-  if(invert_colors)
-  {
-   gr->GetXaxis()->SetAxisColor(kWhite);
-   gr->GetYaxis()->SetAxisColor(kWhite);
-   gr->GetXaxis()->SetTitleColor(kWhite);
-   gr->GetYaxis()->SetTitleColor(kWhite);
-   gr->GetXaxis()->SetLabelColor(kWhite);
-   gr->GetYaxis()->SetLabelColor(kWhite);
-  }
-}
-
-void Format_Graph(TGraphAsymmErrors*& gr)
-{
- gr->GetXaxis()->CenterTitle(true);
- gr->GetXaxis()->SetTitleFont(132);
- gr->GetXaxis()->SetTitleSize(0.06);
- gr->GetXaxis()->SetTitleOffset(1.06);
- gr->GetXaxis()->SetLabelFont(132);
- gr->GetXaxis()->SetLabelSize(0.0);
- //gr->GetXaxis()->SetLabelSize(0.00000001);
- gr->GetYaxis()->CenterTitle(true);
- gr->GetYaxis()->SetTitleFont(132);
- gr->GetYaxis()->SetTitleSize(0.06);
- gr->GetYaxis()->SetTitleOffset(.6);
- gr->GetYaxis()->SetLabelFont(132);
- gr->GetYaxis()->SetLabelSize(0.05);
-
- if(invert_colors)
- {
-  gr->GetXaxis()->SetAxisColor(kWhite);
-  gr->GetYaxis()->SetAxisColor(kWhite);
-  gr->GetXaxis()->SetTitleColor(kWhite);
-  gr->GetYaxis()->SetTitleColor(kWhite);
-  gr->GetXaxis()->SetLabelColor(kWhite);
-  gr->GetYaxis()->SetLabelColor(kWhite);
- }
-}
-
-void Format_Graph(TGraphErrors*& gr)
-{
- gr->GetXaxis()->CenterTitle(true);
- gr->GetXaxis()->SetTitleFont(132);
- gr->GetXaxis()->SetTitleSize(0.06);
- gr->GetXaxis()->SetTitleOffset(1.06);
- gr->GetXaxis()->SetLabelFont(132);
- gr->GetXaxis()->SetLabelSize(0.0);
- //gr->GetXaxis()->SetLabelSize(0.00000001);
- gr->GetYaxis()->CenterTitle(true);
- gr->GetYaxis()->SetTitleFont(132);
- gr->GetYaxis()->SetTitleSize(0.06);
- gr->GetYaxis()->SetTitleOffset(.6);
- gr->GetYaxis()->SetLabelFont(132);
- gr->GetYaxis()->SetLabelSize(0.05);
-
- if(invert_colors)
- {
-  gr->GetXaxis()->SetAxisColor(kWhite);
-  gr->GetYaxis()->SetAxisColor(kWhite);
-  gr->GetXaxis()->SetTitleColor(kWhite);
-  gr->GetYaxis()->SetTitleColor(kWhite);
-  gr->GetXaxis()->SetLabelColor(kWhite);
-  gr->GetYaxis()->SetLabelColor(kWhite);
  }
 }
 
@@ -240,7 +123,7 @@ double Get_ScaleFactor(string bkg_tag, string data_tag, string Trigger, vector<i
  can->Clear();
 
 //This is where we evaluate scale factors (Ratio or Fit)
- TPad *pad_res = new TPad("pad_res","pad_res",0,0.03,1,0.35-0.04);
+ TPad *pad_res = new TPad("pad_res","pad_res",0,0.03,1,0.31);
  pad_res->SetGridx(); 
  pad_res->SetGridy();
  pad_res->SetTopMargin(0.);
@@ -384,130 +267,6 @@ return scale;
 
 
 
-}
-
-TGraphErrors* Get_Bands_Ratio(double x_min, double x_max, TGraphAsymmErrors* gr, vector<double>& y_upper, vector<double>& y_lower, TF1* Bkg_Nominal, TF1* Data_Nominal)
-{
- int N = 1000;
- TGraphErrors* gr_bands_ratio = new TGraphErrors(N);
- double x = 0.;
- double y_upper_i = 0.;
- double y_lower_i = 0.;
- double y = 0.;
- double x_err = ((x_max-x_min)/(N));
- double y_err = 0.;
- double b = 300.;
-
- for(int i = 0; i < N; i++)
- {
-  x = x_min+(((x_max-x_min)/(N))*i);
-  //y_upper_i = ((.1e-5*(x-b)*(x-b)+1.01)*(Ratio_Nominal->GetParameter(0))*ROOT::Math::normal_cdf(x,Ratio_Nominal->GetParameter(2),Ratio_Nominal->GetParameter(1)));
-  //y_lower_i = ((-1.e-5*(x-b)*(x-b)+.98)*(Ratio_Nominal->GetParameter(0))*ROOT::Math::normal_cdf(x,Ratio_Nominal->GetParameter(2),Ratio_Nominal->GetParameter(1)));
-  //y_upper_i = (.1e-5*(x-b)*(x-b)+1.01)*Ratio_Nominal->Eval(x);
-  //y_lower_i = (-0.25e-5*(x-b)*(x-b)+.98)*Ratio_Nominal->Eval(x);
-  y_upper_i = (.2e-5*(x-b)*(x-b)+1.01);
-  y_lower_i = (-.2e-5*(x-b)*(x-b)+.99);
-  if(x > b)
-  {
-   y_upper_i = 1.01;
-  }
-  if(x > b)
-  {
-   y_lower_i = 0.99;
-  }
-  y_upper.push_back(y_upper_i);
-  y_lower.push_back(y_lower_i);
-  y_upper_i *= (Data_Nominal->Eval(x)/Bkg_Nominal->Eval(x));
-  y_lower_i *= (Data_Nominal->Eval(x)/Bkg_Nominal->Eval(x));
-/*
-  if(x > b)
-  {
-   y_upper_i = 1.015;
-  }
-  if(x > b)
-  {
-   y_lower_i = 0.99;
-  }
-*/ 
- //if(y_upper_i < 1.) {y_upper_i=1.;}
-  //if(y_lower_i > .98) {y_lower_i=.98;}
-  y = (y_upper_i+y_lower_i)/2.;
-  y_err = (y_upper_i-y_lower_i)/2.;
-  gr_bands_ratio->SetPoint(i,x,y);
-  gr_bands_ratio->SetPointError(i,x_err,y_err);
- }
- return gr_bands_ratio; 
-}
-
-TGraphErrors* Get_Bands(double x_min, double x_max, TF1* Data_Nominal, vector<double>& y_upper, vector<double>& y_lower)
-{
- int N = y_upper.size();
- TGraphErrors* gr_bands = new TGraphErrors(N);
- double x = 0.;
- double y = 0.;
- double x_err = ((x_max-x_min)/(N));
- double y_err_i = 0.;
- double y_upper_err_i = 0.;
- double y_lower_err_i = 0.;
-
- for(int i = 0; i < N; i++)
- {
-  x = x_min+(((x_max-x_min)/(N))*i);
-  y_upper_err_i = std::min(1.,Data_Nominal->Eval(x)*y_upper[i]);
-  y_lower_err_i = Data_Nominal->Eval(x)*y_lower[i];
-  y = (y_upper_err_i+y_lower_err_i)/2.;
-  y_err_i = (y_upper_err_i-y_lower_err_i)/2.;
-  if(y > 1.) {y = 1.;}
-  if(y_err_i > 1.) {y_err_i = 1.;}
-  gr_bands->SetPoint(i,x,y);
-  //gr_bands->SetPointError(i,x_err,x_err,y_lower_err_i,y_upper_err_i);
-  gr_bands->SetPointError(i,x_err,y_err_i);
- }
- return gr_bands; 
-}
-
-TGraph* Get_Fit_Ratio(double x_min, double x_max, TF1* Bkg_Nominal, TF1* Data_Nominal)
-{
- int N = 1000;
- TGraph* gr = new TGraph(1000);
- double x = 0.;
- for(int i = 0; i < 1000; i++)
- {
-  x = x_min+(((x_max-x_min)/(N))*i);
-  gr->SetPoint(i,x,Data_Nominal->Eval(x)/Bkg_Nominal->Eval(x));
- }
- return gr;
-}
-
-TGraphAsymmErrors* TGAE_Ratio(TGraphAsymmErrors* gr_bkg, TGraphAsymmErrors* gr_data)
-{
- TGraphAsymmErrors* mg = NULL;
- int N = gr_bkg->GetN();
- if(N != gr_data->GetN()) return mg;
- double xnew[N];
- double ynew[N];
- for(int i=0; i<N; i++)
- {
-  double x_bkg,y_bkg,x_data,y_data;
-  gr_bkg->GetPoint(i,x_bkg,y_bkg);
-  gr_data->GetPoint(i,x_data,y_data);
-  if(x_bkg != x_data) return mg;
-  xnew[i]=x_bkg;
-  ynew[i]=y_data/y_bkg;
- }
- mg = new TGraphAsymmErrors(N,xnew,ynew);
- for(int i=0; i<N; i++)
- {
-  double bkg_ey_h = gr_bkg->GetErrorYhigh(i);
-  double bkg_ey_l = gr_bkg->GetErrorYlow(i);
-  double data_ey_h = gr_data->GetErrorYhigh(i);
-  double data_ey_l = gr_data->GetErrorYlow(i);
-  double x_bkg,y_bkg,x_data,y_data;
-  gr_bkg->GetPoint(i,x_bkg,y_bkg);
-  gr_data->GetPoint(i,x_data,y_data);
-  mg->SetPointError(i,gr_bkg->GetErrorXlow(i),gr_data->GetErrorXhigh(i),sqrt((data_ey_l*data_ey_l)*((y_data/y_bkg)*(y_data/y_bkg))/(y_data*y_data)+(bkg_ey_l*bkg_ey_l)*((y_data/y_bkg)*(y_data/y_bkg))/(y_bkg*y_bkg)),sqrt((data_ey_h*data_ey_h)*((y_data/y_bkg)*(y_data/y_bkg))/(y_data*y_data)+(bkg_ey_h*bkg_ey_h)*((y_data/y_bkg)*(y_data/y_bkg))/(y_bkg*y_bkg)));
- }
- return mg;
 }
 
 TGraphAsymmErrors* get_gr(string fname, string tag, string Trigger, int color, TLegend*& leg, TCanvas*& can)

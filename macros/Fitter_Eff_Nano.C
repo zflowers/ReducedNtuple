@@ -1,5 +1,4 @@
 //Code for Fitting Efficiency Curves
-//function: Error function or CDF for gaussian or Fermi function or Soft Heaviside
 
 #include <TMinuit.h>
 #include <fstream>
@@ -8,6 +7,7 @@
 #include <sys/stat.h>
 #include <algorithm>
 #include <TMatrixDSym.h>
+#include <TGraphErrors.h>
 #include <TPaveStats.h>
 #include <TLine.h>
 #include <TFitResult.h>
@@ -17,6 +17,11 @@ using namespace std;
 
 void Get_Fit(TGraphAsymmErrors*& gr, vector<TF1*> funcs, vector<int> colors, string outFile, string name);
 void Fit_Graph_With_Funcs(TCanvas*& canv, TGraphAsymmErrors*& gr, vector<TF1*> funcs, const vector<int>& colors, string name);
+TGraph* Get_Fit_Ratio(double x_min, double x_max, TF1* Bkg_Nominal, TF1* Data_Nominal);
+TGraphErrors* Get_Bands_Ratio(double x_min, double x_max, TGraphAsymmErrors* gr, vector<double>& y_upper, vector<double>& y_lower, TF1* Bkg_Nominal, TF1* Data_Nominal, double& a1, double& a2, double& b1, double& b2, double& c1, double& c2);
+TGraphErrors* Get_Bands(double x_min, double x_max, TF1* Data_Nominal, vector<double>& y_upper, vector<double>& y_lower);
+void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, double& c1, double& c2, const double& HT, const int& year, const bool& muon);
+TGraphAsymmErrors* TGAE_Ratio(TGraphAsymmErrors* gr_bkg, TGraphAsymmErrors* gr_data);
 
 Double_t Error_Func(Double_t *x, Double_t *par)
 {
@@ -48,6 +53,327 @@ bool fileExists(const std::string& filename)
      return true;
  }
  return false;
+}
+
+TGraphAsymmErrors* TGAE_Ratio(TGraphAsymmErrors* gr_bkg, TGraphAsymmErrors* gr_data)
+{
+ TGraphAsymmErrors* mg = NULL;
+ int N = gr_bkg->GetN();
+ if(N != gr_data->GetN()) return mg;
+ double xnew[N];
+ double ynew[N];
+ for(int i=0; i<N; i++)
+ {
+  double x_bkg,y_bkg,x_data,y_data;
+  gr_bkg->GetPoint(i,x_bkg,y_bkg);
+  gr_data->GetPoint(i,x_data,y_data);
+  if(x_bkg != x_data) return mg;
+  xnew[i]=x_bkg;
+  ynew[i]=y_data/y_bkg;
+ }
+ mg = new TGraphAsymmErrors(N,xnew,ynew);
+ for(int i=0; i<N; i++)
+ {
+  double bkg_ey_h = gr_bkg->GetErrorYhigh(i);
+  double bkg_ey_l = gr_bkg->GetErrorYlow(i);
+  double data_ey_h = gr_data->GetErrorYhigh(i);
+  double data_ey_l = gr_data->GetErrorYlow(i);
+  double x_bkg,y_bkg,x_data,y_data;
+  gr_bkg->GetPoint(i,x_bkg,y_bkg);
+  gr_data->GetPoint(i,x_data,y_data);
+  mg->SetPointError(i,gr_bkg->GetErrorXlow(i),gr_data->GetErrorXhigh(i),sqrt((data_ey_l*data_ey_l)*((y_data/y_bkg)*(y_data/y_bkg))/(y_data*y_data)+(bkg_ey_l*bkg_ey_l)*((y_data/y_bkg)*(y_data/y_bkg))/(y_bkg*y_bkg)),sqrt((data_ey_h*data_ey_h)*((y_data/y_bkg)*(y_data/y_bkg))/(y_data*y_data)+(bkg_ey_h*bkg_ey_h)*((y_data/y_bkg)*(y_data/y_bkg))/(y_bkg*y_bkg)));
+ }
+ return mg;
+}
+
+void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, double& c1, double& c2, const double& HT, const int& year, const bool& muon)
+{
+ if(HT <= 600.)
+ {
+  if(year == 2016)
+  {
+   if(muon)
+   {
+    a1 = .2e-5;
+    a2 = -.2e-5;
+    b1 = 300.;
+    b2 = 300.;
+    c1 = 1.01;
+    c2 = 0.99;
+   }
+   else
+   {
+    a1 = .5e-5;
+    a2 = -.5e-5;
+    b1 = 300.;
+    b2 = 300.;
+    c1 = 1.01;
+    c2 = 0.99;
+   }
+  }
+  else if(year == 2017)
+  {
+   if(muon)
+   {
+    a1 = .2e-5;
+    a2 = -.2e-5;
+    b1 = 300.;
+    b2 = 300.;
+    c1 = 1.01;
+    c2 = 0.99;
+   }
+   else
+   {
+    a1 = .5e-5;
+    a2 = -.5e-5;
+    b1 = 300.;
+    b2 = 300.;
+    c1 = 1.01;
+    c2 = 0.99;
+   }
+  }
+  else if(year == 2018)
+  {
+   if(muon)
+   {
+    a1 = .2e-5;
+    a2 = -.2e-5;
+    b1 = 300.;
+    b2 = 300.;
+    c1 = 1.01;
+    c2 = 0.99;
+   }
+   else
+   {
+    a1 = .5e-5;
+    a2 = -.5e-5;
+    b1 = 300.;
+    b2 = 300.;
+    c1 = 1.01;
+    c2 = 0.99;
+   }
+  }
+  else
+  {
+   cout << "Improper year given!" << endl;
+  }
+ }
+ else if(HT > 600. && HT < 750.)
+ {
+  if(year == 2016)
+  {
+   if(muon)
+   {
+    a1 = .2e-5;
+    a2 = -.2e-5;
+    b1 = 300.;
+    b2 = 300.;
+    c1 = 1.01;
+    c2 = 0.99;
+   }
+   else
+   {
+    a1 = .5e-5;
+    a2 = -.5e-5;
+    b1 = 300.;
+    b2 = 300.;
+    c1 = 1.01;
+    c2 = 0.99;
+   }
+  }
+  else if(year == 2017)
+  {
+   if(muon)
+   {
+    a1 = .2e-5;
+    a2 = -.2e-5;
+    b1 = 300.;
+    b2 = 300.;
+    c1 = 1.01;
+    c2 = 0.99;
+   }
+   else
+   {
+    a1 = .5e-5;
+    a2 = -.5e-5;
+    b1 = 300.;
+    b2 = 300.;
+    c1 = 1.01;
+    c2 = 0.99;
+   }
+  }
+  else if(year == 2018)
+  {
+   if(muon)
+   {
+    a1 = .2e-5;
+    a2 = -.2e-5;
+    b1 = 300.;
+    b2 = 300.;
+    c1 = 1.01;
+    c2 = 0.99;
+   }
+   else
+   {
+    a1 = .5e-5;
+    a2 = -.5e-5;
+    b1 = 300.;
+    b2 = 300.;
+    c1 = 1.01;
+    c2 = 0.99;
+   }
+  }
+  else
+  {
+   cout << "Improper year given!" << endl;
+  }
+ }
+ else if(HT > 750.)
+ {
+  if(year == 2016)
+  {
+   if(muon)
+   {
+    a1 = .2e-5;
+    a2 = -.2e-5;
+    b1 = 300.;
+    b2 = 300.;
+    c1 = 1.01;
+    c2 = 0.99;
+   }
+   else
+   {
+    a1 = .5e-5;
+    a2 = -.5e-5;
+    b1 = 300.;
+    b2 = 300.;
+    c1 = 1.01;
+    c2 = 0.99;
+   }
+  }
+  else if(year == 2017)
+  {
+   if(muon)
+   {
+    a1 = .2e-5;
+    a2 = -.2e-5;
+    b1 = 300.;
+    b2 = 300.;
+    c1 = 1.01;
+    c2 = 0.99;
+   }
+   else
+   {
+    a1 = .5e-5;
+    a2 = -.5e-5;
+    b1 = 300.;
+    b2 = 300.;
+    c1 = 1.01;
+    c2 = 0.99;
+   }
+  }
+  else if(year == 2018)
+  {
+   if(muon)
+   {
+    a1 = .2e-5;
+    a2 = -.2e-5;
+    b1 = 300.;
+    b2 = 300.;
+    c1 = 1.01;
+    c2 = 0.99;
+   }
+   else
+   {
+    a1 = .5e-5;
+    a2 = -.5e-5;
+    b1 = 300.;
+    b2 = 300.;
+    c1 = 1.01;
+    c2 = 0.99;
+   }
+  }
+  else
+  {
+   cout << "Improper year given for function parameters!" << endl;
+  }
+ }
+}
+
+TGraphErrors* Get_Bands_Ratio(double x_min, double x_max, TGraphAsymmErrors* gr, vector<double>& y_upper, vector<double>& y_lower, TF1* Bkg_Nominal, TF1* Data_Nominal, double& a1, double& a2, double& b1, double& b2, double& c1, double& c2)
+{
+ int N = 1000;
+ TGraphErrors* gr_bands_ratio = new TGraphErrors(N);
+ double x = 0.;
+ double y_upper_i = 0.;
+ double y_lower_i = 0.;
+ double y = 0.;
+ double x_err = ((x_max-x_min)/(N));
+ double y_err = 0.;
+
+ for(int i = 0; i < N; i++)
+ {
+  x = x_min+(((x_max-x_min)/(N))*i);
+  y_upper_i = (a1*(x-b1)*(x-b1)+c1);
+  y_lower_i = (a2*(x-b2)*(x-b2)+c2);
+  if(x > b1)
+  {
+   y_upper_i = 1.01;
+  }
+  if(x > b2)
+  {
+   y_lower_i = 0.99;
+  }
+  y_upper.push_back(y_upper_i);
+  y_lower.push_back(y_lower_i);
+  y_upper_i *= (Data_Nominal->Eval(x)/Bkg_Nominal->Eval(x));
+  y_lower_i *= (Data_Nominal->Eval(x)/Bkg_Nominal->Eval(x));
+  y = (y_upper_i+y_lower_i)/2.;
+  y_err = (y_upper_i-y_lower_i)/2.;
+  gr_bands_ratio->SetPoint(i,x,y);
+  gr_bands_ratio->SetPointError(i,x_err,y_err);
+ }
+ return gr_bands_ratio; 
+}
+
+TGraphErrors* Get_Bands(double x_min, double x_max, TF1* Data_Nominal, vector<double>& y_upper, vector<double>& y_lower)
+{
+ int N = y_upper.size();
+ TGraphErrors* gr_bands = new TGraphErrors(N);
+ double x = 0.;
+ double y = 0.;
+ double x_err = ((x_max-x_min)/(N));
+ double y_err_i = 0.;
+ double y_upper_err_i = 0.;
+ double y_lower_err_i = 0.;
+
+ for(int i = 0; i < N; i++)
+ {
+  x = x_min+(((x_max-x_min)/(N))*i);
+  y_upper_err_i = std::min(1.,Data_Nominal->Eval(x)*y_upper[i]);
+  y_lower_err_i = Data_Nominal->Eval(x)*y_lower[i];
+  y = (y_upper_err_i+y_lower_err_i)/2.;
+  y_err_i = (y_upper_err_i-y_lower_err_i)/2.;
+  if(y > 1.) {y = 1.;}
+  if(y_err_i > 1.) {y_err_i = 1.;}
+  gr_bands->SetPoint(i,x,y);
+  //gr_bands->SetPointError(i,x_err,x_err,y_lower_err_i,y_upper_err_i);
+  gr_bands->SetPointError(i,x_err,y_err_i);
+ }
+ return gr_bands; 
+}
+
+TGraph* Get_Fit_Ratio(double x_min, double x_max, TF1* Bkg_Nominal, TF1* Data_Nominal)
+{
+ int N = 1000;
+ TGraph* gr = new TGraph(1000);
+ double x = 0.;
+ for(int i = 0; i < 1000; i++)
+ {
+  x = x_min+(((x_max-x_min)/(N))*i);
+  gr->SetPoint(i,x,Data_Nominal->Eval(x)/Bkg_Nominal->Eval(x));
+ }
+ return gr;
 }
 
 void Fitter_Eff_Nano(TGraphAsymmErrors* gr_given, vector<int> colors, string name)
@@ -158,19 +484,70 @@ void Fitter_Eff_Nano(TGraphAsymmErrors* gr_given, vector<int> colors, string nam
 
 void Format_Graph(TMultiGraph*& gr)
 {
+ gr->GetXaxis()->CenterTitle(true);
+ gr->GetXaxis()->SetTitleFont(132);
+ gr->GetXaxis()->SetTitleSize(0.06);
+ gr->GetXaxis()->SetTitleOffset(1.06);
+ gr->GetXaxis()->SetLabelFont(132);
+ gr->GetXaxis()->SetLabelSize(0.0);
+ gr->GetYaxis()->CenterTitle(true);
+ gr->GetYaxis()->SetTitleFont(132);
+ gr->GetYaxis()->SetTitleSize(0.06);
+ gr->GetYaxis()->SetTitleOffset(.6);
+ gr->GetYaxis()->SetLabelFont(132);
+ gr->GetYaxis()->SetLabelSize(0.05);
+
+ if(invert_colors)
+ {
+  gr->GetXaxis()->SetAxisColor(kWhite);
+  gr->GetYaxis()->SetAxisColor(kWhite);
+  gr->GetXaxis()->SetTitleColor(kWhite);
+  gr->GetYaxis()->SetTitleColor(kWhite);
+  gr->GetXaxis()->SetLabelColor(kWhite);
+  gr->GetYaxis()->SetLabelColor(kWhite);
+ }
+}
+
+void Format_Graph_res(TMultiGraph*& gr)
+{
   gr->GetXaxis()->CenterTitle(true);
   gr->GetXaxis()->SetTitleFont(132);
-  gr->GetXaxis()->SetTitleSize(0.06);
-  gr->GetXaxis()->SetTitleOffset(1.06);
+  gr->GetXaxis()->SetTitleSize(0.12);
+  gr->GetXaxis()->SetTitleOffset(.71);
   gr->GetXaxis()->SetLabelFont(132);
-  gr->GetXaxis()->SetLabelSize(0.05);
-  //gr->GetXaxis()->SetLabelSize(0.00000001);
+  gr->GetXaxis()->SetLabelSize(0.1);
   gr->GetYaxis()->CenterTitle(true);
   gr->GetYaxis()->SetTitleFont(132);
-  gr->GetYaxis()->SetTitleSize(0.06);
-  gr->GetYaxis()->SetTitleOffset(.6);
+  gr->GetYaxis()->SetTitleSize(0.12);
+  gr->GetYaxis()->SetTitleOffset(.3);
   gr->GetYaxis()->SetLabelFont(132);
-  gr->GetYaxis()->SetLabelSize(0.05);
+  gr->GetYaxis()->SetLabelSize(0.1);
+
+  if(invert_colors)
+  {
+   gr->GetXaxis()->SetAxisColor(kWhite);
+   gr->GetYaxis()->SetAxisColor(kWhite);
+   gr->GetXaxis()->SetTitleColor(kWhite);
+   gr->GetYaxis()->SetTitleColor(kWhite);
+   gr->GetXaxis()->SetLabelColor(kWhite);
+   gr->GetYaxis()->SetLabelColor(kWhite);
+  }
+}
+
+void Format_Graph_res(TGraphErrors*& gr)
+{
+  gr->GetXaxis()->CenterTitle(true);
+  gr->GetXaxis()->SetTitleFont(132);
+  gr->GetXaxis()->SetTitleSize(0.115);
+  gr->GetXaxis()->SetTitleOffset(.75);
+  gr->GetXaxis()->SetLabelFont(132);
+  gr->GetXaxis()->SetLabelSize(0.09);
+  gr->GetYaxis()->CenterTitle(true);
+  gr->GetYaxis()->SetTitleFont(132);
+  gr->GetYaxis()->SetTitleSize(0.115);
+  gr->GetYaxis()->SetTitleOffset(.33);
+  gr->GetYaxis()->SetLabelFont(132);
+  gr->GetYaxis()->SetLabelSize(0.09);
 
   if(invert_colors)
   {
@@ -185,55 +562,56 @@ void Format_Graph(TMultiGraph*& gr)
 
 void Format_Graph(TGraphAsymmErrors*& gr)
 {
-  gr->GetXaxis()->CenterTitle(true);
-  gr->GetXaxis()->SetTitleFont(132);
-  gr->GetXaxis()->SetTitleSize(0.06);
-  gr->GetXaxis()->SetTitleOffset(1.06);
-  gr->GetXaxis()->SetLabelFont(132);
-  gr->GetXaxis()->SetLabelSize(0.05);
-  //gr->GetXaxis()->SetLabelSize(0.00000001);
-  gr->GetYaxis()->CenterTitle(true);
-  gr->GetYaxis()->SetTitleFont(132);
-  gr->GetYaxis()->SetTitleSize(0.06);
-  gr->GetYaxis()->SetTitleOffset(.6);
-  gr->GetYaxis()->SetLabelFont(132);
-  gr->GetYaxis()->SetLabelSize(0.05);
+ gr->GetXaxis()->CenterTitle(true);
+ gr->GetXaxis()->SetTitleFont(132);
+ gr->GetXaxis()->SetTitleSize(0.06);
+ gr->GetXaxis()->SetTitleOffset(1.06);
+ gr->GetXaxis()->SetLabelFont(132);
+ gr->GetXaxis()->SetLabelSize(0.0);
+ //gr->GetXaxis()->SetLabelSize(0.00000001);
+ gr->GetYaxis()->CenterTitle(true);
+ gr->GetYaxis()->SetTitleFont(132);
+ gr->GetYaxis()->SetTitleSize(0.06);
+ gr->GetYaxis()->SetTitleOffset(.6);
+ gr->GetYaxis()->SetLabelFont(132);
+ gr->GetYaxis()->SetLabelSize(0.05);
 
-  if(invert_colors)
-  {
-   gr->GetXaxis()->SetAxisColor(kWhite);
-   gr->GetYaxis()->SetAxisColor(kWhite);
-   gr->GetXaxis()->SetTitleColor(kWhite);
-   gr->GetYaxis()->SetTitleColor(kWhite);
-   gr->GetXaxis()->SetLabelColor(kWhite);
-   gr->GetYaxis()->SetLabelColor(kWhite);
-  }
+ if(invert_colors)
+ {
+  gr->GetXaxis()->SetAxisColor(kWhite);
+  gr->GetYaxis()->SetAxisColor(kWhite);
+  gr->GetXaxis()->SetTitleColor(kWhite);
+  gr->GetYaxis()->SetTitleColor(kWhite);
+  gr->GetXaxis()->SetLabelColor(kWhite);
+  gr->GetYaxis()->SetLabelColor(kWhite);
+ }
 }
 
-void Format_Graph_res(TMultiGraph*& gr)
+void Format_Graph(TGraphErrors*& gr)
 {
-  gr->GetXaxis()->CenterTitle(true);
-  gr->GetXaxis()->SetTitleFont(132);
-  gr->GetXaxis()->SetTitleSize(0.12);
-  gr->GetXaxis()->SetTitleOffset(.7);
-  gr->GetXaxis()->SetLabelFont(132);
-  gr->GetXaxis()->SetLabelSize(0.1);
-  gr->GetYaxis()->CenterTitle(true);
-  gr->GetYaxis()->SetTitleFont(132);
-  gr->GetYaxis()->SetTitleSize(0.12);
-  gr->GetYaxis()->SetTitleOffset(.35);
-  gr->GetYaxis()->SetLabelFont(132);
-  gr->GetYaxis()->SetLabelSize(0.1);
+ gr->GetXaxis()->CenterTitle(true);
+ gr->GetXaxis()->SetTitleFont(132);
+ gr->GetXaxis()->SetTitleSize(0.06);
+ gr->GetXaxis()->SetTitleOffset(1.06);
+ gr->GetXaxis()->SetLabelFont(132);
+ gr->GetXaxis()->SetLabelSize(0.0);
+ //gr->GetXaxis()->SetLabelSize(0.00000001);
+ gr->GetYaxis()->CenterTitle(true);
+ gr->GetYaxis()->SetTitleFont(132);
+ gr->GetYaxis()->SetTitleSize(0.06);
+ gr->GetYaxis()->SetTitleOffset(.6);
+ gr->GetYaxis()->SetLabelFont(132);
+ gr->GetYaxis()->SetLabelSize(0.05);
 
-  if(invert_colors)
-  {
-   gr->GetXaxis()->SetAxisColor(kWhite);
-   gr->GetYaxis()->SetAxisColor(kWhite);
-   gr->GetXaxis()->SetTitleColor(kWhite);
-   gr->GetYaxis()->SetTitleColor(kWhite);
-   gr->GetXaxis()->SetLabelColor(kWhite);
-   gr->GetYaxis()->SetLabelColor(kWhite);
-  }
+ if(invert_colors)
+ {
+  gr->GetXaxis()->SetAxisColor(kWhite);
+  gr->GetYaxis()->SetAxisColor(kWhite);
+  gr->GetXaxis()->SetTitleColor(kWhite);
+  gr->GetYaxis()->SetTitleColor(kWhite);
+  gr->GetXaxis()->SetLabelColor(kWhite);
+  gr->GetYaxis()->SetLabelColor(kWhite);
+ }
 }
 
 TGraphAsymmErrors* TGAE_TF1(TGraphAsymmErrors *gr, TF1 *fit_func)

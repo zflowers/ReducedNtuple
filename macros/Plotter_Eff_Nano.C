@@ -20,8 +20,11 @@ using namespace std;
 string states = "";
 void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, string outFile, string name, string option);
 void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, vector<string> inFile, vector<string> cut, string name, string option);
+void Get_Plot_WithSF(vector<string> tags, string data_tag, string bkg_tag, vector<string> Triggers, vector<int> colors, vector<string> inFile, vector<string> cuts, string SF_FinalState, string name, string option);
 TMultiGraph* get_mg(string fname, vector<string> tags, vector<string> Triggers, vector<int> colors, TLegend*& leg, TCanvas*& can, string option);
-TMultiGraph* get_mg(vector<string> cut, vector<string> tags, vector<string> Triggers, vector<string> fname, vector<int> colors, TLegend*& leg, TCanvas*& can, string option);
+TMultiGraph* get_mg(vector<string> cut, vector<string> tags, vector<string> Triggers, vector<string> fname, vector<int> colors, TLegend*& leg, TCanvas*& can, string option, string SF_Cut = "default");
+TMultiGraph* get_mg_ratio(vector<string> cut, vector<string> tags, vector<string> Triggers, vector<string> fname, vector<int> colors, string nominal, string name);
+TGraphAsymmErrors* get_gr(string cut, string tag, string trigger, TCanvas*& can);
 string RewriteCut(std::string cut);
 string GetCut(string found_cut, string current_cut);
 std::string get_str_between_two_str(const std::string &s, const std::string &start_delim, const std::string &stop_delim);
@@ -36,91 +39,13 @@ void eraseSubStr(std::string & mainStr, const std::string & toErase)
  }
 }
 
-void Plotter_Eff_Nano(vector<string> inFile, vector<string> cut){
+void Plotter_Eff_Nano(vector<string> cut, bool muon = false, bool electron = false, bool data = false, bool bkg = false){
+ vector<string> inFile;
+ for(int i = 0; i < cut.size(); i++) { inFile.push_back("Eff_output_"+cut[i]+".root"); }
+ vector<int> colors = {kBlue+1, kRed+1, kGreen+1, kBlack, kOrange-1, kViolet+1, kMagenta, kAzure+1};
  //string inFile ="output_quick.root";
- //vector<string> tags_2016 = {"QCD_2016", "WJets_2016", "TTJets_2016", "ZJetsToNuNu_2016", "SingleElectron_2016", "SingleMuon_2016"};
- //vector<string> tags_2017 = {"QCD_2017", "WJets_2017", "TTJets_2017", "ZJetsToNuNu_2017", "SingleElectron_2017", "SingleMuon_2017"};
- //vector<string> tags_2018 = {"QCD_2018", "WJets_2018", "TTJets_2018", "ZJetsToNuNu_2018", "SingleElectron_2018", "SingleMuon_2018"};
- //vector<string> tags_bkg_2016 = {"QCD_2016", "WJets_2016", "TTJets_2016", "ZJetsToNuNu_2016"};
- //vector<string> tags_bkg_2017 = {"QCD_2017", "WJets_2017", "TTJets_2017", "ZJetsToNuNu_2017"};
- //vector<string> tags_bkg_2018 = {"QCD_2018", "WJets_2018", "TTJets_2018", "ZJetsToNuNu_2018"};
- //vector<string> tags_data_2016 = {"SingleElectron_2016", "SingleMuon_2016"};
- //vector<string> tags_data_2017 = {"SingleElectron_2017", "SingleMuon_2017"};
- //vector<string> tags_data_2018 = {"SingleElectron_2018", "SingleMuon_2018"};
- //vector<string> tags_MET_2016 = {"MET_2016","MET_2017","MET_2018"};
- //vector<string> tags_SingleElectron_2016 = {"SingleElectron_2016"};
- //vector<string> tags_SingleElectron_2017 = {"SingleElectron_2017"};
- //vector<string> tags_SingleElectron_2018 = {"SingleElectron_2018"};
- //vector<string> tags_SingleMuon_2016 = {"SingleMuon_2016"};
- //vector<string> tags_SingleMuon_2017 = {"SingleMuon_2017"};
- //vector<string> tags_SingleMuon_2018 = {"SingleMuon_2018"};
- //vector<string> tags_TTJets_2016 = {"TTJets_2016"};
- //vector<string> tags_ZJets_2016 = {"ZJetsToNuNu_2016"};
- //vector<string> tags_WJets_2016 = {"WJets_2016"};
- //vector<string> tags_QCD_2016 = {"WJets_2016"};
- //vector<string> tags_TTJets_2017 = {"TTJets_2017"};
- //vector<string> tags_ZJets_2017 = {"ZJetsToNuNu_2017"};
- //vector<string> tags_WJets_2017 = {"WJets_2017"};
- //vector<string> tags_QCD_2017 = {"WJets_2017"};
- //vector<string> tags_TTJets_2018 = {"TTJets_2018"};
- //vector<string> tags_ZJets_2018 = {"ZJetsToNuNu_2018"};
- //vector<string> tags_WJets_2018 = {"WJets_2018"};
- //vector<string> tags_QCD_2018 = {"WJets_2018"};
- //vector<string> SingleMuon = {"SingleMuon_2016","SingleMuon_2017","SingleMuon_2018"};
- //vector<string> SingleElectron = {"SingleElectron_2016","SingleElectron_2017","SingleElectron_2018"};
- //vector<string> WJets_years = {"WJets_2016","WJets_2017","WJets_2018"};
- //vector<string> TTJets_years = {"TTJets_2016","TTJets_2017","TTJets_2018"};
- //vector<string> WWTo2L2Nu_years = {"WWTo2L2Nu_2016","WWTo2L2Nu_2017","WWTo2L2Nu_2018"};
- //vector<string> ZJets_years = {"ZJetsToNuNu_2016","ZJetsToNuNu_2017","ZJetsToNuNu_2018"};
-
- vector<int> colors = {kBlue+1, kRed+1, kGreen+1, kMagenta, kCyan, kOrange, kViolet+2, kAzure+7, kPink, kGreen, kGray};
 
  vector<string> METtrigger{ "METtrigger" };
- vector<string> METHTtrigger{ "METHTtrigger" };
- vector<string> METORtrigger{ "METORtrigger" };
- vector<string> METAlltrigger { "METtrigger", "METHTtrigger", "METORtrigger" };
- vector<string> SuperOR { "SuperOR" };
-
- //Get_Plot(tags_2017a,Triggers_100,colors,inFile,tags_2017a[0],"Tag");
- //Get_Plot(tags_2017b,Triggers_100,colors,inFile,tags_2017b[0],"Tag");
- //Get_Plot(tags_2017c,Triggers_100,colors,inFile,tags_2017c[0],"Tag");
- //Get_Plot(tags_2017d,Triggers_100,colors,inFile,tags_2017d[0],"Tag");
- //Get_Plot(tags_2017e,METtrigger,colors,inFile,tags_2017e[0],"Tag");
- //Get_Plot(tags_2017,Triggers_100,colors,inFile,"2017_HLT_PFMET100","Trigger");
- //Get_Plot(tags_2017,Triggers_100_TypeOne,colors,inFile,"2017_HLT_PFMET100_TypeOne","Trigger");
- //Get_Plot(tags_2017,Triggers_100_NoMu,colors,inFile,"2017_HLT_PFMET100_NoMu","Trigger");
- 
- //Get_Plot(tags_2017,METtrigger,colors,inFile,"METtrigger_2017","Trigger");
- //Get_Plot(tags_2017,METHTtrigger,colors,inFile,"METHTtrigger_2017","Trigger");
- //Get_Plot(tags_2017,METORtrigger,colors,inFile,"METORtrigger_2017","Trigger");
- 
-// for(int i = 0; i < inFile.size(); i++)
-// {
- // Get_Plot(tags_2016,METtrigger,colors,inFile[i],METtrigger[0]+"_"+cut[i]+"_2016","Trigger");
- // Get_Plot(tags_2017,METtrigger,colors,inFile[i],METtrigger[0]+"_"+cut[i]+"_2017","Trigger");
- // Get_Plot(tags_2018,METtrigger,colors,inFile[i],METtrigger[0]+"_"+cut[i]+"_2018","Trigger");
-
-//  Get_Plot(SingleMuon,METtrigger,colors,inFile[i],METtrigger[0]+"SingleMuon"+cut[i]+"_","Trigger");
-//  Get_Plot(SingleElectron,METtrigger,colors,inFile[i],METtrigger[0]+"SingleElectron"+"_"+cut[i],"Trigger");
-//  Get_Plot(WJets_years,METtrigger,colors,inFile[i],METtrigger[0]+"WJets"+"_"+cut[i],"Trigger");
-//  Get_Plot(TTJets_years,METtrigger,colors,inFile[i],METtrigger[0]+"TTJets"+"_"+cut[i],"Trigger");
-//  Get_Plot(WWTo2L2Nu_years,METtrigger,colors,inFile[i],METtrigger[0]+"WWTo2L2Nu"+"_"+cut[i],"Trigger");
-//  Get_Plot(ZJetsToNuNu_years,METtrigger,colors,inFile[i],METtrigger[0]+"ZJetsToNuNu"+"_"+cut[i],"Trigger");
-
-// }
- 
- //Get_Plot(tags_TTJets_2016,METtrigger,colors,inFile,cut,"METtrigger_2016_TTJets","FinalState");
- //Get_Plot(tags_ZJets_2016,METtrigger,colors,inFile,cut,"METtrigger_2016_ZJets","FinalState");
- //Get_Plot(tags_WJets_2016,METtrigger,colors,inFile,cut,"METtrigger_2016_WJets","FinalState");
- //Get_Plot(tags_QCD_2016,METtrigger,colors,inFile,cut,"METtrigger_2016_QCD","FinalState");
- //Get_Plot(tags_TTJets_2017,METtrigger,colors,inFile,cut,"METtrigger_2017_TTJets","FinalState");
- //Get_Plot(tags_ZJets_2017,METtrigger,colors,inFile,cut,"METtrigger_2017_ZJets","FinalState");
- //Get_Plot(tags_WJets_2017,METtrigger,colors,inFile,cut,"METtrigger_2017_WJets","FinalState");
- //Get_Plot(tags_QCD_2017,METtrigger,colors,inFile,cut,"METtrigger_2017_QCD","FinalState");
- //Get_Plot(tags_TTJets_2018,METtrigger,colors,inFile,cut,"METtrigger_2018_TTJets","FinalState");
- //Get_Plot(tags_ZJets_2018,METtrigger,colors,inFile,cut,"METtrigger_2018_ZJets","FinalState");
- //Get_Plot(tags_WJets_2018,METtrigger,colors,inFile,cut,"METtrigger_2018_WJets","FinalState");
- //Get_Plot(tags_QCD_2018,METtrigger,colors,inFile,cut,"METtrigger_2018_QCD","FinalState");
  
  vector<string> tags_bkg_2016 = {"Bkg_2016"};
  vector<string> tags_SingleElectron_2016 = {"SingleElectron_2016"};
@@ -139,21 +64,46 @@ void Plotter_Eff_Nano(vector<string> inFile, vector<string> cut){
   states += ("_"+cut[i]);
  } 
 
- //Get_Plot(tags_bkg_2016,METtrigger,colors,inFile,cut,"Bkg_2016","FinalState");
- //Get_Plot(tags_SingleElectron_2016,METtrigger,colors,inFile,cut,"SingleElectron_2016","FinalState");
- //Get_Plot(tags_SingleMuon_2016,METtrigger,colors,inFile,cut,"SingleMuon_2016","FinalState");
- Get_Plot(tags_bkg_2017,METtrigger,colors,inFile,cut,"Bkg_2017","FinalState");
- Get_Plot(tags_SingleElectron_2017,METtrigger,colors,inFile,cut,"SingleElectron_2017","FinalState");
- Get_Plot(tags_SingleMuon_2017,METtrigger,colors,inFile,cut,"SingleMuon_2017","FinalState");
- //Get_Plot(tags_bkg_2018,METtrigger,colors,inFile,cut,"Bkg_2018","FinalState");
- //Get_Plot(tags_SingleElectron_2018,METtrigger,colors,inFile,cut,"SingleElectron_2018","FinalState");
- //Get_Plot(tags_SingleMuon_2018,METtrigger,colors,inFile,cut,"SingleMuon_2018","FinalState");
- for(int i = 0; i < inFile.size(); i++)
+ string muon_FS = "SingleMuontrigger-E1--Nmu-E1";
+ string electron_FS = "SingleElectrontrigger-E1--Nele-E1";
+
+ if(muon)
  {
+  if(data)
+  {
+   Get_Plot_WithSF(tags_SingleMuon_2016,"SingleMuon_2016","Bkg_2016",METtrigger,colors,inFile,cut,muon_FS,"SingleMuon_2016","FinalState");
+   Get_Plot_WithSF(tags_SingleMuon_2017,"SingleMuon_2017","Bkg_2017",METtrigger,colors,inFile,cut,muon_FS,"SingleMuon_2017","FinalState");
+   Get_Plot_WithSF(tags_SingleMuon_2018,"SingleMuon_2018","Bkg_2018",METtrigger,colors,inFile,cut,muon_FS,"SingleMuon_2018","FinalState");
+  }
+  if(bkg)
+  {
+   Get_Plot_WithSF(tags_bkg_2016,"SingleMuon_2016","Bkg_2016",METtrigger,colors,inFile,cut,muon_FS,"Bkg_2016","FinalState");
+   Get_Plot_WithSF(tags_bkg_2017,"SingleMuon_2017","Bkg_2017",METtrigger,colors,inFile,cut,muon_FS,"Bkg_2017","FinalState");
+   Get_Plot_WithSF(tags_bkg_2018,"SingleMuon_2018","Bkg_2018",METtrigger,colors,inFile,cut,muon_FS,"Bkg_2018","FinalState");
+  }
+ }
+ if(electron)
+ {
+  if(data)
+  {
+   Get_Plot_WithSF(tags_SingleElectron_2016,"SingleElectron_2016","Bkg_2016",METtrigger,colors,inFile,cut,electron_FS,"SingleElectron_2016","FinalState");
+   Get_Plot_WithSF(tags_SingleElectron_2017,"SingleElectron_2017","Bkg_2017",METtrigger,colors,inFile,cut,electron_FS,"SingleElectron_2017","FinalState");
+   Get_Plot_WithSF(tags_SingleElectron_2018,"SingleElectron_2018","Bkg_2018",METtrigger,colors,inFile,cut,electron_FS,"SingleElectron_2018","FinalState");
+  }
+  if(bkg)
+  {
+   Get_Plot_WithSF(tags_bkg_2016,"SingleElectron_2016","Bkg_2016",METtrigger,colors,inFile,cut,electron_FS,"Bkg_2016","FinalState");
+   Get_Plot_WithSF(tags_bkg_2017,"SingleElectron_2017","Bkg_2017",METtrigger,colors,inFile,cut,electron_FS,"Bkg_2017","FinalState");
+   Get_Plot_WithSF(tags_bkg_2018,"SingleElectron_2018","Bkg_2018",METtrigger,colors,inFile,cut,electron_FS,"Bkg_2018","FinalState");
+  }
+ }
+
+// for(int i = 0; i < inFile.size(); i++)
+// {
  // Get_Plot(tags_bkg_years,METtrigger,colors,inFile[i],cut[i],"Trigger");
  // Get_Plot(tags_SingleElectron_years,METtrigger,colors,inFile[i],cut[i],"Trigger");
  // Get_Plot(tags_SingleMuon_years,METtrigger,colors,inFile[i],cut[i],"Trigger");
- }
+// }
 }
 
 //get all Eff on one plot
@@ -277,21 +227,14 @@ TMultiGraph* get_mg(string fname, vector<string> tags, vector<string> Triggers, 
  return mg;
 }
 
-//get all Eff on one plot
-void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, vector<string> inFile, vector<string> cut, string name, string option)
+void Get_Plot_WithSF(vector<string> tags, string data_tag, string bkg_tag, vector<string> Triggers, vector<int> colors, vector<string> inFile, vector<string> cuts, string SF_FinalState, string name, string option)
 {
- if(invert_colors)
- {
-  gStyle->SetFrameFillColor(kBlack);
-  gStyle->SetFrameLineColor(kWhite);
- }
-
  TLegend* leg = new TLegend(0.3,0.2,0.95,0.5); 
  leg->SetTextFont(132);
  leg->SetTextSize(0.033);
  
  TLatex l;
- TCanvas* can = new TCanvas((name).c_str(),"",600.,500);
+ TCanvas* can = new TCanvas((name).c_str(),"",1278,775);
  can->SetLeftMargin(0.13);
  can->SetRightMargin(0.04);
  can->SetBottomMargin(0.15);
@@ -300,51 +243,202 @@ void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, 
  can->SetGridy();
  can->Draw();
  can->cd();
- TMultiGraph* mg = get_mg(cut,tags,Triggers,inFile,colors,leg,can,option);
+ TMultiGraph* mg = get_mg(cuts,tags,Triggers,inFile,colors,leg,can,option);
  can->Clear();
 
- mg->Draw("AP"); 
- mg->GetXaxis()->CenterTitle(true);
- mg->GetXaxis()->SetTitleFont(132);
- mg->GetXaxis()->SetTitleSize(0.06);
- mg->GetXaxis()->SetTitleOffset(1.06);
- mg->GetXaxis()->SetLabelFont(132);
- mg->GetXaxis()->SetLabelSize(0.05);
- mg->GetYaxis()->CenterTitle(true);
- mg->GetYaxis()->SetTitleFont(132);
- mg->GetYaxis()->SetTitleSize(0.06);
- mg->GetYaxis()->SetTitleOffset(1.);
- mg->GetYaxis()->SetLabelFont(132);
- mg->GetYaxis()->SetLabelSize(0.05);
+ string extra_name = "";
+ vector<string> known_cuts;
+ known_cuts.push_back("PTISR");
+ known_cuts.push_back("PTCM");
+ known_cuts.push_back("RISR");
+ known_cuts.push_back("dphiCMI");
+ known_cuts.push_back("Nlep");
+ known_cuts.push_back("Njet_S");
+ known_cuts.push_back("Nbjet_ISR");
+ known_cuts.push_back("NmuBronze");
+ known_cuts.push_back("NeleBronze");
+ known_cuts.push_back("NlepBronze");
+ known_cuts.push_back("NmuSilver");
+ known_cuts.push_back("NeleSilver");
+ known_cuts.push_back("NlepSilver");
+ known_cuts.push_back("NmuGold");
+ known_cuts.push_back("NeleGold");
+ known_cuts.push_back("NlepGold");
+ known_cuts.push_back("Njet");
+ known_cuts.push_back("DoubleElectrontrigger");
+ known_cuts.push_back("DoubleMuontrigger");
+ known_cuts.push_back("EMutrigger");
+ //known_cuts.push_back("EventFilter");
+ //known_cuts.push_back("EventFlag_FailJetID");
+ //known_cuts.push_back("EventFlag_JetInHEM");
+ //known_cuts.push_back("EventFlag_JetInHEM_Pt20");
+ //known_cuts.push_back("EventFlag_JetInHEM_Pt20_JetID");
+ //known_cuts.push_back("HEM_Veto");
 
- if(invert_colors)
- {
-  mg->GetXaxis()->SetAxisColor(kWhite);
-  mg->GetYaxis()->SetAxisColor(kWhite);
-  mg->GetXaxis()->SetTitleColor(kWhite);
-  mg->GetYaxis()->SetTitleColor(kWhite);
-  mg->GetXaxis()->SetLabelColor(kWhite);
-  mg->GetYaxis()->SetLabelColor(kWhite);
-  can->SetFillColor(kBlack);
-  leg->SetTextColor(kWhite);
-  leg->SetFillColor(kBlack);
-  leg->SetLineColor(kBlack);
-  leg->SetShadowColor(kBlack); 
-  l.SetTextColor(kWhite);
+ //Add SF stuff to plot
+ int color_SF = kBlack;
+ string SF_Cut = "";
+ for(int i = 0; i < int(cuts.size()); i++)
+ { 
+  for(int j = 0; j < int(known_cuts.size()); j++)
+  {
+   if(cuts[i].find("Njet_S") != std::string::npos) { extra_name = " Jets"; continue; }
+   if(cuts[i].find("Bronze") != std::string::npos) { extra_name = " Quality"; continue; }
+   if(cuts[i].find(known_cuts[j]) != std::string::npos) { continue; }
+   if(cuts[i].find(SF_FinalState) != std::string::npos) { SF_Cut = cuts[i]; color_SF = colors[i]; }
+  }
  }
 
- leg->Draw("SAME");
+ TGraphAsymmErrors* gr_bkg = get_gr(SF_Cut,bkg_tag,"METtrigger",can);
+ TGraphAsymmErrors* gr_data = get_gr(SF_Cut,data_tag,"METtrigger",can);
+ can->Clear();
 
+ mg->Draw("A"); 
+ can->Update();
+ 
+ double x_min = mg->GetXaxis()->GetXmin();
+ //double x_max = mg->GetXaxis()->GetXmax();
+ double x_max = 500.;
+
+ TF1* Bkg_Nominal = new TF1("Bkg_Nominal",Gaussian_CDF_Func,150.,500.,3);
+ Bkg_Nominal->SetLineColor(kGreen);
+ Bkg_Nominal->SetParameter(0,0.99);
+ Bkg_Nominal->SetParameter(1,125.);
+ Bkg_Nominal->SetParameter(2,40.);
+ Bkg_Nominal->SetParName(0,"Norm_Gauss_CDF");
+ Bkg_Nominal->SetParName(1,"Mean_Gauss_CDF");
+ Bkg_Nominal->SetParName(2,"Sigma_Gauss_CDF");
+ gr_bkg->Fit(Bkg_Nominal,"QEMS+0");
+
+ TF1* Data_Nominal = new TF1("Data_Nominal",Gaussian_CDF_Func,150.,500.,3);
+ Data_Nominal->SetLineColor(kAzure+10);
+ Data_Nominal->SetParameter(0,0.99);
+ Data_Nominal->SetParameter(1,125.);
+ Data_Nominal->SetParameter(2,40.);
+ Data_Nominal->SetParName(0,"Norm_Gauss_CDF");
+ Data_Nominal->SetParName(1,"Mean_Gauss_CDF");
+ Data_Nominal->SetParName(2,"Sigma_Gauss_CDF");
+ gr_data->Fit(Data_Nominal,"QEMS+0");
+
+ can->Clear();
+ can->Update();
+ TGraphErrors* gr_bands_ratio = NULL;
+ TGraphErrors* gr_bands = NULL;
+ TGraphAsymmErrors* res_ratio;
+ res_ratio = TGAE_Ratio(gr_bkg,gr_data);
+
+ vector<double> y_upper, y_lower;
+ double a1, a2, b1, b2, c1, c2, HT;
+
+ if(SF_Cut.find("HT-Le600") != std::string::npos) { HT = 550.; }
+ else if(SF_Cut.find("HT-G600--HT-L750") != std::string::npos) { HT = 650.; }
+ else if(SF_Cut.find("HT-Ge750") != std::string::npos) { HT = 800.; }
+
+ int year = std::stoi(data_tag.substr(data_tag.find("_")+1));
+ bool muon = false;
+ if(data_tag.find("Muon") != std::string::npos) { muon = true; }
+
+ Get_Bands_Ratio_Params(a1,a2,b1,b2,c1,c2,HT,year,muon);
+
+ if(name.find("Bkg") != std::string::npos)
+ {
+  gr_bands_ratio = Get_Bands_Ratio(x_min,x_max,res_ratio,y_upper,y_lower,Data_Nominal,Bkg_Nominal,a1,a2,b1,b2,c1,c2);
+  gr_bands = Get_Bands(x_min,x_max,Bkg_Nominal,y_upper,y_lower); 
+ }
+ else 
+ { 
+  gr_bands_ratio = Get_Bands_Ratio(x_min,x_max,res_ratio,y_upper,y_lower,Bkg_Nominal,Data_Nominal,a1,a2,b1,b2,c1,c2);
+  gr_bands = Get_Bands(x_min,x_max,Data_Nominal,y_upper,y_lower); 
+ }
+ gr_bands_ratio->SetFillColor(color_SF+1);
+ gr_bands_ratio->SetLineColor(color_SF+1);
+ gr_bands_ratio->SetMarkerColor(color_SF+1);
+ gr_bands_ratio->SetFillStyle(3003);
+ gr_bands_ratio->SetMarkerSize(0);
+ gr_bands->SetFillColor(color_SF+1);
+ gr_bands->SetLineColor(color_SF+1);
+ gr_bands->SetMarkerColor(color_SF+1);
+ gr_bands->SetFillStyle(3003);
+ gr_bands->SetMarkerSize(0);
+ delete leg;
+ delete mg;
+ can->Clear();
+
+ TLegend* leg_new = new TLegend(0.4,0.05,0.85,0.4); 
+ leg_new->SetTextFont(132);
+ leg_new->SetTextSize(0.033);
+ leg_new->AddEntry(gr_bands,"Systematic Uncertainty From SF","F");
+
+ TPad* pad_gr = new TPad("pad_gr","pad_gr",0,0.32,1.,1.);
+ pad_gr->SetGridx();
+ pad_gr->SetGridy();
+ pad_gr->SetBottomMargin(0.02);
+ pad_gr->Draw();
+ pad_gr->cd();
+ pad_gr->Update();
+ can->Update();
+
+ TMultiGraph* mg_new = get_mg(cuts,tags,Triggers,inFile,colors,leg_new,can,option,SF_Cut);
+ //mg_new->Draw("A"); 
+ gr_bands->Draw("A3");
+ can->Update();
+ Format_Graph(gr_bands);
+ gr_bands->GetXaxis()->SetTitle("MET [GeV]");
+ gr_bands->GetYaxis()->SetTitle("Efficiency");
+ gr_bands->SetTitle("");
+ gr_bands->GetXaxis()->SetLimits(x_min,x_max);
+ pad_gr->Modified();
+ pad_gr->Update();
+ can->Modified();
+ can->Update();
+ mg_new->Draw("P");
+ can->Update();
+
+ //leg->AddEntry(Data_Nominal,(data_tag+" Fit").c_str(),"L");
+ //leg->AddEntry(Bkg_Nominal,(bkg_tag+" Fit").c_str(),"L");
+ leg_new->Draw("SAME");
+ can->Update();
+
+ can->cd();
+ TPad *pad_res = new TPad("pad_res","pad_res",0.,0.03,1.,0.31);
+ pad_res->SetGridx(); 
+ pad_res->SetGridy();
+ pad_res->SetTopMargin(0.05);
+ pad_res->SetBottomMargin(0.2);
+ pad_res->Draw();
+ pad_res->cd();
+ pad_res->Update();
+ can->Update();
+
+ TMultiGraph* mg_ratio = get_mg_ratio(cuts,tags,Triggers,inFile,colors,SF_Cut,extra_name); 
+ pad_res->cd();
+ string mg_ratio_name = mg_ratio->GetName();
+ mg_ratio->Draw("AP");
+ mg_ratio->GetXaxis()->SetLimits(x_min,x_max);
+ pad_res->Update();
+ gr_bands_ratio->Draw("30");
+ Format_Graph_res(mg_ratio);
+ //Format_Graph_res(gr_bands_ratio);
+ mg_ratio->SetTitle("");
+ mg_ratio->GetXaxis()->SetTitle("MET [GeV]");
+ mg_ratio->GetYaxis()->SetTitle("#frac{Final State}{Nominal}");
+ pad_res->Modified();
+ pad_res->Update();
+ can->Modified();
+ can->Update();
+ can->Update();
+
+ pad_gr->cd();
  l.SetTextFont(42);
  l.SetNDC();
- l.SetTextSize(0.04);
+ l.SetTextSize(0.06);
  l.SetTextFont(42);
- eraseSubStr(name,states);
+ //eraseSubStr(name,states);
  
- name+=": ";
- vector<string> known_cuts;
+ name += "";
+ string current_cut = cuts[0]+"--";
+ known_cuts.clear();
  known_cuts.push_back("HT");
- string current_cut = cut[0]+"--";
  vector<string> found_cuts;
  for(int i = 0; i < int(known_cuts.size()); i++)
  {
@@ -362,21 +456,183 @@ void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, 
   eraseSubStr(current_cut,(found_cuts[i]+"-"+get_str_between_two_str(current_cut,found_cuts[i]+"-","--")+"--"));
  }
  if(name.back() == '&') name.pop_back();
- l.DrawLatex(0.41,0.93,name.c_str());
- l.DrawLatex(0.13,0.93,"#bf{#it{CMS}} Internal 13 TeV Simulation");
+ UInt_t w, h;
+ TText t;
+ t.SetNDC();
+ t.GetTextExtent(w,h,name.c_str());
+ double x_latex = 1.0-w*0.001-0.05;
+ l.DrawLatex(x_latex,0.93,name.c_str());
+ l.DrawLatex(0.1,0.93,"#bf{#it{CMS}}  work-in-progress");
+ pad_gr->Modified();
+ pad_gr->Update();
  can->Modified();
  can->Update();
+ string can_name = name+extra_name;
+ std::replace(can_name.begin(), can_name.end(), ' ', '_');
+ std::replace(can_name.begin(), can_name.end(), '>', 'G');
+ std::replace(can_name.begin(), can_name.end(), '<', 'L');
+ can_name.erase(std::remove(can_name.begin(), can_name.end(), '='), can_name.end());
+ can_name.erase(std::remove(can_name.begin(), can_name.end(), '&'), can_name.end());
+ if(name.find("Bkg") != std::string::npos)
+ {
+  if(data_tag.find("Electron") != std::string::npos) { can_name += "_Electron"; }
+  if(data_tag.find("Muon") != std::string::npos) { can_name += "_Muon"; }
+ }
+ can->SetName((can_name).c_str());
 
+ can->SaveAs((can_name+".pdf").c_str());
  TFile* output = TFile::Open("output_Plots.root","UPDATE");
  can->Write();
  output->Close();
- delete leg;
- delete mg;
+ delete leg_new;
+ delete mg_new;
  delete can;
  delete output;
 }
 
-TMultiGraph* get_mg(vector<string> cut, vector<string> tags, vector<string> Triggers, vector<string> fname, vector<int> colors, TLegend*& leg, TCanvas*& can, string option)
+//get all Eff on one plot
+void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, vector<string> inFile, vector<string> cut, string name, string option)
+{
+ if(invert_colors)
+ {
+  gStyle->SetFrameFillColor(kBlack);
+  gStyle->SetFrameLineColor(kWhite);
+ }
+
+ TLegend* leg = new TLegend(0.3,0.2,0.95,0.5); 
+ leg->SetTextFont(132);
+ leg->SetTextSize(0.033);
+ 
+ TLatex l;
+ TCanvas* can = new TCanvas((name).c_str(),"",1278,775);
+ can->SetLeftMargin(0.13);
+ can->SetRightMargin(0.04);
+ can->SetBottomMargin(0.15);
+ can->SetTopMargin(0.085);
+ can->SetGridx();
+ can->SetGridy();
+ can->Draw();
+ can->cd();
+ TMultiGraph* mg = get_mg(cut,tags,Triggers,inFile,colors,leg,can,option);
+ can->Clear();
+
+ string extra_name = "";
+ vector<string> known_cuts;
+ known_cuts.push_back("PTISR");
+ known_cuts.push_back("PTCM");
+ known_cuts.push_back("RISR");
+ known_cuts.push_back("dphiCMI");
+ known_cuts.push_back("Nlep");
+ known_cuts.push_back("Njet_S");
+ known_cuts.push_back("Nbjet_ISR");
+ known_cuts.push_back("NmuBronze");
+ known_cuts.push_back("NeleBronze");
+ known_cuts.push_back("NlepBronze");
+ known_cuts.push_back("NmuSilver");
+ known_cuts.push_back("NeleSilver");
+ known_cuts.push_back("NlepSilver");
+ known_cuts.push_back("NmuGold");
+ known_cuts.push_back("NeleGold");
+ known_cuts.push_back("NlepGold");
+ known_cuts.push_back("Njet");
+ known_cuts.push_back("DoubleElectrontrigger");
+ known_cuts.push_back("DoubleMuontrigger");
+ known_cuts.push_back("EMutrigger");
+ //known_cuts.push_back("EventFilter");
+ //known_cuts.push_back("EventFlag_FailJetID");
+ //known_cuts.push_back("EventFlag_JetInHEM");
+ //known_cuts.push_back("EventFlag_JetInHEM_Pt20");
+ //known_cuts.push_back("EventFlag_JetInHEM_Pt20_JetID");
+ //known_cuts.push_back("HEM_Veto");
+
+
+ mg->Draw("AP"); 
+ mg->GetXaxis()->CenterTitle(true);
+ mg->GetXaxis()->SetTitleFont(132);
+ mg->GetXaxis()->SetTitleSize(0.06);
+ mg->GetXaxis()->SetTitleOffset(1.06);
+ mg->GetXaxis()->SetLabelFont(132);
+ mg->GetXaxis()->SetLabelSize(0.05);
+ mg->GetYaxis()->CenterTitle(true);
+ mg->GetYaxis()->SetTitleFont(132);
+ mg->GetYaxis()->SetTitleSize(0.06);
+ mg->GetYaxis()->SetTitleOffset(1.);
+ mg->GetYaxis()->SetLabelFont(132);
+ mg->GetYaxis()->SetLabelSize(0.05);
+ 
+ if(invert_colors)
+ {
+  mg->GetXaxis()->SetAxisColor(kWhite);
+  mg->GetYaxis()->SetAxisColor(kWhite);
+  mg->GetXaxis()->SetTitleColor(kWhite);
+  mg->GetYaxis()->SetTitleColor(kWhite);
+  mg->GetXaxis()->SetLabelColor(kWhite);
+  mg->GetYaxis()->SetLabelColor(kWhite);
+  can->SetFillColor(kBlack);
+  leg->SetTextColor(kWhite);
+  leg->SetFillColor(kBlack);
+  leg->SetLineColor(kBlack);
+  leg->SetShadowColor(kBlack); 
+  l.SetTextColor(kWhite);
+ }
+ 
+ leg->Draw("SAME");
+
+ l.SetTextFont(42);
+ l.SetNDC();
+ l.SetTextSize(0.04);
+ l.SetTextFont(42);
+ //eraseSubStr(name,states);
+ 
+ name += "";
+ string current_cut = cut[0]+"--";
+ known_cuts.clear();
+ known_cuts.push_back("HT");
+ vector<string> found_cuts;
+ for(int i = 0; i < int(known_cuts.size()); i++)
+ {
+  int nPos = current_cut.find(known_cuts[i]+"-", 0); 
+  while (nPos != string::npos)
+  {
+   nPos = current_cut.find(known_cuts[i]+"-", nPos+(known_cuts[i]+"-").size());
+   found_cuts.push_back(known_cuts[i]);
+  }
+ }
+
+ for(int i = 0; i < int(found_cuts.size()); i++)
+ {
+  name += GetCut(found_cuts[i]+"-"+get_str_between_two_str(current_cut,found_cuts[i]+"-","--")+"--",current_cut);
+  eraseSubStr(current_cut,(found_cuts[i]+"-"+get_str_between_two_str(current_cut,found_cuts[i]+"-","--")+"--"));
+ }
+ if(name.back() == '&') name.pop_back();
+ UInt_t w, h;
+ TText t;
+ t.SetNDC();
+ t.GetTextExtent(w,h,name.c_str());
+ double x_latex = 1.0-w*0.001+0.2;
+ l.DrawLatex(x_latex,0.93,name.c_str());
+ l.DrawLatex(0.13,0.93,"#bf{#it{CMS}}  work-in-progress");
+ can->Modified();
+ can->Update();
+ string can_name = name+extra_name;
+ std::replace(can_name.begin(), can_name.end(), ' ', '_');
+ std::replace(can_name.begin(), can_name.end(), '>', 'G');
+ std::replace(can_name.begin(), can_name.end(), '<', 'L');
+ can_name.erase(std::remove(can_name.begin(), can_name.end(), '='), can_name.end());
+ can_name.erase(std::remove(can_name.begin(), can_name.end(), '&'), can_name.end());
+ can->SetName((can_name).c_str());
+
+ can->SaveAs((can_name+".pdf").c_str());
+ TFile* output = TFile::Open("output_Plots.root","UPDATE");
+ can->Write();
+ output->Close();
+ //delete leg;
+ //delete mg;
+ delete can;
+ delete output;
+}
+
+TMultiGraph* get_mg(vector<string> cut, vector<string> tags, vector<string> Triggers, vector<string> fname, vector<int> colors, TLegend*& leg, TCanvas*& can, string option, string SF_Cut)
 {
  TMultiGraph* mg = new TMultiGraph();
  for(int k = 0; k < int(fname.size()); k++)
@@ -406,10 +662,10 @@ TMultiGraph* get_mg(vector<string> cut, vector<string> tags, vector<string> Trig
     if((i+j) == 0)
     {
      string title = " ;";
-     mg->SetTitle((title+gr->GetXaxis()->GetTitle()+";"+gr->GetYaxis()->GetTitle()).c_str());
+     mg->SetTitle((title+gr->GetXaxis()->GetTitle()+" [GeV];"+gr->GetYaxis()->GetTitle()).c_str());
     }
     string new_cut = RewriteCut(cut.at(k));
-    //string new_cut = cut.at(k);
+    if(cut.at(k) == SF_Cut) { new_cut += "(Nominal)"; }
     if(option.compare("Tag") == 0)
     {
      leg->AddEntry(gr,Triggers.at(j).c_str(),"PL");
@@ -435,6 +691,83 @@ TMultiGraph* get_mg(vector<string> cut, vector<string> tags, vector<string> Trig
  return mg;
 }
 
+TMultiGraph* get_mg_ratio(vector<string> cut, vector<string> tags, vector<string> Triggers, vector<string> fname, vector<int> colors, string nominal, string name)
+{
+ TMultiGraph* mg = new TMultiGraph();
+ TCanvas* can = new TCanvas(("dummy_can"+cut[0]+tags[0]+Triggers[0]+nominal+name).c_str(),"dummy_can",750,500);
+ TGraphAsymmErrors* Nominal = get_gr(nominal,tags[0],Triggers[0],can);
+ 
+ for(int k = 0; k < int(fname.size()); k++)
+ {
+  if(cut[k] == nominal) continue;
+  TKey *key;
+  TFile *f = TFile::Open(fname[k].c_str(), "READ");
+  if(!f || f->IsZombie())
+  {
+   cout << "Unable to open " << fname[k] << " for reading..." << endl;
+   return mg;
+  }
+  for(int i = 0; i < int(tags.size()); i++)
+  {
+   TDirectoryFile* folder = nullptr;
+   f->GetObject(tags[i].c_str(),folder);
+   folder->cd();
+   if(folder == nullptr) continue;
+   for(int j = 0; j < int(Triggers.size()); j++)
+   {
+    TEfficiency* eff = nullptr;
+    folder->GetObject(Triggers.at(j).c_str(),eff);
+    eff->Draw("AP");
+    can->Update();
+    TGraphAsymmErrors* gr = eff->GetPaintedGraph();
+    TGraphAsymmErrors* gr_ratio = TGAE_Ratio(Nominal,gr);
+    if((i+j) == 0)
+    {
+     string title = " ;";
+     mg->SetTitle((title+gr->GetXaxis()->GetTitle()+" [GeV];"+gr->GetYaxis()->GetTitle()).c_str());
+    }
+    /*
+    string new_cut = RewriteCut(cut.at(k));
+    //string new_cut = cut.at(k);
+    if(option.compare("Tag") == 0)
+    {
+     leg->AddEntry(gr,Triggers.at(j).c_str(),"PL");
+    }
+    else if(option.compare("Trigger") == 0)
+    {
+     leg->AddEntry(gr,tags.at(i).c_str(),"PL");
+     can->SetName((new_cut+"_"+tags.at(i)).c_str());
+    }
+    else if(option.compare("FinalState") == 0)
+    {
+     leg->AddEntry(gr,new_cut.c_str(),"PL");
+    }
+    */
+    gr_ratio->SetMarkerStyle(20);
+    gr_ratio->SetMarkerColor(colors[i+j+k]);
+    gr_ratio->SetLineColor(colors[i+j+k]);
+    mg->Add(gr_ratio);
+   }
+  }
+  f->Close();
+  delete f;
+ }
+ return mg;
+}
+
+TGraphAsymmErrors* get_gr(string cut, string tag, string trigger, TCanvas*& can)
+{
+ TFile *f = TFile::Open(("Eff_output_"+cut+".root").c_str(), "READ");
+ TDirectoryFile* folder = nullptr;
+ f->GetObject(tag.c_str(),folder);
+ TEfficiency* eff = nullptr;
+ folder->GetObject(trigger.c_str(),eff);
+ eff->Draw("AP");
+ can->Update();
+ TGraphAsymmErrors* gr = eff->GetPaintedGraph();
+ return gr;
+}
+
 string GetCut(string found_cut, string current_cut)
 {
  string cut = found_cut;
@@ -454,6 +787,10 @@ string GetCut(string found_cut, string current_cut)
  if(found_cut.find("DoubleMuontrigger-E1") != std::string::npos)
  {
   cut =  " Passed Double Muon Trigger &";
+ }
+ if(found_cut.find("EMutrigger-E1") != std::string::npos)
+ {
+  cut =  " Passed Electron+Muon Trigger &";
  }
  if(found_cut.find("Nlep-E0") != std::string::npos)
  {
@@ -620,6 +957,7 @@ string RewriteCut(std::string cut)
  known_cuts.push_back("SingleMuontrigger");
  known_cuts.push_back("DoubleElectrontrigger");
  known_cuts.push_back("DoubleMuontrigger");
+ known_cuts.push_back("EMutrigger");
 
  known_cuts.push_back("EventFilter");
 
@@ -674,9 +1012,7 @@ string get_cut_type(string& cut)
 
 int main(int argc, char* argv[])
 {
- string cutsFile = "cuts.txt";
- vector<string> cuts;
- vector<string> files;
+ string cutsFile = "";
 
  if(argc < 1)
  {
@@ -694,15 +1030,148 @@ int main(int argc, char* argv[])
   }
  }
  
- string cut = "";
- std::ifstream fs(cutsFile);
- while(std::getline(fs,cut))
+ if(cutsFile != "")
  {
-  if(cut.rfind("#", 0) == 0) continue;
-  cuts.push_back(cut);
-  files.push_back("Eff_output_"+cut+".root");
+  vector<string> cuts;
+  string cut = "";
+  std::ifstream fs(cutsFile);
+  while(std::getline(fs,cut))
+  {
+   if(cut.rfind("#", 0) == 0) continue;
+   cuts.push_back(cut);
+  }
+  Plotter_Eff_Nano(cuts);
+ }
+ else
+ {
+  //Plot
+  vector<string> cuts_1;
+  cuts_1.push_back("HT-Le600--SingleElectrontrigger-E1--Nele-E1");
+  cuts_1.push_back("HT-Le600--Njet_S-E0");
+  cuts_1.push_back("HT-Le600--Njet_S-E1");
+  cuts_1.push_back("HT-Le600--Njet_S-Ge2");
+  cuts_1.push_back("HT-Le600--Njet_S-E0--SingleElectrontrigger-E1--Nele-E1");
+  cuts_1.push_back("HT-Le600--Njet_S-E1--SingleElectrontrigger-E1--Nele-E1");
+  cuts_1.push_back("HT-Le600--Njet_S-Ge2--SingleElectrontrigger-E1--Nele-E1");
+  Plotter_Eff_Nano(cuts_1, false, true, true, true);
+  //Plot
+  vector<string> cuts_2;
+  cuts_2.push_back("HT-Le600--SingleElectrontrigger-E1--Nele-E1");
+  cuts_2.push_back("HT-Le600--SingleElectrontrigger-E1--NeleBronze-E1");
+  cuts_2.push_back("HT-Le600--SingleElectrontrigger-E1--NeleSilver-E1");
+  cuts_2.push_back("HT-Le600--SingleElectrontrigger-E1--NeleGold-E1");
+  Plotter_Eff_Nano(cuts_2, false, true, true, false);
+  cuts_2.push_back("HT-Le600--EMutrigger-E1--Nmu-E1--Nele-E1");
+  cuts_2.push_back("HT-Le600--DoubleElectrontrigger-E1--NeleE2");
+  cuts_2.push_back("HT-Le600--Nlep-E0");
+  Plotter_Eff_Nano(cuts_2, false, true, false, true);
+  //Plot
+  vector<string> cuts_3;
+  cuts_3.push_back("HT-Le600--SingleMuontrigger-E1--Nmu-E1");
+  cuts_3.push_back("HT-Le600--Njet_S-E0");
+  cuts_3.push_back("HT-Le600--Njet_S-E1");
+  cuts_3.push_back("HT-Le600--Njet_S-Ge2");
+  cuts_3.push_back("HT-Le600--Njet_S-E0--SingleMuontrigger-E1--Nmu-E1");
+  cuts_3.push_back("HT-Le600--Njet_S-E1--SingleMuontrigger-E1--Nmu-E1");
+  cuts_3.push_back("HT-Le600--Njet_S-Ge2--SingleMuontrigger-E1--Nmu-E1");
+  Plotter_Eff_Nano(cuts_3, true, false, true, true);
+  //Plot
+  vector<string> cuts_4;
+  cuts_4.push_back("HT-Le600--SingleMuontrigger-E1--Nmu-E1");
+  cuts_4.push_back("HT-Le600--SingleMuontrigger-E1--NmuBronze-E1");
+  cuts_4.push_back("HT-Le600--SingleMuontrigger-E1--NmuSilver-E1");
+  cuts_4.push_back("HT-Le600--SingleMuontrigger-E1--NmuGold-E1");
+  Plotter_Eff_Nano(cuts_4, true, false, true, false);
+  cuts_4.push_back("HT-Le600--EMutrigger-E1--Nmu-E1--Nele-E1");
+  cuts_4.push_back("HT-Le600--DoubleMuontrigger-E1--NmuE2");
+  cuts_4.push_back("HT-Le600--Nlep-E0");
+  Plotter_Eff_Nano(cuts_4, true, false, false, true);
+  //Plot
+  vector<string> cuts_5;
+  cuts_5.push_back("HT-G600--HT-L750--SingleElectrontrigger-E1--Nele-E1");
+  cuts_5.push_back("HT-G600--HT-L750--Njet_S-E0");
+  cuts_5.push_back("HT-G600--HT-L750--Njet_S-E1");
+  cuts_5.push_back("HT-G600--HT-L750--Njet_S-Ge2");
+  cuts_5.push_back("HT-G600--HT-L750--Njet_S-E0--SingleElectrontrigger-E1--Nele-E1");
+  cuts_5.push_back("HT-G600--HT-L750--Njet_S-E1--SingleElectrontrigger-E1--Nele-E1");
+  cuts_5.push_back("HT-G600--HT-L750--Njet_S-Ge2--SingleElectrontrigger-E1--Nele-E1");
+  Plotter_Eff_Nano(cuts_5, false, true, true, true);
+  //Plot
+  vector<string> cuts_6;
+  cuts_6.push_back("HT-G600--HT-L750--SingleElectrontrigger-E1--Nele-E1");
+  cuts_6.push_back("HT-G600--HT-L750--SingleElectrontrigger-E1--NeleBronze-E1");
+  cuts_6.push_back("HT-G600--HT-L750--SingleElectrontrigger-E1--NeleSilver-E1");
+  cuts_6.push_back("HT-G600--HT-L750--SingleElectrontrigger-E1--NeleGold-E1");
+  Plotter_Eff_Nano(cuts_6, false, true, true, false);
+  cuts_6.push_back("HT-G600--HT-L750--EMutrigger-E1--Nmu-E1--Nele-E1");
+  cuts_6.push_back("HT-G600--HT-L750--DoubleElectrontrigger-E1--NeleE2");
+  cuts_6.push_back("HT-G600--HT-L750--Nlep-E0");
+  Plotter_Eff_Nano(cuts_6, false, true, false, true);
+  //Plot
+  vector<string> cuts_7;
+  cuts_7.push_back("HT-G600--HT-L750--SingleMuontrigger-E1--Nmu-E1");
+  cuts_7.push_back("HT-G600--HT-L750--Njet_S-E0");
+  cuts_7.push_back("HT-G600--HT-L750--Njet_S-E1");
+  cuts_7.push_back("HT-G600--HT-L750--Njet_S-Ge2");
+  cuts_7.push_back("HT-G600--HT-L750--Njet_S-E0--SingleMuontrigger-E1--Nmu-E1");
+  cuts_7.push_back("HT-G600--HT-L750--Njet_S-E1--SingleMuontrigger-E1--Nmu-E1");
+  cuts_7.push_back("HT-G600--HT-L750--Njet_S-Ge2--SingleMuontrigger-E1--Nmu-E1");
+  Plotter_Eff_Nano(cuts_7, true, false, true, true);
+  //Plot
+  vector<string> cuts_8;
+  cuts_8.push_back("HT-G600--HT-L750--SingleMuontrigger-E1--Nmu-E1");
+  cuts_8.push_back("HT-G600--HT-L750--SingleMuontrigger-E1--NmuBronze-E1");
+  cuts_8.push_back("HT-G600--HT-L750--SingleMuontrigger-E1--NmuSilver-E1");
+  cuts_8.push_back("HT-G600--HT-L750--SingleMuontrigger-E1--NmuGold-E1");
+  Plotter_Eff_Nano(cuts_8, true, false, true, false);
+  cuts_8.push_back("HT-G600--HT-L750--EMutrigger-E1--Nmu-E1--Nele-E1");
+  cuts_8.push_back("HT-G600--HT-L750--DoubleMuontrigger-E1--NmuE2");
+  cuts_8.push_back("HT-G600--HT-L750--Nlep-E0");
+  Plotter_Eff_Nano(cuts_8, true, false, false, true);
+  //Plot
+  vector<string> cuts_9;
+  cuts_9.push_back("HT-Ge750--SingleElectrontrigger-E1--Nele-E1");
+  cuts_9.push_back("HT-Ge750--Njet_S-E0");
+  cuts_9.push_back("HT-Ge750--Njet_S-E1");
+  cuts_9.push_back("HT-Ge750--Njet_S-Ge2");
+  cuts_9.push_back("HT-Ge750--Njet_S-E0--SingleElectrontrigger-E1--Nele-E1");
+  cuts_9.push_back("HT-Ge750--Njet_S-E1--SingleElectrontrigger-E1--Nele-E1");
+  cuts_9.push_back("HT-Ge750--Njet_S-Ge2--SingleElectrontrigger-E1--Nele-E1");
+  Plotter_Eff_Nano(cuts_9, false, true, true, true);
+  //Plot
+  vector<string> cuts_10;
+  cuts_10.push_back("HT-Ge750--SingleElectrontrigger-E1--Nele-E1");
+  cuts_10.push_back("HT-Ge750--SingleElectrontrigger-E1--NeleBronze-E1");
+  cuts_10.push_back("HT-Ge750--SingleElectrontrigger-E1--NeleSilver-E1");
+  cuts_10.push_back("HT-Ge750--SingleElectrontrigger-E1--NeleGold-E1");
+  Plotter_Eff_Nano(cuts_10, false, true, true, false);
+  cuts_10.push_back("HT-Ge750--EMutrigger-E1--Nmu-E1--Nele-E1");
+  cuts_10.push_back("HT-Ge750--DoubleElectrontrigger-E1--NeleE2");
+  cuts_10.push_back("HT-Ge750--Nlep-E0");
+  Plotter_Eff_Nano(cuts_10, false, true, false, true);
+  //Plot
+  vector<string> cuts_11;
+  cuts_11.push_back("HT-Ge750--SingleMuontrigger-E1--Nmu-E1");
+  cuts_11.push_back("HT-Ge750--Njet_S-E0");
+  cuts_11.push_back("HT-Ge750--Njet_S-E1");
+  cuts_11.push_back("HT-Ge750--Njet_S-Ge2");
+  cuts_11.push_back("HT-Ge750--Njet_S-E0--SingleMuontrigger-E1--Nmu-E1");
+  cuts_11.push_back("HT-Ge750--Njet_S-E1--SingleMuontrigger-E1--Nmu-E1");
+  cuts_11.push_back("HT-Ge750--Njet_S-Ge2--SingleMuontrigger-E1--Nmu-E1");
+  Plotter_Eff_Nano(cuts_11, true, false, true, true);
+  //Plot
+  vector<string> cuts_12;
+  cuts_12.push_back("HT-Ge750--SingleMuontrigger-E1--Nmu-E1");
+  cuts_12.push_back("HT-Ge750--SingleMuontrigger-E1--NmuBronze-E1");
+  cuts_12.push_back("HT-Ge750--SingleMuontrigger-E1--NmuSilver-E1");
+  cuts_12.push_back("HT-Ge750--SingleMuontrigger-E1--NmuGold-E1");
+  Plotter_Eff_Nano(cuts_12, true, false, true, false);
+  cuts_12.push_back("HT-Ge750--EMutrigger-E1--Nmu-E1--Nele-E1");
+  cuts_12.push_back("HT-Ge750--DoubleMuontrigger-E1--NmuE2");
+  cuts_12.push_back("HT-Ge750--Nlep-E0");
+  Plotter_Eff_Nano(cuts_12, true, false, false, true);
  }
 
- Plotter_Eff_Nano(files,cuts);
+//muon electron data bkg
  return 0;
 }
