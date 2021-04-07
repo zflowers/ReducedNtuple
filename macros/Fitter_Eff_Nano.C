@@ -22,6 +22,7 @@ TGraphErrors* Get_Bands_Ratio(double x_min, double x_max, TGraphAsymmErrors* gr,
 TGraphErrors* Get_Bands(double x_min, double x_max, TF1* Data_Nominal, vector<double>& y_upper, vector<double>& y_lower);
 void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, double& c1, double& c2, const double& HT, const int& year, const bool& muon);
 TGraphAsymmErrors* TGAE_Ratio(TGraphAsymmErrors* gr_bkg, TGraphAsymmErrors* gr_data);
+void Get_Fit_Params();
 
 Double_t Error_Func(Double_t *x, Double_t *par)
 {
