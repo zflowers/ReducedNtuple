@@ -100,7 +100,7 @@ inline double MET_Trigger_SF::Get_EFF(const double& MET, const double& HT, const
 inline double MET_Trigger_SF::Get_SF(const double& MET, const double& HT, const int& year, const bool& electron, const bool& muon, const int& updown)
 {
  std::string data_name, bkg_name;
- if(electron && muon)
+ if(!electron && !muon)
  {
   data_name = Get_Name(HT,year,electron,muon,false); 
   bkg_name = Get_Name(HT,year,electron,muon,false);
