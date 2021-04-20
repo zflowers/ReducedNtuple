@@ -54,6 +54,12 @@ Scale.x: $(SRCDIR)ScaleFactors.C $(OBJ_FILES) $(HH_FILES)
 	$(CXX) $(CXXFLAGS) -o Scale.x $(GLIBS) $ $< 
 	touch Scale.x
 
+Example_SF: Example_SF.x
+
+Example_SF.x: $(SRCDIR)Example_MET_Trigger_SF.C $(OBJ_FILES) $(HH_FILES)
+	$(CXX) $(CXXFLAGS) -o Example_SF.x $(GLIBS) $ $< 
+	touch Example_SF.x
+
 all: run_Eff_Nano.x
 
 run_Eff_Nano.x: $(SRCDIR)run_Eff_Nano_Hist.cc $(OBJ_FILES) $(HH_FILES)

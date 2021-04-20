@@ -17,9 +17,9 @@ output_dir = "/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/"
 print("Writing shell scripts")
 
 list_cuts_hist = [
-    #"PreSelection",
-    "SingleElectrontrigger-E1--Nele-E1",
-    "SingleMuontrigger-E1--Nmu-E1",
+    "PreSelection",
+    "HEM_Veto-E1",
+    "HEM_Veto-E0",
 ]
 
 list_cuts_eff = [
@@ -46,15 +46,15 @@ list_cuts_eff = [
     #"Njet_S-E0--SingleMuontrigger-E1--Nmu-E1",
     #"Njet_S-E1--SingleMuontrigger-E1--Nmu-E1",
     #"Njet_S-Ge2--SingleMuontrigger-E1--Nmu-E1",
-    "Njet_S-E0--SingleMuontrigger-E1--NmuBronze-E1",
-    "Njet_S-E0--SingleMuontrigger-E1--NmuSilver-E1",
-    "Njet_S-E0--SingleMuontrigger-E1--NmuGold-E1",
-    "Njet_S-E1--SingleMuontrigger-E1--NmuBronze-E1",
-    "Njet_S-E1--SingleMuontrigger-E1--NmuSilver-E1",
-    "Njet_S-E1--SingleMuontrigger-E1--NmuGold-E1",
-    "Njet_S-Ge2--SingleMuontrigger-E1--NmuBronze-E1",
-    "Njet_S-Ge2--SingleMuontrigger-E1--NmuSilver-E1",
-    "Njet_S-Ge2--SingleMuontrigger-E1--NmuGold-E1",
+    #"Njet_S-E0--SingleMuontrigger-E1--NmuBronze-E1",
+    #"Njet_S-E0--SingleMuontrigger-E1--NmuSilver-E1",
+    #"Njet_S-E0--SingleMuontrigger-E1--NmuGold-E1",
+    #"Njet_S-E1--SingleMuontrigger-E1--NmuBronze-E1",
+    #"Njet_S-E1--SingleMuontrigger-E1--NmuSilver-E1",
+    #"Njet_S-E1--SingleMuontrigger-E1--NmuGold-E1",
+    #"Njet_S-Ge2--SingleMuontrigger-E1--NmuBronze-E1",
+    #"Njet_S-Ge2--SingleMuontrigger-E1--NmuSilver-E1",
+    #"Njet_S-Ge2--SingleMuontrigger-E1--NmuGold-E1",
     #"EMutrigger-E1--Nmu-E1--Nele-E1",
     #"SingleElectrontrigger-E1--Nele-E1",
     #"SingleElectrontrigger-E1--NeleBronze-E1",
@@ -223,6 +223,10 @@ list_tags_Bkg_2018 = [
     list_path+"Autumn18_102X_NoQCD.list",
 ]
 
+list_tags_MET_2018 = [
+    list_path+"Autumn18_102X_Data_MET.list",
+]
+
 
 #master list of samples to run over
 list_list_eff = [
@@ -245,9 +249,8 @@ list_list_eff = [
 ]
 
 list_list_hist = [
-    'Bkg_2017',list_tags_Bkg_2017,
-    'SingleMuon_2017',list_tags_SingleMuon_2017,
-    'SingleElectron_2017',list_tags_SingleElectron_2017,
+    'Bkg_2018',list_tags_Bkg_2018,
+    'MET_2018',list_tags_MET_2018,
 ]
 
 def run_hadd(head_dir,list_dir):

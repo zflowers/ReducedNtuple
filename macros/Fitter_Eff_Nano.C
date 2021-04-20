@@ -18,11 +18,10 @@ using namespace std;
 void Get_Fit(TGraphAsymmErrors*& gr, vector<TF1*> funcs, vector<int> colors, string outFile, string name);
 void Fit_Graph_With_Funcs(TCanvas*& canv, TGraphAsymmErrors*& gr, vector<TF1*> funcs, const vector<int>& colors, string name);
 TGraph* Get_Fit_Ratio(double x_min, double x_max, TF1* Bkg_Nominal, TF1* Data_Nominal);
-TGraphErrors* Get_Bands_Ratio(double x_min, double x_max, TGraphAsymmErrors* gr, vector<double>& y_upper, vector<double>& y_lower, TF1* Bkg_Nominal, TF1* Data_Nominal, double& a1, double& a2, double& b1, double& b2, double& c1, double& c2);
-TGraphErrors* Get_Bands(double x_min, double x_max, TF1* Data_Nominal, vector<double>& y_upper, vector<double>& y_lower);
-void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, double& c1, double& c2, const double& HT, const int& year, const bool& muon);
+TGraphErrors* Get_Bands(double x_min, double x_max, TF1* Data_Nominal, int N, double& a1, double& a2, double& b1, double& b2, double& c1, double& c2);
+void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, double& c1, double& c2, const double& HT, const int& year, const bool& muon, const bool& electron, const bool& data);
+TGraphErrors* Get_Bands_Ratio(double x_min, double x_max, TGraphAsymmErrors* gr, TF1* Bkg_Nominal, TF1* Data_Nominal, double& a1, double& a2, double& b1, double& b2, double& c1, double& c2);
 TGraphAsymmErrors* TGAE_Ratio(TGraphAsymmErrors* gr_bkg, TGraphAsymmErrors* gr_data);
-void Get_Fit_Params();
 
 Double_t Error_Func(Double_t *x, Double_t *par)
 {
@@ -51,9 +50,28 @@ bool fileExists(const std::string& filename)
  struct stat buf;
  if (stat(filename.c_str(), &buf) != -1)
  {
-     return true;
+  return true;
  }
  return false;
+}
+
+TGraphAsymmErrors* get_gr(string cut, string tag)
+{
+ TKey *key;
+ TCanvas* can = new TCanvas(("temp"+cut+tag).c_str(),("temp"+cut+tag).c_str(),750,500);
+ TFile *f = TFile::Open(("Eff_output_"+cut+".root").c_str(), "READ");
+ TDirectoryFile* folder = nullptr;
+ f->GetObject(tag.c_str(),folder);
+ folder->cd();
+ TEfficiency* eff = nullptr;
+ folder->GetObject("METtrigger",eff);
+ eff->Draw("AP");
+ can->Update();
+ TGraphAsymmErrors* gr = eff->GetPaintedGraph();
+ delete can;
+ f->Close();
+ delete f;
+ return gr;
 }
 
 TGraphAsymmErrors* TGAE_Ratio(TGraphAsymmErrors* gr_bkg, TGraphAsymmErrors* gr_data)
@@ -87,7 +105,7 @@ TGraphAsymmErrors* TGAE_Ratio(TGraphAsymmErrors* gr_bkg, TGraphAsymmErrors* gr_d
  return mg;
 }
 
-void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, double& c1, double& c2, const double& HT, const int& year, const bool& muon)
+TF1* Get_Func_Nominal(const double& HT, const int& year, const bool& muon, const bool& electron, const bool& data, const double& x_min, const double& x_max)
 {
  if(HT <= 600.)
  {
@@ -95,63 +113,188 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
   {
    if(muon)
    {
-    a1 = .2e-5;
-    a2 = -.2e-5;
-    b1 = 300.;
-    b2 = 300.;
-    c1 = 1.01;
-    c2 = 0.99;
+    if(data)
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+    else
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+   }
+   else if(electron)
+   {
+    if(data)
+    {
+     TF1* Nominal = new TF1("Nominal",Double_Gaussian_CDF_Func_Multi,x_min,x_max,5);
+     Nominal->SetParameter(0,1.);
+     Nominal->SetParameter(1,100.);
+     Nominal->SetParameter(2,10.);
+     Nominal->SetParameter(3,10.);
+     Nominal->SetParameter(4,0.5);
+     return Nominal;
+    }
+    else
+    {
+     TF1* Nominal = new TF1("Nominal",Double_Gaussian_CDF_Func_Multi,x_min,x_max,5);
+     Nominal->SetParameter(0,1.);
+     Nominal->SetParameter(1,100.);
+     Nominal->SetParameter(2,10.);
+     Nominal->SetParameter(3,10.);
+     Nominal->SetParameter(4,0.5);
+     return Nominal;
+    }
    }
    else
    {
-    a1 = .5e-5;
-    a2 = -.5e-5;
-    b1 = 300.;
-    b2 = 300.;
-    c1 = 1.01;
-    c2 = 0.99;
+    if(data)
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+    else
+    {
+     TF1* Nominal = new TF1("Nominal",Double_Gaussian_CDF_Func_Multi,x_min,x_max,5);
+     Nominal->SetParameter(0,1.);
+     Nominal->SetParameter(1,100.);
+     Nominal->SetParameter(2,10.);
+     Nominal->SetParameter(3,10.);
+     Nominal->SetParameter(4,0.5);
+     return Nominal;
+    }
    }
   }
   else if(year == 2017)
   {
    if(muon)
    {
-    a1 = .2e-5;
-    a2 = -.2e-5;
-    b1 = 300.;
-    b2 = 300.;
-    c1 = 1.01;
-    c2 = 0.99;
+    if(data)
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+    else
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+   }
+   else if(electron)
+   {
+    if(data)
+    {
+     TF1* Nominal = new TF1("Nominal",Double_Gaussian_CDF_Func_Multi,x_min,x_max,5);
+     Nominal->SetParameter(0,1.);
+     Nominal->SetParameter(1,100.);
+     Nominal->SetParameter(2,10.);
+     Nominal->SetParameter(3,10.);
+     Nominal->SetParameter(4,0.5);
+     return Nominal;
+    }
+    else
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
    }
    else
    {
-    a1 = .5e-5;
-    a2 = -.5e-5;
-    b1 = 300.;
-    b2 = 300.;
-    c1 = 1.01;
-    c2 = 0.99;
+    if(data)
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+    else
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
    }
   }
   else if(year == 2018)
   {
    if(muon)
    {
-    a1 = .2e-5;
-    a2 = -.2e-5;
-    b1 = 300.;
-    b2 = 300.;
-    c1 = 1.01;
-    c2 = 0.99;
+    if(data)
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+    else
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+   }
+   else if(electron)
+   {
+    if(data)
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+    else
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
    }
    else
    {
-    a1 = .5e-5;
-    a2 = -.5e-5;
-    b1 = 300.;
-    b2 = 300.;
-    c1 = 1.01;
-    c2 = 0.99;
+    if(data)
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+    else
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
    }
   }
   else
@@ -165,63 +308,184 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
   {
    if(muon)
    {
-    a1 = .2e-5;
-    a2 = -.2e-5;
-    b1 = 300.;
-    b2 = 300.;
-    c1 = 1.01;
-    c2 = 0.99;
+    if(data)
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+    else
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+   }
+   else if(electron)
+   {
+    if(data)
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+    else
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
    }
    else
    {
-    a1 = .5e-5;
-    a2 = -.5e-5;
-    b1 = 300.;
-    b2 = 300.;
-    c1 = 1.01;
-    c2 = 0.99;
+    if(data)
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+    else
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
    }
   }
   else if(year == 2017)
   {
    if(muon)
    {
-    a1 = .2e-5;
-    a2 = -.2e-5;
-    b1 = 300.;
-    b2 = 300.;
-    c1 = 1.01;
-    c2 = 0.99;
+    if(data)
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+    else
+    {
+     TF1* Nominal = new TF1("Nominal",Double_Gaussian_CDF_Func_Multi,x_min,x_max,5);
+     Nominal->SetParameter(0,1.);
+     Nominal->SetParameter(1,100.);
+     Nominal->SetParameter(2,10.);
+     Nominal->SetParameter(3,10.);
+     Nominal->SetParameter(4,0.5);
+     return Nominal;
+    }
+   }
+   else if(electron)
+   {
+    if(data)
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+    else
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
    }
    else
    {
-    a1 = .5e-5;
-    a2 = -.5e-5;
-    b1 = 300.;
-    b2 = 300.;
-    c1 = 1.01;
-    c2 = 0.99;
+    if(data)
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+    else
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
    }
   }
   else if(year == 2018)
   {
    if(muon)
    {
-    a1 = .2e-5;
-    a2 = -.2e-5;
-    b1 = 300.;
-    b2 = 300.;
-    c1 = 1.01;
-    c2 = 0.99;
+    if(data)
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+    else
+    {
+     TF1* Nominal = new TF1("Nominal",Double_Gaussian_CDF_Func_Multi,x_min,x_max,5);
+     Nominal->SetParameter(0,1.);
+     Nominal->SetParameter(1,100.);
+     Nominal->SetParameter(2,10.);
+     Nominal->SetParameter(3,10.);
+     Nominal->SetParameter(4,0.5);
+     return Nominal;
+    }
+   }
+   else if(electron)
+   {
+    if(data)
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+    else
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
    }
    else
    {
-    a1 = .5e-5;
-    a2 = -.5e-5;
-    b1 = 300.;
-    b2 = 300.;
-    c1 = 1.01;
-    c2 = 0.99;
+    if(data)
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+    else
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
    }
   }
   else
@@ -235,63 +499,184 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
   {
    if(muon)
    {
-    a1 = .2e-5;
-    a2 = -.2e-5;
-    b1 = 300.;
-    b2 = 300.;
-    c1 = 1.01;
-    c2 = 0.99;
+    if(data)
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+    else
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+   }
+   else if(electron)
+   {
+    if(data)
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+    else
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
    }
    else
    {
-    a1 = .5e-5;
-    a2 = -.5e-5;
-    b1 = 300.;
-    b2 = 300.;
-    c1 = 1.01;
-    c2 = 0.99;
+    if(data)
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+    else
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
    }
   }
   else if(year == 2017)
   {
    if(muon)
    {
-    a1 = .2e-5;
-    a2 = -.2e-5;
-    b1 = 300.;
-    b2 = 300.;
-    c1 = 1.01;
-    c2 = 0.99;
+    if(data)
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+    else
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+   }
+   else if(electron)
+   {
+    if(data)
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+    else
+    {
+     TF1* Nominal = new TF1("Nominal",Double_Gaussian_CDF_Func_Multi,x_min,x_max,5);
+     Nominal->SetParameter(0,1.);
+     Nominal->SetParameter(1,100.);
+     Nominal->SetParameter(2,10.);
+     Nominal->SetParameter(3,10.);
+     Nominal->SetParameter(4,0.5);
+     return Nominal;
+    }
    }
    else
    {
-    a1 = .5e-5;
-    a2 = -.5e-5;
-    b1 = 300.;
-    b2 = 300.;
-    c1 = 1.01;
-    c2 = 0.99;
+    if(data)
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+    else
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
    }
   }
   else if(year == 2018)
   {
    if(muon)
    {
-    a1 = .2e-5;
-    a2 = -.2e-5;
-    b1 = 300.;
-    b2 = 300.;
-    c1 = 1.01;
-    c2 = 0.99;
+    if(data)
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+    else
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+   }
+   else if(electron)
+   {
+    if(data)
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+    else
+    {
+     TF1* Nominal = new TF1("Nominal",Double_Gaussian_CDF_Func_Multi,x_min,x_max,5);
+     Nominal->SetParameter(0,1.);
+     Nominal->SetParameter(1,100.);
+     Nominal->SetParameter(2,10.);
+     Nominal->SetParameter(3,10.);
+     Nominal->SetParameter(4,0.5);
+     return Nominal;
+    }
    }
    else
    {
-    a1 = .5e-5;
-    a2 = -.5e-5;
-    b1 = 300.;
-    b2 = 300.;
-    c1 = 1.01;
-    c2 = 0.99;
+    if(data)
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
+    else
+    {
+     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
+     Nominal->SetParameter(0,0.99);
+     Nominal->SetParameter(1,125.);
+     Nominal->SetParameter(2,40.);
+     return Nominal;
+    }
    }
   }
   else
@@ -301,7 +686,712 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
  }
 }
 
-TGraphErrors* Get_Bands_Ratio(double x_min, double x_max, TGraphAsymmErrors* gr, vector<double>& y_upper, vector<double>& y_lower, TF1* Bkg_Nominal, TF1* Data_Nominal, double& a1, double& a2, double& b1, double& b2, double& c1, double& c2)
+void Get_Func_Params(const double& HT, const int& year, const bool& muon, const bool& electron, const bool& data, string cut, string tag, double& norm, double& mean, double& sigma, double& scale, double& weight)
+{
+ TGraphAsymmErrors* gr = get_gr(cut, tag);
+ TCanvas* can = new TCanvas(("temp"+cut+tag+std::to_string(HT)+std::to_string(year)).c_str(),("temp"+cut+tag+std::to_string(HT)+std::to_string(year)).c_str(),750,500);
+ can->cd();
+ gr->Draw("A");
+ TF1* func = Get_Func_Nominal(HT,year,muon,electron,data,gr->GetXaxis()->GetXmin(),gr->GetXaxis()->GetXmax()); 
+ gr->Fit(func,"QEMS+0");
+ norm = func->GetParameter(0);
+ mean = func->GetParameter(1);
+ sigma = func->GetParameter(2);
+ if(func->GetNpar() > 3)
+ {
+  scale = func->GetParameter(3);
+  weight = func->GetParameter(4);
+ }
+ else
+ {
+  scale = 0.;
+  weight = 0.;
+ }
+}
+
+void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, double& c1, double& c2, const double& HT, const int& year, const bool& muon, const bool& electron, const bool& data)
+{
+ if(HT <= 600.)
+ {
+  if(year == 2016)
+  {
+   if(muon)
+   {
+    if(data)
+    {
+     a1 = .3e-5;
+     a2 = -.7e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+    else
+    {
+     a1 = .1e-5;
+     a2 = -.1e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+   }
+   else if(electron)
+   {
+    if(data)
+    {
+     a1 = .12e-4;
+     a2 = -.7e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+    else
+    {
+     a1 = .9e-5;
+     a2 = -.75e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    } 
+   }
+   else
+   {
+    if(data)
+    {
+     a1 = .5e-5;
+     a2 = -.5e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+    else
+    {
+     a1 = .5e-5;
+     a2 = -.5e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+   }
+  }
+  else if(year == 2017)
+  {
+   if(muon)
+   {
+    if(data)
+    {
+     a1 = .5e-5;
+     a2 = -.7e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+    else
+    {
+     a1 = .5e-5;
+     a2 = -.95e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+   }
+   else if(electron)
+   {
+    if(data)
+    {
+     a1 = .85e-5;
+     a2 = -.4e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+    else
+    {
+     a1 = .65e-5;
+     a2 = -.3e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+   }
+   else
+   {
+    if(data)
+    {
+     a1 = .5e-5;
+     a2 = -.5e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+    else
+    {
+     a1 = .5e-5;
+     a2 = -.5e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+   }
+  }
+  else if(year == 2018)
+  {
+   if(muon)
+   {
+    if(data)
+    {
+     a1 = .5e-5;
+     a2 = -.6e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+    else
+    {
+     a1 = .25e-5;
+     a2 = -.25e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+   }
+   else if(electron)
+   {
+    if(data)
+    {
+     a1 = .95e-5;
+     a2 = -.7e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+    else
+    {
+     a1 = .2e-5;
+     a2 = -.2e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+   }
+   else
+   {
+    if(data)
+    {
+     a1 = .5e-5;
+     a2 = -.5e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+    else
+    {
+     a1 = .5e-5;
+     a2 = -.5e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+   }
+  }
+  else
+  {
+   cout << "Improper year given!" << endl;
+  }
+ }
+ else if(HT > 600. && HT < 750.)
+ {
+  if(year == 2016)
+  {
+   if(muon)
+   {
+    if(data)
+    {
+     a1 = .2e-5;
+     a2 = -.2e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+    else
+    {
+     a1 = .2e-5;
+     a2 = -.2e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+   }
+   else if(electron)
+   {
+    if(data)
+    {
+     a1 = .9e-5;
+     a2 = -.9e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+    else
+    {
+     a1 = .5e-5;
+     a2 = -.5e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+   }
+   else
+   {
+    if(data)
+    {
+     a1 = .5e-5;
+     a2 = -.5e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+    else
+    {
+     a1 = .5e-5;
+     a2 = -.5e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+   }
+  }
+  else if(year == 2017)
+  {
+   if(muon)
+   {
+    if(data)
+    {
+     a1 = .2e-5;
+     a2 = -.2e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+    else
+    {
+     a1 = .2e-5;
+     a2 = -.2e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+   }
+   else if(electron)
+   {
+    if(data)
+    {
+     a1 = .75e-5;
+     a2 = -.75e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+    else
+    {
+     a1 = .5e-5;
+     a2 = -.5e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+   }
+   else
+   {
+    if(data)
+    {
+     a1 = .5e-5;
+     a2 = -.5e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+    else
+    {
+     a1 = .5e-5;
+     a2 = -.5e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+   }
+  }
+  else if(year == 2018)
+  {
+   if(muon)
+   {
+    if(data)
+    {
+     a1 = .2e-5;
+     a2 = -.2e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+    else
+    {
+     a1 = .2e-5;
+     a2 = -.2e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+   }
+   else if(electron)
+   {
+    if(data)
+    {
+     a1 = .75e-5;
+     a2 = -.75e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+    else
+    {
+     a1 = .5e-5;
+     a2 = -.5e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+   }
+   else
+   {
+    if(data)
+    {
+     a1 = .5e-5;
+     a2 = -.5e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+    else
+    {
+     a1 = .5e-5;
+     a2 = -.5e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+   }
+  }
+  else
+  {
+   cout << "Improper year given!" << endl;
+  }
+ }
+ else if(HT > 750.)
+ {
+  if(year == 2016)
+  {
+   if(muon)
+   {
+    if(data)
+    {
+     a1 = .2e-5;
+     a2 = -.2e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+    else
+    {
+     a1 = .2e-5;
+     a2 = -.2e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+   }
+   else if(electron)
+   {
+    if(data)
+    {
+     a1 = .5e-5;
+     a2 = -.5e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+    else
+    {
+     a1 = .5e-5;
+     a2 = -.5e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+   }
+   else
+   {
+    if(data)
+    {
+     a1 = .5e-5;
+     a2 = -.5e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+    else
+    {
+     a1 = .5e-5;
+     a2 = -.5e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+   }
+  }
+  else if(year == 2017)
+  {
+   if(muon)
+   {
+    if(data)
+    {
+     a1 = .2e-5;
+     a2 = -.2e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+    else
+    {
+     a1 = .2e-5;
+     a2 = -.2e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+   }
+   else if(electron)
+   {
+    if(data)
+    {
+     a1 = .5e-5;
+     a2 = -.5e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+    else
+    {
+     a1 = .5e-5;
+     a2 = -.5e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+   }
+   else
+   {
+    if(data)
+    {
+     a1 = .5e-5;
+     a2 = -.5e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+    else
+    {
+     a1 = .5e-5;
+     a2 = -.5e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+   }
+  }
+  else if(year == 2018)
+  {
+   if(muon)
+   {
+    if(data)
+    {
+     a1 = .2e-5;
+     a2 = -.2e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+    else
+    {
+     a1 = .2e-5;
+     a2 = -.2e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+   }
+   else if(electron)
+   {
+    if(data)
+    {
+     a1 = .5e-5;
+     a2 = -.5e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+    else
+    {
+     a1 = .5e-5;
+     a2 = -.5e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+   }
+   else
+   {
+    if(data)
+    {
+     a1 = .5e-5;
+     a2 = -.5e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+    else
+    {
+     a1 = .5e-5;
+     a2 = -.5e-5;
+     b1 = 300.;
+     b2 = 300.;
+     c1 = 1.01;
+     c2 = 0.99;
+    }
+   }
+  }
+  else
+  {
+   cout << "Improper year given for function parameters!" << endl;
+  }
+ }
+}
+
+double Get_Value(string& line)
+{
+ size_t comma_pos = line.find(",");
+ string value = line.substr(0,comma_pos);
+ line.erase(0,comma_pos+1);
+ return std::stod(value);
+}
+
+void Get_Band_Params_CSV(string name, double& a1, double& a2, double& b1, double& b2, double& c1, double& c2)
+{
+  std::ifstream ifile("Parameters.csv");
+  if(!ifile.is_open()){
+    std::cout << "can't open csv file " << std::endl;
+    return;
+  }
+  string line;
+  //discard header line
+  getline(ifile,line);
+  while(getline(ifile,line)){
+   if(line.find(name) == std::string::npos) continue;
+   size_t s = line.find(name);
+   if(s != std::string::npos) { line.erase(s,(name+",").length()); }
+   a1 = Get_Value(line);
+   a2 = Get_Value(line);
+   b1 = Get_Value(line);
+   b2 = Get_Value(line);
+   c1 = Get_Value(line);
+   c2 = Get_Value(line);
+   return;
+  }
+}
+
+void Get_Fit_Params_CSV(string name, double& norm, double& mean, double& sigma, double& scale, double& weight)
+{
+  std::ifstream ifile("Parameters.csv");
+  if(!ifile.is_open()){
+    std::cout << "can't open csv file " << std::endl;
+    return;
+  }
+  string line, values;
+  //discard first line
+  getline(ifile,line);
+  while(getline(ifile,line)){
+   if(line.find(name) == std::string::npos) continue;
+   size_t s = line.find(name);
+   if(s != std::string::npos) { line.erase(s,(name+",").length()); }
+   double dum = 0.0; //dummy variable
+   //skip variables that we don't need
+   dum = Get_Value(line);
+   dum = Get_Value(line);
+   dum = Get_Value(line);
+   dum = Get_Value(line);
+   dum = Get_Value(line);
+   dum = Get_Value(line);
+   norm = Get_Value(line);
+   mean = Get_Value(line);
+   sigma = Get_Value(line);
+   scale = Get_Value(line);
+   weight = Get_Value(line);
+   return;
+  }
+}
+
+TGraphErrors* Get_Bands_Ratio(double x_min, double x_max, TGraphAsymmErrors* gr, TF1* Bkg_Nominal, TF1* Data_Nominal, double& a1, double& a2, double& b1, double& b2, double& c1, double& c2)
 {
  int N = 1000;
  TGraphErrors* gr_bands_ratio = new TGraphErrors(N);
@@ -325,8 +1415,6 @@ TGraphErrors* Get_Bands_Ratio(double x_min, double x_max, TGraphAsymmErrors* gr,
   {
    y_lower_i = 0.99;
   }
-  y_upper.push_back(y_upper_i);
-  y_lower.push_back(y_lower_i);
   y_upper_i *= (Data_Nominal->Eval(x)/Bkg_Nominal->Eval(x));
   y_lower_i *= (Data_Nominal->Eval(x)/Bkg_Nominal->Eval(x));
   y = (y_upper_i+y_lower_i)/2.;
@@ -337,28 +1425,36 @@ TGraphErrors* Get_Bands_Ratio(double x_min, double x_max, TGraphAsymmErrors* gr,
  return gr_bands_ratio; 
 }
 
-TGraphErrors* Get_Bands(double x_min, double x_max, TF1* Data_Nominal, vector<double>& y_upper, vector<double>& y_lower)
+TGraphErrors* Get_Bands(double x_min, double x_max, TF1* Data_Nominal, int N, double& a1, double& a2, double& b1, double& b2, double& c1, double& c2)
 {
- int N = y_upper.size();
  TGraphErrors* gr_bands = new TGraphErrors(N);
  double x = 0.;
  double y = 0.;
  double x_err = ((x_max-x_min)/(N));
  double y_err_i = 0.;
- double y_upper_err_i = 0.;
- double y_lower_err_i = 0.;
+ double y_upper_i = 0.;
+ double y_lower_i = 0.;
 
  for(int i = 0; i < N; i++)
  {
   x = x_min+(((x_max-x_min)/(N))*i);
-  y_upper_err_i = std::min(1.,Data_Nominal->Eval(x)*y_upper[i]);
-  y_lower_err_i = Data_Nominal->Eval(x)*y_lower[i];
-  y = (y_upper_err_i+y_lower_err_i)/2.;
-  y_err_i = (y_upper_err_i-y_lower_err_i)/2.;
+  y_upper_i = (a1*(x-b1)*(x-b1)+c1);
+  y_lower_i = (a2*(x-b2)*(x-b2)+c2);
+  if(x > b1)
+  {
+   y_upper_i = 1.01;
+  }
+  if(x > b2)
+  {
+   y_lower_i = 0.99;
+  }
+  y_upper_i = std::min(1.,Data_Nominal->Eval(x)*y_upper_i);
+  y_lower_i = Data_Nominal->Eval(x)*y_lower_i;
+  y = (y_upper_i+y_lower_i)/2.;
+  y_err_i = (y_upper_i-y_lower_i)/2.;
   if(y > 1.) {y = 1.;}
   if(y_err_i > 1.) {y_err_i = 1.;}
   gr_bands->SetPoint(i,x,y);
-  //gr_bands->SetPointError(i,x_err,x_err,y_lower_err_i,y_upper_err_i);
   gr_bands->SetPointError(i,x_err,y_err_i);
  }
  return gr_bands; 
@@ -375,6 +1471,29 @@ TGraph* Get_Fit_Ratio(double x_min, double x_max, TF1* Bkg_Nominal, TF1* Data_No
   gr->SetPoint(i,x,Data_Nominal->Eval(x)/Bkg_Nominal->Eval(x));
  }
  return gr;
+}
+
+void Output_Parameters(const double& HT, const int& year, const bool& muon, const bool& electron, const bool& data, string cut, string tag)
+{
+ double a1, a2, b1, b2, c1, c2, norm, mean, sigma;
+ double scale = 0;
+ double weight = 0;
+ Get_Bands_Ratio_Params(a1,a2,b1,b2,c1,c2,HT,year,muon,electron,data);
+ Get_Func_Params(HT,year,muon,electron,data,cut,tag,norm,mean,sigma,scale,weight);
+
+ ofstream output;
+ if(!fileExists("Parameters.csv"))
+ {
+  output.open("Parameters.csv",fstream::app);
+  output << "Name" << "," << "a1" << "," << "a2" << "," << "b1" << "," << "b2" << "," << "c1" << "," << "c2" << "," << "norm" << "," << "mean" << "," << "sigma" << "," << "scale" << "," << "weight" << "," << endl;
+ }
+ else { output.open("Parameters.csv",fstream::app); }
+ string name = cut+"_"+tag;
+ if(muon) { name+="_Muon"; }
+ else if(electron) { name+="_Electron"; }
+ else { name+="_ZeroLepton"; }
+ output << name << "," << a1 << "," << a2 << "," << b1 << "," << b2 << "," << c1 << "," << c2 << "," << norm << "," << mean << "," << sigma << "," << scale << "," << weight << "," << endl;
+ output.close();
 }
 
 void Fitter_Eff_Nano(TGraphAsymmErrors* gr_given, vector<int> colors, string name)
@@ -715,7 +1834,7 @@ double Round(const double& num)
  return (toPrecision(num,3));
 }
 
-void Output_Fit(TF1* func, string name, string status, TFitResultPtr result)
+void Output_Fit_ToCSV(TF1* func, string name, string status, TFitResultPtr result)
 {
  ofstream output;
  output.open("Fit_Parameters_Output.csv",fstream::app);
@@ -753,10 +1872,7 @@ void Output_Fit(TF1* func, string name, string status, TFitResultPtr result)
   }
  }
  output << Round(func->GetChisquare()) << "," << func->GetNDF() << "," << status << endl;
-
  output.close();
-
-
 }
 
 void Fit_Graph_With_Funcs(TCanvas*& canv, TGraphAsymmErrors*& gr_given, vector<TF1*> funcs, const vector<int>& colors, string name)
@@ -849,7 +1965,7 @@ void Fit_Graph_With_Funcs(TCanvas*& canv, TGraphAsymmErrors*& gr_given, vector<T
   pad_gr->Update();
   canv->Update();
 
-  Output_Fit(funcs[i],name,string(status_func),result);
+  Output_Fit_ToCSV(funcs[i],name,string(status_func),result);
 
  }
  mg->Draw("AP SAMES");
@@ -957,3 +2073,22 @@ TGraphAsymmErrors* get_gr(vector<string> tags, vector<string> Triggers, string f
  
  return gr;
 }
+
+void Find_Fit_Params(TGraphAsymmErrors* gr, string name, TF1* func)
+{
+ double x_min = gr->GetXaxis()->GetXmin();
+ double x_max = gr->GetXaxis()->GetXmax(); 
+
+ string gr_name = gr->GetName();
+ string canv_name = "canv_"+gr_name;
+ TCanvas* canv = new TCanvas(canv_name.c_str(),canv_name.c_str(),750,500);
+ canv->cd();
+
+ TFitResultPtr result = gr->Fit(func,"EMS+");
+ TString status = gMinuit->fCstatu;
+ canv->Update();
+ 
+ Output_Fit_ToCSV(func,name,string(status),result);
+ delete canv;
+}
+

@@ -19,6 +19,14 @@ class HistClass{
   TH2F* hist2f;
   TH1D* hist1d;
   TH2D* hist2d;
+  TH1F* preHEM_hist1f;
+  TH2F* preHEM_hist2f;
+  TH1D* preHEM_hist1d;
+  TH2D* preHEM_hist2d;
+  TH1F* postHEM_hist1f;
+  TH2F* postHEM_hist2f;
+  TH1D* postHEM_hist1d;
+  TH2D* postHEM_hist2d;
   KUAnalysis selector;
 
 };
@@ -29,6 +37,14 @@ HistClass::HistClass(){
   hist2f = NULL;
   hist1d = NULL;
   hist2d = NULL;
+  preHEM_hist1f = NULL;
+  preHEM_hist2f = NULL;
+  preHEM_hist1d = NULL;
+  preHEM_hist2d = NULL;
+  postHEM_hist1f = NULL;
+  postHEM_hist2f = NULL;
+  postHEM_hist1d = NULL;
+  postHEM_hist2d = NULL;
 
 }
 
@@ -38,6 +54,14 @@ HistClass::~HistClass(){
   if( hist2f ) delete hist2f;
   if( hist1d ) delete hist1d;
   if( hist2d ) delete hist2d;
+  if( preHEM_hist1f ) delete preHEM_hist1f;
+  if( preHEM_hist2f ) delete preHEM_hist2f;
+  if( preHEM_hist1d ) delete preHEM_hist1d;
+  if( preHEM_hist2d ) delete preHEM_hist2d;
+  if( postHEM_hist1f ) delete postHEM_hist1f;
+  if( postHEM_hist2f ) delete postHEM_hist2f;
+  if( postHEM_hist1d ) delete postHEM_hist1d;
+  if( postHEM_hist2d ) delete postHEM_hist2d;
 
 }
 
@@ -66,6 +90,14 @@ void HistClass::write_hist( string outFile, string Tag ){
   if( hist2f ) {cout << hist2f->GetName() << endl; hist2f->SetDirectory(0); hist2f->Write();}
   if( hist1d ) {cout << hist1d->GetName() << endl; hist1d->SetDirectory(0); hist1d->Write();}
   if( hist2d ) {cout << hist2d->GetName() << endl; hist2d->SetDirectory(0); hist2d->Write();}
+  if( preHEM_hist1f ) {cout << preHEM_hist1f->GetName() << endl; preHEM_hist1f->SetDirectory(0); preHEM_hist1f->Write();}
+  if( preHEM_hist2f ) {cout << preHEM_hist2f->GetName() << endl; preHEM_hist2f->SetDirectory(0); preHEM_hist2f->Write();}
+  if( preHEM_hist1d ) {cout << preHEM_hist1d->GetName() << endl; preHEM_hist1d->SetDirectory(0); preHEM_hist1d->Write();}
+  if( preHEM_hist2d ) {cout << preHEM_hist2d->GetName() << endl; preHEM_hist2d->SetDirectory(0); preHEM_hist2d->Write();}
+  if( postHEM_hist1f ) {cout << postHEM_hist1f->GetName() << endl; postHEM_hist1f->SetDirectory(0); postHEM_hist1f->Write();}
+  if( postHEM_hist2f ) {cout << postHEM_hist2f->GetName() << endl; postHEM_hist2f->SetDirectory(0); postHEM_hist2f->Write();}
+  if( postHEM_hist1d ) {cout << postHEM_hist1d->GetName() << endl; postHEM_hist1d->SetDirectory(0); postHEM_hist1d->Write();}
+  if( postHEM_hist2d ) {cout << postHEM_hist2d->GetName() << endl; postHEM_hist2d->SetDirectory(0); postHEM_hist2d->Write();}
   output->Close();
   delete output;
 }
@@ -98,7 +130,7 @@ inline Hist_Maker::Hist_Maker(string outFile, string Tag, TTree* Tree, int ichun
  m_nchunk = nchunk;
 }
 
-bool Clean_cut = true;
+bool Clean_cut = false;
 bool dPhiMET_V_cut = true;
 double lumi = 1.; //store lumi for given year
 
@@ -893,6 +925,12 @@ void dphiCMI_v_PTCM_Hist::init_hist(TTree* tree){
  hist2d = new TH2D("dphiCMI_v_PTCM_Hist","",64,0.,TMath::Pi(),80,0.,500.);
  hist2d->GetXaxis()->SetTitle("#Delta #phi_{CM,I}");
  hist2d->GetYaxis()->SetTitle("p_{T}^{CM} [GeV]");
+ preHEM_hist2d = new TH2D("dphiCMI_v_PTCM_Hist_preHEM","",64,0.,TMath::Pi(),80,0.,500.);
+ preHEM_hist2d->GetXaxis()->SetTitle("#Delta #phi_{CM,I}");
+ preHEM_hist2d->GetYaxis()->SetTitle("p_{T}^{CM} [GeV]");
+ postHEM_hist2d = new TH2D("dphiCMI_v_PTCM_Hist_postHEM","",64,0.,TMath::Pi(),80,0.,500.);
+ postHEM_hist2d->GetXaxis()->SetTitle("#Delta #phi_{CM,I}");
+ postHEM_hist2d->GetYaxis()->SetTitle("p_{T}^{CM} [GeV]");
 }
 void dphiCMI_v_PTCM_Hist::fill_hist(Long64_t jentry){
 //Option A: Load only the branches we need:
@@ -901,12 +939,15 @@ void dphiCMI_v_PTCM_Hist::fill_hist(Long64_t jentry){
  selector.b_dphiCMI->GetEntry(jentry);
  selector.b_PTCM->GetEntry(jentry);
  selector.b_weight->GetEntry(jentry);
+ selector.b_runnum->GetEntry(jentry);
 //
 //Option B: Load all branches:
 //
  m_Tree->GetEntry(jentry);
 //
  hist2d->Fill(selector.dphiCMI,selector.PTCM,lumi*selector.weight);
+ if(selector.runnum < 319077) { preHEM_hist2d->Fill(selector.dphiCMI,selector.PTCM,lumi*selector.weight); }
+ else { postHEM_hist2d->Fill(selector.dphiCMI,selector.PTCM,lumi*selector.weight); }
 }
 
 class dphiCMI_v_Njet_S_Hist:public HistClass, public Hist_Maker{
@@ -1506,16 +1547,16 @@ vector<HistClass*> Setup_Hists(TTree* tree){
  //Classes.push_back(new mu_PT_proj_MET_Hist);
  //Classes.push_back(new mu_PT_proj_METperp_Hist);
  //
- //Classes.push_back(new dphiCMI_v_PTCM_Hist);
+ Classes.push_back(new dphiCMI_v_PTCM_Hist);
  //Classes.push_back(new dphiCMI_v_Mperp_Hist);
  //Classes.push_back(new dphiCMI_v_RISR_Hist);
  //Classes.push_back(new Mperp_v_PTCM_Hist);
  //Classes.push_back(new RISR_v_PTCM_Hist);
  //Classes.push_back(new RISR_v_PTISR_Hist);
- Classes.push_back(new HT_v_MET_Hist);
- Classes.push_back(new HTMedium_v_MET_Hist);
- Classes.push_back(new HTLoose_v_MET_Hist);
- Classes.push_back(new HTVeryLoose_v_MET_Hist);
+ //Classes.push_back(new HT_v_MET_Hist);
+ //Classes.push_back(new HTMedium_v_MET_Hist);
+ //Classes.push_back(new HTLoose_v_MET_Hist);
+ //Classes.push_back(new HTVeryLoose_v_MET_Hist);
  //Classes.push_back(new dphiCMI_v_dphiMET_V_Hist);
  //Classes.push_back(new dphiMET_V_v_RISR_Hist);
  //Classes.push_back(new Mperp_v_dphiMET_V_Hist);

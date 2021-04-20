@@ -1274,10 +1274,10 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
  //Get1D_Ratio("met_Hist","PreSelection","HEM","MET_2018",true);
  //Get1D_Ratio("met_Hist","PreSelection","met_Hist_HEM","MET_2018",false);
  
- Get2D_Plot("HT_v_MET_Hist",directories_2D,inFiles,cuts,trigger);
- Get2D_Plot("HTMedium_v_MET_Hist",directories_2D,inFiles,cuts,trigger);
- Get2D_Plot("HTLoose_v_MET_Hist",directories_2D,inFiles,cuts,trigger);
- Get2D_Plot("HTVeryLoose_v_MET_Hist",directories_2D,inFiles,cuts,trigger);
+ //Get2D_Plot("HT_v_MET_Hist",directories_2D,inFiles,cuts,trigger);
+ //Get2D_Plot("HTMedium_v_MET_Hist",directories_2D,inFiles,cuts,trigger);
+ //Get2D_Plot("HTLoose_v_MET_Hist",directories_2D,inFiles,cuts,trigger);
+ //Get2D_Plot("HTVeryLoose_v_MET_Hist",directories_2D,inFiles,cuts,trigger);
  
  //Get2D_Plot("dphiCMI_v_PTCM_Hist",directories_2D,inFiles,cuts,trigger);
  //Get2D_Plot("dphiCMI_v_Mperp_Hist",directories_2D,inFiles,cuts,trigger);
@@ -1363,6 +1363,10 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
  //Get2D_Ratio("dphiCMI_v_PTCM_Hist_preHEM","dphiCMI_v_PTCM_Hist_postHEM","PreSelection","EventFlag_JetInHEM_Pt20_JetIDE0","MET_2018","MET_2018",true);
  //Get2D_Ratio("dphiCMI_v_PTCM_Hist_postHEM","dphiCMI_v_PTCM_Hist_postHEM","HEM-EventFlag_JetInHEM_Pt20E0","HEM-EventFlag_JetInHEM_Pt20_JetIDE0","MET_2018","MET_2018",true);
  //Get2D_Ratio("dphiCMI_v_PTCM_Hist_postHEM","dphiCMI_v_PTCM_Hist_postHEM","EventFlag_JetInHEM_Pt20E0","HEM-EventFlag_JetInHEM_Pt20E0","MET_2018","MET_2018",true);
+ //Final HEM $$$
+ Get2D_Ratio("dphiCMI_v_PTCM_Hist_preHEM","dphiCMI_v_PTCM_Hist_postHEM","PreSelection","HEM_Veto-E1","MET_2018","MET_2018",true);
+ Get2D_Ratio("dphiCMI_v_PTCM_Hist_preHEM","dphiCMI_v_PTCM_Hist_postHEM","PreSelection","HEM_Veto-E0","MET_2018","MET_2018",true);
+ 
  
  //2D Ratio 2017 Cleaning
  //Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist","RISRG0.9","RISRG0.9","Bkg_2017","MET_2017",true);

@@ -17,7 +17,6 @@
 
 using namespace std;
 
-string states = "";
 void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, string outFile, string name, string option);
 void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, vector<string> inFile, vector<string> cut, string name, string option);
 void Get_Plot_WithSF(vector<string> tags, string data_tag, string bkg_tag, vector<string> Triggers, vector<int> colors, vector<string> inFile, vector<string> cuts, string SF_FinalState, string name, string option, bool HT_group = true);
@@ -59,10 +58,6 @@ void Plotter_Eff_Nano(vector<string> cut, bool muon = false, bool data = false, 
  vector<string> tags_bkg_years = {"Bkg_2016","Bkg_2017","Bkg_2018"};
  vector<string> tags_SingleElectron_years = {"SingleElectron_2016","SingleElectron_2017","SingleElectron_2018"};
  vector<string> tags_SingleMuon_years = {"SingleMuon_2016","SingleMuon_2017","SingleMuon_2018"};
- for(int i = 0; i < int(cut.size()); i++)
- {
-  states += ("_"+cut[i]);
- } 
 
  string muon_FS = "SingleMuontrigger-E1--Nmu-E1";
  string electron_FS = "SingleElectrontrigger-E1--Nele-E1";
@@ -90,17 +85,9 @@ void Plotter_Eff_Nano(vector<string> cut, bool muon = false, bool data = false, 
   if(data) { cout << "Check booleans" << endl; return; }
   if(bkg)
   {
-   //NEED TO FIGURE OUT WHICH OPTION TO GO WITH
    Get_Plot_WithSF(tags_bkg_2016,"Bkg_2016","Bkg_2016",METtrigger,colors,inFile,cut,zero_lep_FS,"Bkg_2016","FinalState",HT_group);
    Get_Plot_WithSF(tags_bkg_2017,"Bkg_2017","Bkg_2017",METtrigger,colors,inFile,cut,zero_lep_FS,"Bkg_2017","FinalState",HT_group);
    Get_Plot_WithSF(tags_bkg_2018,"Bkg_2018","Bkg_2018",METtrigger,colors,inFile,cut,zero_lep_FS,"Bkg_2018","FinalState",HT_group);
-   //Probably Not These???
-   //Get_Plot_WithSF(tags_bkg_2016,"SingleElectron_2016","Bkg_2016",METtrigger,colors,inFile,cut,zero_lep_FS,"Bkg_2016","FinalState",HT_group);
-   //Get_Plot_WithSF(tags_bkg_2017,"SingleElectron_2017","Bkg_2017",METtrigger,colors,inFile,cut,zero_lep_FS,"Bkg_2017","FinalState",HT_group);
-   //Get_Plot_WithSF(tags_bkg_2018,"SingleElectron_2018","Bkg_2018",METtrigger,colors,inFile,cut,zero_lep_FS,"Bkg_2018","FinalState",HT_group);
-   //Get_Plot_WithSF(tags_bkg_2016,"SingleMuon_2016","Bkg_2016",METtrigger,colors,inFile,cut,zero_lep_FS,"Bkg_2016","FinalState",HT_group);
-   //Get_Plot_WithSF(tags_bkg_2017,"SingleMuon_2017","Bkg_2017",METtrigger,colors,inFile,cut,zero_lep_FS,"Bkg_2017","FinalState",HT_group);
-   //Get_Plot_WithSF(tags_bkg_2018,"SingleMuon_2018","Bkg_2018",METtrigger,colors,inFile,cut,zero_lep_FS,"Bkg_2018","FinalState",HT_group);
   }
  }
  else
@@ -118,13 +105,6 @@ void Plotter_Eff_Nano(vector<string> cut, bool muon = false, bool data = false, 
    Get_Plot_WithSF(tags_bkg_2018,"SingleElectron_2018","Bkg_2018",METtrigger,colors,inFile,cut,electron_FS,"Bkg_2018","FinalState",HT_group);
   }
  }
-
-// for(int i = 0; i < inFile.size(); i++)
-// {
- // Get_Plot(tags_bkg_years,METtrigger,colors,inFile[i],cut[i],"Trigger");
- // Get_Plot(tags_SingleElectron_years,METtrigger,colors,inFile[i],cut[i],"Trigger");
- // Get_Plot(tags_SingleMuon_years,METtrigger,colors,inFile[i],cut[i],"Trigger");
-// }
 }
 
 //get all Eff on one plot
@@ -321,37 +301,9 @@ void Get_Plot_WithSF(vector<string> tags, string data_tag, string bkg_tag, vecto
  can->Update();
  
  double x_min = mg->GetXaxis()->GetXmin();
- //double x_max = mg->GetXaxis()->GetXmax();
- double x_max = 500.;
+ double x_max = mg->GetXaxis()->GetXmax();
+ //double x_max = 500.;
 
- TF1* Bkg_Nominal = new TF1("Bkg_Nominal",Gaussian_CDF_Func,150.,500.,3);
- Bkg_Nominal->SetLineColor(kGreen);
- Bkg_Nominal->SetParameter(0,0.99);
- Bkg_Nominal->SetParameter(1,125.);
- Bkg_Nominal->SetParameter(2,40.);
- Bkg_Nominal->SetParName(0,"Norm_Gauss_CDF");
- Bkg_Nominal->SetParName(1,"Mean_Gauss_CDF");
- Bkg_Nominal->SetParName(2,"Sigma_Gauss_CDF");
- gr_bkg->Fit(Bkg_Nominal,"QEMS+0");
-
- TF1* Data_Nominal = new TF1("Data_Nominal",Gaussian_CDF_Func,150.,500.,3);
- Data_Nominal->SetLineColor(kAzure+10);
- Data_Nominal->SetParameter(0,0.99);
- Data_Nominal->SetParameter(1,125.);
- Data_Nominal->SetParameter(2,40.);
- Data_Nominal->SetParName(0,"Norm_Gauss_CDF");
- Data_Nominal->SetParName(1,"Mean_Gauss_CDF");
- Data_Nominal->SetParName(2,"Sigma_Gauss_CDF");
- gr_data->Fit(Data_Nominal,"QEMS+0");
-
- can->Clear();
- can->Update();
- TGraphErrors* gr_bands_ratio = NULL;
- TGraphErrors* gr_bands = NULL;
- TGraphAsymmErrors* res_ratio;
- res_ratio = TGAE_Ratio(gr_bkg,gr_data);
-
- vector<double> y_upper, y_lower;
  double a1, a2, b1, b2, c1, c2, HT;
 
  if(SF_Cut.find("HT-Le600") != std::string::npos) { HT = 550.; }
@@ -360,19 +312,71 @@ void Get_Plot_WithSF(vector<string> tags, string data_tag, string bkg_tag, vecto
 
  int year = std::stoi(data_tag.substr(data_tag.find("_")+1));
  bool muon = false;
+ bool electron = false;
  if(data_tag.find("Muon") != std::string::npos) { muon = true; }
+ else if(data_tag.find("Electron") != std::string::npos) { electron = true; }
 
- Get_Bands_Ratio_Params(a1,a2,b1,b2,c1,c2,HT,year,muon);
+ string CSV_name = SF_Cut+"_"+data_tag;
+ if(muon) { CSV_name+="_Muon"; }
+ else if(electron) { CSV_name+="_Electron"; }
+ else { CSV_name+="_ZeroLepton"; }
+ Get_Band_Params_CSV(CSV_name,a1,a2,b1,b2,c1,c2);
+
+ /*
+ Get_Bands_Ratio_Params(a1,a2,b1,b2,c1,c2,HT,year,muon,electron);
+ TF1* Bkg_Nominal = Get_Func_Nominal(HT,year,muon,electron,false,x_min,x_max);
+ TF1* Data_Nominal = Get_Func_Nominal(HT,year,muon,electron,true,x_min,x_max);
+ gr_bkg->Fit(Bkg_Nominal,"QEMS+0");
+ gr_data->Fit(Data_Nominal,"QEMS+0");
+ */
+ 
+ double bkg_norm, bkg_mean, bkg_sigma, bkg_scale, bkg_weight, data_norm, data_mean, data_sigma, data_scale, data_weight;
+ Get_Fit_Params_CSV(CSV_name,data_norm,data_mean,data_sigma,data_scale,data_weight);
+ CSV_name = SF_Cut+"_"+data_tag;
+ if(muon) { CSV_name+="_Muon"; }
+ else if(electron) { CSV_name+="_Electron"; }
+ else { CSV_name+="_ZeroLepton"; }
+ Get_Fit_Params_CSV(CSV_name,bkg_norm,bkg_mean,bkg_sigma,bkg_scale,bkg_weight);
+
+ TF1* Bkg_Nominal;
+ TF1* Data_Nominal;
+ if(bkg_scale == 0 && bkg_weight == 0)
+ {
+  Bkg_Nominal = new TF1("Bkg_Nominal","[0]*ROOT::Math::normal_cdf(x,[2],[1])",x_min,x_max);
+  Bkg_Nominal->SetParameters(bkg_norm,bkg_mean,bkg_sigma);
+ }
+ else
+ {
+  Bkg_Nominal = new TF1("Bkg_Nominal","[0]*((TMath::Cos([4])*TMath::Cos([4]))*ROOT::Math::normal_cdf(x,[2],[1])+(TMath::Sin([4])*TMath::Sin([4]))*ROOT::Math::normal_cdf(x,[2]*[3],[1]))",x_min,x_max);
+  Bkg_Nominal->SetParameters(bkg_norm,bkg_mean,bkg_sigma,bkg_scale,bkg_weight);
+ }
+ if(data_scale == 0 && data_weight == 0)
+ {
+  Data_Nominal = new TF1("Data_Nominal","[0]*ROOT::Math::normal_cdf(x,[2],[1])",x_min,x_max);
+  Data_Nominal->SetParameters(data_norm,data_mean,data_sigma);
+ }
+ else
+ {
+  Data_Nominal = new TF1("Data_Nominal","[0]*((TMath::Cos([4])*TMath::Cos([4]))*ROOT::Math::normal_cdf(x,[2],[1])+(TMath::Sin([4])*TMath::Sin([4]))*ROOT::Math::normal_cdf(x,[2]*[3],[1]))",x_min,x_max);
+  Data_Nominal->SetParameters(data_norm,data_mean,data_sigma,data_scale,data_weight);
+ }
+
+ can->Clear();
+ can->Update();
+ TGraphErrors* gr_bands_ratio = NULL;
+ TGraphErrors* gr_bands = NULL;
+ TGraphAsymmErrors* res_ratio;
+ res_ratio = TGAE_Ratio(gr_bkg,gr_data);
 
  if(name.find("Bkg") != std::string::npos)
  {
-  gr_bands_ratio = Get_Bands_Ratio(x_min,x_max,res_ratio,y_upper,y_lower,Data_Nominal,Bkg_Nominal,a1,a2,b1,b2,c1,c2);
-  gr_bands = Get_Bands(x_min,x_max,Bkg_Nominal,y_upper,y_lower); 
+  gr_bands_ratio = Get_Bands_Ratio(x_min,x_max,res_ratio,Data_Nominal,Bkg_Nominal,a1,a2,b1,b2,c1,c2);
+  gr_bands = Get_Bands(x_min,x_max,Bkg_Nominal,int(gr_bkg->GetN()),a1,a2,b1,b2,c1,c2); 
  }
  else 
  { 
-  gr_bands_ratio = Get_Bands_Ratio(x_min,x_max,res_ratio,y_upper,y_lower,Bkg_Nominal,Data_Nominal,a1,a2,b1,b2,c1,c2);
-  gr_bands = Get_Bands(x_min,x_max,Data_Nominal,y_upper,y_lower); 
+  gr_bands_ratio = Get_Bands_Ratio(x_min,x_max,res_ratio,Bkg_Nominal,Data_Nominal,a1,a2,b1,b2,c1,c2);
+  gr_bands = Get_Bands(x_min,x_max,Data_Nominal,int(gr_bkg->GetN()),a1,a2,b1,b2,c1,c2); 
  }
  gr_bands_ratio->SetFillColor(color_SF+1);
  gr_bands_ratio->SetLineColor(color_SF+1);
@@ -436,8 +440,7 @@ void Get_Plot_WithSF(vector<string> tags, string data_tag, string bkg_tag, vecto
 
  TMultiGraph* mg_ratio = get_mg_ratio(cuts,tags,Triggers,inFile,colors,SF_Cut,extra_name); 
  TGraphAsymmErrors* res_ratio_ratio = TGAE_Ratio(gr_bkg,gr_bkg);
- vector<double> y_upper_ratio, y_lower_ratio;
- TGraphErrors* gr_bands_ratio_ratio = Get_Bands_Ratio(x_min,x_max,res_ratio_ratio,y_upper_ratio,y_lower_ratio,Bkg_Nominal,Bkg_Nominal,a1,a2,b1,b2,c1,c2);
+ TGraphErrors* gr_bands_ratio_ratio = Get_Bands_Ratio(x_min,x_max,res_ratio_ratio,Bkg_Nominal,Bkg_Nominal,a1,a2,b1,b2,c1,c2);
  gr_bands_ratio_ratio->SetFillColor(color_SF+1);
  gr_bands_ratio_ratio->SetLineColor(color_SF+1);
  gr_bands_ratio_ratio->SetMarkerColor(color_SF+1);
@@ -465,7 +468,6 @@ void Get_Plot_WithSF(vector<string> tags, string data_tag, string bkg_tag, vecto
  l.SetNDC();
  l.SetTextSize(0.06);
  l.SetTextFont(42);
- //eraseSubStr(name,states);
  
  name += "";
  string current_cut = cuts[0]+"--";
@@ -615,7 +617,6 @@ void Get_Plot(vector<string> tags, vector<string> Triggers, vector<int> colors, 
  l.SetNDC();
  l.SetTextSize(0.04);
  l.SetTextFont(42);
- //eraseSubStr(name,states);
  
  name += "";
  string current_cut = cut[0]+"--";
@@ -754,6 +755,7 @@ TMultiGraph* get_mg_ratio(vector<string> cut, vector<string> tags, vector<string
     can->Update();
     TGraphAsymmErrors* gr = eff->GetPaintedGraph();
     TGraphAsymmErrors* gr_ratio = TGAE_Ratio(Nominal,gr);
+    if(gr_ratio == NULL) { cout << "Couldn't get ratio for: " << cut[k] << "/" << nominal << endl; continue; }
     if((i+j) == 0)
     {
      string title = " ;";
@@ -907,7 +909,7 @@ string GetCut(string found_cut, string current_cut)
  }
  if(found_cut.find("Njet_S-E1") != std::string::npos)
  {
-  cut =  " One S Jets &";
+  cut =  " One S Jet &";
  }
  if(found_cut.find("Njet_S-Ge2") != std::string::npos)
  {
@@ -1181,6 +1183,7 @@ int main(int argc, char* argv[])
   //cuts_12.push_back("HT-Ge750--DoubleMuontrigger-E1--Nmu-E2");
   //cuts_12.push_back("HT-Ge750--Nlep-E0");
   Plotter_Eff_Nano(cuts_12, true, true, true, true);
+  /* 
   //Plot
   vector<string> cuts_13;
   cuts_13.push_back("Njet_S-E0--SingleElectrontrigger-E1--Nele-E1");
@@ -1265,33 +1268,35 @@ int main(int argc, char* argv[])
   cuts_24.push_back("Njet_S-Ge2--SingleMuontrigger-E1--NmuSilver-E1");
   cuts_24.push_back("Njet_S-Ge2--SingleMuontrigger-E1--NmuGold-E1");
   Plotter_Eff_Nano(cuts_24, true, true, true, false);
+  */
   //Plot
   vector<string> cuts_25;
   cuts_25.push_back("HT-Le600--Nlep-E0");
-  cuts_25.push_back("HT-Le600--Njet_S-E0--Nlep-E0");
+  //cuts_25.push_back("HT-Le600--Njet_S-E0--Nlep-E0");
   cuts_25.push_back("HT-Le600--Njet_S-E1--Nlep-E0");
   cuts_25.push_back("HT-Le600--Njet_S-Ge2--Nlep-E0");
   Plotter_Eff_Nano(cuts_25, false, false, true, true, true);
+  //Plot
   vector<string> cuts_26;
   cuts_26.push_back("HT-G600--HT-L750--Nlep-E0");
-  cuts_26.push_back("HT-G600--HT-L750--Njet_S-E0--Nlep-E0");
+  //cuts_26.push_back("HT-G600--HT-L750--Njet_S-E0--Nlep-E0");
   cuts_26.push_back("HT-G600--HT-L750--Njet_S-E1--Nlep-E0");
   cuts_26.push_back("HT-G600--HT-L750--Njet_S-Ge2--Nlep-E0");
   Plotter_Eff_Nano(cuts_26, false, false, true, true, true);
   //Plot
   vector<string> cuts_27;
   cuts_27.push_back("HT-Ge750--Nlep-E0");
-  cuts_27.push_back("HT-Ge750--Njet_S-E0--Nlep-E0");
+  //cuts_27.push_back("HT-Ge750--Njet_S-E0--Nlep-E0");
   cuts_27.push_back("HT-Ge750--Njet_S-E1--Nlep-E0");
   cuts_27.push_back("HT-Ge750--Njet_S-Ge2--Nlep-E0");
   Plotter_Eff_Nano(cuts_27, false, false, true, true, true);
   //Plot
-  vector<string> cuts_28;
-  cuts_28.push_back("Njet_S-E0--Nlep-E0");
-  cuts_28.push_back("HT-Le600--Njet_S-E0--Nlep-E0");
-  cuts_28.push_back("HT-G600--HT-L750--Njet_S-E0--Nlep-E0");
-  cuts_28.push_back("HT-Ge750--Njet_S-E0--Nlep-E0");
-  Plotter_Eff_Nano(cuts_28, false, false, true, false, true);
+  //vector<string> cuts_28;
+  //cuts_28.push_back("Njet_S-E0--Nlep-E0");
+  //cuts_28.push_back("HT-Le600--Njet_S-E0--Nlep-E0");
+  //cuts_28.push_back("HT-G600--HT-L750--Njet_S-E0--Nlep-E0");
+  //cuts_28.push_back("HT-Ge750--Njet_S-E0--Nlep-E0");
+  //Plotter_Eff_Nano(cuts_28, false, false, true, false, true);
   //Plot
   vector<string> cuts_29;
   cuts_29.push_back("Njet_S-E1--Nlep-E0");
@@ -1308,6 +1313,5 @@ int main(int argc, char* argv[])
   Plotter_Eff_Nano(cuts_30, false, false, true, false, true);
  }
 
-//muon electron data bkg
  return 0;
 }

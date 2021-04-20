@@ -23,12 +23,15 @@ using namespace std;
 double Get_ScaleFactor(string bkg_tag, string data_tag, string Trigger, vector<int> colors, string outFile, string cut, string option);
 TGraphAsymmErrors* get_gr(string fname, string tag, string Trigger, int color, TLegend*& leg, TCanvas*& can);
 
-void ScaleFactors(vector<string> inFile, vector<string> cut){
+void ScaleFactors(vector<string> cut){
+
+ vector<string> inFile;
+ for(int i = 0; i < cut.size(); i++) { inFile.push_back("Eff_output_"+cut[i]+".root"); }
 
  //string inFile ="output_quick.root";
- vector<string> data_tags_2016 = {"SingleElectron_2016","SingleMuon_2016","DoubleElectron_2016","DoubleMuon_2016"};
- vector<string> data_tags_2017 = {"SingleElectron_2017","SingleMuon_2017","DoubleElectron_2017","DoubleMuon_2017"};
- vector<string> data_tags_2018 = {"SingleElectron_2018","SingleMuon_2018","DoubleElectron_2018","DoubleMuon_2018"};
+ vector<string> data_tags_2016 = {"SingleElectron_2016","SingleMuon_2016"};
+ vector<string> data_tags_2017 = {"SingleElectron_2017","SingleMuon_2017"};
+ vector<string> data_tags_2018 = {"SingleElectron_2018","SingleMuon_2018"};
  
  //vector<int> colors = {kCyan, kMagenta, kYellow, kViolet+2, kAzure+7, kPink, kGreen, kGray};
  vector<int> colors = {kGreen+2, kAzure-2, kYellow, kViolet+2, kAzure+7, kPink, kGreen, kGray};
@@ -37,17 +40,77 @@ void ScaleFactors(vector<string> inFile, vector<string> cut){
  {
   for(int j = 0; j < int(data_tags_2017.size()); j++)
   {
-   //double scale_Ratio_2016 = Get_ScaleFactor("Bkg_2016", data_tags_2016[j], "METtrigger", colors, inFile[i], cut[i], "Ratio");
-   //if(scale_Ratio_2016 == -1) cout << "Failed to get SF for: " << data_tags_2016[j] << " " << cut[i] << endl;
+   double scale_Ratio_2016 = Get_ScaleFactor("Bkg_2016", data_tags_2016[j], "METtrigger", colors, inFile[i], cut[i], "Ratio");
+   if(scale_Ratio_2016 == -1) cout << "Failed to get SF for: " << data_tags_2016[j] << " " << cut[i] << endl;
    double scale_Ratio_2017 = Get_ScaleFactor("Bkg_2017", data_tags_2017[j], "METtrigger", colors, inFile[i], cut[i], "Ratio");
    if(scale_Ratio_2017 == -1) cout << "Failed to get SF for: " << data_tags_2017[j] << " " << cut[i] << endl;
-   //double scale_Ratio_2018 = Get_ScaleFactor("Bkg_2018", data_tags_2018[j], "METtrigger", colors, inFile[i], cut[i], "Ratio");
-   //if(scale_Ratio_2018 == -1) cout << "Failed to get SF for: " << data_tags_2018[j] << " " << cut[i] << endl;
+   double scale_Ratio_2018 = Get_ScaleFactor("Bkg_2018", data_tags_2018[j], "METtrigger", colors, inFile[i], cut[i], "Ratio");
+   if(scale_Ratio_2018 == -1) cout << "Failed to get SF for: " << data_tags_2018[j] << " " << cut[i] << endl;
   }
  }
 }
 
-//get all Eff on one plot
+void Get_Values(string cut, bool muon = false, bool data = false, bool bkg = false, bool HT_group = true, bool zero_lep = false){
+ 
+ string muon_FS = "SingleMuontrigger-E1--Nmu-E1";
+ string electron_FS = "SingleElectrontrigger-E1--Nele-E1";
+ string zero_lep_FS = "Nlep-E0";
+
+ if(muon && zero_lep) { cout << "Check booleans (leptons)" << endl; return; }
+
+ if(HT_group)
+ {
+  double HT;
+  if(cut.find("HT-Le600") != std::string::npos) { HT = 550.; }
+  else if(cut.find("HT-G600--HT-L750") != std::string::npos) { HT = 650.; }
+  else if(cut.find("HT-Ge750") != std::string::npos) { HT = 800.; }
+ 
+  if(muon)
+  {
+   if(data)
+   {
+    Output_Parameters(HT,2016,true,false,true,cut,"SingleMuon_2016");
+    Output_Parameters(HT,2017,true,false,true,cut,"SingleMuon_2017");
+    Output_Parameters(HT,2018,true,false,true,cut,"SingleMuon_2018");
+   }
+   if(bkg)
+   {
+    Output_Parameters(HT,2016,true,false,false,cut,"Bkg_2016");
+    Output_Parameters(HT,2017,true,false,false,cut,"Bkg_2017");
+    Output_Parameters(HT,2018,true,false,false,cut,"Bkg_2018");
+   }
+  }
+  else if(zero_lep)
+  {
+   if(data) { cout << "Check booleans" << endl; return; }
+   if(bkg)
+   {
+    Output_Parameters(HT,2016,false,false,false,cut,"Bkg_2016");
+    Output_Parameters(HT,2017,false,false,false,cut,"Bkg_2017");
+    Output_Parameters(HT,2018,false,false,false,cut,"Bkg_2018");
+   }
+  }
+  else
+  {
+   if(data)
+   {
+    Output_Parameters(HT,2016,false,true,true,cut,"SingleElectron_2016");
+    Output_Parameters(HT,2017,false,true,true,cut,"SingleElectron_2017");
+    Output_Parameters(HT,2018,false,true,true,cut,"SingleElectron_2018");
+   }
+   if(bkg)
+   {
+    Output_Parameters(HT,2016,false,true,false,cut,"Bkg_2016");
+    Output_Parameters(HT,2017,false,true,false,cut,"Bkg_2017");
+    Output_Parameters(HT,2018,false,true,false,cut,"Bkg_2018");
+   }
+  }
+ }
+}
+
+
+
+//get all SF plot
 double Get_ScaleFactor(string bkg_tag, string data_tag, string Trigger, vector<int> colors, string outFile, string cut, string option)
 {
  double scale = 0;
@@ -144,8 +207,21 @@ double Get_ScaleFactor(string bkg_tag, string data_tag, string Trigger, vector<i
  res_ratio->SetMarkerStyle(20);
  mg_res->Add(res_ratio);
 
- vector<double> y_upper, y_lower;
- gr_bands_ratio = Get_Bands_Ratio(x_min,x_max,res_ratio,y_upper,y_lower,Bkg_Nominal,Data_Nominal);
+ double a1, a2, b1, b2, c1, c2, HT;
+ if(cut.find("HT-Le600") != std::string::npos) { HT = 550.; }
+ else if(cut.find("HT-G600--HT-L750") != std::string::npos) { HT = 650.; }
+ else if(cut.find("HT-Ge750") != std::string::npos) { HT = 800.; }
+
+ int year = std::stoi(data_tag.substr(data_tag.find("_")+1));
+ bool muon = false;
+ bool electron = false;
+ bool data = false;
+ if(data_tag.find("Muon") != std::string::npos) { muon = true; data = true; }
+ else if(data_tag.find("Electron") != std::string::npos) { electron = true; data = true; }
+
+ Get_Bands_Ratio_Params(a1,a2,b1,b2,c1,c2,HT,year,muon,electron,data);
+
+ gr_bands_ratio = Get_Bands_Ratio(x_min,x_max,res_ratio,Bkg_Nominal,Data_Nominal,a1,a2,b1,b2,c1,c2);
  gr_bands_ratio->SetFillColor(kCyan+2);
  gr_bands_ratio->SetFillStyle(3003);
  gr_bands_ratio->SetMarkerSize(0);
@@ -182,7 +258,7 @@ double Get_ScaleFactor(string bkg_tag, string data_tag, string Trigger, vector<i
  pad_gr->cd();
  can->Update();
 
- TGraphErrors* gr_bands = Get_Bands(x_min,x_max,Data_Nominal,y_upper,y_lower);
+ TGraphErrors* gr_bands = Get_Bands(x_min,x_max,Data_Nominal,gr_bands_ratio->GetN(),a1,a2,b1,b2,c1,c2);
  gr_bands->SetFillColor(kCyan+2);
  gr_bands->SetFillStyle(3003);
  gr_bands->SetMarkerSize(0);
@@ -302,14 +378,12 @@ TGraphAsymmErrors* get_gr(string fname, string tag, string Trigger, int color, T
 
 int main(int argc, char* argv[])
 {
- string cutsFile = "cuts.txt";
- vector<string> cuts;
- vector<string> files;
+ string cutsFile = "";
 
  if(argc < 1)
  {
   cout << "ERROR: Need to specify cuts file" << endl;
-  cout << "Example: ./Scale.x -cuts=cuts.txt" << endl;
+  cout << "Example: ./Plotter.x -cuts=cuts.txt" << endl;
   return 1;
  }
 
@@ -322,16 +396,46 @@ int main(int argc, char* argv[])
   }
  }
  
- string cut = "";
- std::ifstream fs(cutsFile);
- while(std::getline(fs,cut))
+ if(cutsFile != "")
  {
-  if(cut.rfind("#", 0) == 0) continue;
-  cuts.push_back(cut);
-  files.push_back("Eff_output_"+cut+".root");
-  //files.push_back("NoLowHTScale_MET_PreSelection.root");
+  vector<string> cuts;
+  string cut = "";
+  std::ifstream fs(cutsFile);
+  while(std::getline(fs,cut))
+  {
+   if(cut.rfind("#", 0) == 0) continue;
+   cuts.push_back(cut);
+  }
+  ScaleFactors(cuts);
+ }
+ else
+ {
+  if(fileExists("Parameters.csv")) { remove("Parameters.csv"); }
+  Get_Values("HT-Le600--SingleElectrontrigger-E1--Nele-E1",false,true,false,true,false);
+  Get_Values("HT-Le600--SingleElectrontrigger-E1--Nele-E1",false,false,true,true,false);
+  Get_Values("HT-Le600--SingleMuontrigger-E1--Nmu-E1",true,true,false,true,false);
+  Get_Values("HT-Le600--SingleMuontrigger-E1--Nmu-E1",true,false,true,true,false);
+  Get_Values("HT-G600--HT-L750--SingleElectrontrigger-E1--Nele-E1",false,true,false,true,false);
+  Get_Values("HT-G600--HT-L750--SingleElectrontrigger-E1--Nele-E1",false,false,true,true,false);
+  Get_Values("HT-G600--HT-L750--SingleMuontrigger-E1--Nmu-E1",true,true,false,true,false);
+  Get_Values("HT-G600--HT-L750--SingleMuontrigger-E1--Nmu-E1",true,false,true,true,false);
+  Get_Values("HT-Ge750--SingleElectrontrigger-E1--Nele-E1",false,true,false,true,false);
+  Get_Values("HT-Ge750--SingleElectrontrigger-E1--Nele-E1",false,false,true,true,false);
+  Get_Values("HT-Ge750--SingleMuontrigger-E1--Nmu-E1",true,true,false,true,false);
+  Get_Values("HT-Ge750--SingleMuontrigger-E1--Nmu-E1",true,false,true,true,false);
+  Get_Values("Njet_S-E0--SingleElectrontrigger-E1--Nele-E1");
+  Get_Values("HT-Le600--Nlep-E0",false,false,true,true,true);
+  Get_Values("HT-G600--HT-L750--Nlep-E0",false,false,true,true,true);
+  Get_Values("HT-Ge750--Nlep-E0",false,false,true,true,true);
+  //Get_Values("Njet_S-E0--SingleMuontrigger-E1--Nmu-E1",true,true,false,false,false);
+  //Get_Values("Njet_S-E1--SingleElectrontrigger-E1--Nele-E1");
+  //Get_Values("Njet_S-E1--SingleMuontrigger-E1--Nmu-E1");
+  //Get_Values("Njet_S-Ge2--SingleElectrontrigger-E1--Nele-E1");
+  //Get_Values("Njet_S-Ge2--SingleMuontrigger-E1--Nmu-E1");
+  //Get_Values("Njet_S-E0--Nlep-E0");
+  //Get_Values("Njet_S-E1--Nlep-E0");
+  //Get_Values("Njet_S-Ge2--Nlep-E0");
  }
 
- ScaleFactors(files,cuts);
  return 0;
 }
