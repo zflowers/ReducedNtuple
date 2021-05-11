@@ -155,7 +155,6 @@ inline void Analysis_Base::Set_Cut(const string& cut)
  known_cuts.push_back("EventFlag_JetInHEM");
  known_cuts.push_back("EventFlag_JetInHEM_Pt20");
  known_cuts.push_back("EventFlag_JetInHEM_Pt20_JetID");
- known_cuts.push_back("HEM_Veto");
 
  string current_cut = m_cut;
 

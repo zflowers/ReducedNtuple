@@ -1364,8 +1364,12 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
  //Get2D_Ratio("dphiCMI_v_PTCM_Hist_postHEM","dphiCMI_v_PTCM_Hist_postHEM","HEM-EventFlag_JetInHEM_Pt20E0","HEM-EventFlag_JetInHEM_Pt20_JetIDE0","MET_2018","MET_2018",true);
  //Get2D_Ratio("dphiCMI_v_PTCM_Hist_postHEM","dphiCMI_v_PTCM_Hist_postHEM","EventFlag_JetInHEM_Pt20E0","HEM-EventFlag_JetInHEM_Pt20E0","MET_2018","MET_2018",true);
  //Final HEM $$$
- Get2D_Ratio("dphiCMI_v_PTCM_Hist_preHEM","dphiCMI_v_PTCM_Hist_postHEM","PreSelection","HEM_Veto-E1","MET_2018","MET_2018",true);
- Get2D_Ratio("dphiCMI_v_PTCM_Hist_preHEM","dphiCMI_v_PTCM_Hist_postHEM","PreSelection","HEM_Veto-E0","MET_2018","MET_2018",true);
+ //Get2D_Ratio("dphiCMI_v_PTCM_Hist_preHEM","dphiCMI_v_PTCM_Hist_postHEM","PreSelection","HEM_Veto-E1","MET_2018","MET_2018",true);
+ //Get2D_Ratio("dphiCMI_v_PTCM_Hist_preHEM","dphiCMI_v_PTCM_Hist_postHEM","PreSelection","HEM_Veto-E0","MET_2018","MET_2018",true);
+ //Get2D_Ratio("dphiCMI_v_PTCM_Hist_preHEM","dphiCMI_v_PTCM_Hist_postHEM","HEM_Veto_E1","HEM_Veto-E1","MET_2018","MET_2018",true);
+ //Get2D_Ratio("dphiCMI_v_PTCM_Hist_preHEM","dphiCMI_v_PTCM_Hist_postHEM","HEM_Veto_E0","HEM_Veto-E0","MET_2018","MET_2018",true);
+ //New HEM $$$
+ Get2D_Ratio("dphiCMI_v_PTCM_Hist_preHEM","dphiCMI_v_PTCM_Hist_postHEM","HEM_Veto","HEM_Veto","MET_2018","MET_2018",true);
  
  
  //2D Ratio 2017 Cleaning

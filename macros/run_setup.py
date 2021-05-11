@@ -17,13 +17,14 @@ output_dir = "/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/"
 print("Writing shell scripts")
 
 list_cuts_hist = [
-    "PreSelection",
-    "HEM_Veto-E1",
-    "HEM_Veto-E0",
+    #"PreSelection",
+    "HEM_Veto",
+    #"HEM_Veto-E1",
+    #"HEM_Veto-E0",
 ]
 
 list_cuts_eff = [
-#    "PreSelection",
+    #"PreSelection",
     #"Nlep-E0",
     #"Njet_S-E0",
     #"Njet_S-E1",
@@ -249,7 +250,7 @@ list_list_eff = [
 ]
 
 list_list_hist = [
-    'Bkg_2018',list_tags_Bkg_2018,
+#    'Bkg_2018',list_tags_Bkg_2018,
     'MET_2018',list_tags_MET_2018,
 ]
 

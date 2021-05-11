@@ -3,6 +3,8 @@ import os
 print("Checking if jobs finished")
 complete = False
 while complete is not True:
+    os.system("condor_q $USER > watch.txt")
+    os.system("condor_release $USER")
     os.system("source ../scripts/Plot_watch.sh > watch.txt")
     os.system("sleep 60")
     with open('watch.txt') as watch:

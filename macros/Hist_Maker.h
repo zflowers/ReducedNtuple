@@ -132,6 +132,7 @@ inline Hist_Maker::Hist_Maker(string outFile, string Tag, TTree* Tree, int ichun
 
 bool Clean_cut = false;
 bool dPhiMET_V_cut = true;
+bool HEM_Veto_cut = true;
 double lumi = 1.; //store lumi for given year
 
 inline void Hist_Maker::Analyze(){
@@ -148,12 +149,15 @@ inline void Hist_Maker::Analyze(){
    }
 
    if(m_cut.find("Clean") != std::string::npos) Clean_cut = true;
-   eraseSubStr(m_cut,("Clean-"));
+   eraseSubStr(m_cut,("Clean--"));
    TF1* left_para = new TF1("left para","-500.*sqrt(-2.777*x*x+1.388*x+0.8264)+575.",0.,TMath::Pi());
    TF1* right_para = new TF1("right para","-500.*sqrt((-1.5625*x*x+7.8125*x-8.766))+600.",0.,TMath::Pi());
 
    if(m_cut.find("dPhiMET_V") != std::string::npos) dPhiMET_V_cut = true;
-   eraseSubStr(m_cut,("dPhiMET_V-"));
+   eraseSubStr(m_cut,("dPhiMET_V-i"));
+
+   if(m_cut.find("HEM_Veto") != std::string::npos) HEM_Veto_cut = true;
+   eraseSubStr(m_cut,("HEM_Veto--"));
 
  //new splitting 
 
@@ -221,6 +225,21 @@ inline void Hist_Maker::Analyze(){
        if(fabs(dphiMET_V) > TMath::Pi()/2.){ skip = true; }
        dphiMET_V_branch->ResetAddress();
        m_Tree->ResetBranchAddresses();
+       if(skip) continue;
+      }
+
+      if(HEM_Veto_cut)
+      {
+       bool skip = false;
+       TBranch* HEM_Veto_branch = NULL;
+       Bool_t HEM_Veto = false;
+       m_Tree->SetBranchAddress("HEM_Veto",&HEM_Veto,&HEM_Veto_branch);
+       HEM_Veto_branch->GetEntry(jentry);
+       TBranch* runnum_branch = NULL;
+       Int_t runnum = 0;
+       m_Tree->SetBranchAddress("runnum",&runnum,&runnum_branch);
+       runnum_branch->GetEntry(jentry);
+       if(runnum > 319077 && HEM_Veto){ skip = true; }
        if(skip) continue;
       }
 
