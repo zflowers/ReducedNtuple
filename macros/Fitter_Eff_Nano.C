@@ -22,6 +22,10 @@ TGraphErrors* Get_Bands(double x_min, double x_max, TF1* Data_Nominal, int N, do
 void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, double& c1, double& c2, const double& HT, const int& year, const bool& muon, const bool& electron, const bool& data);
 TGraphErrors* Get_Bands_Ratio(double x_min, double x_max, TGraphAsymmErrors* gr, TF1* Bkg_Nominal, TF1* Data_Nominal, double& a1, double& a2, double& b1, double& b2, double& c1, double& c2);
 TGraphAsymmErrors* TGAE_Ratio(TGraphAsymmErrors* gr_bkg, TGraphAsymmErrors* gr_data);
+string GetCut(string found_cut, string current_cut);
+std::string get_str_between_two_str(const std::string &s, const std::string &start_delim, const std::string &stop_delim);
+string get_cut_type(string& cut);
+string RewriteCut(std::string cut, bool HT_group = true);
 
 Double_t Error_Func(Double_t *x, Double_t *par)
 {
@@ -229,10 +233,12 @@ TF1* Get_Func_Nominal(const double& HT, const int& year, const bool& muon, const
     }
     else
     {
-     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
-     Nominal->SetParameter(0,0.99);
-     Nominal->SetParameter(1,125.);
-     Nominal->SetParameter(2,40.);
+     TF1* Nominal = new TF1("Nominal",Double_Gaussian_CDF_Func_Multi,x_min,x_max,5);
+     Nominal->SetParameter(0,1.);
+     Nominal->SetParameter(1,100.);
+     Nominal->SetParameter(2,10.);
+     Nominal->SetParameter(3,10.);
+     Nominal->SetParameter(4,0.5);
      return Nominal;
     }
    }
@@ -270,10 +276,12 @@ TF1* Get_Func_Nominal(const double& HT, const int& year, const bool& muon, const
     }
     else
     {
-     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
-     Nominal->SetParameter(0,0.99);
-     Nominal->SetParameter(1,125.);
-     Nominal->SetParameter(2,40.);
+     TF1* Nominal = new TF1("Nominal",Double_Gaussian_CDF_Func_Multi,x_min,x_max,5);
+     Nominal->SetParameter(0,1.);
+     Nominal->SetParameter(1,100.);
+     Nominal->SetParameter(2,10.);
+     Nominal->SetParameter(3,10.);
+     Nominal->SetParameter(4,0.5);
      return Nominal;
     }
    }
@@ -289,10 +297,12 @@ TF1* Get_Func_Nominal(const double& HT, const int& year, const bool& muon, const
     }
     else
     {
-     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
-     Nominal->SetParameter(0,0.99);
-     Nominal->SetParameter(1,125.);
-     Nominal->SetParameter(2,40.);
+     TF1* Nominal = new TF1("Nominal",Double_Gaussian_CDF_Func_Multi,x_min,x_max,5);
+     Nominal->SetParameter(0,1.);
+     Nominal->SetParameter(1,100.);
+     Nominal->SetParameter(2,10.);
+     Nominal->SetParameter(3,10.);
+     Nominal->SetParameter(4,0.5);
      return Nominal;
     }
    }
@@ -318,10 +328,12 @@ TF1* Get_Func_Nominal(const double& HT, const int& year, const bool& muon, const
     }
     else
     {
-     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
-     Nominal->SetParameter(0,0.99);
-     Nominal->SetParameter(1,125.);
-     Nominal->SetParameter(2,40.);
+     TF1* Nominal = new TF1("Nominal",Double_Gaussian_CDF_Func_Multi,x_min,x_max,5);
+     Nominal->SetParameter(0,1.);
+     Nominal->SetParameter(1,100.);
+     Nominal->SetParameter(2,10.);
+     Nominal->SetParameter(3,10.);
+     Nominal->SetParameter(4,0.5);
      return Nominal;
     }
    }
@@ -329,18 +341,22 @@ TF1* Get_Func_Nominal(const double& HT, const int& year, const bool& muon, const
    {
     if(data)
     {
-     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
-     Nominal->SetParameter(0,0.99);
-     Nominal->SetParameter(1,125.);
-     Nominal->SetParameter(2,40.);
+     TF1* Nominal = new TF1("Nominal",Double_Gaussian_CDF_Func_Multi,x_min,x_max,5);
+     Nominal->SetParameter(0,1.);
+     Nominal->SetParameter(1,100.);
+     Nominal->SetParameter(2,10.);
+     Nominal->SetParameter(3,10.);
+     Nominal->SetParameter(4,0.5);
      return Nominal;
     }
     else
     {
-     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
-     Nominal->SetParameter(0,0.99);
-     Nominal->SetParameter(1,125.);
-     Nominal->SetParameter(2,40.);
+     TF1* Nominal = new TF1("Nominal",Double_Gaussian_CDF_Func_Multi,x_min,x_max,5);
+     Nominal->SetParameter(0,1.);
+     Nominal->SetParameter(1,100.);
+     Nominal->SetParameter(2,10.);
+     Nominal->SetParameter(3,10.);
+     Nominal->SetParameter(4,0.5);
      return Nominal;
     }
    }
@@ -356,10 +372,12 @@ TF1* Get_Func_Nominal(const double& HT, const int& year, const bool& muon, const
     }
     else
     {
-     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
-     Nominal->SetParameter(0,0.99);
-     Nominal->SetParameter(1,125.);
-     Nominal->SetParameter(2,40.);
+     TF1* Nominal = new TF1("Nominal",Double_Gaussian_CDF_Func_Multi,x_min,x_max,5);
+     Nominal->SetParameter(0,1.);
+     Nominal->SetParameter(1,100.);
+     Nominal->SetParameter(2,10.);
+     Nominal->SetParameter(3,10.);
+     Nominal->SetParameter(4,0.5);
      return Nominal;
     }
    }
@@ -547,10 +565,12 @@ TF1* Get_Func_Nominal(const double& HT, const int& year, const bool& muon, const
     }
     else
     {
-     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
-     Nominal->SetParameter(0,0.99);
-     Nominal->SetParameter(1,125.);
-     Nominal->SetParameter(2,40.);
+     TF1* Nominal = new TF1("Nominal",Double_Gaussian_CDF_Func_Multi,x_min,x_max,5);
+     Nominal->SetParameter(0,1.);
+     Nominal->SetParameter(1,100.);
+     Nominal->SetParameter(2,10.);
+     Nominal->SetParameter(3,10.);
+     Nominal->SetParameter(4,0.5);
      return Nominal;
     }
    }
@@ -609,10 +629,12 @@ TF1* Get_Func_Nominal(const double& HT, const int& year, const bool& muon, const
     }
     else
     {
-     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
-     Nominal->SetParameter(0,0.99);
-     Nominal->SetParameter(1,125.);
-     Nominal->SetParameter(2,40.);
+     TF1* Nominal = new TF1("Nominal",Double_Gaussian_CDF_Func_Multi,x_min,x_max,5);
+     Nominal->SetParameter(0,1.);
+     Nominal->SetParameter(1,100.);
+     Nominal->SetParameter(2,10.);
+     Nominal->SetParameter(3,10.);
+     Nominal->SetParameter(4,0.5);
      return Nominal;
     }
    }
@@ -719,8 +741,8 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
    {
     if(data)
     {
-     a1 = .3e-5;
-     a2 = -.7e-5;
+     a1 = .1e-5;
+     a2 = -.3e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -728,8 +750,8 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
     }
     else
     {
-     a1 = .1e-5;
-     a2 = -.1e-5;
+     a1 = .05e-5;
+     a2 = -.05e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -761,17 +783,29 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
    {
     if(data)
     {
-     a1 = .5e-5;
-     a2 = -.5e-5;
-     b1 = 300.;
-     b2 = 300.;
-     c1 = 1.01;
-     c2 = 0.99;
+     if(muon)
+     {
+      a1 = .85e-5;
+      a2 = -.4e-5;
+      b1 = 300.;
+      b2 = 300.;
+      c1 = 1.01;
+      c2 = 0.99;
+     }
+     else if(electron)
+     {
+      a1 = .85e-5;
+      a2 = -.4e-5;
+      b1 = 300.;
+      b2 = 300.;
+      c1 = 1.01;
+      c2 = 0.99;
+     }
     }
     else
     {
-     a1 = .5e-5;
-     a2 = -.5e-5;
+     a1 = .3e-5;
+     a2 = -.2e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -794,8 +828,8 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
     }
     else
     {
-     a1 = .5e-5;
-     a2 = -.95e-5;
+     a1 = .3e-5;
+     a2 = -.65e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -827,17 +861,29 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
    {
     if(data)
     {
-     a1 = .5e-5;
-     a2 = -.5e-5;
-     b1 = 300.;
-     b2 = 300.;
-     c1 = 1.01;
-     c2 = 0.99;
+     if(muon)
+     {
+      a1 = .85e-5;
+      a2 = -.4e-5;
+      b1 = 300.;
+      b2 = 300.;
+      c1 = 1.01;
+      c2 = 0.99;
+     }
+     else if(electron)
+     {
+      a1 = .85e-5;
+      a2 = -.4e-5;
+      b1 = 300.;
+      b2 = 300.;
+      c1 = 1.01;
+      c2 = 0.99;
+     }
     }
     else
     {
-     a1 = .5e-5;
-     a2 = -.5e-5;
+     a1 = .4e-5;
+     a2 = -.3e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -860,8 +906,8 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
     }
     else
     {
-     a1 = .25e-5;
-     a2 = -.25e-5;
+     a1 = .15e-5;
+     a2 = -.15e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -872,7 +918,7 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
    {
     if(data)
     {
-     a1 = .95e-5;
+     a1 = .1e-4;
      a2 = -.7e-5;
      b1 = 300.;
      b2 = 300.;
@@ -881,8 +927,8 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
     }
     else
     {
-     a1 = .2e-5;
-     a2 = -.2e-5;
+     a1 = .1e-5;
+     a2 = -.1e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -893,17 +939,29 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
    {
     if(data)
     {
-     a1 = .5e-5;
-     a2 = -.5e-5;
-     b1 = 300.;
-     b2 = 300.;
-     c1 = 1.01;
-     c2 = 0.99;
+     if(muon)
+     {
+      a1 = .85e-5;
+      a2 = -.4e-5;
+      b1 = 300.;
+      b2 = 300.;
+      c1 = 1.01;
+      c2 = 0.99;
+     }
+     else if(electron)
+     {
+      a1 = .85e-5;
+      a2 = -.4e-5;
+      b1 = 300.;
+      b2 = 300.;
+      c1 = 1.01;
+      c2 = 0.99;
+     }
     }
     else
     {
-     a1 = .5e-5;
-     a2 = -.5e-5;
+     a1 = .3e-5;
+     a2 = -.3e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -924,7 +982,7 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
    {
     if(data)
     {
-     a1 = .2e-5;
+     a1 = .3e-5;
      a2 = -.2e-5;
      b1 = 300.;
      b2 = 300.;
@@ -933,8 +991,8 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
     }
     else
     {
-     a1 = .2e-5;
-     a2 = -.2e-5;
+     a1 = .5e-5;
+     a2 = -.3e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -945,8 +1003,8 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
    {
     if(data)
     {
-     a1 = .9e-5;
-     a2 = -.9e-5;
+     a1 = .1e-4;
+     a2 = -.1e-4;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -955,7 +1013,7 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
     else
     {
      a1 = .5e-5;
-     a2 = -.5e-5;
+     a2 = -.75e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -966,17 +1024,29 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
    {
     if(data)
     {
-     a1 = .5e-5;
-     a2 = -.5e-5;
-     b1 = 300.;
-     b2 = 300.;
-     c1 = 1.01;
-     c2 = 0.99;
+     if(muon)
+     {
+      a1 = .85e-5;
+      a2 = -.4e-5;
+      b1 = 300.;
+      b2 = 300.;
+      c1 = 1.01;
+      c2 = 0.99;
+     }
+     else if(electron)
+     {
+      a1 = .85e-5;
+      a2 = -.4e-5;
+      b1 = 300.;
+      b2 = 300.;
+      c1 = 1.01;
+      c2 = 0.99;
+     }
     }
     else
     {
-     a1 = .5e-5;
-     a2 = -.5e-5;
+     a1 = .3e-5;
+     a2 = -.3e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -990,8 +1060,8 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
    {
     if(data)
     {
-     a1 = .2e-5;
-     a2 = -.2e-5;
+     a1 = .5e-5;
+     a2 = -.3e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -999,8 +1069,8 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
     }
     else
     {
-     a1 = .2e-5;
-     a2 = -.2e-5;
+     a1 = .5e-5;
+     a2 = -.3e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -1011,8 +1081,8 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
    {
     if(data)
     {
-     a1 = .75e-5;
-     a2 = -.75e-5;
+     a1 = .8e-5;
+     a2 = -.8e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -1021,7 +1091,7 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
     else
     {
      a1 = .5e-5;
-     a2 = -.5e-5;
+     a2 = -.75e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -1032,17 +1102,29 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
    {
     if(data)
     {
-     a1 = .5e-5;
-     a2 = -.5e-5;
-     b1 = 300.;
-     b2 = 300.;
-     c1 = 1.01;
-     c2 = 0.99;
+     if(muon)
+     {
+      a1 = .85e-5;
+      a2 = -.4e-5;
+      b1 = 300.;
+      b2 = 300.;
+      c1 = 1.01;
+      c2 = 0.99;
+     }
+     else if(electron)
+     {
+      a1 = .85e-5;
+      a2 = -.4e-5;
+      b1 = 300.;
+      b2 = 300.;
+      c1 = 1.01;
+      c2 = 0.99;
+     }
     }
     else
     {
-     a1 = .5e-5;
-     a2 = -.5e-5;
+     a1 = .3e-5;
+     a2 = -.3e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -1056,8 +1138,8 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
    {
     if(data)
     {
-     a1 = .2e-5;
-     a2 = -.2e-5;
+     a1 = .5e-5;
+     a2 = -.3e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -1065,8 +1147,8 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
     }
     else
     {
-     a1 = .2e-5;
-     a2 = -.2e-5;
+     a1 = .5e-5;
+     a2 = -.3e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -1087,7 +1169,7 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
     else
     {
      a1 = .5e-5;
-     a2 = -.5e-5;
+     a2 = -.75e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -1098,17 +1180,29 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
    {
     if(data)
     {
-     a1 = .5e-5;
-     a2 = -.5e-5;
-     b1 = 300.;
-     b2 = 300.;
-     c1 = 1.01;
-     c2 = 0.99;
+     if(muon)
+     {
+      a1 = .85e-5;
+      a2 = -.4e-5;
+      b1 = 300.;
+      b2 = 300.;
+      c1 = 1.01;
+      c2 = 0.99;
+     }
+     else if(electron)
+     {
+      a1 = .85e-5;
+      a2 = -.4e-5;
+      b1 = 300.;
+      b2 = 300.;
+      c1 = 1.01;
+      c2 = 0.99;
+     }
     }
     else
     {
-     a1 = .5e-5;
-     a2 = -.5e-5;
+     a1 = .3e-5;
+     a2 = -.3e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -1129,8 +1223,8 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
    {
     if(data)
     {
-     a1 = .2e-5;
-     a2 = -.2e-5;
+     a1 = .4e-5;
+     a2 = -.25e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -1138,8 +1232,8 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
     }
     else
     {
-     a1 = .2e-5;
-     a2 = -.2e-5;
+     a1 = .65e-5;
+     a2 = -.3e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -1150,8 +1244,8 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
    {
     if(data)
     {
-     a1 = .5e-5;
-     a2 = -.5e-5;
+     a1 = .55e-5;
+     a2 = -.55e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -1160,7 +1254,7 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
     else
     {
      a1 = .5e-5;
-     a2 = -.5e-5;
+     a2 = -.65e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -1171,12 +1265,24 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
    {
     if(data)
     {
-     a1 = .5e-5;
-     a2 = -.5e-5;
-     b1 = 300.;
-     b2 = 300.;
-     c1 = 1.01;
-     c2 = 0.99;
+     if(muon)
+     {
+      a1 = .85e-5;
+      a2 = -.4e-5;
+      b1 = 300.;
+      b2 = 300.;
+      c1 = 1.01;
+      c2 = 0.99;
+     }
+     else if(electron)
+     {
+      a1 = .85e-5;
+      a2 = -.4e-5;
+      b1 = 300.;
+      b2 = 300.;
+      c1 = 1.01;
+      c2 = 0.99;
+     }
     }
     else
     {
@@ -1195,8 +1301,8 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
    {
     if(data)
     {
-     a1 = .2e-5;
-     a2 = -.2e-5;
+     a1 = .4e-5;
+     a2 = -.25e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -1204,8 +1310,8 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
     }
     else
     {
-     a1 = .2e-5;
-     a2 = -.2e-5;
+     a1 = .65e-5;
+     a2 = -.3e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -1216,8 +1322,8 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
    {
     if(data)
     {
-     a1 = .5e-5;
-     a2 = -.5e-5;
+     a1 = .55e-5;
+     a2 = -.55e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -1226,7 +1332,7 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
     else
     {
      a1 = .5e-5;
-     a2 = -.5e-5;
+     a2 = -.75e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -1237,12 +1343,24 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
    {
     if(data)
     {
-     a1 = .5e-5;
-     a2 = -.5e-5;
-     b1 = 300.;
-     b2 = 300.;
-     c1 = 1.01;
-     c2 = 0.99;
+     if(muon)
+     {
+      a1 = .85e-5;
+      a2 = -.4e-5;
+      b1 = 300.;
+      b2 = 300.;
+      c1 = 1.01;
+      c2 = 0.99;
+     }
+     else if(electron)
+     {
+      a1 = .85e-5;
+      a2 = -.4e-5;
+      b1 = 300.;
+      b2 = 300.;
+      c1 = 1.01;
+      c2 = 0.99;
+     }
     }
     else
     {
@@ -1261,8 +1379,8 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
    {
     if(data)
     {
-     a1 = .2e-5;
-     a2 = -.2e-5;
+     a1 = .4e-5;
+     a2 = -.4e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -1270,8 +1388,8 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
     }
     else
     {
-     a1 = .2e-5;
-     a2 = -.2e-5;
+     a1 = .5e-5;
+     a2 = -.3e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -1282,8 +1400,8 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
    {
     if(data)
     {
-     a1 = .5e-5;
-     a2 = -.5e-5;
+     a1 = .55e-5;
+     a2 = -.65e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -1292,7 +1410,7 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
     else
     {
      a1 = .5e-5;
-     a2 = -.5e-5;
+     a2 = -.85e-5;
      b1 = 300.;
      b2 = 300.;
      c1 = 1.01;
@@ -1303,12 +1421,24 @@ void Get_Bands_Ratio_Params(double& a1, double& a2, double& b1, double& b2, doub
    {
     if(data)
     {
-     a1 = .5e-5;
-     a2 = -.5e-5;
-     b1 = 300.;
-     b2 = 300.;
-     c1 = 1.01;
-     c2 = 0.99;
+     if(muon)
+     {
+      a1 = .85e-5;
+      a2 = -.4e-5;
+      b1 = 300.;
+      b2 = 300.;
+      c1 = 1.01;
+      c2 = 0.99;
+     }
+     else if(electron)
+     {
+      a1 = .85e-5;
+      a2 = -.4e-5;
+      b1 = 300.;
+      b2 = 300.;
+      c1 = 1.01;
+      c2 = 0.99;
+     }
     }
     else
     {
@@ -1489,9 +1619,9 @@ void Output_Parameters(const double& HT, const int& year, const bool& muon, cons
  }
  else { output.open("Parameters.csv",fstream::app); }
  string name = cut+"_"+tag;
- if(muon) { name+="_Muon"; }
+ if(cut.find("Nlep-E0") != std::string::npos) { name+="_ZeroLepton"; }
+ else if(muon) { name+="_Muon"; }
  else if(electron) { name+="_Electron"; }
- else { name+="_ZeroLepton"; }
  output << name << "," << a1 << "," << a2 << "," << b1 << "," << b2 << "," << c1 << "," << c2 << "," << norm << "," << mean << "," << sigma << "," << scale << "," << weight << "," << endl;
  output.close();
 }
@@ -2092,3 +2222,255 @@ void Find_Fit_Params(TGraphAsymmErrors* gr, string name, TF1* func)
  delete canv;
 }
 
+void eraseSubStr(std::string & mainStr, const std::string & toErase)
+{
+ size_t pos = mainStr.find(toErase);
+ if (pos != std::string::npos)
+ {
+  mainStr.erase(pos, toErase.length());
+ }
+}
+
+string GetCut(string found_cut, string current_cut)
+{
+ string cut = found_cut;
+
+ if(found_cut.find("SingleElectrontrigger-E1") != std::string::npos)
+ {
+  cut =  " Passed Single Electron Trigger &";
+ }
+ if(found_cut.find("DoubleElectrontrigger-E1") != std::string::npos)
+ {
+  cut =  " Passed Double Electron Trigger &";
+ }
+ if(found_cut.find("SingleMuontrigger-E1") != std::string::npos)
+ {
+  cut =  " Passed Single Muon Trigger &";
+ }
+ if(found_cut.find("DoubleMuontrigger-E1") != std::string::npos)
+ {
+  cut =  " Passed Double Muon Trigger &";
+ }
+ if(found_cut.find("EMutrigger-E1") != std::string::npos)
+ {
+  cut =  " Passed Electron+Muon Trigger &";
+ }
+ if(found_cut.find("Nlep-E0") != std::string::npos)
+ {
+  cut =  " No Leptons &";
+ }
+ if(found_cut.find("Nele-E0") != std::string::npos)
+ {
+  cut =  " No Electrons &";
+ }
+ if(found_cut.find("Nmu-E0") != std::string::npos)
+ {
+  cut =  " No Muons &";
+ }
+ if(found_cut.find("Nmu-E1") != std::string::npos)
+ {
+  cut =  " One Muon &";
+ }
+ if(found_cut.find("Nmu-E2") != std::string::npos)
+ {
+  cut =  " Two Muons &";
+ }
+ if(found_cut.find("Nele-E1") != std::string::npos)
+ {
+  cut =  " One Electron &";
+ }
+ if(found_cut.find("Nele-E2") != std::string::npos)
+ {
+  cut =  " Two Electrons &";
+ }
+ if(found_cut.find("NmuBronze-E1") != std::string::npos)
+ {
+  cut =  " One Bronze Muon &";
+ }
+ if(found_cut.find("NmuBronze-E2") != std::string::npos)
+ {
+  cut =  " Two Bronze Muons &";
+ }
+ if(found_cut.find("NeleBronze-E1") != std::string::npos)
+ {
+  cut =  " One Bronze Electron &";
+ }
+ if(found_cut.find("NeleBronze-E2") != std::string::npos)
+ {
+  cut =  " Two Bronze Electrons &";
+ }
+ if(found_cut.find("NmuSilver-E1") != std::string::npos)
+ {
+  cut =  " One Silver Muon &";
+ }
+ if(found_cut.find("NmuSilver-E2") != std::string::npos)
+ {
+  cut =  " Two Silver Muons &";
+ }
+ if(found_cut.find("NeleSilver-E1") != std::string::npos)
+ {
+  cut =  " One Silver Electron &";
+ }
+ if(found_cut.find("NeleSilver-E2") != std::string::npos)
+ {
+  cut =  " Two Silver Electrons &";
+ }
+ if(found_cut.find("NmuGold-E1") != std::string::npos)
+ {
+  cut =  " One Gold Muon &";
+ }
+ if(found_cut.find("NmuGold-E2") != std::string::npos)
+ {
+  cut =  " Two Gold Muons &";
+ }
+ if(found_cut.find("NeleGold-E1") != std::string::npos)
+ {
+  cut =  " One Gold Electron &";
+ }
+ if(found_cut.find("NeleGold-E2") != std::string::npos)
+ {
+  cut =  " Two Gold Electrons &";
+ }
+ if(found_cut.find("Njet_S-E0") != std::string::npos)
+ {
+  cut =  " No S Jets &";
+ }
+ if(found_cut.find("Njet_S-E1") != std::string::npos)
+ {
+  cut =  " One S Jet &";
+ }
+ if(found_cut.find("Njet_S-Ge2") != std::string::npos)
+ {
+  cut =  " At Least 2 S Jets &";
+ }
+ if(found_cut.find("HT-") != std::string::npos)
+ {
+  string current_cut = get_str_between_two_str(found_cut,"HT-","--");
+  string cut_type = get_cut_type(current_cut);
+  string cut_value = current_cut;
+  cut = " HT "+cut_type+" "+cut_value+" &";
+ }
+ if(found_cut.find("HTMedium-") != std::string::npos)
+ {
+  string current_cut = get_str_between_two_str(found_cut,"HTMedium-","--");
+  string cut_type = get_cut_type(current_cut);
+  string cut_value = current_cut;
+  cut = " HTMedium "+cut_type+" "+cut_value+" &";
+ }
+ if(found_cut.find("HTLoose-") != std::string::npos)
+ {
+  string current_cut = get_str_between_two_str(found_cut,"HTLoose-","--");
+  string cut_type = get_cut_type(current_cut);
+  string cut_value = current_cut;
+  cut = " HTLoose "+cut_type+" "+cut_value+" &";
+ }
+ if(found_cut.find("HTVeryLoose-") != std::string::npos)
+ {
+  string current_cut = get_str_between_two_str(found_cut,"HTVeryLoose-","--");
+  string cut_type = get_cut_type(current_cut);
+  string cut_value = current_cut;
+  cut = " HTVeryLoose "+cut_type+" "+cut_value+" &";
+ }
+ return cut;
+}
+
+string RewriteCut(std::string cut, bool HT_group)
+{
+ if(cut.find("PreSelection") != std::string::npos)
+ {
+  return "PreSelection";
+ }
+
+ vector<string> known_cuts;
+
+ known_cuts.push_back("PTISR");
+ //known_cuts.push_back("HTVeryLoose");
+ //known_cuts.push_back("HTLoose");
+ //known_cuts.push_back("HTMedium");
+ //known_cuts.push_back("HT");
+ known_cuts.push_back("PTCM");
+ known_cuts.push_back("RISR");
+ known_cuts.push_back("dphiCMI");
+ known_cuts.push_back("MET");
+ known_cuts.push_back("Nmu");
+ known_cuts.push_back("Nele");
+ known_cuts.push_back("Nlep");
+ if(HT_group) { known_cuts.push_back("Njet_S"); }
+ else { known_cuts.push_back("HT"); }
+ known_cuts.push_back("Nbjet_ISR");
+
+ known_cuts.push_back("NmuBronze");
+ known_cuts.push_back("NeleBronze");
+ known_cuts.push_back("NlepBronze");
+
+ known_cuts.push_back("NmuSilver");
+ known_cuts.push_back("NeleSilver");
+ known_cuts.push_back("NlepSilver");
+
+ known_cuts.push_back("NmuGold");
+ known_cuts.push_back("NeleGold");
+ known_cuts.push_back("NlepGold");
+
+ known_cuts.push_back("Njet");
+
+ known_cuts.push_back("METtrigger");
+ known_cuts.push_back("METORtrigger");
+ known_cuts.push_back("METHTtrigger");
+
+ known_cuts.push_back("SingleElectrontrigger");
+ known_cuts.push_back("SingleMuontrigger");
+ known_cuts.push_back("DoubleElectrontrigger");
+ known_cuts.push_back("DoubleMuontrigger");
+ known_cuts.push_back("EMutrigger");
+
+ known_cuts.push_back("EventFilter");
+
+ known_cuts.push_back("EventFlag_FailJetID");
+ known_cuts.push_back("EventFlag_JetInHEM");
+ known_cuts.push_back("EventFlag_JetInHEM_Pt20");
+ known_cuts.push_back("EventFlag_JetInHEM_Pt20_JetID");
+ known_cuts.push_back("HEM_Veto");
+
+ string current_cut = cut+"--";
+
+ vector<string> found_cuts;
+ for(int i = 0; i < int(known_cuts.size()); i++)
+ {
+  int nPos = cut.find(known_cuts[i]+"-", 0); 
+  while (nPos != string::npos)
+  {
+   nPos = cut.find(known_cuts[i]+"-", nPos+(known_cuts[i]+"-").size());
+   found_cuts.push_back(known_cuts[i]);
+  }
+ }
+
+ string new_cut = "";
+ for(int i = 0; i < int(found_cuts.size()); i++)
+ {
+  new_cut += GetCut(found_cuts[i]+"-"+get_str_between_two_str(current_cut,found_cuts[i]+"-","--")+"--",current_cut);
+  eraseSubStr(current_cut,(found_cuts[i]+"-"+get_str_between_two_str(current_cut,found_cuts[i]+"-","--")+"--"));
+ }
+
+ if(new_cut.back() == '&') new_cut.pop_back();
+
+ return new_cut;
+}
+
+std::string get_str_between_two_str(const std::string &s, const std::string &start_delim, const std::string &stop_delim)
+{
+ unsigned first_delim_pos = s.find(start_delim);
+ unsigned end_pos_of_first_delim = first_delim_pos + start_delim.length();
+ unsigned last_delim_pos = s.find_first_of(stop_delim, end_pos_of_first_delim);
+ return s.substr(end_pos_of_first_delim,last_delim_pos - end_pos_of_first_delim);
+}
+
+string get_cut_type(string& cut)
+{
+ string type = "";
+ if(cut.find("E") != std::string::npos) { cut.erase(0,1); type = "=="; }
+ else if(cut.find("Ge") != std::string::npos) { cut.erase(0,1); cut.erase(0,1); type = ">="; }
+ else if(cut.find("G") != std::string::npos) { cut.erase(0,1); type = ">"; }
+ else if(cut.find("Le") != std::string::npos) { cut.erase(0,1); cut.erase(0,1); type = "<="; }
+ else if(cut.find("L") != std::string::npos) { cut.erase(0,1); type = "<"; }
+ return type;
+}

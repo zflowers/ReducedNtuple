@@ -1,2 +1,3 @@
-Subject: HistMaker Finished
-HistMaker process has finished producing and hadd
+Subject: FilterEff Finished
+FilterEff process has finished producing
+Need to convert files now
