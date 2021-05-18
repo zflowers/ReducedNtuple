@@ -18,12 +18,31 @@ print("Writing shell scripts")
 
 list_cuts_hist = [
     #"PreSelection",
-    "HEM_Veto",
     #"HEM_Veto-E1",
     #"HEM_Veto-E0",
 ]
 
 list_cuts_eff = [
+    "Clean--HT-Le600--SingleElectrontrigger-E1--Nele-E1",
+    "Clean--HEM_Veto--HT-Le600--SingleElectrontrigger-E1--Nele-E1",
+    "HEM_Veto--HT-Le600--SingleElectrontrigger-E1--Nele-E1",
+    "Clean--HT-Le600--SingleMuontrigger-E1--Nmu-E1",
+    "Clean--HEM_Veto--HT-Le600--SingleMuontrigger-E1--Nmu-E1",
+    "HEM_Veto--HT-Le600--SingleMuontrigger-E1--Nmu-E1",
+    "Clean--HT-G600--HT-L750--SingleElectrontrigger-E1--Nele-E1",
+    "Clean--HEM_Veto--HT-G600--HT-L750--SingleElectrontrigger-E1--Nele-E1",
+    "HEM_Veto--HT-G600--HT-L750--SingleElectrontrigger-E1--Nele-E1",
+    "Clean--HT-G600--HT-L750--SingleMuontrigger-E1--Nmu-E1",
+    "Clean--HEM_Veto--HT-G600--HT-L750--SingleMuontrigger-E1--Nmu-E1",
+    "HEM_Veto--HT-G600--HT-L750--SingleMuontrigger-E1--Nmu-E1",
+    "Clean--HT-Ge750--SingleElectrontrigger-E1--Nele-E1",
+    "Clean--HEM_Veto--HT-Ge750--SingleElectrontrigger-E1--Nele-E1",
+    "HEM_Veto--HT-Ge750--SingleElectrontrigger-E1--Nele-E1",
+    "Clean--HT-Ge750--SingleMuontrigger-E1--Nmu-E1",
+    "Clean--HEM_Veto--HT-Ge750--SingleMuontrigger-E1--Nmu-E1",
+    "HEM_Veto--HT-Ge750--SingleMuontrigger-E1--Nmu-E1",
+
+
     #"PreSelection",
     #"Nlep-E0",
     #"Njet_S-E0",
@@ -221,7 +240,8 @@ list_tags_TTJets_2018 = [
 ]
 
 list_tags_Bkg_2018 = [
-    list_path+"Autumn18_102X_NoQCD.list",
+#    list_path+"Autumn18_102X_NoQCD.list",
+    list_path+"Autumn18_102X_Quick.list",
 ]
 
 list_tags_MET_2018 = [
@@ -231,18 +251,18 @@ list_tags_MET_2018 = [
 
 #master list of samples to run over
 list_list_eff = [
-    'SingleMuon_2016',list_tags_SingleMuon_2016,
-    'SingleElectron_2016',list_tags_SingleElectron_2016,
+#    'SingleMuon_2016',list_tags_SingleMuon_2016,
+#    'SingleElectron_2016',list_tags_SingleElectron_2016,
 #    'DoubleMuon_2016',list_tags_DoubleMuon_2016,
 #    'DoubleElectron_2016',list_tags_DoubleElectron_2016,
-    'Bkg_2016',list_tags_Bkg_2016,
-    'SingleMuon_2017',list_tags_SingleMuon_2017,
-    'SingleElectron_2017',list_tags_SingleElectron_2017,
+#    'Bkg_2016',list_tags_Bkg_2016,
+#    'SingleMuon_2017',list_tags_SingleMuon_2017,
+#    'SingleElectron_2017',list_tags_SingleElectron_2017,
 #    'DoubleMuon_2017',list_tags_DoubleMuon_2017,
 #    'DoubleElectron_2017',list_tags_DoubleElectron_2017,
-    'Bkg_2017',list_tags_Bkg_2017,
-    'SingleMuon_2018',list_tags_SingleMuon_2018,
-    'SingleElectron_2018',list_tags_SingleElectron_2018,
+#    'Bkg_2017',list_tags_Bkg_2017,
+#    'SingleMuon_2018',list_tags_SingleMuon_2018,
+#    'SingleElectron_2018',list_tags_SingleElectron_2018,
 #    'DoubleMuon_2018',list_tags_DoubleMuon_2018,
 #    'DoubleElectron_2018',list_tags_DoubleElectron_2018,
     'Bkg_2018',list_tags_Bkg_2018,

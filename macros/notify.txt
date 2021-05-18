@@ -1,3 +1,2 @@
-Subject: FilterEff Finished
-FilterEff process has finished producing
-Need to convert files now
+Subject: Condor Jobs Finished
+Condor Jobs Have Finished Running

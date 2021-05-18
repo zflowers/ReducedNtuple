@@ -402,6 +402,7 @@ void Get_Plot_WithSF(vector<string> tags, string data_tag, string bkg_tag, vecto
  gr_bands->GetYaxis()->SetTitle("Efficiency");
  gr_bands->SetTitle("");
  gr_bands->GetXaxis()->SetLimits(x_min,x_max);
+ gr_bands->GetYaxis()->SetRangeUser(0.15,1.05);
  pad_gr->Modified();
  pad_gr->Update();
  can->Modified();
@@ -437,6 +438,7 @@ void Get_Plot_WithSF(vector<string> tags, string data_tag, string bkg_tag, vecto
  string mg_ratio_name = mg_ratio->GetName();
  mg_ratio->Draw("AP");
  mg_ratio->GetXaxis()->SetLimits(x_min,x_max);
+ mg_ratio->GetYaxis()->SetRangeUser(0.8,1.3);
  pad_res->Update();
  gr_bands_ratio_ratio->Draw("30");
  Format_Graph_res(mg_ratio);
@@ -824,6 +826,8 @@ int main(int argc, char* argv[])
  }
  else
  {
+//old plots
+/*
   //Plot
   vector<string> cuts_1;
   cuts_1.push_back("HT-Le600--SingleElectrontrigger-E1--Nele-E1");
@@ -1012,6 +1016,7 @@ int main(int argc, char* argv[])
   cuts_24.push_back("Njet_S-Ge2--SingleMuontrigger-E1--NmuGold-E1");
   Plotter_Eff_Nano(cuts_24, true, true, true, false);
   */
+/*
   //Plot
   vector<string> cuts_25;
   cuts_25.push_back("HT-Le600--Nlep-E0");
@@ -1054,6 +1059,85 @@ int main(int argc, char* argv[])
   cuts_30.push_back("HT-G600--HT-L750--Njet_S-Ge2--Nlep-E0");
   cuts_30.push_back("HT-Ge750--Njet_S-Ge2--Nlep-E0");
   Plotter_Eff_Nano(cuts_30, false, false, true, false, true);
+*/
+  //Plot
+  vector<string> cuts_1;
+  cuts_1.push_back("HT-Le600--SingleElectrontrigger-E1--Nele-E1");
+  cuts_1.push_back("HT-Le600--Njet_S-E0--SingleElectrontrigger-E1--Nele-E1");
+  cuts_1.push_back("HT-Le600--Njet_S-E1--SingleElectrontrigger-E1--Nele-E1");
+  cuts_1.push_back("HT-Le600--Njet_S-Ge2--SingleElectrontrigger-E1--Nele-E1");
+  cuts_1.push_back("HT-Le600--SingleElectrontrigger-E1--NeleBronze-E1");
+  cuts_1.push_back("HT-Le600--SingleElectrontrigger-E1--NeleSilver-E1");
+  cuts_1.push_back("HT-Le600--SingleElectrontrigger-E1--NeleGold-E1");
+  Plotter_Eff_Nano(cuts_1, false, true, true, true);
+  //Plot
+  vector<string> cuts_2;
+  cuts_2.push_back("HT-Le600--SingleMuontrigger-E1--Nmu-E1");
+  cuts_2.push_back("HT-Le600--Njet_S-E0--SingleMuontrigger-E1--Nmu-E1");
+  cuts_2.push_back("HT-Le600--Njet_S-E1--SingleMuontrigger-E1--Nmu-E1");
+  cuts_2.push_back("HT-Le600--Njet_S-Ge2--SingleMuontrigger-E1--Nmu-E1");
+  cuts_2.push_back("HT-Le600--SingleMuontrigger-E1--NmuBronze-E1");
+  cuts_2.push_back("HT-Le600--SingleMuontrigger-E1--NmuSilver-E1");
+  cuts_2.push_back("HT-Le600--SingleMuontrigger-E1--NmuGold-E1");
+  Plotter_Eff_Nano(cuts_2, true, true, true, true);
+  //Plot
+  vector<string> cuts_3;
+  cuts_3.push_back("HT-G600--HT-L750--SingleElectrontrigger-E1--Nele-E1");
+  cuts_3.push_back("HT-G600--HT-L750--Njet_S-E0--SingleElectrontrigger-E1--Nele-E1");
+  cuts_3.push_back("HT-G600--HT-L750--Njet_S-E1--SingleElectrontrigger-E1--Nele-E1");
+  cuts_3.push_back("HT-G600--HT-L750--Njet_S-Ge2--SingleElectrontrigger-E1--Nele-E1");
+  cuts_3.push_back("HT-G600--HT-L750--SingleElectrontrigger-E1--NeleBronze-E1");
+  cuts_3.push_back("HT-G600--HT-L750--SingleElectrontrigger-E1--NeleSilver-E1");
+  cuts_3.push_back("HT-G600--HT-L750--SingleElectrontrigger-E1--NeleGold-E1");
+  Plotter_Eff_Nano(cuts_3, false, true, true, true);
+  //Plot
+  vector<string> cuts_4;
+  cuts_4.push_back("HT-G600--HT-L750--SingleMuontrigger-E1--Nmu-E1");
+  cuts_4.push_back("HT-G600--HT-L750--Njet_S-E0--SingleMuontrigger-E1--Nmu-E1");
+  cuts_4.push_back("HT-G600--HT-L750--Njet_S-E1--SingleMuontrigger-E1--Nmu-E1");
+  cuts_4.push_back("HT-G600--HT-L750--Njet_S-Ge2--SingleMuontrigger-E1--Nmu-E1");
+  cuts_4.push_back("HT-G600--HT-L750--SingleMuontrigger-E1--NmuBronze-E1");
+  cuts_4.push_back("HT-G600--HT-L750--SingleMuontrigger-E1--NmuSilver-E1");
+  cuts_4.push_back("HT-G600--HT-L750--SingleMuontrigger-E1--NmuGold-E1");
+  Plotter_Eff_Nano(cuts_4, true, true, true, true);
+  //Plot
+  vector<string> cuts_5;
+  cuts_5.push_back("HT-Ge750--SingleElectrontrigger-E1--Nele-E1");
+  cuts_5.push_back("HT-Ge750--Njet_S-E0--SingleElectrontrigger-E1--Nele-E1");
+  cuts_5.push_back("HT-Ge750--Njet_S-E1--SingleElectrontrigger-E1--Nele-E1");
+  cuts_5.push_back("HT-Ge750--Njet_S-Ge2--SingleElectrontrigger-E1--Nele-E1");
+  cuts_5.push_back("HT-Ge750--SingleElectrontrigger-E1--NeleBronze-E1");
+  cuts_5.push_back("HT-Ge750--SingleElectrontrigger-E1--NeleSilver-E1");
+  cuts_5.push_back("HT-Ge750--SingleElectrontrigger-E1--NeleGold-E1");
+  Plotter_Eff_Nano(cuts_5, false, true, true, true);
+  //Plot
+  vector<string> cuts_6;
+  cuts_6.push_back("HT-Ge750--SingleMuontrigger-E1--Nmu-E1");
+  cuts_6.push_back("HT-Ge750--Njet_S-E0--SingleMuontrigger-E1--Nmu-E1");
+  cuts_6.push_back("HT-Ge750--Njet_S-E1--SingleMuontrigger-E1--Nmu-E1");
+  cuts_6.push_back("HT-Ge750--Njet_S-Ge2--SingleMuontrigger-E1--Nmu-E1");
+  cuts_6.push_back("HT-Ge750--SingleMuontrigger-E1--NmuBronze-E1");
+  cuts_6.push_back("HT-Ge750--SingleMuontrigger-E1--NmuSilver-E1");
+  cuts_6.push_back("HT-Ge750--SingleMuontrigger-E1--NmuGold-E1");
+  Plotter_Eff_Nano(cuts_6, true, true, true, true);
+  //Plot
+  vector<string> cuts_7;
+  cuts_7.push_back("HT-Le600--Nlep-E0");
+  cuts_7.push_back("HT-Le600--Njet_S-E1--Nlep-E0");
+  cuts_7.push_back("HT-Le600--Njet_S-Ge2--Nlep-E0");
+  Plotter_Eff_Nano(cuts_7, false, false, true, true, true);
+  //Plot
+  vector<string> cuts_8;
+  cuts_8.push_back("HT-G600--HT-L750--Nlep-E0");
+  cuts_8.push_back("HT-G600--HT-L750--Njet_S-E1--Nlep-E0");
+  cuts_8.push_back("HT-G600--HT-L750--Njet_S-Ge2--Nlep-E0");
+  Plotter_Eff_Nano(cuts_8, false, false, true, true, true);
+  //Plot
+  vector<string> cuts_9;
+  cuts_9.push_back("HT-Ge750--Nlep-E0");
+  cuts_9.push_back("HT-Ge750--Njet_S-E1--Nlep-E0");
+  cuts_9.push_back("HT-Ge750--Njet_S-Ge2--Nlep-E0");
+  Plotter_Eff_Nano(cuts_9, false, false, true, true, true);
  }
 
  return 0;

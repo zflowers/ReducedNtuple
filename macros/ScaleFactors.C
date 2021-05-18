@@ -82,12 +82,12 @@ void Get_Values(string cut, bool muon = false, bool data = false, bool bkg = fal
   {
    if(data)
    {
-    Output_Parameters(HT,2016,false,true,true,cut,"SingleElectron_2016");
-    Output_Parameters(HT,2017,false,true,true,cut,"SingleElectron_2017");
-    Output_Parameters(HT,2018,false,true,true,cut,"SingleElectron_2018");
-    Output_Parameters(HT,2016,true,false,true,cut,"SingleMuon_2016");
-    Output_Parameters(HT,2017,true,false,true,cut,"SingleMuon_2017");
-    Output_Parameters(HT,2018,true,false,true,cut,"SingleMuon_2018");
+    Output_Parameters(HT,2016,false,false,true,cut,"SingleElectron_2016");
+    Output_Parameters(HT,2017,false,false,true,cut,"SingleElectron_2017");
+    Output_Parameters(HT,2018,false,false,true,cut,"SingleElectron_2018");
+    Output_Parameters(HT,2016,false,false,true,cut,"SingleMuon_2016");
+    Output_Parameters(HT,2017,false,false,true,cut,"SingleMuon_2017");
+    Output_Parameters(HT,2018,false,false,true,cut,"SingleMuon_2018");
    }
    if(bkg)
    {
@@ -256,6 +256,7 @@ double Get_ScaleFactor(string bkg_tag, string data_tag, string Trigger, vector<i
  mg_res->Draw("AP");
  Format_Graph_res(mg_res);
  mg_res->GetXaxis()->SetLimits(x_min,x_max);
+ mg_res->GetYaxis()->SetRangeUser(0.75,1.25);
  mg_res->GetYaxis()->SetTitle("Data/MC Bkg");
  mg_res->GetXaxis()->SetTitle("MET [GeV]");
  pad_res->Modified();
@@ -286,8 +287,6 @@ double Get_ScaleFactor(string bkg_tag, string data_tag, string Trigger, vector<i
  mg_new->Add(gr_data);
  mg_new->Add(gr_bands);
  mg_new->Draw("A"); 
- double y_min = mg_new->GetYaxis()->GetXmin();
- double y_max = mg_new->GetYaxis()->GetXmax();
 
  pad_gr->Clear();
  //Format_Graph(mg_new);
@@ -302,7 +301,7 @@ double Get_ScaleFactor(string bkg_tag, string data_tag, string Trigger, vector<i
  Format_Graph(gr_bands);
  gr_bands->SetTitle("");
  gr_bands->GetXaxis()->SetLimits(x_min,x_max);
- gr_bands->GetYaxis()->SetRangeUser(y_min,y_max);
+ gr_bands->GetYaxis()->SetRangeUser(0.15,1.05);
  gr_bands->GetYaxis()->SetTitle("Efficiency");
  gr_bkg->Draw("P");
  gr_data->Draw("P");

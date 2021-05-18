@@ -1,1 +1,1 @@
-root://xrootd.unl.edu//store/user/zflowers/Fall17_102X/WWTo2L2Nu_NNPDF31_TuneCP5_PSweights_13TeV-powheg-pythia8_Fall17_102X.root 
+root://xrootd.unl.edu//store/user/zflowers/NEW/Fall17_102X/WWTo2L2Nu_NNPDF31_TuneCP5_PSweights_13TeV-powheg-pythia8_Fall17_102X.root 

@@ -5,13 +5,14 @@ import os
 
 #unl
 #input_path = "/home/t3-ku/crogan/CMSSW_10_6_5/src/KUEWKinoAnalysis/samples/NANO/"
-#output_path = "/home/t3-ku/z374f439/ReducedNtuple/macros/samples/NANO/"
+input_path = "/home/t3-ku/z374f439/CMSSW_10_6_5/src/KUEWKinoAnalysis/samples/NANO/"
+output_path = "/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/samples/NANO/"
 
 #lxplus
-input_path = "/afs/cern.ch/user/z/zflowers/storage/private/KUEWKinoAnalysis/samples/NANO/"
-output_path = "/afs/cern.ch/user/z/zflowers/storage/private/ReducedNtuple/macros/samples/NANO/"
+#input_path = "/afs/cern.ch/user/z/zflowers/storage/private/KUEWKinoAnalysis/samples/NANO/"
+#output_path = "/afs/cern.ch/user/z/zflowers/storage/private/ReducedNtuple/macros/samples/NANO/"
 
-file_path = "root://xrootd.unl.edu//store/user/zflowers/" #xrootd option
+file_path = "root://xrootd.unl.edu//store/user/zflowers/NEW/" #xrootd option
 #file_path = "/home/t3-ku/z374f439/storage/" #local option unl
 
 subdirs = os.listdir(input_path)

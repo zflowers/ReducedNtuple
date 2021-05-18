@@ -1,2 +1,0 @@
-Subject: Connect Jobs Finished
-Jobs on connect have finished running

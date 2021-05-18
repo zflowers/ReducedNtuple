@@ -66,6 +66,7 @@ inline void Eff_Nano::Set_x(string x)
 
 bool Clean_cut_eff = true;
 bool dPhiMET_V_cut_eff = true;
+bool HEM_Veto_cut_eff = true;
 double lumi_eff = 1.;
 
 inline void Eff_Nano::Analyze(){
@@ -111,15 +112,18 @@ inline void Eff_Nano::Analyze(){
 
    if(m_cut.find("Clean") != std::string::npos) {
     Clean_cut_eff = true;
-    eraseSubStr(m_cut,("Clean-"));
+    eraseSubStr(m_cut,("Clean--"));
     TF1* left_para = new TF1("left para","-500.*sqrt(-2.777*x*x+1.388*x+0.8264)+575.",0.,TMath::Pi());
     TF1* right_para = new TF1("right para","-500.*sqrt((-1.5625*x*x+7.8125*x-8.766))+600.",0.,TMath::Pi());
    }
 
    if(m_cut.find("dPhiMET_V") != std::string::npos) {
     dPhiMET_V_cut_eff = true;
-    eraseSubStr(m_cut,("dPhiMET_V-"));
+    eraseSubStr(m_cut,("dPhiMET_V--"));
    }
+
+   if(m_cut.find("HEM_Veto") != std::string::npos) HEM_Veto_cut_eff = true;
+   eraseSubStr(m_cut,("HEM_Veto--"));
    
  //new splitting 
 
@@ -155,6 +159,7 @@ inline void Eff_Nano::Analyze(){
 
       if(Clean_cut_eff)
       {
+       bool skip = false;
        TBranch* dphiCMI_branch = NULL;
        Double_t dphiCMI = 0.;
        TBranch* PTCM_branch = NULL;
@@ -163,28 +168,43 @@ inline void Eff_Nano::Analyze(){
        m_Tree->SetBranchAddress("PTCM",&PTCM,&PTCM_branch);
        dphiCMI_branch->GetEntry(jentry);
        PTCM_branch->GetEntry(jentry);
-       if(PTCM > 200.)
-         continue;
+       if(PTCM > 200.) { skip = true; }
        if(PTCM > -500.*sqrt(std::max(0.,-2.777*dphiCMI*dphiCMI+1.388*dphiCMI+0.8264))+575. &&
-          -2.777*dphiCMI*dphiCMI+1.388*dphiCMI+0.8264 > 0.)
-         continue;
+          -2.777*dphiCMI*dphiCMI+1.388*dphiCMI+0.8264 > 0.) { skip = true; }
        if(PTCM > -500.*sqrt(std::max(0.,-1.5625*dphiCMI*dphiCMI+7.8125*dphiCMI-8.766))+600. &&
-          -1.5625*dphiCMI*dphiCMI+7.8125*dphiCMI-8.766 > 0.)
-         continue;
+          -1.5625*dphiCMI*dphiCMI+7.8125*dphiCMI-8.766 > 0.) { skip = true; }
        dphiCMI_branch->ResetAddress();
        PTCM_branch->ResetAddress();
        m_Tree->ResetBranchAddresses();
+       if(skip) continue;
       }
 
       if(dPhiMET_V_cut_eff)
       {
+       bool skip = false;
        TBranch* dphiMET_V_branch = NULL;
        Double_t dphiMET_V = 0.;
        m_Tree->SetBranchAddress("dphiMET_V",&dphiMET_V,&dphiMET_V_branch);
        dphiMET_V_branch->GetEntry(jentry);
-       if(fabs(dphiMET_V) > TMath::Pi()/2.) continue;
+       if(fabs(dphiMET_V) > TMath::Pi()/2.){ skip = true; }
        dphiMET_V_branch->ResetAddress();
        m_Tree->ResetBranchAddresses();
+       if(skip) continue;
+      }
+
+      if(HEM_Veto_cut_eff)
+      {
+       bool skip = false;
+       TBranch* HEM_Veto_branch = NULL;
+       Bool_t HEM_Veto = false;
+       m_Tree->SetBranchAddress("HEM_Veto",&HEM_Veto,&HEM_Veto_branch);
+       HEM_Veto_branch->GetEntry(jentry);
+       TBranch* runnum_branch = NULL;
+       Int_t runnum = 0;
+       m_Tree->SetBranchAddress("runnum",&runnum,&runnum_branch);
+       runnum_branch->GetEntry(jentry);
+       if(runnum > 319077 && HEM_Veto){ skip = true; }
+       if(skip) continue;
       }
 
       if(global_cuts(jentry)) continue;

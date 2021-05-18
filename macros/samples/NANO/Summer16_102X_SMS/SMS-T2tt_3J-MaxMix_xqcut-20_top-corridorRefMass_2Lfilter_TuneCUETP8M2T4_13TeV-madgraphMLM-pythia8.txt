@@ -1,1 +1,1 @@
-root://xrootd.unl.edu//store/user/zflowers/Summer16_102X_SMS/SMS-T2tt_3J-MaxMix_xqcut-20_top-corridorRefMass_2Lfilter_TuneCUETP8M2T4_13TeV-madgraphMLM-pythia8_Summer16_102X.root 
+root://xrootd.unl.edu//store/user/zflowers/NEW/Summer16_102X_SMS/SMS-T2tt_3J-MaxMix_xqcut-20_top-corridorRefMass_2Lfilter_TuneCUETP8M2T4_13TeV-madgraphMLM-pythia8_Summer16_102X.root 

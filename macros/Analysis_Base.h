@@ -704,6 +704,8 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
   string cut_value = get_str_between_two_str(current_cut,name+"-","--");
   string cut_type = get_str_between_two_str(current_cut,name+"-","--");
 
+  //for HT in new ntuples
+  if(name == "HT") { name = "HT_eta5"; }
   string type = m_Tree->GetBranch(name.c_str())->GetLeaf(name.c_str())->GetTypeName();
 
   double val = 0.;
@@ -855,6 +857,8 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
    val = numGold;
   }
 
+  //for HT in new ntuples
+  if(name == "HT_eta5") { name = "HT"; }
   if(cut_type.find("E") != std::string::npos)
   {
    cut_value.erase(0,1);

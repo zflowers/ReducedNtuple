@@ -1,4 +1,8 @@
+ls
+
 tar -xzf config.tgz
+
+ls config/
 
 echo "Arguments: "
 

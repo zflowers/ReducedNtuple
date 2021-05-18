@@ -1,1 +1,1 @@
-root://xrootd.unl.edu//store/user/zflowers/Summer16_102X/WZTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8_Summer16_102X.root 
+root://xrootd.unl.edu//store/user/zflowers/NEW/Summer16_102X/WZTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8_Summer16_102X.root 
