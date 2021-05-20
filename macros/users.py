@@ -13,7 +13,7 @@ with open('users.txt') as watch:
             users[user] = users[user]+1
         else:
             users[user] = 1
-print("Total Number Of Jobs By User: "+str(users))
+print("Total Number Of Jobs By User: "+str(users).replace('{','').replace('}','').replace('\'',''))
 users = {}
 os.system("condor_q -all -format \"%s \n\" Owner -idle > users.txt")
 with open('users.txt') as watch:
@@ -23,7 +23,7 @@ with open('users.txt') as watch:
             users[user] = users[user]+1
         else:
             users[user] = 1
-print("Total Number Of Idle Jobs By User: "+str(users))
+print("Total Number Of Idle Jobs By User: "+str(users).replace('{','').replace('}','').replace('\'',''))
 users = {}
 os.system("condor_q -all -format \"%s \n\" Owner -run > users.txt")
 with open('users.txt') as watch:
@@ -33,7 +33,7 @@ with open('users.txt') as watch:
             users[user] = users[user]+1
         else:
             users[user] = 1
-print("Total Number Of Running Jobs By User: "+str(users))
+print("Total Number Of Running Jobs By User: "+str(users).replace('{','').replace('}','').replace('\'',''))
 users = {}
 os.system("condor_q -all -format \"%s \n\" Owner -held > users.txt")
 with open('users.txt') as watch:
@@ -43,4 +43,4 @@ with open('users.txt') as watch:
             users[user] = users[user]+1
         else:
             users[user] = 1
-print("Total Number Of Held Jobs By User: "+str(users))
+print("Total Number Of Held Jobs By User: "+str(users).replace('{','').replace('}','').replace('\'',''))
