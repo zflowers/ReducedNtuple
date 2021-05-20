@@ -127,10 +127,12 @@ TF1* Get_Func_Nominal(const double& HT, const int& year, const bool& muon, const
     }
     else
     {
-     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
-     Nominal->SetParameter(0,0.99);
-     Nominal->SetParameter(1,125.);
-     Nominal->SetParameter(2,40.);
+     TF1* Nominal = new TF1("Nominal",Double_Gaussian_CDF_Func_Multi,x_min,x_max,5);
+     Nominal->SetParameter(0,1.);
+     Nominal->SetParameter(1,100.);
+     Nominal->SetParameter(2,10.);
+     Nominal->SetParameter(3,10.);
+     Nominal->SetParameter(4,0.5);
      return Nominal;
     }
    }
@@ -214,10 +216,12 @@ TF1* Get_Func_Nominal(const double& HT, const int& year, const bool& muon, const
     }
     else
     {
-     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
-     Nominal->SetParameter(0,0.99);
-     Nominal->SetParameter(1,125.);
-     Nominal->SetParameter(2,40.);
+     TF1* Nominal = new TF1("Nominal",Double_Gaussian_CDF_Func_Multi,x_min,x_max,5);
+     Nominal->SetParameter(0,1.);
+     Nominal->SetParameter(1,100.);
+     Nominal->SetParameter(2,10.);
+     Nominal->SetParameter(3,10.);
+     Nominal->SetParameter(4,0.5);
      return Nominal;
     }
    }
@@ -257,10 +261,12 @@ TF1* Get_Func_Nominal(const double& HT, const int& year, const bool& muon, const
     }
     else
     {
-     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
-     Nominal->SetParameter(0,0.99);
-     Nominal->SetParameter(1,125.);
-     Nominal->SetParameter(2,40.);
+     TF1* Nominal = new TF1("Nominal",Double_Gaussian_CDF_Func_Multi,x_min,x_max,5);
+     Nominal->SetParameter(0,1.);
+     Nominal->SetParameter(1,100.);
+     Nominal->SetParameter(2,10.);
+     Nominal->SetParameter(3,10.);
+     Nominal->SetParameter(4,0.5);
      return Nominal;
     }
    }
@@ -268,10 +274,12 @@ TF1* Get_Func_Nominal(const double& HT, const int& year, const bool& muon, const
    {
     if(data)
     {
-     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
-     Nominal->SetParameter(0,0.99);
-     Nominal->SetParameter(1,125.);
-     Nominal->SetParameter(2,40.);
+     TF1* Nominal = new TF1("Nominal",Double_Gaussian_CDF_Func_Multi,x_min,x_max,5);
+     Nominal->SetParameter(0,1.);
+     Nominal->SetParameter(1,100.);
+     Nominal->SetParameter(2,10.);
+     Nominal->SetParameter(3,10.);
+     Nominal->SetParameter(4,0.5);
      return Nominal;
     }
     else
@@ -428,18 +436,22 @@ TF1* Get_Func_Nominal(const double& HT, const int& year, const bool& muon, const
    {
     if(data)
     {
-     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
-     Nominal->SetParameter(0,0.99);
-     Nominal->SetParameter(1,125.);
-     Nominal->SetParameter(2,40.);
+     TF1* Nominal = new TF1("Nominal",Double_Gaussian_CDF_Func_Multi,x_min,x_max,5);
+     Nominal->SetParameter(0,1.);
+     Nominal->SetParameter(1,100.);
+     Nominal->SetParameter(2,10.);
+     Nominal->SetParameter(3,10.);
+     Nominal->SetParameter(4,0.5);
      return Nominal;
     }
     else
     {
-     TF1* Nominal = new TF1("Nominal",Gaussian_CDF_Func,x_min,x_max,3);
-     Nominal->SetParameter(0,0.99);
-     Nominal->SetParameter(1,125.);
-     Nominal->SetParameter(2,40.);
+     TF1* Nominal = new TF1("Nominal",Double_Gaussian_CDF_Func_Multi,x_min,x_max,5);
+     Nominal->SetParameter(0,1.);
+     Nominal->SetParameter(1,100.);
+     Nominal->SetParameter(2,10.);
+     Nominal->SetParameter(3,10.);
+     Nominal->SetParameter(4,0.5);
      return Nominal;
     }
    }
@@ -1911,6 +1923,14 @@ string GetCut(string found_cut, string current_cut)
  {
   cut =  " At Least 2 S Jets &";
  }
+ if(found_cut.find("HEM_Veto") != std::string::npos)
+ {
+  cut =  " Passed HEM Veto &";
+ }
+ if(found_cut.find("Clean") != std::string::npos)
+ {
+  cut =  " Passed Cleaning Cuts &";
+ }
  if(found_cut.find("HT-") != std::string::npos)
  {
   string current_cut = get_str_between_two_str(found_cut,"HT-","--");
@@ -1998,6 +2018,7 @@ string RewriteCut(std::string cut, bool HT_group)
  known_cuts.push_back("EventFlag_JetInHEM_Pt20");
  known_cuts.push_back("EventFlag_JetInHEM_Pt20_JetID");
  known_cuts.push_back("HEM_Veto");
+ known_cuts.push_back("Clean");
 
  string current_cut = cut+"--";
 

@@ -17,9 +17,12 @@ output_dir = "/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/"
 print("Writing shell scripts")
 
 list_cuts_hist = [
-    #"PreSelection",
-    #"HEM_Veto-E1",
-    #"HEM_Veto-E0",
+    "PreSelection",
+    "HEM_Veto",
+    "EventFilter-E1",
+    "EventFilter-E0",
+    "HEM_Veto--EventFilter-E1",
+    "HEM_Veto--EventFilter-E0",
 ]
 
 list_cuts_eff = [
@@ -41,6 +44,12 @@ list_cuts_eff = [
     "Clean--HT-Ge750--SingleMuontrigger-E1--Nmu-E1",
     "Clean--HEM_Veto--HT-Ge750--SingleMuontrigger-E1--Nmu-E1",
     "HEM_Veto--HT-Ge750--SingleMuontrigger-E1--Nmu-E1",
+    "Clean--SingleMuontrigger-E1--Nmu-E1",
+    "Clean--HEM_Veto--SingleMuontrigger-E1--Nmu-E1",
+    "HEM_Veto--SingleMuontrigger-E1--Nmu-E1",
+    "Clean--SingleElectrontrigger-E1--Nele-E1",
+    "Clean--HEM_Veto--SingleElectrontrigger-E1--Nele-E1",
+    "HEM_Veto--SingleElectrontrigger-E1--Nele-E1",
 
 
     #"PreSelection",
@@ -240,8 +249,7 @@ list_tags_TTJets_2018 = [
 ]
 
 list_tags_Bkg_2018 = [
-#    list_path+"Autumn18_102X_NoQCD.list",
-    list_path+"Autumn18_102X_Quick.list",
+    list_path+"Autumn18_102X_NoQCD.list",
 ]
 
 list_tags_MET_2018 = [
@@ -261,8 +269,8 @@ list_list_eff = [
 #    'DoubleMuon_2017',list_tags_DoubleMuon_2017,
 #    'DoubleElectron_2017',list_tags_DoubleElectron_2017,
 #    'Bkg_2017',list_tags_Bkg_2017,
-#    'SingleMuon_2018',list_tags_SingleMuon_2018,
-#    'SingleElectron_2018',list_tags_SingleElectron_2018,
+    'SingleMuon_2018',list_tags_SingleMuon_2018,
+    'SingleElectron_2018',list_tags_SingleElectron_2018,
 #    'DoubleMuon_2018',list_tags_DoubleMuon_2018,
 #    'DoubleElectron_2018',list_tags_DoubleElectron_2018,
     'Bkg_2018',list_tags_Bkg_2018,
@@ -291,7 +299,7 @@ def run_hadd(head_dir,list_dir):
             os.system("hadd -k "+head_dir+"Eff_output_"+cut+".root "+cut_dir+"*.root")
         if DO_HIST:
             os.system("hadd -k "+head_dir+"Hist_output_"+cut+".root "+cut_dir+"*.root")
-        #os.system("rm -rf "+cut_dir)
+        os.system("rm -rf "+cut_dir)
 
       
 
@@ -373,7 +381,7 @@ for cut in list_cuts:
                 NJOBS = get_jobs()+(SPLIT*sum(1 for line in open(list_tag)))
                 while NJOBS > safety_jobs:
                     print("Hit safety limit")
-                    print("Waiting for jobs to finish...")
+                    print("Waiting for "+str(get_jobs())+" jobs to finish...")
                     NJOBS = get_jobs()+(SPLIT*sum(1 for line in open(list_tag)))
                     print("Trying to submit: "+str((SPLIT*sum(1 for line in open(list_tag))))+" jobs...")
                     os.system("sleep 60")

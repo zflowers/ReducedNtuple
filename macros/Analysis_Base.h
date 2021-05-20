@@ -103,7 +103,7 @@ inline void Analysis_Base::Set_Cut(const string& cut)
  m_cut += "--PTISR-G200";
  m_cut += "--RISR-G0.5";
  m_cut += "--RISR-L1.0";
- m_cut += "--EventFilter-E1";
+ //m_cut += "--EventFilter-E1";
  //m_cut += "--MET-G175";
 
  m_cut += "--";
@@ -858,7 +858,7 @@ inline bool Analysis_Base::Get_Cut(const Long64_t& jentry, string name, string& 
   }
 
   //for HT in new ntuples
-  if(name == "HT_eta5") { name = "HT"; }
+  //if(name == "HT_eta5") { name = "HT"; }
   if(cut_type.find("E") != std::string::npos)
   {
    cut_value.erase(0,1);

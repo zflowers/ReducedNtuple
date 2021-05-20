@@ -223,10 +223,10 @@ double Get_ScaleFactor(string bkg_tag, string data_tag, string Trigger, vector<i
 
  can->Clear();
 
- TPad *pad_res = new TPad("pad_res","pad_res",0,0.03,1,0.31);
+ TPad *pad_res = new TPad("pad_res","pad_res",0,0.03,1,0.349);
  pad_res->SetGridx(); 
  pad_res->SetGridy();
- pad_res->SetTopMargin(0.);
+ pad_res->SetTopMargin(0.1);
  pad_res->SetBottomMargin(0.2);
  pad_res->Draw();
  pad_res->cd();
@@ -273,7 +273,7 @@ double Get_ScaleFactor(string bkg_tag, string data_tag, string Trigger, vector<i
  TPad* pad_gr = new TPad("pad_gr","pad_gr",0,0.35,1.,1.);
  pad_gr->SetGridx();
  pad_gr->SetGridy();
- pad_gr->SetBottomMargin(0.02);
+ pad_gr->SetBottomMargin(0.01);
  pad_gr->Draw();
  pad_gr->cd();
  can->Update();
@@ -443,9 +443,9 @@ int main(int argc, char* argv[])
   cuts.push_back("HT-G600--HT-L750--SingleMuontrigger-E1--Nmu-E1");
   cuts.push_back("HT-Ge750--SingleElectrontrigger-E1--Nele-E1");
   cuts.push_back("HT-Ge750--SingleMuontrigger-E1--Nmu-E1");
-  cuts.push_back("HT-Le600--Nlep-E0");
-  cuts.push_back("HT-G600--HT-L750--Nlep-E0");
-  cuts.push_back("HT-Ge750--Nlep-E0");
+//  cuts.push_back("HT-Le600--Nlep-E0");
+//  cuts.push_back("HT-G600--HT-L750--Nlep-E0");
+//  cuts.push_back("HT-Ge750--Nlep-E0");
  }
  ScaleFactors(cuts);
 

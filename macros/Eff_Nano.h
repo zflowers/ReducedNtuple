@@ -64,9 +64,9 @@ inline void Eff_Nano::Set_x(string x)
  m_x = x;
 }
 
-bool Clean_cut_eff = true;
+bool Clean_cut_eff = false;
 bool dPhiMET_V_cut_eff = true;
-bool HEM_Veto_cut_eff = true;
+bool HEM_Veto_cut_eff = false;
 double lumi_eff = 1.;
 
 inline void Eff_Nano::Analyze(){
@@ -113,8 +113,6 @@ inline void Eff_Nano::Analyze(){
    if(m_cut.find("Clean") != std::string::npos) {
     Clean_cut_eff = true;
     eraseSubStr(m_cut,("Clean--"));
-    TF1* left_para = new TF1("left para","-500.*sqrt(-2.777*x*x+1.388*x+0.8264)+575.",0.,TMath::Pi());
-    TF1* right_para = new TF1("right para","-500.*sqrt((-1.5625*x*x+7.8125*x-8.766))+600.",0.,TMath::Pi());
    }
 
    if(m_cut.find("dPhiMET_V") != std::string::npos) {
@@ -203,7 +201,7 @@ inline void Eff_Nano::Analyze(){
        Int_t runnum = 0;
        m_Tree->SetBranchAddress("runnum",&runnum,&runnum_branch);
        runnum_branch->GetEntry(jentry);
-       if(runnum > 319077 && HEM_Veto){ skip = true; }
+       if((runnum == 1 || runnum > 319077) && HEM_Veto){ skip = true; }
        if(skip) continue;
       }
 

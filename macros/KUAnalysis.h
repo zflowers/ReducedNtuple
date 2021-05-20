@@ -1,8 +1,8 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Sat Apr 24 17:39:51 2021 by ROOT version 6.12/07
+// Thu May 20 14:02:44 2021 by ROOT version 6.12/07
 // from TTree KUAnalysis/KUAnalysis
-// found on file: /home/t3-ku/z374f439/storage/Autumn18_102X_Data/MET_Run2018B-02Apr2020-v1_2018_Autumn18_102X.root
+// found on file: ../../../storage/NEW/Autumn18_102X_Data/MET_Run2018B-02Apr2020-v1_2018_Autumn18_102X.root
 //////////////////////////////////////////////////////////
 
 #ifndef KUAnalysis_h
@@ -29,14 +29,25 @@ public :
    Double_t        PUweight;
    Double_t        PUweight_up;
    Double_t        PUweight_down;
-   Double_t        BtagSFweight;
-   Double_t        BtagSFweight_up;
-   Double_t        BtagSFweight_down;
+   Double_t        BtagHFSFweight;
+   Double_t        BtagHFSFweight_up;
+   Double_t        BtagHFSFweight_down;
+   Double_t        BtagLFSFweight;
+   Double_t        BtagLFSFweight_up;
+   Double_t        BtagLFSFweight_down;
+   Double_t        MetTrigSFweight;
+   Double_t        MetTrigSFweight_up;
+   Double_t        MetTrigSFweight_down;
    Int_t           runnum;
    Int_t           luminum;
    Long64_t        eventnum;
    Int_t           NPV;
    Bool_t          EventFilter;
+   Bool_t          EventFlag_FailJetID;
+   Bool_t          EventFlag_JetInHEM;
+   Bool_t          EventFlag_JetInHEM_Pt20;
+   Bool_t          EventFlag_JetInHEM_Pt20_JetID;
+   Bool_t          HEM_Veto;
    Bool_t          METtrigger;
    Bool_t          METHTtrigger;
    Bool_t          METORtrigger;
@@ -45,17 +56,16 @@ public :
    Bool_t          DoubleElectrontrigger;
    Bool_t          DoubleMuontrigger;
    Bool_t          EMutrigger;
-   Bool_t          EventFlag_FailJetID;
-   Bool_t          EventFlag_JetInHEM;
-   Bool_t          EventFlag_JetInHEM_Pt20;
-   Bool_t          EventFlag_JetInHEM_Pt20_JetID;
-   Bool_t          HEM_Veto;
    Double_t        MET;
    Double_t        MET_phi;
-   Double_t        HT;
-   Double_t        HTMedium;
-   Double_t        HTLoose;
-   Double_t        HTVeryLoose;
+   Double_t        altMET;
+   Double_t        altMET_phi;
+   Double_t        HT_eta24;
+   Double_t        HT_eta24_id;
+   Double_t        HT_eta3;
+   Double_t        HT_eta3_id;
+   Double_t        HT_eta5;
+   Double_t        HT_eta5_id;
    Int_t           Nele;
    Int_t           Nmu;
    Int_t           Nlep;
@@ -214,14 +224,25 @@ public :
    TBranch        *b_PUweight;   //!
    TBranch        *b_PUweight_up;   //!
    TBranch        *b_PUweight_down;   //!
-   TBranch        *b_BtagSFweight;   //!
-   TBranch        *b_BtagSFweight_up;   //!
-   TBranch        *b_BtagSFweight_down;   //!
+   TBranch        *b_BtagHFSFweight;   //!
+   TBranch        *b_BtagHFSFweight_up;   //!
+   TBranch        *b_BtagHFSFweight_down;   //!
+   TBranch        *b_BtagLFSFweight;   //!
+   TBranch        *b_BtagLFSFweight_up;   //!
+   TBranch        *b_BtagLFSFweight_down;   //!
+   TBranch        *b_MetTrigSFweight;   //!
+   TBranch        *b_MetTrigSFweight_up;   //!
+   TBranch        *b_MetTrigSFweight_down;   //!
    TBranch        *b_runnum;   //!
    TBranch        *b_luminum;   //!
    TBranch        *b_eventnum;   //!
    TBranch        *b_NPV;   //!
    TBranch        *b_EventFilter;   //!
+   TBranch        *b_EventFlag_FailJetID;   //!
+   TBranch        *b_EventFlag_JetInHEM;   //!
+   TBranch        *b_EventFlag_JetInHEM_Pt20;   //!
+   TBranch        *b_EventFlag_JetInHEM_Pt20_JetID;   //!
+   TBranch        *b_HEM_Veto;   //!
    TBranch        *b_METtrigger;   //!
    TBranch        *b_METHTtrigger;   //!
    TBranch        *b_METORtrigger;   //!
@@ -230,17 +251,16 @@ public :
    TBranch        *b_DoubleElectrontrigger;   //!
    TBranch        *b_DoubleMuontrigger;   //!
    TBranch        *b_EMutrigger;   //!
-   TBranch        *b_EventFlag_FailJetID;   //!
-   TBranch        *b_EventFlag_JetInHEM;   //!
-   TBranch        *b_EventFlag_JetInHEM_Pt20;   //!
-   TBranch        *b_EventFlag_JetInHEM_Pt20_JetID;   //!
-   TBranch        *b_HEM_Veto;   //!
    TBranch        *b_MET;   //!
    TBranch        *b_MET_phi;   //!
-   TBranch        *b_HT;   //!
-   TBranch        *b_HTMedium;   //!
-   TBranch        *b_HTLoose;   //!
-   TBranch        *b_HTVeryLoose;   //!
+   TBranch        *b_altMET;   //!
+   TBranch        *b_altMET_phi;   //!
+   TBranch        *b_HT_eta24;   //!
+   TBranch        *b_HT_eta24_id;   //!
+   TBranch        *b_HT_eta3;   //!
+   TBranch        *b_HT_eta3_id;   //!
+   TBranch        *b_HT_eta5;   //!
+   TBranch        *b_HT_eta5_id;   //!
    TBranch        *b_Nele;   //!
    TBranch        *b_Nmu;   //!
    TBranch        *b_Nlep;   //!
@@ -412,9 +432,9 @@ KUAnalysis::KUAnalysis(TTree *tree) : fChain(0)
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/home/t3-ku/z374f439/storage/Autumn18_102X_Data/MET_Run2018B-02Apr2020-v1_2018_Autumn18_102X.root");
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("../../../storage/NEW/Autumn18_102X_Data/MET_Run2018B-02Apr2020-v1_2018_Autumn18_102X.root");
       if (!f || !f->IsOpen()) {
-         f = new TFile("/home/t3-ku/z374f439/storage/Autumn18_102X_Data/MET_Run2018B-02Apr2020-v1_2018_Autumn18_102X.root");
+         f = new TFile("../../../storage/NEW/Autumn18_102X_Data/MET_Run2018B-02Apr2020-v1_2018_Autumn18_102X.root");
       }
       f->GetObject("KUAnalysis",tree);
 
@@ -520,14 +540,25 @@ void KUAnalysis::Init(TTree *tree)
    fChain->SetBranchAddress("PUweight", &PUweight, &b_PUweight);
    fChain->SetBranchAddress("PUweight_up", &PUweight_up, &b_PUweight_up);
    fChain->SetBranchAddress("PUweight_down", &PUweight_down, &b_PUweight_down);
-   fChain->SetBranchAddress("BtagSFweight", &BtagSFweight, &b_BtagSFweight);
-   fChain->SetBranchAddress("BtagSFweight_up", &BtagSFweight_up, &b_BtagSFweight_up);
-   fChain->SetBranchAddress("BtagSFweight_down", &BtagSFweight_down, &b_BtagSFweight_down);
+   fChain->SetBranchAddress("BtagHFSFweight", &BtagHFSFweight, &b_BtagHFSFweight);
+   fChain->SetBranchAddress("BtagHFSFweight_up", &BtagHFSFweight_up, &b_BtagHFSFweight_up);
+   fChain->SetBranchAddress("BtagHFSFweight_down", &BtagHFSFweight_down, &b_BtagHFSFweight_down);
+   fChain->SetBranchAddress("BtagLFSFweight", &BtagLFSFweight, &b_BtagLFSFweight);
+   fChain->SetBranchAddress("BtagLFSFweight_up", &BtagLFSFweight_up, &b_BtagLFSFweight_up);
+   fChain->SetBranchAddress("BtagLFSFweight_down", &BtagLFSFweight_down, &b_BtagLFSFweight_down);
+   fChain->SetBranchAddress("MetTrigSFweight", &MetTrigSFweight, &b_MetTrigSFweight);
+   fChain->SetBranchAddress("MetTrigSFweight_up", &MetTrigSFweight_up, &b_MetTrigSFweight_up);
+   fChain->SetBranchAddress("MetTrigSFweight_down", &MetTrigSFweight_down, &b_MetTrigSFweight_down);
    fChain->SetBranchAddress("runnum", &runnum, &b_runnum);
    fChain->SetBranchAddress("luminum", &luminum, &b_luminum);
    fChain->SetBranchAddress("eventnum", &eventnum, &b_eventnum);
    fChain->SetBranchAddress("NPV", &NPV, &b_NPV);
    fChain->SetBranchAddress("EventFilter", &EventFilter, &b_EventFilter);
+   fChain->SetBranchAddress("EventFlag_FailJetID", &EventFlag_FailJetID, &b_EventFlag_FailJetID);
+   fChain->SetBranchAddress("EventFlag_JetInHEM", &EventFlag_JetInHEM, &b_EventFlag_JetInHEM);
+   fChain->SetBranchAddress("EventFlag_JetInHEM_Pt20", &EventFlag_JetInHEM_Pt20, &b_EventFlag_JetInHEM_Pt20);
+   fChain->SetBranchAddress("EventFlag_JetInHEM_Pt20_JetID", &EventFlag_JetInHEM_Pt20_JetID, &b_EventFlag_JetInHEM_Pt20_JetID);
+   fChain->SetBranchAddress("HEM_Veto", &HEM_Veto, &b_HEM_Veto);
    fChain->SetBranchAddress("METtrigger", &METtrigger, &b_METtrigger);
    fChain->SetBranchAddress("METHTtrigger", &METHTtrigger, &b_METHTtrigger);
    fChain->SetBranchAddress("METORtrigger", &METORtrigger, &b_METORtrigger);
@@ -536,17 +567,16 @@ void KUAnalysis::Init(TTree *tree)
    fChain->SetBranchAddress("DoubleElectrontrigger", &DoubleElectrontrigger, &b_DoubleElectrontrigger);
    fChain->SetBranchAddress("DoubleMuontrigger", &DoubleMuontrigger, &b_DoubleMuontrigger);
    fChain->SetBranchAddress("EMutrigger", &EMutrigger, &b_EMutrigger);
-   fChain->SetBranchAddress("EventFlag_FailJetID", &EventFlag_FailJetID, &b_EventFlag_FailJetID);
-   fChain->SetBranchAddress("EventFlag_JetInHEM", &EventFlag_JetInHEM, &b_EventFlag_JetInHEM);
-   fChain->SetBranchAddress("EventFlag_JetInHEM_Pt20", &EventFlag_JetInHEM_Pt20, &b_EventFlag_JetInHEM_Pt20);
-   fChain->SetBranchAddress("EventFlag_JetInHEM_Pt20_JetID", &EventFlag_JetInHEM_Pt20_JetID, &b_EventFlag_JetInHEM_Pt20_JetID);
-   fChain->SetBranchAddress("HEM_Veto", &HEM_Veto, &b_HEM_Veto);
    fChain->SetBranchAddress("MET", &MET, &b_MET);
    fChain->SetBranchAddress("MET_phi", &MET_phi, &b_MET_phi);
-   fChain->SetBranchAddress("HT", &HT, &b_HT);
-   fChain->SetBranchAddress("HTMedium", &HTMedium, &b_HTMedium);
-   fChain->SetBranchAddress("HTLoose", &HTLoose, &b_HTLoose);
-   fChain->SetBranchAddress("HTVeryLoose", &HTVeryLoose, &b_HTVeryLoose);
+   fChain->SetBranchAddress("altMET", &altMET, &b_altMET);
+   fChain->SetBranchAddress("altMET_phi", &altMET_phi, &b_altMET_phi);
+   fChain->SetBranchAddress("HT_eta24", &HT_eta24, &b_HT_eta24);
+   fChain->SetBranchAddress("HT_eta24_id", &HT_eta24_id, &b_HT_eta24_id);
+   fChain->SetBranchAddress("HT_eta3", &HT_eta3, &b_HT_eta3);
+   fChain->SetBranchAddress("HT_eta3_id", &HT_eta3_id, &b_HT_eta3_id);
+   fChain->SetBranchAddress("HT_eta5", &HT_eta5, &b_HT_eta5);
+   fChain->SetBranchAddress("HT_eta5_id", &HT_eta5_id, &b_HT_eta5_id);
    fChain->SetBranchAddress("Nele", &Nele, &b_Nele);
    fChain->SetBranchAddress("Nmu", &Nmu, &b_Nmu);
    fChain->SetBranchAddress("Nlep", &Nlep, &b_Nlep);
