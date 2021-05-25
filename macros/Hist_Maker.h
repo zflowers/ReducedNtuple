@@ -818,13 +818,13 @@ class dphiCMI_v_HT5_Hist:public HistClass, public Hist_Maker{
 void dphiCMI_v_HT5_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist2d = new TH2D("dphiCMI_v_HT5_Hist","",64,0.,TMath::Pi(),100,0.,2.);
+ hist2d = new TH2D("dphiCMI_v_HT5_Hist","",64,0.,TMath::Pi(),100,0.,1.05);
  hist2d->GetXaxis()->SetTitle("#Delta #phi_{CM,I}");
  hist2d->GetYaxis()->SetTitle("HT5");
- preHEM_hist2d = new TH2D("dphiCMI_v_HT5_Hist_preHEM","",64,0.,TMath::Pi(),100,0.,2.);
+ preHEM_hist2d = new TH2D("dphiCMI_v_HT5_Hist_preHEM","",64,0.,TMath::Pi(),100,0.,1.05);
  preHEM_hist2d->GetXaxis()->SetTitle("#Delta #phi_{CM,I}");
  preHEM_hist2d->GetYaxis()->SetTitle("HT5");
- postHEM_hist2d = new TH2D("dphiCMI_v_HT5_Hist_postHEM","",64,0.,TMath::Pi(),100,0.,2.);
+ postHEM_hist2d = new TH2D("dphiCMI_v_HT5_Hist_postHEM","",64,0.,TMath::Pi(),100,0.,1.05);
  postHEM_hist2d->GetXaxis()->SetTitle("#Delta #phi_{CM,I}");
  postHEM_hist2d->GetYaxis()->SetTitle("HT5");
 }
@@ -855,13 +855,13 @@ class dphiCMI_v_HT5ID_Hist:public HistClass, public Hist_Maker{
 void dphiCMI_v_HT5ID_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist2d = new TH2D("dphiCMI_v_HT5ID_Hist","",64,0.,TMath::Pi(),100,0.,2.);
+ hist2d = new TH2D("dphiCMI_v_HT5ID_Hist","",64,0.,TMath::Pi(),100,0.,1.05);
  hist2d->GetXaxis()->SetTitle("#Delta #phi_{CM,I}");
  hist2d->GetYaxis()->SetTitle("HT5ID");
- preHEM_hist2d = new TH2D("dphiCMI_v_HT5ID_Hist_preHEM","",64,0.,TMath::Pi(),100,0.,2.);
+ preHEM_hist2d = new TH2D("dphiCMI_v_HT5ID_Hist_preHEM","",64,0.,TMath::Pi(),100,0.,1.05);
  preHEM_hist2d->GetXaxis()->SetTitle("#Delta #phi_{CM,I}");
  preHEM_hist2d->GetYaxis()->SetTitle("HT5ID");
- postHEM_hist2d = new TH2D("dphiCMI_v_HT5ID_Hist_postHEM","",64,0.,TMath::Pi(),100,0.,2.);
+ postHEM_hist2d = new TH2D("dphiCMI_v_HT5ID_Hist_postHEM","",64,0.,TMath::Pi(),100,0.,1.05);
  postHEM_hist2d->GetXaxis()->SetTitle("#Delta #phi_{CM,I}");
  postHEM_hist2d->GetYaxis()->SetTitle("HT5ID");
 }
@@ -964,13 +964,13 @@ class PTCM_v_HT5_Hist:public HistClass, public Hist_Maker{
 void PTCM_v_HT5_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist2d = new TH2D("PTCM_v_HT5_Hist","",100,0.,500.,100,0.,10.);
+ hist2d = new TH2D("PTCM_v_HT5_Hist","",100,0.,500.,100,0.,1.05);
  hist2d->GetXaxis()->SetTitle("p_{T}^{CM} [GeV]");
  hist2d->GetYaxis()->SetTitle("HT5");
- preHEM_hist2d = new TH2D("PTCM_v_HT5_Hist_preHEM","",100,0.,500.,100,0.,2.);
+ preHEM_hist2d = new TH2D("PTCM_v_HT5_Hist_preHEM","",100,0.,500.,100,0.,1.05);
  preHEM_hist2d->GetXaxis()->SetTitle("p_{T}^{CM} [GeV]");
  preHEM_hist2d->GetYaxis()->SetTitle("HT5");
- postHEM_hist2d = new TH2D("PTCM_v_HT5_Hist_postHEM","",100,0.,500.,100,0.,2.);
+ postHEM_hist2d = new TH2D("PTCM_v_HT5_Hist_postHEM","",100,0.,500.,100,0.,1.05);
  postHEM_hist2d->GetXaxis()->SetTitle("p_{T}^{CM} [GeV]");
  postHEM_hist2d->GetYaxis()->SetTitle("HT5");
 }
@@ -1001,13 +1001,13 @@ class PTCM_v_HT5ID_Hist:public HistClass, public Hist_Maker{
 void PTCM_v_HT5ID_Hist::init_hist(TTree* tree){
  m_Tree = tree;
  selector = KUAnalysis(m_Tree);
- hist2d = new TH2D("PTCM_v_HT5ID_Hist","",100,0.,500.,100,0.,2.);
+ hist2d = new TH2D("PTCM_v_HT5ID_Hist","",100,0.,500.,100,0.,1.05);
  hist2d->GetXaxis()->SetTitle("p_{T}^{CM} [GeV]");
  hist2d->GetYaxis()->SetTitle("HT5ID");
- preHEM_hist2d = new TH2D("PTCM_v_HT5ID_Hist_preHEM","",100,0.,500.,100,0.,2.);
+ preHEM_hist2d = new TH2D("PTCM_v_HT5ID_Hist_preHEM","",100,0.,500.,100,0.,1.05);
  preHEM_hist2d->GetXaxis()->SetTitle("p_{T}^{CM} [GeV]");
  preHEM_hist2d->GetYaxis()->SetTitle("HT5ID");
- postHEM_hist2d = new TH2D("PTCM_v_HT5ID_Hist_postHEM","",100,0.,500.,100,0.,2.);
+ postHEM_hist2d = new TH2D("PTCM_v_HT5ID_Hist_postHEM","",100,0.,500.,100,0.,1.05);
  postHEM_hist2d->GetXaxis()->SetTitle("p_{T}^{CM} [GeV]");
  postHEM_hist2d->GetYaxis()->SetTitle("HT5ID");
 }

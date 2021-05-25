@@ -493,6 +493,8 @@ void Get2D_Plot(string hist_name, vector<string> directories, vector<string> inF
    l.DrawLatex(0.4,.94,name.c_str());
    gPad->RedrawAxis();
    gPad->RedrawAxis("G");
+   string file_name = can->GetName();
+   can->SaveAs((file_name+".pdf").c_str());
    TFile* output = new TFile("output_Stack.root","UPDATE");
    can->Write();
    output->Close();
@@ -853,6 +855,8 @@ void Get2D_Ratio(string hist_name1, string hist_name2, string cut1, string cut2,
  gr_right_para->SetMarkerSize(0.4);
  gr_right_para->SetMarkerStyle(20.);
  gr_right_para->Draw("P");
+ string file_name = can->GetName();
+ can->SaveAs((file_name+".pdf").c_str());
  TFile* output = new TFile("output_Stack.root","UPDATE");
  can->Write();
  output->Close();
@@ -1163,8 +1167,10 @@ void Get1D_Plot(vector<string> outFiles, string hist_name, vector<string> sample
  //l.DrawLatex(0.72,0.94,s_lumi.c_str());
 }
 
-void Stacker(vector<string> inFiles, vector<string> cuts){
+void Stacker(vector<string> cuts){
  cout << "Running Stacker..." << endl;
+ vector<string> inFiles;
+ for(int i = 0; i < cuts.size(); i++) { inFiles.push_back("Hist_output_"+cuts[i]+".root"); }
  bool trigger = false;
  vector<string> WJets_directories = {"WJets_2017"};
  vector<string> WJets_Old_directories = {"WJets_2017_Old"};
@@ -1176,7 +1182,7 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
  //vector<string> directories_2D{"TChiWW_SMS_275_235", "TTJets", "WJets", "DiBoson", "DYJetsToLL", "ST"};
  //vector<string> directories_2D{"Bkg_2016","MET_2016","Bkg_2017","MET_2017","Bkg_2018","MET_2018","QCD_2017","TTJets_2017","WJets_2017","ZJetsToNuNu_2017","T2bW_500_490_2016","T2bW_500_490_2017","T2bW_500_300_2018"};
  //vector<string> directories_2D{"Bkg_2017","Bkg_QCD_RM_2017","MET_2017","QCD_2017","TTJets_2017","WJets_2017","ZJetsToNuNu_2017","T2bW_500_490_2017","Bkg_QCD200_RM_2017","Bkg_QCD300_RM_2017","Bkg_QCD500_RM_2017","Bkg_QCD700_RM_2017","Bkg_QCD1000_RM_2017","Bkg_QCD1500_RM_2017","Bkg_QCD2000_RM_2017","QCD_100to200_2017","QCD_200to300_2017","QCD_300to500_2017","QCD_500to700_2017","QCD_700to1000_2017","QCD_1000to1500_2017","QCD_1500to2000_2017","QCD_2000toInf_2017"};
- vector<string> directories_2D{"SingleElectron_2017","SingleMuon_2017","Bkg_2017"};
+ vector<string> directories_2D{"MET_2018"};
  vector<int> colors = {kBlue+1, kRed+1, kGreen+1, kMagenta, kCyan, kOrange, kViolet+2, kAzure+7, kPink, kGreen, kGray};
  vector<int> colors_bkg = { kAzure+1, kGreen-9, kPink, kTeal+2, kYellow-4 };
  vector<int> colors_sig = { kMagenta, kCyan+2, };
@@ -1372,9 +1378,79 @@ void Stacker(vector<string> inFiles, vector<string> cuts){
  //Get2D_Ratio("dphiCMI_v_PTCM_Hist_preHEM","dphiCMI_v_PTCM_Hist_postHEM","HEM_Veto","HEM_Veto","MET_2018","MET_2018",true);
  
  //HT5 Plots
- //Something like this and some ratios?? //Get2D_Plot("dphiCMI_v_PTCM_Hist",directories_2D,inFiles,cuts,trigger);
+ Get2D_Plot("dphiCMI_v_HT5_Hist",directories_2D,inFiles,cuts,false);
+ Get2D_Plot("dphiCMI_v_HT5ID_Hist",directories_2D,inFiles,cuts,false);
+ Get2D_Plot("dphiCMI_v_HTeta5_Hist",directories_2D,inFiles,cuts,false);
+ Get2D_Plot("dphiCMI_v_HTeta24_Hist",directories_2D,inFiles,cuts,false);
+ Get2D_Plot("PTCM_v_HT5_Hist",directories_2D,inFiles,cuts,false);
+ Get2D_Plot("PTCM_v_HT5ID_Hist",directories_2D,inFiles,cuts,false);
+ Get2D_Plot("PTCM_v_HTeta5_Hist",directories_2D,inFiles,cuts,false);
+ Get2D_Plot("PTCM_v_HTeta24_Hist",directories_2D,inFiles,cuts,false);
  
+ Get2D_Ratio("dphiCMI_v_HT5_Hist_preHEM", "dphiCMI_v_HT5_Hist_postHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
+ Get2D_Ratio("dphiCMI_v_HT5_Hist_preHEM", "dphiCMI_v_HT5_Hist_postHEM","PreSelection","HEM_Veto","MET_2018","MET_2018",true);
+ Get2D_Ratio("dphiCMI_v_HT5_Hist_preHEM", "dphiCMI_v_HT5_Hist_preHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
+ Get2D_Ratio("dphiCMI_v_HT5_Hist_postHEM","dphiCMI_v_HT5_Hist_postHEM","HEM_Veto","HEM_Veto","MET_2018","MET_2018",true);
+ Get2D_Ratio("dphiCMI_v_HT5_Hist_preHEM", "dphiCMI_v_HT5_Hist_preHEM","EventFilter-E1","EventFilter-E0","MET_2018","MET_2018",true);
+ Get2D_Ratio("dphiCMI_v_HT5_Hist_postHEM","dphiCMI_v_HT5_Hist_postHEM","HEM_Veto--EventFilter-E1","HEM_Veto--EventFilter-E0","MET_2018","MET_2018",true);
+ Get2D_Ratio("dphiCMI_v_HT5_Hist_postHEM","dphiCMI_v_HT5_Hist_postHEM","EventFilter-E1","EventFilter-E0","MET_2018","MET_2018",true);
+
+ Get2D_Ratio("dphiCMI_v_HT5ID_Hist_preHEM", "dphiCMI_v_HT5ID_Hist_postHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
+ Get2D_Ratio("dphiCMI_v_HT5ID_Hist_preHEM", "dphiCMI_v_HT5ID_Hist_postHEM","PreSelection","HEM_Veto","MET_2018","MET_2018",true);
+ Get2D_Ratio("dphiCMI_v_HT5ID_Hist_preHEM", "dphiCMI_v_HT5ID_Hist_preHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
+ Get2D_Ratio("dphiCMI_v_HT5ID_Hist_postHEM","dphiCMI_v_HT5ID_Hist_postHEM","HEM_Veto","HEM_Veto","MET_2018","MET_2018",true);
+ Get2D_Ratio("dphiCMI_v_HT5ID_Hist_preHEM", "dphiCMI_v_HT5ID_Hist_preHEM","EventFilter-E1","EventFilter-E0","MET_2018","MET_2018",true);
+ Get2D_Ratio("dphiCMI_v_HT5ID_Hist_postHEM","dphiCMI_v_HT5ID_Hist_postHEM","HEM_Veto--EventFilter-E1","HEM_Veto--EventFilter-E0","MET_2018","MET_2018",true);
+ Get2D_Ratio("dphiCMI_v_HT5ID_Hist_postHEM","dphiCMI_v_HT5ID_Hist_postHEM","EventFilter-E1","EventFilter-E0","MET_2018","MET_2018",true);
+
+ Get2D_Ratio("dphiCMI_v_HTeta5_Hist_preHEM", "dphiCMI_v_HTeta5_Hist_postHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
+ Get2D_Ratio("dphiCMI_v_HTeta5_Hist_preHEM", "dphiCMI_v_HTeta5_Hist_postHEM","PreSelection","HEM_Veto","MET_2018","MET_2018",true);
+ Get2D_Ratio("dphiCMI_v_HTeta5_Hist_preHEM", "dphiCMI_v_HTeta5_Hist_preHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
+ Get2D_Ratio("dphiCMI_v_HTeta5_Hist_postHEM","dphiCMI_v_HTeta5_Hist_postHEM","HEM_Veto","HEM_Veto","MET_2018","MET_2018",true);
+ Get2D_Ratio("dphiCMI_v_HTeta5_Hist_preHEM", "dphiCMI_v_HTeta5_Hist_preHEM","EventFilter-E1","EventFilter-E0","MET_2018","MET_2018",true);
+ Get2D_Ratio("dphiCMI_v_HTeta5_Hist_postHEM","dphiCMI_v_HTeta5_Hist_postHEM","HEM_Veto--EventFilter-E1","HEM_Veto--EventFilter-E0","MET_2018","MET_2018",true);
+ Get2D_Ratio("dphiCMI_v_HTeta5_Hist_postHEM","dphiCMI_v_HTeta5_Hist_postHEM","EventFilter-E1","EventFilter-E0","MET_2018","MET_2018",true);
  
+ Get2D_Ratio("dphiCMI_v_HTeta24_Hist_preHEM", "dphiCMI_v_HTeta24_Hist_postHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
+ Get2D_Ratio("dphiCMI_v_HTeta24_Hist_preHEM", "dphiCMI_v_HTeta24_Hist_postHEM","PreSelection","HEM_Veto","MET_2018","MET_2018",true);
+ Get2D_Ratio("dphiCMI_v_HTeta24_Hist_preHEM", "dphiCMI_v_HTeta24_Hist_preHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
+ Get2D_Ratio("dphiCMI_v_HTeta24_Hist_postHEM","dphiCMI_v_HTeta24_Hist_postHEM","HEM_Veto","HEM_Veto","MET_2018","MET_2018",true);
+ Get2D_Ratio("dphiCMI_v_HTeta24_Hist_preHEM", "dphiCMI_v_HTeta24_Hist_preHEM","EventFilter-E1","EventFilter-E0","MET_2018","MET_2018",true);
+ Get2D_Ratio("dphiCMI_v_HTeta24_Hist_postHEM","dphiCMI_v_HTeta24_Hist_postHEM","HEM_Veto--EventFilter-E1","HEM_Veto--EventFilter-E0","MET_2018","MET_2018",true);
+ Get2D_Ratio("dphiCMI_v_HTeta24_Hist_postHEM","dphiCMI_v_HTeta24_Hist_postHEM","EventFilter-E1","EventFilter-E0","MET_2018","MET_2018",true);
+
+ Get2D_Ratio("PTCM_v_HT5_Hist_preHEM", "PTCM_v_HT5_Hist_postHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
+ Get2D_Ratio("PTCM_v_HT5_Hist_preHEM", "PTCM_v_HT5_Hist_postHEM","PreSelection","HEM_Veto","MET_2018","MET_2018",true);
+ Get2D_Ratio("PTCM_v_HT5_Hist_preHEM", "PTCM_v_HT5_Hist_preHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
+ Get2D_Ratio("PTCM_v_HT5_Hist_postHEM","PTCM_v_HT5_Hist_postHEM","HEM_Veto","HEM_Veto","MET_2018","MET_2018",true);
+ Get2D_Ratio("PTCM_v_HT5_Hist_preHEM", "PTCM_v_HT5_Hist_preHEM","EventFilter-E1","EventFilter-E0","MET_2018","MET_2018",true);
+ Get2D_Ratio("PTCM_v_HT5_Hist_postHEM","PTCM_v_HT5_Hist_postHEM","HEM_Veto--EventFilter-E1","HEM_Veto--EventFilter-E0","MET_2018","MET_2018",true);
+ Get2D_Ratio("PTCM_v_HT5_Hist_postHEM","PTCM_v_HT5_Hist_postHEM","EventFilter-E1","EventFilter-E0","MET_2018","MET_2018",true);
+
+ Get2D_Ratio("PTCM_v_HT5ID_Hist_preHEM", "PTCM_v_HT5ID_Hist_postHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
+ Get2D_Ratio("PTCM_v_HT5ID_Hist_preHEM", "PTCM_v_HT5ID_Hist_postHEM","PreSelection","HEM_Veto","MET_2018","MET_2018",true);
+ Get2D_Ratio("PTCM_v_HT5ID_Hist_preHEM", "PTCM_v_HT5ID_Hist_preHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
+ Get2D_Ratio("PTCM_v_HT5ID_Hist_postHEM","PTCM_v_HT5ID_Hist_postHEM","HEM_Veto","HEM_Veto","MET_2018","MET_2018",true);
+ Get2D_Ratio("PTCM_v_HT5ID_Hist_preHEM", "PTCM_v_HT5ID_Hist_preHEM","EventFilter-E1","EventFilter-E0","MET_2018","MET_2018",true);
+ Get2D_Ratio("PTCM_v_HT5ID_Hist_postHEM","PTCM_v_HT5ID_Hist_postHEM","HEM_Veto--EventFilter-E1","HEM_Veto--EventFilter-E0","MET_2018","MET_2018",true);
+ Get2D_Ratio("PTCM_v_HT5ID_Hist_postHEM","PTCM_v_HT5ID_Hist_postHEM","EventFilter-E1","EventFilter-E0","MET_2018","MET_2018",true);
+
+ Get2D_Ratio("PTCM_v_HTeta5_Hist_preHEM", "PTCM_v_HTeta5_Hist_postHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
+ Get2D_Ratio("PTCM_v_HTeta5_Hist_preHEM", "PTCM_v_HTeta5_Hist_postHEM","PreSelection","HEM_Veto","MET_2018","MET_2018",true);
+ Get2D_Ratio("PTCM_v_HTeta5_Hist_preHEM", "PTCM_v_HTeta5_Hist_preHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
+ Get2D_Ratio("PTCM_v_HTeta5_Hist_postHEM","PTCM_v_HTeta5_Hist_postHEM","HEM_Veto","HEM_Veto","MET_2018","MET_2018",true);
+ Get2D_Ratio("PTCM_v_HTeta5_Hist_preHEM", "PTCM_v_HTeta5_Hist_preHEM","EventFilter-E1","EventFilter-E0","MET_2018","MET_2018",true);
+ Get2D_Ratio("PTCM_v_HTeta5_Hist_postHEM","PTCM_v_HTeta5_Hist_postHEM","HEM_Veto--EventFilter-E1","HEM_Veto--EventFilter-E0","MET_2018","MET_2018",true);
+ Get2D_Ratio("PTCM_v_HTeta5_Hist_postHEM","PTCM_v_HTeta5_Hist_postHEM","EventFilter-E1","EventFilter-E0","MET_2018","MET_2018",true);
+ 
+ Get2D_Ratio("PTCM_v_HTeta24_Hist_preHEM", "PTCM_v_HTeta24_Hist_postHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
+ Get2D_Ratio("PTCM_v_HTeta24_Hist_preHEM", "PTCM_v_HTeta24_Hist_postHEM","PreSelection","HEM_Veto","MET_2018","MET_2018",true);
+ Get2D_Ratio("PTCM_v_HTeta24_Hist_preHEM", "PTCM_v_HTeta24_Hist_preHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
+ Get2D_Ratio("PTCM_v_HTeta24_Hist_postHEM","PTCM_v_HTeta24_Hist_postHEM","HEM_Veto","HEM_Veto","MET_2018","MET_2018",true);
+ Get2D_Ratio("PTCM_v_HTeta24_Hist_preHEM", "PTCM_v_HTeta24_Hist_preHEM","EventFilter-E1","EventFilter-E0","MET_2018","MET_2018",true);
+ Get2D_Ratio("PTCM_v_HTeta24_Hist_postHEM","PTCM_v_HTeta24_Hist_postHEM","HEM_Veto--EventFilter-E1","HEM_Veto--EventFilter-E0","MET_2018","MET_2018",true);
+ Get2D_Ratio("PTCM_v_HTeta24_Hist_postHEM","PTCM_v_HTeta24_Hist_postHEM","EventFilter-E1","EventFilter-E0","MET_2018","MET_2018",true);
+
  //2D Ratio 2017 Cleaning
  //Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist","RISRG0.9","RISRG0.9","Bkg_2017","MET_2017",true);
  //Get2D_Ratio("dphiCMI_v_PTCM_Hist","dphiCMI_v_PTCM_Hist","PreSelection","PreSelection","Bkg_2017","MET_2017",true);
@@ -1428,7 +1504,6 @@ int main(int argc, char* argv[])
 {
  string cutsFile = "cuts.txt";
  vector<string> cuts;
- vector<string> files;
 
  if(argc < 1)
  {
@@ -1452,10 +1527,9 @@ int main(int argc, char* argv[])
  {
   if(cut.rfind("#", 0) == 0) continue;
   cuts.push_back(cut);
-  files.push_back("Hist_output_"+cut+".root");
  }
 
- Stacker(files,cuts);
+ Stacker(cuts);
  return 0;
 }
 
