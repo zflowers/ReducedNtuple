@@ -17,12 +17,18 @@ output_dir = "/home/t3-ku/z374f439/Eff_NANO/ReducedNtuple/macros/"
 print("Writing shell scripts")
 
 list_cuts_hist = [
-    "PreSelection",
-    "HEM_Veto",
-    "EventFilter-E1",
-    "EventFilter-E0",
-    "HEM_Veto--EventFilter-E1",
-    "HEM_Veto--EventFilter-E0",
+    #"PreSelection",
+    #"HEM_Veto",
+    #"EventFilter-E1",
+    #"EventFilter-E0",
+    #"HEM_Veto--EventFilter-E1",
+    #"HEM_Veto--EventFilter-E0",
+    "Clean",
+    "Clean--HEM_Veto",
+    "Clean--HEM_Veto--EventFilter-E0",
+    "Clean--HEM_Veto--EventFilter-E1",
+    "Clean--EventFilter-E0",
+    "Clean--EventFilter-E1",
 ]
 
 list_cuts_eff = [

@@ -445,7 +445,7 @@ void Get2D_Plot(string hist_name, vector<string> directories, vector<string> inF
     }
    }
    name+=trigger_name;
-   TCanvas* can = new TCanvas(name.c_str(),"",600.,500);
+   TCanvas* can = new TCanvas((name).c_str(),"",1278,775);
    can->SetLeftMargin(0.15);
    can->SetRightMargin(0.18);
    can->SetBottomMargin(0.15);
@@ -480,17 +480,22 @@ void Get2D_Plot(string hist_name, vector<string> directories, vector<string> inF
    //l.SetTextColor(kWhite);
    l.SetTextSize(0.04);
    l.SetTextFont(42);
-   l.DrawLatex(0.15,0.943,"#bf{#it{CMS}} Preliminary 13 TeV");
    l.SetTextSize(0.04);
    l.SetTextFont(42);
-   name = "Sample: "+directories[j];
-   name+= " Cut: "+cuts[i];
+   name = " Cut: "+cuts[i];
+   //name += "Sample: "+directories[j];
+   UInt_t w, h;
+   TText t;
+   t.SetNDC();
+   t.GetTextExtent(w,h,name.c_str());
    string hist_name = hist->GetName();
-   //if(hist_name.find("HEM") != std::string::npos) { name +=", postHEM"; }
-   //else { name +=", preHEM"; }
+   if(hist_name.find("postHEM") != std::string::npos) { name +=", postHEM"; }
+   else if(hist_name.find("preHEM") != std::string::npos) { name +=", preHEM"; }
    //eraseSubStr(name,"PTISRG200-");
    //name+=trigger_name;
-   l.DrawLatex(0.4,.94,name.c_str());
+   double x_latex = 1.-w*0.0001-.3;
+   l.DrawLatex(x_latex,0.93,name.c_str());
+   l.DrawLatex(0.13,0.93,"#bf{#it{CMS}}  work-in-progress");
    gPad->RedrawAxis();
    gPad->RedrawAxis("G");
    string file_name = can->GetName();
@@ -655,7 +660,7 @@ void Get2D_Ratio(TH2D* hist_denom, TH2D* hist, string cut1, string cut2, string 
  hist->Scale(1./hist->Integral());
  string name = "can_ratio_"+hist_name1+"_"+hist_name2+"_"+cut1+"_"+cut2+"_"+directory1+"_"+directory2;
  if(zoom) { name = "can_ratio_zoom_"+hist_name1+"_"+hist_name2+"_"+cut1+"_"+cut2+"_"+directory1+"_"+directory2; }
- TCanvas* can = new TCanvas(name.c_str(),"",600.,500);
+ TCanvas* can = new TCanvas((name).c_str(),"",1278,775);
  can->SetLeftMargin(0.15);
  can->SetRightMargin(0.18);
  can->SetBottomMargin(0.15);
@@ -698,7 +703,6 @@ void Get2D_Ratio(TH2D* hist_denom, TH2D* hist, string cut1, string cut2, string 
  //l.SetTextColor(kWhite);
  l.SetTextSize(0.04);
  l.SetTextFont(42);
- l.DrawLatex(0.15,0.943,"#bf{#it{CMS}} Internal 13 TeV");
  l.SetTextSize(0.04);
  l.SetTextFont(42);
  //name = directories[j];
@@ -710,7 +714,14 @@ void Get2D_Ratio(TH2D* hist_denom, TH2D* hist, string cut1, string cut2, string 
   else { name += cut1+", preHEM"; }
  */
  name = cut2+" "+directory2+"/"+cut1+" "+directory1;
- l.DrawLatex(0.42,.94,name.c_str());
+ UInt_t w, h;
+ TText t;
+ t.SetNDC();
+ t.GetTextExtent(w,h,name.c_str());
+ string hist_name = hist->GetName();
+ double x_latex = 1.-w*0.0001-.3;
+ l.DrawLatex(x_latex,0.93,name.c_str());
+ l.DrawLatex(0.13,0.93,"#bf{#it{CMS}}  work-in-progress");
  gPad->RedrawAxis();
  gPad->RedrawAxis("G");
  TF1* left_para = new TF1("left para","-500.*sqrt(-2.777*x*x+1.388*x+0.8264)+575.",0.,TMath::Pi());
@@ -727,14 +738,14 @@ void Get2D_Ratio(TH2D* hist_denom, TH2D* hist, string cut1, string cut2, string 
   gr_left_para->SetPoint(i,x,x < 0.25 ? 75. : left_para->Eval(x));
   gr_right_para->SetPoint(i,x,x > 2.5 ? 100. : right_para->Eval(x));
  }
- gr_left_para->Draw("P");
  gr_left_para->SetMarkerColor(kRed);
  gr_left_para->SetMarkerSize(0.4);
  gr_left_para->SetMarkerStyle(20.);
+ //gr_left_para->Draw("P");
  gr_right_para->SetMarkerColor(kRed);
  gr_right_para->SetMarkerSize(0.4);
  gr_right_para->SetMarkerStyle(20.);
- gr_right_para->Draw("P");
+ //gr_right_para->Draw("P");
  TFile* output = new TFile("Ratios.root","UPDATE");
  can->Write();
 /*
@@ -777,7 +788,7 @@ void Get2D_Ratio(string hist_name1, string hist_name2, string cut1, string cut2,
  hist->Scale(1./hist->Integral());
  string name = "can_ratio_"+hist_name1+"_"+hist_name2+"_"+cut1+"_"+cut2+"_"+directory1+"_"+directory2;
  if(zoom) { name = "can_ratio_zoom_"+hist_name1+"_"+hist_name2+"_"+cut1+"_"+cut2+"_"+directory1+"_"+directory2; }
- TCanvas* can = new TCanvas(name.c_str(),"",600.,500);
+ TCanvas* can = new TCanvas((name).c_str(),"",1278,775);
  can->SetLeftMargin(0.15);
  can->SetRightMargin(0.18);
  can->SetBottomMargin(0.15);
@@ -820,9 +831,10 @@ void Get2D_Ratio(string hist_name1, string hist_name2, string cut1, string cut2,
  //l.SetTextColor(kWhite);
  l.SetTextSize(0.04);
  l.SetTextFont(42);
- l.DrawLatex(0.15,0.943,"#bf{#it{CMS}} Internal 13 TeV");
- l.SetTextSize(0.025);
- l.SetTextFont(42);
+ UInt_t w, h;
+ TText t;
+ t.SetNDC();
+ l.DrawLatex(0.13,0.93,"#bf{#it{CMS}}  work-in-progress");
  //name = directories[j];
  name = "";
  if(hist_name2.find("postHEM") != std::string::npos) { name += cut2+", postHEM / "; }
@@ -830,7 +842,9 @@ void Get2D_Ratio(string hist_name1, string hist_name2, string cut1, string cut2,
  if(hist_name1.find("postHEM") != std::string::npos) { name += cut1+", postHEM"; }
   else { name += cut1+", preHEM"; }
  //name = cut2+" "+directory2+"/"+cut1+" "+directory1;
- l.DrawLatex(0.36,.94,name.c_str());
+ t.GetTextExtent(w,h,name.c_str());
+ double x_latex = 1.-w*0.0001-.5;
+ l.DrawLatex(x_latex,0.93,name.c_str());
  gPad->RedrawAxis();
  gPad->RedrawAxis("G");
  TF1* left_para = new TF1("left para","-500.*sqrt(-2.777*x*x+1.388*x+0.8264)+575.",0.,TMath::Pi());
@@ -847,14 +861,14 @@ void Get2D_Ratio(string hist_name1, string hist_name2, string cut1, string cut2,
   gr_left_para->SetPoint(i,x,x < 0.25 ? 75. : left_para->Eval(x));
   gr_right_para->SetPoint(i,x,x > 2.5 ? 100. : right_para->Eval(x));
  }
- gr_left_para->Draw("P");
  gr_left_para->SetMarkerColor(kRed);
  gr_left_para->SetMarkerSize(0.4);
  gr_left_para->SetMarkerStyle(20.);
+ //gr_left_para->Draw("P");
  gr_right_para->SetMarkerColor(kRed);
  gr_right_para->SetMarkerSize(0.4);
  gr_right_para->SetMarkerStyle(20.);
- gr_right_para->Draw("P");
+ //gr_right_para->Draw("P");
  string file_name = can->GetName();
  can->SaveAs((file_name+".pdf").c_str());
  TFile* output = new TFile("output_Stack.root","UPDATE");
@@ -1386,10 +1400,27 @@ void Stacker(vector<string> cuts){
  Get2D_Plot("PTCM_v_HT5ID_Hist",directories_2D,inFiles,cuts,false);
  Get2D_Plot("PTCM_v_HTeta5_Hist",directories_2D,inFiles,cuts,false);
  Get2D_Plot("PTCM_v_HTeta24_Hist",directories_2D,inFiles,cuts,false);
+
+ Get2D_Plot("dphiCMI_v_HT5_Hist_preHEM",directories_2D,inFiles,cuts,false);
+ Get2D_Plot("dphiCMI_v_HT5ID_Hist_preHEM",directories_2D,inFiles,cuts,false);
+ Get2D_Plot("dphiCMI_v_HTeta5_Hist_preHEM",directories_2D,inFiles,cuts,false);
+ Get2D_Plot("dphiCMI_v_HTeta24_Hist_preHEM",directories_2D,inFiles,cuts,false);
+ Get2D_Plot("PTCM_v_HT5_Hist_preHEM",directories_2D,inFiles,cuts,false);
+ Get2D_Plot("PTCM_v_HT5ID_Hist_preHEM",directories_2D,inFiles,cuts,false);
+ Get2D_Plot("PTCM_v_HTeta5_Hist_preHEM",directories_2D,inFiles,cuts,false);
+ Get2D_Plot("PTCM_v_HTeta24_Hist_preHEM",directories_2D,inFiles,cuts,false);
+
+ Get2D_Plot("dphiCMI_v_HT5_Hist_postHEM",directories_2D,inFiles,cuts,false);
+ Get2D_Plot("dphiCMI_v_HT5ID_Hist_postHEM",directories_2D,inFiles,cuts,false);
+ Get2D_Plot("dphiCMI_v_HTeta5_Hist_postHEM",directories_2D,inFiles,cuts,false);
+ Get2D_Plot("dphiCMI_v_HTeta24_Hist_postHEM",directories_2D,inFiles,cuts,false);
+ Get2D_Plot("PTCM_v_HT5_Hist_postHEM",directories_2D,inFiles,cuts,false);
+ Get2D_Plot("PTCM_v_HT5ID_Hist_postHEM",directories_2D,inFiles,cuts,false);
+ Get2D_Plot("PTCM_v_HTeta5_Hist_postHEM",directories_2D,inFiles,cuts,false);
+ Get2D_Plot("PTCM_v_HTeta24_Hist_postHEM",directories_2D,inFiles,cuts,false);
  
  Get2D_Ratio("dphiCMI_v_HT5_Hist_preHEM", "dphiCMI_v_HT5_Hist_postHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
  Get2D_Ratio("dphiCMI_v_HT5_Hist_preHEM", "dphiCMI_v_HT5_Hist_postHEM","PreSelection","HEM_Veto","MET_2018","MET_2018",true);
- Get2D_Ratio("dphiCMI_v_HT5_Hist_preHEM", "dphiCMI_v_HT5_Hist_preHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
  Get2D_Ratio("dphiCMI_v_HT5_Hist_postHEM","dphiCMI_v_HT5_Hist_postHEM","HEM_Veto","HEM_Veto","MET_2018","MET_2018",true);
  Get2D_Ratio("dphiCMI_v_HT5_Hist_preHEM", "dphiCMI_v_HT5_Hist_preHEM","EventFilter-E1","EventFilter-E0","MET_2018","MET_2018",true);
  Get2D_Ratio("dphiCMI_v_HT5_Hist_postHEM","dphiCMI_v_HT5_Hist_postHEM","HEM_Veto--EventFilter-E1","HEM_Veto--EventFilter-E0","MET_2018","MET_2018",true);
@@ -1397,7 +1428,6 @@ void Stacker(vector<string> cuts){
 
  Get2D_Ratio("dphiCMI_v_HT5ID_Hist_preHEM", "dphiCMI_v_HT5ID_Hist_postHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
  Get2D_Ratio("dphiCMI_v_HT5ID_Hist_preHEM", "dphiCMI_v_HT5ID_Hist_postHEM","PreSelection","HEM_Veto","MET_2018","MET_2018",true);
- Get2D_Ratio("dphiCMI_v_HT5ID_Hist_preHEM", "dphiCMI_v_HT5ID_Hist_preHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
  Get2D_Ratio("dphiCMI_v_HT5ID_Hist_postHEM","dphiCMI_v_HT5ID_Hist_postHEM","HEM_Veto","HEM_Veto","MET_2018","MET_2018",true);
  Get2D_Ratio("dphiCMI_v_HT5ID_Hist_preHEM", "dphiCMI_v_HT5ID_Hist_preHEM","EventFilter-E1","EventFilter-E0","MET_2018","MET_2018",true);
  Get2D_Ratio("dphiCMI_v_HT5ID_Hist_postHEM","dphiCMI_v_HT5ID_Hist_postHEM","HEM_Veto--EventFilter-E1","HEM_Veto--EventFilter-E0","MET_2018","MET_2018",true);
@@ -1405,7 +1435,6 @@ void Stacker(vector<string> cuts){
 
  Get2D_Ratio("dphiCMI_v_HTeta5_Hist_preHEM", "dphiCMI_v_HTeta5_Hist_postHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
  Get2D_Ratio("dphiCMI_v_HTeta5_Hist_preHEM", "dphiCMI_v_HTeta5_Hist_postHEM","PreSelection","HEM_Veto","MET_2018","MET_2018",true);
- Get2D_Ratio("dphiCMI_v_HTeta5_Hist_preHEM", "dphiCMI_v_HTeta5_Hist_preHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
  Get2D_Ratio("dphiCMI_v_HTeta5_Hist_postHEM","dphiCMI_v_HTeta5_Hist_postHEM","HEM_Veto","HEM_Veto","MET_2018","MET_2018",true);
  Get2D_Ratio("dphiCMI_v_HTeta5_Hist_preHEM", "dphiCMI_v_HTeta5_Hist_preHEM","EventFilter-E1","EventFilter-E0","MET_2018","MET_2018",true);
  Get2D_Ratio("dphiCMI_v_HTeta5_Hist_postHEM","dphiCMI_v_HTeta5_Hist_postHEM","HEM_Veto--EventFilter-E1","HEM_Veto--EventFilter-E0","MET_2018","MET_2018",true);
@@ -1413,7 +1442,6 @@ void Stacker(vector<string> cuts){
  
  Get2D_Ratio("dphiCMI_v_HTeta24_Hist_preHEM", "dphiCMI_v_HTeta24_Hist_postHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
  Get2D_Ratio("dphiCMI_v_HTeta24_Hist_preHEM", "dphiCMI_v_HTeta24_Hist_postHEM","PreSelection","HEM_Veto","MET_2018","MET_2018",true);
- Get2D_Ratio("dphiCMI_v_HTeta24_Hist_preHEM", "dphiCMI_v_HTeta24_Hist_preHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
  Get2D_Ratio("dphiCMI_v_HTeta24_Hist_postHEM","dphiCMI_v_HTeta24_Hist_postHEM","HEM_Veto","HEM_Veto","MET_2018","MET_2018",true);
  Get2D_Ratio("dphiCMI_v_HTeta24_Hist_preHEM", "dphiCMI_v_HTeta24_Hist_preHEM","EventFilter-E1","EventFilter-E0","MET_2018","MET_2018",true);
  Get2D_Ratio("dphiCMI_v_HTeta24_Hist_postHEM","dphiCMI_v_HTeta24_Hist_postHEM","HEM_Veto--EventFilter-E1","HEM_Veto--EventFilter-E0","MET_2018","MET_2018",true);
@@ -1421,7 +1449,6 @@ void Stacker(vector<string> cuts){
 
  Get2D_Ratio("PTCM_v_HT5_Hist_preHEM", "PTCM_v_HT5_Hist_postHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
  Get2D_Ratio("PTCM_v_HT5_Hist_preHEM", "PTCM_v_HT5_Hist_postHEM","PreSelection","HEM_Veto","MET_2018","MET_2018",true);
- Get2D_Ratio("PTCM_v_HT5_Hist_preHEM", "PTCM_v_HT5_Hist_preHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
  Get2D_Ratio("PTCM_v_HT5_Hist_postHEM","PTCM_v_HT5_Hist_postHEM","HEM_Veto","HEM_Veto","MET_2018","MET_2018",true);
  Get2D_Ratio("PTCM_v_HT5_Hist_preHEM", "PTCM_v_HT5_Hist_preHEM","EventFilter-E1","EventFilter-E0","MET_2018","MET_2018",true);
  Get2D_Ratio("PTCM_v_HT5_Hist_postHEM","PTCM_v_HT5_Hist_postHEM","HEM_Veto--EventFilter-E1","HEM_Veto--EventFilter-E0","MET_2018","MET_2018",true);
@@ -1429,7 +1456,6 @@ void Stacker(vector<string> cuts){
 
  Get2D_Ratio("PTCM_v_HT5ID_Hist_preHEM", "PTCM_v_HT5ID_Hist_postHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
  Get2D_Ratio("PTCM_v_HT5ID_Hist_preHEM", "PTCM_v_HT5ID_Hist_postHEM","PreSelection","HEM_Veto","MET_2018","MET_2018",true);
- Get2D_Ratio("PTCM_v_HT5ID_Hist_preHEM", "PTCM_v_HT5ID_Hist_preHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
  Get2D_Ratio("PTCM_v_HT5ID_Hist_postHEM","PTCM_v_HT5ID_Hist_postHEM","HEM_Veto","HEM_Veto","MET_2018","MET_2018",true);
  Get2D_Ratio("PTCM_v_HT5ID_Hist_preHEM", "PTCM_v_HT5ID_Hist_preHEM","EventFilter-E1","EventFilter-E0","MET_2018","MET_2018",true);
  Get2D_Ratio("PTCM_v_HT5ID_Hist_postHEM","PTCM_v_HT5ID_Hist_postHEM","HEM_Veto--EventFilter-E1","HEM_Veto--EventFilter-E0","MET_2018","MET_2018",true);
@@ -1437,7 +1463,6 @@ void Stacker(vector<string> cuts){
 
  Get2D_Ratio("PTCM_v_HTeta5_Hist_preHEM", "PTCM_v_HTeta5_Hist_postHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
  Get2D_Ratio("PTCM_v_HTeta5_Hist_preHEM", "PTCM_v_HTeta5_Hist_postHEM","PreSelection","HEM_Veto","MET_2018","MET_2018",true);
- Get2D_Ratio("PTCM_v_HTeta5_Hist_preHEM", "PTCM_v_HTeta5_Hist_preHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
  Get2D_Ratio("PTCM_v_HTeta5_Hist_postHEM","PTCM_v_HTeta5_Hist_postHEM","HEM_Veto","HEM_Veto","MET_2018","MET_2018",true);
  Get2D_Ratio("PTCM_v_HTeta5_Hist_preHEM", "PTCM_v_HTeta5_Hist_preHEM","EventFilter-E1","EventFilter-E0","MET_2018","MET_2018",true);
  Get2D_Ratio("PTCM_v_HTeta5_Hist_postHEM","PTCM_v_HTeta5_Hist_postHEM","HEM_Veto--EventFilter-E1","HEM_Veto--EventFilter-E0","MET_2018","MET_2018",true);
@@ -1445,7 +1470,6 @@ void Stacker(vector<string> cuts){
  
  Get2D_Ratio("PTCM_v_HTeta24_Hist_preHEM", "PTCM_v_HTeta24_Hist_postHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
  Get2D_Ratio("PTCM_v_HTeta24_Hist_preHEM", "PTCM_v_HTeta24_Hist_postHEM","PreSelection","HEM_Veto","MET_2018","MET_2018",true);
- Get2D_Ratio("PTCM_v_HTeta24_Hist_preHEM", "PTCM_v_HTeta24_Hist_preHEM","PreSelection","PreSelection","MET_2018","MET_2018",true);
  Get2D_Ratio("PTCM_v_HTeta24_Hist_postHEM","PTCM_v_HTeta24_Hist_postHEM","HEM_Veto","HEM_Veto","MET_2018","MET_2018",true);
  Get2D_Ratio("PTCM_v_HTeta24_Hist_preHEM", "PTCM_v_HTeta24_Hist_preHEM","EventFilter-E1","EventFilter-E0","MET_2018","MET_2018",true);
  Get2D_Ratio("PTCM_v_HTeta24_Hist_postHEM","PTCM_v_HTeta24_Hist_postHEM","HEM_Veto--EventFilter-E1","HEM_Veto--EventFilter-E0","MET_2018","MET_2018",true);
